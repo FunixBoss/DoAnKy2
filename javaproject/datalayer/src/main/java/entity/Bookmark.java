@@ -7,6 +7,11 @@ public class Bookmark extends Entity {
 	public Bookmark() {
 		super();
 	}
+	
+	public Bookmark(Integer vocabularyId, Integer userId) {
+		this.vocabularyId = vocabularyId;
+		this.userId = userId;
+	}
 
 	public Bookmark(Integer id, Integer vocabularyId, Integer userId) {
 		super(id);

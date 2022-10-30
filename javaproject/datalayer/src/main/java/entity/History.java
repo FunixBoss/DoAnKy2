@@ -8,6 +8,11 @@ public class History extends Entity {
 		super();
 	}
 
+	public History(Integer vocabularyId, Integer userId) {
+		this.vocabularyId = vocabularyId;
+		this.userId = userId;
+	}
+	
 	public History(Integer id, Integer vocabularyId, Integer userId) {
 		super(id);
 		this.vocabularyId = vocabularyId;

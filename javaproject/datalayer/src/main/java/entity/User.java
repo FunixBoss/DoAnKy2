@@ -21,6 +21,13 @@ public class User extends Entity {
 	}
 
 	// constructor without created and updated time
+	public User(String email, String password, Integer level
+			 
+			 ) {
+		this.email = email;
+		this.password = password;
+		this.level = level;
+	}
 	public User(String email, String password, Integer level,
 			 String fullname, String phoneNumber, LocalDate dateOfBirth,
 			 LocalDate createdAt, LocalDate updatedAt) {
