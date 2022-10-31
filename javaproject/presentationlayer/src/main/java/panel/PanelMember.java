@@ -7,14 +7,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
+
+import dao.impl.UserDAOImpl;
 import insert.FrameMember;
 
 public class PanelMember extends JPanel {
@@ -26,6 +31,7 @@ public class PanelMember extends JPanel {
 	private JLabel lblStatusPage;
 	private JLabel lblRowCount;	
 	private JTextField textField;
+	private JTable table;
 	/**
 	 * Create the panel.
 	 */
@@ -118,6 +124,69 @@ public class PanelMember extends JPanel {
 		btnAdd.setBounds(891, 61, 147, 36);
 		add(btnAdd);
 
+		table = new JTable();
+		scrollPane.setViewportView(table);
+		DefaultTableModel model = new DefaultTableModel() {
+			public Class<?> getColumnClass(int column){
+				switch (column) {
+				case 0 -> {
+					return Integer.class;
+				}
+				case 1 -> {
+					return String.class;
+				}
+				case 2 -> {
+					return String.class;
+				}
+				case 3 -> {
+					return String.class;
+				}
+				case 4 -> {
+					return String.class;
+				}
+				case 5 -> {
+					return String.class;
+				}
+				case 6 -> {
+					return String.class;
+				}
+				default -> {
+					return String.class;
+				}
+				}
+			}
+		};
+		model.addColumn("Email");
+		model.addColumn("Fullname");
+		model.addColumn("Phone Number");
+		model.addColumn("Date of Birth");
+		model.addColumn("Created At");
+		model.addColumn("Update At");
+		UserDAOImpl dao = new UserDAOImpl();
+		totalPage = Math.ceil(totalOfRows/ rowsOfPage);
+		
+		// lbl
+		lblStatusPage.setText("Page " + pageNumber + " of " + totalPage);
+		lblRowCount.setText("Row Count: " + totalOfRows);
+		
+		//handle
+		dao.getList(2).forEach(
+			pro -> model.addRow(new Object[] {
+					pro.getEmail(),
+					pro.getFullname(),
+					pro.getPhoneNumber(),
+					pro.getDateOfBirth().toString(),
+					pro.getCreatedAt().toString(),
+					pro.getUpdatedAt().toString()
+			})
+		);
+		
+		table.setModel(model);
+		table.setRowHeight(60);
+		table.getTableHeader().setBackground(new Color(37,57,111));
+		table.getTableHeader().setForeground(new Color(255,255,255));
+		table.getTableHeader().setFont(new Font("Arial",Font.BOLD,12));
+		table.getTableHeader().setBounds(0, 0, 50, 39);
 	}
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
 		FrameMember frame = new FrameMember();

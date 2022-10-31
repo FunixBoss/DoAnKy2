@@ -3,8 +3,13 @@ package entity;
 public class WordType extends Entity {
 	private String type;
 
+	public WordType() {
+		super();
+	}
+
 	public WordType(String type) {
 		super();
+		this.type = type;
 	}
 
 	public String getType() {

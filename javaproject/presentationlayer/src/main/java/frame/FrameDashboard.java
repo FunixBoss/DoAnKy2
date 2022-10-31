@@ -1,7 +1,6 @@
 package frame;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Toolkit;
@@ -19,7 +18,6 @@ import update.FrameAdmin;
 import panel.PanelAdmin;
 import panel.PanelDashboard;
 import panel.PanelMember;
-import panel.PanelTopic;
 import panel.PanelVocab;
 import javax.swing.border.LineBorder;
 import javax.swing.SwingConstants;
@@ -33,24 +31,19 @@ public class FrameDashboard extends JFrame {
 	private JTextField txtFieldSearch;
 	private Image logoImg = new ImageIcon(getClass().getResource("/image/dictionary-icon.png")).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
 	private Image memberImg = new ImageIcon(getClass().getResource("/image/member.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-	private Image topicImg = new ImageIcon(getClass().getResource("/image/topic.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 	private Image adminImg = new ImageIcon(getClass().getResource("/image/admin.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 	private Image vocabImg = new ImageIcon(getClass().getResource("/image/vocab.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 	private Image searchImg = new ImageIcon(getClass().getResource("/image/search.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-	private Image avatarImg = new ImageIcon(getClass().getResource("/image/avatar.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 	private Image homeImg = new ImageIcon(getClass().getResource("/image/home.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 	private Image dashboardImg = new ImageIcon(getClass().getResource("/image/dashboard.png")).getImage().getScaledInstance(20,20, Image.SCALE_SMOOTH);
 	private PanelMember jpMember;
-	private PanelTopic jpTopic;
 	private PanelVocab jpVocab;
 	private PanelAdmin jpAdmin;
-	private JLabel lblTopic;
 	private JLabel lblMember;
 	private JLabel lblAdmin;
 	private JPanel panelAdmin;
 	private JPanel panelMember;
 	private JLabel lblVocab;
-	private JPanel panelTopic;
 	private JPanel panelVocab;
 	private PanelDashboard jpDashboard;
 	private JLabel lblDashboard;
@@ -88,7 +81,6 @@ public class FrameDashboard extends JFrame {
 		contentPane.setLayout(null);
 		
 		jpMember = new PanelMember();
-		jpTopic = new PanelTopic();
 		jpVocab = new PanelVocab();
 		jpAdmin = new PanelAdmin();
 		jpDashboard = new PanelDashboard();
@@ -123,29 +115,6 @@ public class FrameDashboard extends JFrame {
 		lblVocab.setForeground(new Color(37, 57, 143));
 		lblVocab.setBounds(78, 25, 94, 20);
 		panelVocab.add(lblVocab);
-		
-		panelTopic = new JPanel();
-		panelTopic.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				do_panelTopic_mouseClicked(e);
-			}
-		});
-		panelTopic.setBackground(new Color(255, 255, 255));
-		panelTopic.setBounds(0, 288, 217, 70);
-		panel.add(panelTopic);
-		panelTopic.setLayout(null);
-		
-		lblTopic = new JLabel("Chủ đề");
-		lblTopic.setForeground(new Color(37, 57, 143));
-		lblTopic.setFont(new Font("Arial", Font.BOLD, 16));
-		lblTopic.setBounds(78, 25, 87, 19);
-		panelTopic.add(lblTopic);
-		
-		JLabel lblIconTopic = new JLabel("");
-		lblIconTopic.setBounds(30, 16, 26, 28);
-		panelTopic.add(lblIconTopic);
-		lblIconTopic.setIcon(new ImageIcon(topicImg));
 		
 		panelMember = new JPanel();
 		panelMember.addMouseListener(new MouseAdapter() {
@@ -212,6 +181,7 @@ public class FrameDashboard extends JFrame {
 		lblIconLogo.setIcon(new ImageIcon(logoImg));
 		
 		panelDashboard = new JPanel();
+		panelDashboard.setBorder(null);
 		panelDashboard.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -264,7 +234,6 @@ public class FrameDashboard extends JFrame {
 		panelMain.setLayout(null);
 		panelMain.add(jpAdmin);
 		panelMain.add(jpMember);
-		panelMain.add(jpTopic);
 		panelMain.add(jpVocab);
 		panelMain.add(jpDashboard);
 		menuClicked(jpDashboard);
@@ -302,34 +271,35 @@ public class FrameDashboard extends JFrame {
 		panel_1.add(txtFieldSearch);
 		txtFieldSearch.setColumns(10);
 		
-		JLabel lblIconAvatar = new JLabel("");
-		lblIconAvatar.setBounds(792, 18, 31, 36);
-		panel_1.add(lblIconAvatar);
-		lblIconAvatar.setIcon(new ImageIcon(avatarImg));
-		
 		JButton btnSignOut = new JButton("Sign out");
+		btnSignOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				do_btnSignOut_actionPerformed(e);
+			}
+		});
+		btnSignOut.setForeground(new Color(37, 57, 111));
 		btnSignOut.setBorder(null);
-		btnSignOut.setFont(new Font("Arial", Font.BOLD, 12));
+		btnSignOut.setFont(new Font("Arial", Font.BOLD, 13));
 		btnSignOut.setBackground(new Color(242, 247, 255));
 		btnSignOut.setBounds(982, 27, 72, 23);
 		panel_1.add(btnSignOut);
 		
 		JButton btnProfile = new JButton("Nguyễn Khánh Hoàng Ân");
+		btnProfile.setForeground(new Color(37, 57, 111));
 		btnProfile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				do_btnProfile_actionPerformed(e);
 			}
 		});
-		btnProfile.setFont(new Font("Arial", Font.BOLD, 12));
+		btnProfile.setFont(new Font("Arial", Font.BOLD, 13));
 		btnProfile.setBorder(null);
 		btnProfile.setBackground(new Color(242, 247, 255));
-		btnProfile.setBounds(833, 27, 145, 23);
+		btnProfile.setBounds(808, 27, 170, 23);
 		panel_1.add(btnProfile);
 		
 	}
 	public void menuClicked(JPanel panel) {
 		jpMember.setVisible(false);
-		jpTopic.setVisible(false);
 		jpVocab.setVisible(false);
 		jpAdmin.setVisible(false);
 		panel.setVisible(true);
@@ -337,8 +307,6 @@ public class FrameDashboard extends JFrame {
 	public void menuChanged(JPanel panel, JLabel label) {
 		lblVocab.setForeground(new Color(37, 57, 111));
 		panelVocab.setBackground(new Color(255, 255, 255));
-		lblTopic.setForeground(new Color(37, 57, 111));
-		panelTopic.setBackground(new Color(255, 255, 255));
 		lblMember.setForeground(new Color(37, 57, 111));
 		panelMember.setBackground(new Color(255, 255, 255));
 		lblAdmin.setForeground(new Color(37, 57, 111));
@@ -353,10 +321,6 @@ public class FrameDashboard extends JFrame {
 	protected void do_panelVocab_mouseClicked(MouseEvent e) {
 		menuClicked(jpVocab);
 		menuChanged(panelVocab,lblVocab);
-	}
-	protected void do_panelTopic_mouseClicked(MouseEvent e) {
-		menuClicked(jpTopic);	
-		menuChanged(panelTopic,lblTopic);
 	}
 	protected void do_panelMember_mouseClicked(MouseEvent e) {
 		menuClicked(jpMember);	
@@ -383,4 +347,9 @@ public class FrameDashboard extends JFrame {
 		frame.setVisible(true);
 	}
 
+	protected void do_btnSignOut_actionPerformed(ActionEvent e) {
+		FrameSignIn frame = new FrameSignIn();
+		frame.setVisible(true);
+		frame.setLocation(500, 300);
+	}
 }

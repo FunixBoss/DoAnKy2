@@ -12,9 +12,12 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 
+import dao.impl.UserDAOImpl;
 import insert.FrameAdmin;
 
 public class PanelAdmin extends JPanel {
@@ -26,6 +29,7 @@ public class PanelAdmin extends JPanel {
 	private JLabel lblStatusPage;
 	private JLabel lblRowCount;	
 	private JTextField textField;
+	private JTable table;
 	/**
 	 * Create the panel.
 	 */
@@ -117,6 +121,63 @@ public class PanelAdmin extends JPanel {
 		btnAdd.setBackground(new Color(67, 98, 190));
 		btnAdd.setBounds(853, 61, 185, 36);
 		add(btnAdd);
+		
+		table = new JTable();
+		scrollPane.setViewportView(table);
+		DefaultTableModel model = new DefaultTableModel() {
+			public Class<?> getColumnClass(int column){
+				switch (column) {
+				case 0 -> {
+					return Integer.class;
+				}
+				case 1 -> {
+					return String.class;
+				}
+				case 2 -> {
+					return String.class;
+				}
+				case 3 -> {
+					return String.class;
+				}
+				case 4 -> {
+					return String.class;
+				}
+				case 5 -> {
+					return String.class;
+				}
+				case 6 -> {
+					return String.class;
+				}
+				default -> {
+					return String.class;
+				}
+				}
+			}
+		};
+		model.addColumn("Email");
+		model.addColumn("Fullname");
+		model.addColumn("Phone Number");
+		model.addColumn("Date of Birth");
+		model.addColumn("Created At");
+		model.addColumn("Update At");
+		UserDAOImpl dao = new UserDAOImpl();
+		dao.getList(1).forEach(
+				pro -> model.addRow(new Object[] {
+						pro.getEmail(),
+						pro.getFullname(),
+						pro.getPhoneNumber(),
+						pro.getDateOfBirth().toString(),
+						pro.getCreatedAt().toString(),
+						pro.getUpdatedAt().toString()
+				})
+			);
+			
+		table.setModel(model);
+		table.setRowHeight(60);
+		table.getTableHeader().setBackground(new Color(37,57,111));
+		table.getTableHeader().setForeground(new Color(255,255,255));
+		table.getTableHeader().setFont(new Font("Arial",Font.BOLD,12));
+		table.getTableHeader().setBounds(0, 0, 50, 39);
 	}
 
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {

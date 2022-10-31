@@ -142,6 +142,7 @@ public class PanelVocab extends JPanel {
 		btnRelative.setBackground(new Color(67, 98, 190));
 		btnRelative.setBounds(560, 61, 147, 36);
 		add(btnRelative);
+		
 	}
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
 		FrameVocab  frame = new FrameVocab();

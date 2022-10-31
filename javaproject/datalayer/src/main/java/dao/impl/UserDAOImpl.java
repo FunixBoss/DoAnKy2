@@ -1,19 +1,18 @@
 package dao.impl;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
-import org.mindrot.jbcrypt.BCrypt;
+import dao.UserDAO;
 import database.ConnectDBFromProperties;
 import entity.User;
-import dao.UserDAO;
 
 public class UserDAOImpl implements UserDAO {
 //	fields
@@ -26,7 +25,39 @@ public class UserDAOImpl implements UserDAO {
 		}
 	}
 
-	public List<User> getList() {
+	public List<User> getList(int level) {
+		List<User> list = new ArrayList<>();
+		Connection con = null;
+		CallableStatement cs = null;
+		try {
+			con = ConnectDBFromProperties.getConnectionFromClassPath();
+			cs = con.prepareCall("{call selUserByLevel(?)}");
+			cs.setInt(1, level);
+			ResultSet rs = cs.executeQuery();
+
+			while (rs.next()) {
+				var peo = new User();
+				peo.setEmail(rs.getString("email"));
+				peo.setFullname(rs.getString("fullname"));
+				peo.setPhoneNumber(rs.getString("phone_number"));
+				peo.setDateOfBirth(rs.getDate("birthday").toLocalDate());
+				peo.setCreatedAt(rs.getDate("created_at").toLocalDate());
+				peo.setUpdatedAt(rs.getDate("updated_at").toLocalDate());
+				list.add(peo);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (con != null) {
+					con.close();
+					cs.close();
+				}
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+
 		return list;
 	}
 
@@ -78,7 +109,6 @@ public class UserDAOImpl implements UserDAO {
 	 */
 	public List<User> selectAll() {
 		List<User> list = new ArrayList<>();
-		;
 
 		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
 				var cs = con.prepareCall("{call selAllUser}");
@@ -124,19 +154,18 @@ public class UserDAOImpl implements UserDAO {
 	 */
 	public Integer insert(User user) {
 		Integer result = 0;
-		String hashed = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
 		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
 				var cs = con.prepareCall("{call insertUser(?, ?, ?, ?, ?, ?)}");) {
 			// must be validate before insert
 			cs.setString(1, user.getEmail());
-			cs.setString(2, hashed);
+			cs.setString(2, user.getPassword());
 			cs.setInt(3, user.getLevel());
 
 //			can be null
-			cs.setString(4, null);
-//			cs.setDate(5, Date.valueOf(user.getDateOfBirth()));
+			cs.setString(4, user.getFullname());
+			cs.setDate(5, Date.valueOf(user.getDateOfBirth()));
 			cs.setDate(5, null);
-			cs.setString(6, null);
+			cs.setString(6, user.getPhoneNumber());
 
 			result = cs.executeUpdate();
 		} catch (Exception e) {
@@ -214,38 +243,4 @@ public class UserDAOImpl implements UserDAO {
 		return result;
 	}
 
-	public static String getPassFromDbById(Integer id) {
-		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
-				PreparedStatement stmt = con.prepareStatement("SELECT PASSWORD FROM [USER] where id= ?");) {
-			stmt.setInt(1, id);
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				return rs.getString(1);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	public static String getPassFromDbByAccount(String acc) {
-		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
-				PreparedStatement stmt = con.prepareStatement("SELECT PASSWORD FROM [USER] where EMAIL= ?");) {
-			stmt.setString(1, acc);
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				return rs.getString(1);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	public static void loginDb(User u) {
-		if (BCrypt.checkpw(u.getPassword(),getPassFromDbByAccount(u.getEmail()))) {
-			JOptionPane.showMessageDialog(null, "bạn da dang nhap thanh cong");
-			
-		}else {
-			JOptionPane.showMessageDialog(null, "Vui Lòng Nhập Chính Xác Email Và Password");
-		}
-	}
 }

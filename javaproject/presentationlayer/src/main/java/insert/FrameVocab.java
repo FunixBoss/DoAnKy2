@@ -21,19 +21,27 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import dao.impl.WordTypeDAOImpl;
+
 import javax.swing.JTextPane;
 import javax.swing.JTextArea;
 import java.awt.Panel;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class FrameVocab extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textWord;
-	private JTextArea textExample;
-	private JTextArea textMeaning;
+	private JTextArea textExample3;
+	private JTextArea textExample1;
+	private JTextArea textMeaning3;
+	private JTextArea textMeaning2;
+	private JTextArea textMeaning1;
+	private JTextArea textExample2;
 
 
 	/**
@@ -58,7 +66,7 @@ public class FrameVocab extends JFrame {
 	public FrameVocab() {
 		setResizable(false);
 		setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 990, 674);
+		setBounds(100, 100, 1129, 779);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -67,25 +75,26 @@ public class FrameVocab extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Thêm từ vựng");
+		lblNewLabel.setBounds(20, 11, 219, 34);
 		lblNewLabel.setForeground(new Color(37, 57, 111));
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
-		lblNewLabel.setBounds(20, 11, 219, 34);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblWord = new JLabel("Từ vựng");
+		lblWord.setBounds(32, 97, 84, 21);
 		lblWord.setForeground(Color.BLACK);
 		lblWord.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblWord.setBounds(32, 97, 84, 21);
 		contentPane.add(lblWord);
 		
 		JButton btnAdd = new JButton("Thêm");
+		btnAdd.setBounds(334, 665, 150, 44);
 		btnAdd.setBackground(new Color(67, 98, 190));
 		btnAdd.setForeground(new Color(255, 255, 255));
 		btnAdd.setFont(new Font("Arial", Font.BOLD, 16));
-		btnAdd.setBounds(296, 547, 150, 44);
 		contentPane.add(btnAdd);
 		
 		JButton btnReset = new JButton("Xóa");
+		btnReset.setBounds(567, 665, 150, 44);
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				do_btnReset_actionPerformed(e);
@@ -94,59 +103,45 @@ public class FrameVocab extends JFrame {
 		btnReset.setBackground(new Color(67, 98, 190));
 		btnReset.setForeground(new Color(255, 255, 255));
 		btnReset.setFont(new Font("Arial", Font.BOLD, 16));
-		btnReset.setBounds(546, 547, 150, 44);
 		contentPane.add(btnReset);
 		
 		JLabel lblWordType = new JLabel("Loại từ");
+		lblWordType.setBounds(578, 99, 96, 21);
 		lblWordType.setForeground(Color.BLACK);
 		lblWordType.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblWordType.setBounds(32, 184, 96, 21);
 		contentPane.add(lblWordType);
 		
-		
-		JLabel lblTopic = new JLabel("Chủ đề");
-		lblTopic.setForeground(Color.BLACK);
-		lblTopic.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblTopic.setBounds(32, 274, 96, 21);
-		contentPane.add(lblTopic);
-		
-		JComboBox comboBoxTopic = new JComboBox();
-		comboBoxTopic.setBackground(new Color(255, 255, 255));
-		comboBoxTopic.setFont(new Font("Arial", Font.PLAIN, 14));
-		comboBoxTopic.setModel(new DefaultComboBoxModel(new String[] {"Du lịch", "Ăn uống", "Công việc"}));
-		comboBoxTopic.setBounds(138, 265, 173, 38);
-		contentPane.add(comboBoxTopic);
-		
-		JComboBox comboWordType = new JComboBox();
+		JComboBox<String> comboWordType = new JComboBox<>();
+		comboWordType.setBounds(673, 88, 173, 38);
 		comboWordType.setBackground(new Color(255, 255, 255));
 		comboWordType.setFont(new Font("Arial", Font.PLAIN, 14));
-		comboWordType.setModel(new DefaultComboBoxModel(new String[] {"Danh từ", "Động từ", "Trạng từ"}));
-		comboWordType.setBounds(138, 175, 173, 38);
 		contentPane.add(comboWordType);
-		
+		WordTypeDAOImpl daoTypeWord = new WordTypeDAOImpl();
+		daoTypeWord.selectAll().forEach(pro -> comboWordType.addItem(pro.getType()));
 		textWord = new JTextField();
-		textWord.setBounds(136, 90, 175, 37);
+		textWord.setBounds(122, 90, 175, 37);
 		contentPane.add(textWord);
 		textWord.setColumns(10);
 		
 		JPanel panel = new JPanel();
+		panel.setBounds(0, 0, 1120, 62);
 		panel.setBackground(new Color(242, 247, 255));
-		panel.setBounds(0, 0, 974, 62);
 		contentPane.add(panel);
 		
 		JLabel lblPronunciation = new JLabel("Phát âm");
+		lblPronunciation.setBounds(32, 164, 96, 21);
 		lblPronunciation.setForeground(Color.BLACK);
 		lblPronunciation.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblPronunciation.setBounds(32, 371, 96, 21);
 		contentPane.add(lblPronunciation);
 		
 		JLabel lblImage = new JLabel("Hình ảnh");
+		lblImage.setBounds(578, 166, 96, 21);
 		lblImage.setForeground(Color.BLACK);
 		lblImage.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblImage.setBounds(32, 448, 96, 21);
 		contentPane.add(lblImage);
 		
 		JButton btnImage = new JButton("Tải ảnh lên");
+		btnImage.setBounds(673, 156, 175, 37);
 		btnImage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				do_btnImage_actionPerformed(e);
@@ -154,11 +149,11 @@ public class FrameVocab extends JFrame {
 		});
 		btnImage.setForeground(new Color(0, 0, 0));
 		btnImage.setFont(new Font("Arial", Font.BOLD, 14));
-		btnImage.setBounds(138, 440, 175, 37);
 		btnImage.setBackground(new Color(242, 247, 255));
 		contentPane.add(btnImage);
 		
 		JButton btnPronunciation = new JButton(" Tải âm thanh lên");
+		btnPronunciation.setBounds(122, 156, 175, 37);
 		btnPronunciation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				do_btnPronunciation_actionPerformed(e);
@@ -166,43 +161,110 @@ public class FrameVocab extends JFrame {
 		});
 		btnPronunciation.setForeground(new Color(0, 0, 0));
 		btnPronunciation.setFont(new Font("Arial", Font.BOLD, 14));
-		btnPronunciation.setBounds(136, 355, 175, 37);
 		btnPronunciation.setBackground(new Color(242, 247, 255));
 		contentPane.add(btnPronunciation);
 		
-		JLabel lblExample = new JLabel("Ví dụ");
-		lblExample.setForeground(Color.BLACK);
-		lblExample.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblExample.setBounds(368, 97, 70, 21);
-		contentPane.add(lblExample);
+		Panel panelExample1_1 = new Panel();
+		panelExample1_1.setLayout(null);
+		panelExample1_1.setBackground(Color.BLACK);
+		panelExample1_1.setBounds(122, 230, 362, 102);
+		contentPane.add(panelExample1_1);
 		
-		Panel panel_1 = new Panel();
-		panel_1.setBackground(new Color(0, 0, 0));
-		panel_1.setBounds(458, 90, 482, 181);
-		contentPane.add(panel_1);
-		panel_1.setLayout(null);
+		textMeaning1 = new JTextArea();
+		textMeaning1.setBackground(Color.WHITE);
+		textMeaning1.setBounds(1, 1, 360, 100);
+		panelExample1_1.add(textMeaning1);
 		
-		textExample = new JTextArea();
-		textExample.setBounds(1, 1, 480, 179);
-		panel_1.add(textExample);
-		textExample.setBackground(new Color(255, 255, 255));
+		Panel panelExample1_1_1 = new Panel();
+		panelExample1_1_1.setLayout(null);
+		panelExample1_1_1.setBackground(Color.BLACK);
+		panelExample1_1_1.setBounds(122, 369, 362, 102);
+		contentPane.add(panelExample1_1_1);
 		
-		Panel panel_1_1 = new Panel();
-		panel_1_1.setLayout(null);
-		panel_1_1.setBackground(Color.BLACK);
-		panel_1_1.setBounds(458, 296, 482, 181);
-		contentPane.add(panel_1_1);
+		textMeaning2 = new JTextArea();
+		textMeaning2.setBackground(Color.WHITE);
+		textMeaning2.setBounds(1, 1, 360, 100);
+		panelExample1_1_1.add(textMeaning2);
 		
-		textMeaning = new JTextArea();
-		textMeaning.setBackground(Color.WHITE);
-		textMeaning.setBounds(1, 1, 480, 179);
-		panel_1_1.add(textMeaning);
+		Panel panelExample1_1_2 = new Panel();
+		panelExample1_1_2.setLayout(null);
+		panelExample1_1_2.setBackground(Color.BLACK);
+		panelExample1_1_2.setBounds(122, 509, 362, 102);
+		contentPane.add(panelExample1_1_2);
 		
-		JLabel lblMeaning = new JLabel("Ý nghĩa");
-		lblMeaning.setForeground(Color.BLACK);
-		lblMeaning.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblMeaning.setBounds(368, 307, 70, 21);
-		contentPane.add(lblMeaning);
+		textMeaning3 = new JTextArea();
+		textMeaning3.setBackground(Color.WHITE);
+		textMeaning3.setBounds(1, 1, 360, 100);
+		panelExample1_1_2.add(textMeaning3);
+		
+		Panel panelExample1_1_3 = new Panel();
+		panelExample1_1_3.setLayout(null);
+		panelExample1_1_3.setBackground(Color.BLACK);
+		panelExample1_1_3.setBounds(673, 230, 362, 102);
+		contentPane.add(panelExample1_1_3);
+		
+		textExample1 = new JTextArea();
+		textExample1.setBackground(Color.WHITE);
+		textExample1.setBounds(1, 1, 360, 100);
+		panelExample1_1_3.add(textExample1);
+		
+		Panel panelExample1_1_4 = new Panel();
+		panelExample1_1_4.setLayout(null);
+		panelExample1_1_4.setBackground(Color.BLACK);
+		panelExample1_1_4.setBounds(673, 369, 362, 102);
+		contentPane.add(panelExample1_1_4);
+		
+		textExample2 = new JTextArea();
+		textExample2.setBackground(Color.WHITE);
+		textExample2.setBounds(1, 1, 360, 100);
+		panelExample1_1_4.add(textExample2);
+		
+		Panel panelExample1_1_5 = new Panel();
+		panelExample1_1_5.setLayout(null);
+		panelExample1_1_5.setBackground(Color.BLACK);
+		panelExample1_1_5.setBounds(673, 509, 362, 102);
+		contentPane.add(panelExample1_1_5);
+		
+		textExample3 = new JTextArea();
+		textExample3.setBackground(Color.WHITE);
+		textExample3.setBounds(1, 1, 360, 100);
+		panelExample1_1_5.add(textExample3);
+		
+		JLabel lblMeaning1 = new JLabel("Ý nghĩa 1:");
+		lblMeaning1.setForeground(Color.BLACK);
+		lblMeaning1.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblMeaning1.setBounds(32, 230, 74, 21);
+		contentPane.add(lblMeaning1);
+		
+		JLabel lblMeaning2 = new JLabel("Ý nghĩa 2:");
+		lblMeaning2.setForeground(Color.BLACK);
+		lblMeaning2.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblMeaning2.setBounds(32, 369, 74, 21);
+		contentPane.add(lblMeaning2);
+		
+		JLabel lblMeaning3 = new JLabel("Ý nghĩa 3:");
+		lblMeaning3.setForeground(Color.BLACK);
+		lblMeaning3.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblMeaning3.setBounds(32, 509, 74, 21);
+		contentPane.add(lblMeaning3);
+		
+		JLabel lblExample1 = new JLabel("Ví dụ 1:");
+		lblExample1.setForeground(Color.BLACK);
+		lblExample1.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblExample1.setBounds(578, 230, 96, 21);
+		contentPane.add(lblExample1);
+		
+		JLabel lblIExample2 = new JLabel("Ví dụ 2:");
+		lblIExample2.setForeground(Color.BLACK);
+		lblIExample2.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblIExample2.setBounds(578, 369, 96, 21);
+		contentPane.add(lblIExample2);
+		
+		JLabel lblExample3 = new JLabel("Ví dụ 3:");
+		lblExample3.setForeground(Color.BLACK);
+		lblExample3.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblExample3.setBounds(578, 509, 96, 21);
+		contentPane.add(lblExample3);
 	}
 	protected void do_btnImage_actionPerformed(ActionEvent e) {
 		JFileChooser chooser = new JFileChooser("c://");
@@ -230,8 +292,11 @@ public class FrameVocab extends JFrame {
 	}
 	protected void do_btnReset_actionPerformed(ActionEvent e) {
 		textWord.setText("");
-		textExample.setText("");
-		textMeaning.setText("");
-		
+		textExample1.setText("");
+		textMeaning1.setText("");
+		textExample2.setText("");
+		textMeaning2.setText("");
+		textExample3.setText("");
+		textMeaning3.setText("");
 	}
 }
