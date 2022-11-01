@@ -10,16 +10,15 @@ import dao.CategoryDAO;
 public class TestCateDAOImpl implements CategoryDAO{
 	public static void main(String[] args) {
 		TestCateDAOImpl test = new TestCateDAOImpl();
-		Category cate = new Category("Shit", null, null);
-		Category cate2 = new Category(5, "updated", "updated", null);
-//		System.out.println(test.select(11)); // done // print 0 if parent id = null
-//		test.selectAll().forEach(System.out::println); done
+		Category cate = new Category("Shit", null);
+		Category cate2 = new Category(5, "updated", "updated");
+//		System.out.println(test.select(1)); // done // print 0 if parent id = null
 //		System.out.println(test.insert(cate)); // done
 //		System.out.println(test.update(cate2));
 //		System.out.println(test.delete(cate2));
-//		test.selectAllCateByParentId(1).forEach(System.out::println); 
 		test.selectAllVocabByCategoryId(1).forEach(System.out::println); 
 
+		test.selectAll().forEach(System.out::println);
 	}
 	
 	@Override
@@ -45,12 +44,7 @@ public class TestCateDAOImpl implements CategoryDAO{
 	@Override
 	public Integer delete(Category t) {
 		return new CategoryDAOImpl().delete(t);
-	}
-
-	@Override
-	public List<Category> selectAllCateByParentId(Integer parentId) {
-		return new CategoryDAOImpl().selectAllCateByParentId(parentId);
-	}
+	}	
 
 	@Override
 	public List<Vocabulary> selectAllVocabByCategoryId(Integer cateId) {

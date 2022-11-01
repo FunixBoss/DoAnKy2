@@ -1,0 +1,82 @@
+-- PROC RELATIVES
+DROP PROC IF EXISTS selRel
+GO
+CREATE PROC selRel
+@id INT
+AS
+BEGIN
+	SELECT * FROM RELATIVES
+	WHERE ID = @id 
+END
+GO
+--EXEC selRel @id = 3
+
+
+
+DROP PROC IF EXISTS selAllRel
+GO
+CREATE PROC selAllRel
+AS
+BEGIN
+	SELECT * FROM RELATIVES 
+END
+GO
+--EXEC selAllRel
+
+
+
+DROP PROC IF EXISTS insertRel
+GO
+CREATE PROC insertRel
+@word NVARCHAR(50),
+@vocabulary_id INT
+AS
+BEGIN
+	INSERT INTO RELATIVES 
+	VALUES (@word, @vocabulary_id)
+END
+GO
+--EXEC insertRel N'LoL', 1
+
+
+
+DROP PROC IF EXISTS updateRel
+GO
+CREATE PROC updateRel
+@id INT,
+@word NVARCHAR(50),
+@vocabulary_id INT
+AS
+BEGIN
+	UPDATE RELATIVES
+	SET WORD = @word, VOCABULARY_ID = @vocabulary_id
+	WHERE ID = @id
+END
+GO
+--EXEC updateRel 1, N'updated', 2
+
+
+
+DROP PROC IF EXISTS deleteRel 
+GO
+CREATE PROC deleteRel
+@id INT
+AS
+BEGIN
+	DELETE FROM RELATIVES
+	WHERE ID = @id
+END
+GO
+--EXEC deleteRel 3
+
+
+DROP PROC IF EXISTS selRelativesByVocabId
+GO
+CREATE PROC selRelativesByVocabId
+@vocab_id INT
+AS
+BEGIN
+	SELECT * FROM RELATIVES 
+	WHERE VOCABULARY_ID = @vocab_id
+END
+GO

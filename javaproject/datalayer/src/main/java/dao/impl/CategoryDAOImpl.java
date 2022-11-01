@@ -38,8 +38,7 @@ public class CategoryDAOImpl implements CategoryDAO {
 				Integer cateId = rs.getInt(1);
 				String name = rs.getString(2);
 				String imageIcon = rs.getString(3);
-				Integer parentId = (Integer) rs.getInt(4) != null ? rs.getInt(4) : null;
-				cate = new Category(cateId, name, imageIcon, parentId);
+				cate = new Category(cateId, name, imageIcon);
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -63,8 +62,7 @@ public class CategoryDAOImpl implements CategoryDAO {
 				Integer id = rs.getInt(1);
 				String name = rs.getString(2);
 				String imageIcon = rs.getString(3);
-				Integer parentId = rs.getInt(4); 
-				list.add(new Category(id, name, imageIcon, parentId));
+				list.add(new Category(id, name, imageIcon));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -82,15 +80,10 @@ public class CategoryDAOImpl implements CategoryDAO {
 		Integer result = 0;
 		try (
 			var con = ConnectDBFromProperties.getConnectionFromClassPath();
-			var cs = con.prepareCall("{call insertCate(?,?,?)}");
+			var cs = con.prepareCall("{call insertCate(?,?)}");
 		){
 			cs.setString(1, cate.getName());
 			cs.setString(2, cate.getImageIcon());
-			if(cate.getParentId() != null) {
-				cs.setInt(3, cate.getParentId());				
-			} else {
-				cs.setNull(3, Types.INTEGER);
-			}
 			result = cs.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -108,16 +101,11 @@ public class CategoryDAOImpl implements CategoryDAO {
 		Integer result = 0;
 		try(
 			var con = ConnectDBFromProperties.getConnectionFromClassPath();
-			var cs = con.prepareCall("{call updateCate(?,?,?,?)}");	
+			var cs = con.prepareCall("{call updateCate(?,?,?)}");	
 		) {
 			cs.setInt(1, cate.getId());
 			cs.setString(2, cate.getName());
 			cs.setString(3, cate.getImageIcon());
-			if(cate.getParentId() != null) {
-				cs.setInt(4, cate.getParentId());				
-			} else {
-				cs.setNull(4, Types.INTEGER);
-			}
 			result = cs.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -146,31 +134,6 @@ public class CategoryDAOImpl implements CategoryDAO {
 		return result;
 	}
 
-	@Override
-	/**
-	 * @return null if don't have any
-	 */
-	public List<Category> selectAllCateByParentId(Integer parentId) {
-		List<Category> list = new ArrayList<>();
-		try(
-			var con = ConnectDBFromProperties.getConnectionFromClassPath();
-			var cs = con.prepareCall("{call selAllSubCate(?)}");
-		){
-			cs.setInt(1, parentId);
-			var rs = cs.executeQuery();
-			while(rs.next()) {
-				Integer id = rs.getInt(1);
-				String name = rs.getString(2);
-				String imageIcon = rs.getString(3);
-				Integer parentIdRs = rs.getInt(4); 
-				list.add(new Category(id, name, imageIcon, parentIdRs));
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-			System.out.println("Select all Categories failed");
-		}
-		return list.isEmpty() ? null : list;
-	}
 
 	@Override
 	/**

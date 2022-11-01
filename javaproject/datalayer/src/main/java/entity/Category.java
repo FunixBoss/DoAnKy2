@@ -3,23 +3,20 @@ package entity;
 public class Category extends Entity {
 	private String name;
 	private String imageIcon;
-	private Integer parentId;
 
 	public Category() {
 		super();
 	}
 
-	public Category(String name, String imageIcon, Integer parentId) {
+	public Category(String name, String imageIcon) {
 		this.name = name;
 		this.imageIcon = imageIcon;
-		this.parentId = parentId;
 	}
 
-	public Category(Integer id, String name, String imageIcon, Integer parentId) {
+	public Category(Integer id, String name, String imageIcon) {
 		super(id);
 		this.name = name;
 		this.imageIcon = imageIcon;
-		this.parentId = parentId;
 	}
 
 	public String getName() {
@@ -38,17 +35,9 @@ public class Category extends Entity {
 		this.imageIcon = imageIcon;
 	}
 
-	public Integer getParentId() {
-		return parentId;
-	}
-
-	public void setParentId(Integer parentId) {
-		this.parentId = parentId;
-	}
-
 	@Override
 	public String toString() {
-		return "Categories [id=" + id + ", name=" + name + ", imageIcon=" + imageIcon + ", parentId=" + parentId + "]";
+		return "Categories [id=" + id + ", name=" + name + ", imageIcon=" + imageIcon + "]";
 	}
 
 }

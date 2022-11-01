@@ -24,12 +24,27 @@ public class Register {
 		return ok;
 	}
 	public static boolean checkPasswordConfirm(JTextField password,JTextField PasswordConfirm,StringBuilder sb) {
-		if(password.getText().equals(PasswordConfirm.getText())) {
+		if(password.getText().equals(PasswordConfirm.getText()) && !(password.getText().equals(""))) {
+			PasswordConfirm.setBackground(Color.white);
 			return true;
 		}else {
+			PasswordConfirm.setBackground(Color.red);
 			sb.append("Vui Lòng Nhập Chính xác Mật Khẩu").append("\n");
 			return false;
 		}
+	}
+	public static boolean checkRegexRegister(String regex, JTextField message, StringBuilder sb,String fieldComponent) {
+		boolean ok = true;
+		try {
+			isEmpty(message, sb, "vui lòng nhập dữ liệu "+ fieldComponent);
+			Pattern patt = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+			final Pattern matcher = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+			return patt.matcher(message.getText()).matches();
+		} catch (Exception e) {
+			e.printStackTrace();
+			ok = false;
+		}
+		return ok;
 	}
 	
 

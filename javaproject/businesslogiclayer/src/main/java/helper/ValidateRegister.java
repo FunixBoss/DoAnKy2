@@ -19,11 +19,10 @@ public class ValidateRegister {
 
 	public static boolean checkAll(JTextField textFieldEmail,JTextField textFieldPassword,JTextField textFieldPasswordConfirm,StringBuilder s) {
 		boolean ok = true;
-		boolean checkPassword= checkRegex.checkRegex(regexPattern.PASSWORD, textFieldPassword, s);
-		boolean checkEmail= checkRegex.checkRegex(regexPattern.EMAIL, textFieldEmail, s);
-		boolean checkPasswordConfirm= checkRegex.checkRegex(regexPattern.PASSWORD, textFieldPasswordConfirm, s);
-		boolean checkPasswordConfirm2= Register.checkPasswordConfirm(textFieldPassword, textFieldPasswordConfirm, s);
-		if (!(checkPassword && checkEmail&&checkPasswordConfirm &&checkPasswordConfirm2)) {
+		boolean checkPassword= Register.checkRegexRegister(regexPattern.PASSWORD, textFieldPassword, s,"password");
+		boolean checkEmail=  Register.checkRegexRegister(regexPattern.EMAIL, textFieldEmail,s, "email");
+		boolean checkPasswordConfirm= Register.checkPasswordConfirm( textFieldPassword,textFieldPasswordConfirm, s);
+		if (!(checkPassword &&checkEmail&&checkPasswordConfirm)) {
 			return false;
 		}
 		return ok;
