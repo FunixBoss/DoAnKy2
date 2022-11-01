@@ -4,6 +4,7 @@ import java.util.List;
 
 import dao.impl.CategoryDAOImpl;
 import entity.Category;
+import entity.Vocabulary;
 import dao.CategoryDAO;
 
 public class TestCateDAOImpl implements CategoryDAO{
@@ -15,7 +16,10 @@ public class TestCateDAOImpl implements CategoryDAO{
 //		test.selectAll().forEach(System.out::println); done
 //		System.out.println(test.insert(cate)); // done
 //		System.out.println(test.update(cate2));
-		System.out.println(test.delete(cate2));
+//		System.out.println(test.delete(cate2));
+//		test.selectAllCateByParentId(1).forEach(System.out::println); 
+		test.selectAllVocabByCategoryId(1).forEach(System.out::println); 
+
 	}
 	
 	@Override
@@ -41,6 +45,16 @@ public class TestCateDAOImpl implements CategoryDAO{
 	@Override
 	public Integer delete(Category t) {
 		return new CategoryDAOImpl().delete(t);
+	}
+
+	@Override
+	public List<Category> selectAllCateByParentId(Integer parentId) {
+		return new CategoryDAOImpl().selectAllCateByParentId(parentId);
+	}
+
+	@Override
+	public List<Vocabulary> selectAllVocabByCategoryId(Integer cateId) {
+		return new CategoryDAOImpl().selectAllVocabByCategoryId(cateId);
 	}
 
 }

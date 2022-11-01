@@ -12,6 +12,8 @@ import java.util.List;
 
 import dao.UserDAO;
 import database.ConnectDBFromProperties;
+import entity.Bookmark;
+import entity.History;
 import entity.User;
 
 public class UserDAOImpl implements UserDAO {
@@ -244,6 +246,50 @@ public class UserDAOImpl implements UserDAO {
 			System.out.println("Delete a user failed!");
 		}
 		return result;
+	}
+
+	@Override
+	public History selectHistoryByUserId(Integer userId) {
+		History hst = null;
+		try (
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call selHistoryByUserId(?)}");
+		) {
+			cs.setInt(1, userId);
+			var rs = cs.executeQuery();
+			if (rs.next()) {
+				Integer bmId = rs.getInt(1);
+				Integer vocabId = rs.getInt(2);
+				Integer userIdRs = rs.getInt(3);
+				hst = new History(bmId, vocabId, userIdRs);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Select History By User Id failed");
+		}
+		return hst;
+	}
+
+	@Override
+	public Bookmark selectBookmarkByUserId(Integer userId) {
+		Bookmark bm = null;
+		try (
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call selBookmarkByUserId(?)}");
+		) {
+			cs.setInt(1, userId);
+			var rs = cs.executeQuery();
+			if (rs.next()) {
+				Integer bmId = rs.getInt(1);
+				Integer vocabId = rs.getInt(2);
+				Integer userIdRs = rs.getInt(3);
+				bm = new Bookmark(bmId, vocabId, userIdRs);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Select Bookmark By User Id failed");
+		}
+		return bm;
 	}
 
 }

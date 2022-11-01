@@ -6,6 +6,7 @@ import java.util.List;
 import dao.BookmarkDAO;
 import database.ConnectDBFromProperties;
 import entity.Bookmark;
+import entity.Vocabulary;
 
 public class BookmarkDAOImpl implements BookmarkDAO {
 	private List<Bookmark> list;
@@ -123,5 +124,36 @@ public class BookmarkDAOImpl implements BookmarkDAO {
 			System.err.println("Delete a Bookmark failed");
 		}
 		return result;
+	}
+
+
+	@Override
+	/**
+	 * @return null if doesn't have any
+	 */
+	public List<Vocabulary> selectAllVocabByUserId(Integer userId) {
+		List<Vocabulary> list = new ArrayList<>();
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call selAllVocabularyInBookmarkByUserId(?)}");
+		){
+			cs.setInt(1, userId);
+			var rs = cs.executeQuery();
+			while(rs.next()) {
+				Integer vocab_id = rs.getInt(1);
+				String word = rs.getString(2);
+				String image = rs.getString(3);
+				String pronunciation = rs.getString(4);
+				Integer categoryId = rs.getInt(5);
+				Integer wordTypeId = rs.getInt(6);
+				
+				list.add(
+					new Vocabulary(vocab_id, word, image, pronunciation, categoryId, wordTypeId));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.err.println("Select all vocabulary In Bookmark by User Id failed!");
+		}
+		return list.isEmpty() ? null : list;
 	}
 }

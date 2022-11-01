@@ -37,8 +37,8 @@ public class ExampleDAOImpl implements ExampleDAO {
 				Integer exId = rs.getInt(1);
 				String content = rs.getString(2);
 				String meaning = rs.getString(3);
-				Integer vocabId = rs.getInt(4);
-				ex = new Example(exId, content, meaning, vocabId);
+				Integer meaningId = rs.getInt(4);
+				ex = new Example(exId, content, meaning, meaningId);
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -47,6 +47,7 @@ public class ExampleDAOImpl implements ExampleDAO {
 		return ex;
 	}
 
+	@Override
 	/**
 	 *  @return null if doesn't have any
 	 */
@@ -61,8 +62,8 @@ public class ExampleDAOImpl implements ExampleDAO {
 				Integer exId = rs.getInt(1);
 				String content = rs.getString(2);
 				String meaning = rs.getString(3);
-				Integer vocabId = rs.getInt(4);
-				list.add(new Example(exId, content, meaning, vocabId));
+				Integer meaningId = rs.getInt(4);
+				list.add(new Example(exId, content, meaning, meaningId));
 			}
 		} catch(Exception e) {
 //			e.printStackTrace();
@@ -84,7 +85,7 @@ public class ExampleDAOImpl implements ExampleDAO {
 		){
 			cs.setString(1, ex.getContent());
 			cs.setString(2, ex.getMeaning());
-			cs.setInt(3, ex.getVocabularyId());
+			cs.setInt(3, ex.getMeaningId());
 			result = cs.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,7 +108,7 @@ public class ExampleDAOImpl implements ExampleDAO {
 			cs.setInt(1, ex.getId());
 			cs.setString(2, ex.getContent());
 			cs.setString(3, ex.getMeaning());
-			cs.setInt(4, ex.getVocabularyId());
+			cs.setInt(4, ex.getMeaningId());
 			result = cs.executeUpdate();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -135,5 +136,7 @@ public class ExampleDAOImpl implements ExampleDAO {
 		}
 		return result;
 	}
+
+	
 
 }

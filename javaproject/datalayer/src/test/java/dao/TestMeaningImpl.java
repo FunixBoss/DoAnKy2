@@ -3,6 +3,7 @@ package dao;
 import java.util.List;
 
 import dao.impl.MeaningDAOImpl;
+import entity.Example;
 import entity.Meaning;
 import dao.DAO;
 import dao.MeaningDAO;
@@ -41,5 +42,8 @@ public class TestMeaningImpl implements MeaningDAO {
 	public Integer delete(Meaning t) {
 		return new MeaningDAOImpl().delete(t);
 	}
-
+	@Override
+	public List<Example> selectAllExampleByMeaningId(Integer meaningId) {
+		return new MeaningDAOImpl().selectAllExampleByMeaningId(meaningId);
+	}
 }

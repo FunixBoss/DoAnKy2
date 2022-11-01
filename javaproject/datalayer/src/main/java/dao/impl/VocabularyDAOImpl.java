@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.ConnectDBFromProperties;
+import entity.Meaning;
+import entity.Relatives;
 import entity.Vocabulary;
 import dao.VocabularyDAO;
 
@@ -164,5 +166,54 @@ public class VocabularyDAOImpl implements VocabularyDAO {
 			System.err.println("Delete a vocabulary failed");
 		}
 		return result;
+	}
+	
+	@Override
+	/**
+	 *  @return null if doesn't have any
+	 */
+	public List<Meaning> selectAllMeaningByVocabId(Integer vocabId) {
+		List<Meaning> list = new ArrayList<>();
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call selMeaningsByVocabId(?)}");
+		){
+			cs.setInt(1, vocabId);
+			var rs = cs.executeQuery();
+			while(rs.next()) {
+				Integer meaningId = rs.getInt(1);
+				String content = rs.getString(2);
+				Integer vocabIdRs = rs.getInt(3);
+				list.add(new Meaning(meaningId, content, vocabIdRs));
+			}
+		} catch(Exception e) {
+//			e.printStackTrace();
+			System.err.println("Select all Meaning By Vocabulary Id failed!");
+		}
+		return list.isEmpty() ? null : list;
+	}
+
+	
+
+	@Override
+	public List<Relatives> selectAllRelativesByVocabId(Integer vocabId) {
+		List<Relatives> list = new ArrayList<>();
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call selRelativesByVocabId(?)}");
+		){
+			cs.setInt(1, vocabId);
+			var rs = cs.executeQuery();
+			while(rs.next()) {
+				Integer relId = rs.getInt(1);
+				String word = rs.getString(2);
+				Integer vocabIdRs = rs.getInt(3);
+				list.add(new Relatives(relId, word, vocabIdRs));
+			}
+		} catch(Exception e) {
+//			e.printStackTrace();
+			System.err.println("Select all Relatives By Vocabulary Id failed!");
+		}
+		return list.isEmpty() ? null : list;
 	}
 }

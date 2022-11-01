@@ -3,24 +3,24 @@ package entity;
 public class Example extends Entity {
 	private String content;
 	private String meaning;
-	private Integer vocabularyId;
+	private Integer meaningId;
 
 	public Example() {
 		super();
 	}
 
-	public Example(Integer id, String content, String meaning, Integer vocabularyId) {
+	public Example(Integer id, String content, String meaning, Integer meaningId) {
 		super(id);
 		this.content = content;
 		this.meaning = meaning;
-		this.vocabularyId = vocabularyId;
+		this.meaningId = meaningId;
 	}
 
-	public Example(String content, String meaning, Integer vocabularyId) {
+	public Example(String content, String meaning, Integer meaningId) {
 		super();
 		this.content = content;
 		this.meaning = meaning;
-		this.vocabularyId = vocabularyId;
+		this.meaningId = meaningId;
 	}
 
 	public String getContent() {
@@ -39,17 +39,17 @@ public class Example extends Entity {
 		this.meaning = meaning;
 	}
 
-	public Integer getVocabularyId() {
-		return vocabularyId;
+	public Integer getMeaningId() {
+		return meaningId;
 	}
 
-	public void setVocabularyId(Integer vocabularyId) {
-		this.vocabularyId = vocabularyId;
+	public void setMeaningId(Integer meaningId) {
+		this.meaningId = meaningId;
 	}
 
 	@Override
 	public String toString() {
-		return "Example [id=" + id + ", content=" + content + ", meaning=" + meaning + ", vocabularyId=" + vocabularyId
+		return "Example [id=" + id + ", content=" + content + ", meaning=" + meaning + ", meaningId=" + meaningId
 				+ "]";
 	}
 }

@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import dao.HistoryDAO;
 import dao.impl.HistoryDAOImpl;
 import entity.History;
+import entity.Vocabulary;
 
 public class TestHistoryDAOImpl implements HistoryDAO{
 	public static void main(String[] args) {
@@ -15,8 +16,10 @@ public class TestHistoryDAOImpl implements HistoryDAO{
 //		System.out.println(test.select(3));
 //		System.out.println(test.insert(bm));
 //		System.out.println(test.update(bm2));
-		System.out.println(test.delete(test.select(3)));
-		test.selectAll().forEach(System.out::println);
+//		System.out.println(test.delete(test.select(3)));
+//		test.selectAll().forEach(System.out::println);
+		test.selectAllVocabByUserId(1).forEach(System.out::println);
+
 	}
 
 	@Override
@@ -42,5 +45,10 @@ public class TestHistoryDAOImpl implements HistoryDAO{
 	@Override
 	public Integer delete(History t) {
 		return new HistoryDAOImpl().delete(t);
+	}
+
+	@Override
+	public List<Vocabulary> selectAllVocabByUserId(Integer userId) {
+		return new HistoryDAOImpl().selectAllVocabByUserId(userId);
 	}
 }

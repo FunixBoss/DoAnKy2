@@ -13,8 +13,8 @@ public class TestExampleDAOImpl implements ExampleDAO {
 //		System.out.println(test.select(4));
 //		System.out.println(test.insert(ex));
 //		System.out.println(test.update(new Example(4, "Updated", "Updated", 10)));
-		System.out.println(test.delete(test.select(7)));
-		test.selectAll().forEach(System.out::println);
+//		System.out.println(test.delete(test.select(7)));
+//		test.selectAll().forEach(System.out::println);
 	}
 	@Override
 	public Example select(Integer id) {
@@ -40,5 +40,6 @@ public class TestExampleDAOImpl implements ExampleDAO {
 	public Integer delete(Example t) {
 		return new ExampleDAOImpl().delete(t);
 	}
+	
 
 }

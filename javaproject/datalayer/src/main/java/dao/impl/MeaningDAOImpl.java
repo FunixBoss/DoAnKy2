@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.ConnectDBFromProperties;
+import entity.Example;
 import entity.Meaning;
 import dao.MeaningDAO;
 
@@ -132,6 +133,34 @@ public class MeaningDAOImpl implements MeaningDAO {
 			System.err.println("Delete a Meaning failed");
 		}
 		return result;
+	}
+
+	
+	
+	@Override
+	/**
+	 *  @return null if doesn't have any
+	 */
+	public List<Example> selectAllExampleByMeaningId(Integer meaningId) {
+		List<Example> list = new ArrayList<>();
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call selExamplesByMeaningId(?)}");
+		){
+			cs.setInt(1, meaningId);
+			var rs = cs.executeQuery();
+			while(rs.next()) {
+				Integer exId = rs.getInt(1);
+				String content = rs.getString(2);
+				String meaning = rs.getString(3);
+				Integer meaningIdRs = rs.getInt(4);
+				list.add(new Example(exId, content, meaning, meaningIdRs));
+			}
+		} catch(Exception e) {
+//			e.printStackTrace();
+			System.err.println("Select all Example failed!");
+		}
+		return list.isEmpty() ? null : list;
 	}
 
 }
