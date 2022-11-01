@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -140,7 +141,7 @@ public class PanelAdmin extends JPanel {
 					return String.class;
 				}
 				case 4 -> {
-					return String.class;
+					return LocalDate.class;
 				}
 				case 5 -> {
 					return String.class;
@@ -166,7 +167,7 @@ public class PanelAdmin extends JPanel {
 						pro.getEmail(),
 						pro.getFullname(),
 						pro.getPhoneNumber(),
-						pro.getDateOfBirth().toString(),
+						pro.getDateOfBirth(),
 						pro.getCreatedAt().toString(),
 						pro.getUpdatedAt().toString()
 				})

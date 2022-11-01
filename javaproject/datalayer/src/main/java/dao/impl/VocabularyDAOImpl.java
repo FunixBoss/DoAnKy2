@@ -40,10 +40,9 @@ public class VocabularyDAOImpl implements VocabularyDAO {
 				String word = rs.getString(2);
 				String image = rs.getString(3);
 				String pronunciation = rs.getString(4);
-				Integer exampleId = rs.getInt(5);
 				Integer categoryId = rs.getInt(6);
 				Integer wordTypeId = rs.getInt(7);
-				vocab = new Vocabulary(vocab_id, word, pronunciation, image, exampleId, categoryId, wordTypeId);
+				vocab = new Vocabulary(vocab_id, word, image, pronunciation, categoryId, wordTypeId);
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -68,15 +67,14 @@ public class VocabularyDAOImpl implements VocabularyDAO {
 				String word = rs.getString(2);
 				String image = rs.getString(3);
 				String pronunciation = rs.getString(4);
-				Integer exampleId = rs.getInt(5);
-				Integer categoryId = rs.getInt(6);
-				Integer wordTypeId = rs.getInt(7);
+				Integer categoryId = rs.getInt(5);
+				Integer wordTypeId = rs.getInt(6);
 				
 				list.add(
-					new Vocabulary(vocab_id, word, pronunciation, image, exampleId, categoryId, wordTypeId));
+					new Vocabulary(vocab_id, word, image, pronunciation, categoryId, wordTypeId));
 			}
 		} catch(Exception e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Select all vocabulary failed!");
 		}
 		return list.isEmpty() ? null : list;
@@ -96,20 +94,15 @@ public class VocabularyDAOImpl implements VocabularyDAO {
 			cs.setString(1, vocab.getWord());
 			cs.setString(2, vocab.getImage());
 			cs.setString(3, vocab.getPronunciation());
-			if(vocab.getExampleId() != null) {
-				cs.setInt(4, vocab.getExampleId());
-			}  else {
+			if(vocab.getCategoryId() != null) {
+				cs.setInt(4, vocab.getCategoryId());
+			} else {
 				cs.setNull(4, Types.INTEGER);
 			}
-			if(vocab.getCategoryId() != null) {
-				cs.setInt(5, vocab.getCategoryId());
+			if(vocab.getWordTypeId() != null) {
+				cs.setInt(5, vocab.getWordTypeId());
 			} else {
 				cs.setNull(5, Types.INTEGER);
-			}
-			if(vocab.getWordTypeId() != null) {
-				cs.setInt(6, vocab.getWordTypeId());
-			} else {
-				cs.setNull(6, Types.INTEGER);
 			}
 			result = cs.executeUpdate();
 		} catch (Exception e) {
@@ -135,20 +128,15 @@ public class VocabularyDAOImpl implements VocabularyDAO {
 			cs.setString(3, vocab.getImage());
 			cs.setString(4, vocab.getPronunciation());
 			
-			if(vocab.getExampleId() != null) {
-				cs.setInt(5, vocab.getExampleId());				
+			if(vocab.getCategoryId() != null) {
+				cs.setInt(5, vocab.getCategoryId());
 			} else {
 				cs.setNull(5, Types.INTEGER);
 			}
-			if(vocab.getCategoryId() != null) {
-				cs.setInt(6, vocab.getCategoryId());
+			if(vocab.getWordTypeId() != null) {
+				cs.setInt(6, vocab.getWordTypeId());
 			} else {
 				cs.setNull(6, Types.INTEGER);
-			}
-			if(vocab.getWordTypeId() != null) {
-				cs.setInt(7, vocab.getWordTypeId());
-			} else {
-				cs.setNull(7, Types.INTEGER);
 			}
 			result = cs.executeUpdate();
 		} catch(Exception e) {

@@ -5,7 +5,6 @@ public class Vocabulary extends Entity {
 	private String image;
 	private String pronunciation;
 
-	private Integer exampleId;
 	private Integer categoryId;
 	private Integer wordTypeId;
 
@@ -13,22 +12,21 @@ public class Vocabulary extends Entity {
 		super();
 	}
 
-	public Vocabulary(String word, String image, String pronunciation,
-			Integer exampleId, Integer categoryId, Integer wordTypeId) {
+	public Vocabulary(String word, String image, String pronunciation, Integer categoryId,
+			Integer wordTypeId) {
 		this.word = word;
 		this.pronunciation = pronunciation;
 		this.image = image;
-		this.exampleId = exampleId;
 		this.categoryId = categoryId;
 		this.wordTypeId = wordTypeId;
 	}
+
 	public Vocabulary(Integer id, String word, String image, String pronunciation,
-			Integer exampleId, Integer categoryId, Integer wordTypeId) {
+			Integer categoryId, Integer wordTypeId) {
 		super(id);
 		this.word = word;
 		this.pronunciation = pronunciation;
 		this.image = image;
-		this.exampleId = exampleId;
 		this.categoryId = categoryId;
 		this.wordTypeId = wordTypeId;
 	}
@@ -57,14 +55,6 @@ public class Vocabulary extends Entity {
 		this.image = image;
 	}
 
-	public Integer getExampleId() {
-		return exampleId;
-	}
-
-	public void setExampleId(Integer exampleId) {
-		this.exampleId = exampleId;
-	}
-
 	public Integer getCategoryId() {
 		return categoryId;
 	}
@@ -83,8 +73,7 @@ public class Vocabulary extends Entity {
 
 	@Override
 	public String toString() {
-		return "Vocabulary [id=" + id + ", word=" + word + ", image=" + image + ", pronunciation=" + pronunciation 
-				+ ", exampleId=" + exampleId + ", categoryId=" + categoryId
-				+ ", wordTypeId=" + wordTypeId + "]";
+		return "Vocabulary [id=" + id + ", word=" + word + ", image=" + image + ", pronunciation=" + pronunciation
+				+ ", categoryId=" + categoryId + ", wordTypeId=" + wordTypeId + "]";
 	}
 }

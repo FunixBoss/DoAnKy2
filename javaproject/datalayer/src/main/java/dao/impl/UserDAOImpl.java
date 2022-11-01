@@ -20,9 +20,6 @@ public class UserDAOImpl implements UserDAO {
 
 //	constructors
 	public UserDAOImpl() {
-		if (list == null) {
-			list = selectAll();
-		}
 	}
 
 	public List<User> getList(int level) {
@@ -36,14 +33,20 @@ public class UserDAOImpl implements UserDAO {
 			ResultSet rs = cs.executeQuery();
 
 			while (rs.next()) {
-				var peo = new User();
-				peo.setEmail(rs.getString("email"));
-				peo.setFullname(rs.getString("fullname"));
-				peo.setPhoneNumber(rs.getString("phone_number"));
-				peo.setDateOfBirth(rs.getDate("birthday").toLocalDate());
-				peo.setCreatedAt(rs.getDate("created_at").toLocalDate());
-				peo.setUpdatedAt(rs.getDate("updated_at").toLocalDate());
-				list.add(peo);
+				Integer user_id = rs.getInt(1);
+				String email = rs.getString(2);
+				String fullname = rs.getString(3);
+				String phoneNumber = rs.getString(4);
+				LocalDate dob = null;
+				if (rs.getDate(5) != null) {
+					dob = LocalDate.parse(rs.getDate(5).toString(), DateTimeFormatter.ofPattern("[yyyy-MM-dd]"));
+				}
+				Integer user_level = rs.getInt(6);
+				LocalDate createdAt = LocalDate.parse(rs.getDate(7).toString(),
+						DateTimeFormatter.ofPattern("[yyyy-MM-dd]"));
+				LocalDate updatedAt = LocalDate.parse(rs.getDate(8).toString(),
+						DateTimeFormatter.ofPattern("[yyyy-MM-dd]"));
+				list.add(new User(user_id, email, null, user_level, fullname, phoneNumber, dob, createdAt, updatedAt));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

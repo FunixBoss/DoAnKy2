@@ -9,7 +9,8 @@ import entity.User;
 public class TestUserDAOImpl {
 	public static void main(String[] args) {
 		User user = new User("daohoangmy@gmail.com", "123123", 1, null, null, null , null, null);
-		showListUser(); // done
+//		showListUser(); // done
+		showListUserByLevel(1);
 //		System.out.println(selectAUser(3)); // done
 		
 //		System.out.println(insertAUser(user)); // done
@@ -20,6 +21,11 @@ public class TestUserDAOImpl {
 	
 	public static void showListUser() {
 		List<User> list = new UserDAOImpl().selectAll();
+		list.forEach(user -> System.out.println(user));	
+	}
+	
+	public static void showListUserByLevel(Integer level) {
+		List<User> list = new UserDAOImpl().getList(level);
 		list.forEach(user -> System.out.println(user));	
 	}
 	
