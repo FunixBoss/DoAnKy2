@@ -142,7 +142,7 @@ public class PanelMember extends JPanel {
 					return String.class;
 				}
 				case 4 -> {
-					return String.class;
+					return ImageIcon.class;
 				}
 				case 5 -> {
 					return String.class;

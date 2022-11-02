@@ -3,11 +3,12 @@ package entity;
 import java.time.LocalDate;
 
 public class User extends Entity {
-//   Account information
+	private static  int userLevel= 0;
+	private static  int adminLevel = 1;
+	//   Account information
 	private String email;
 	private String password;
 	private Integer level;
-
 //	private information
 	private String fullname;
 	private String phoneNumber;
@@ -15,6 +16,8 @@ public class User extends Entity {
 	
 	private LocalDate createdAt;
 	private LocalDate updatedAt;
+
+	
 
 	public User() {
 		super();
@@ -28,6 +31,7 @@ public class User extends Entity {
 		this.password = password;
 		this.level = level;
 	}
+	
 	public User(String email, String password, Integer level,
 			 String fullname, String phoneNumber, LocalDate dateOfBirth,
 			 LocalDate createdAt, LocalDate updatedAt) {
@@ -54,6 +58,22 @@ public class User extends Entity {
 		this.fullname = fullname;
 		this.phoneNumber = phoneNumber;
 		this.dateOfBirth = dateOfBirth;
+	}
+
+	public static int getUserLevel() {
+		return userLevel;
+	}
+
+	public static void setUserLevel(int userLevel) {
+		User.userLevel = userLevel;
+	}
+
+	public static int getAdminLevel() {
+		return adminLevel;
+	}
+
+	public static void setAdminLevel(int adminLevel) {
+		User.adminLevel = adminLevel;
 	}
 
 	public String getEmail() {
