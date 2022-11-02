@@ -38,7 +38,7 @@ public class WordTypeDAOImpl implements WordTypeDAO{
 				list.add(type);
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.out.println("Select all WordType failed");
 		}
 		return list.isEmpty() ? null : list;

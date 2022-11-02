@@ -39,7 +39,7 @@ public class BookmarkDAOImpl implements BookmarkDAO {
 				bm = new Bookmark(bmId, vocabId, userId);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Select A Bookmark Failed!");
 		}
 		return bm;
@@ -151,7 +151,7 @@ public class BookmarkDAOImpl implements BookmarkDAO {
 					new Vocabulary(vocab_id, word, image, pronunciation, categoryId, wordTypeId));
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Select all vocabulary In Bookmark by User Id failed!");
 		}
 		return list.isEmpty() ? null : list;

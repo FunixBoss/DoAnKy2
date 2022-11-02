@@ -59,7 +59,8 @@ public class UserDAOImpl implements UserDAO {
 					cs.close();
 				}
 			} catch (Exception e2) {
-				e2.printStackTrace();
+//				e2.printStackTrace();
+				System.out.println("Get list " + (level == 1 ? "Admin" : "User") + "Failed");
 			}
 		}
 
@@ -102,7 +103,7 @@ public class UserDAOImpl implements UserDAO {
 				return null;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Get a user failed!");
 		}
 		return user;
@@ -205,7 +206,7 @@ public class UserDAOImpl implements UserDAO {
 			cs.setString(4, user.getPhoneNumber());
 			result = cs.executeUpdate();
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.out.println("Update User Failed");
 		}
 		return result;
@@ -242,7 +243,7 @@ public class UserDAOImpl implements UserDAO {
 			cs.setInt(1, user.getId());
 			result = cs.executeUpdate();
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.out.println("Delete a user failed!");
 		}
 		return result;
@@ -264,7 +265,7 @@ public class UserDAOImpl implements UserDAO {
 				hst = new History(bmId, vocabId, userIdRs);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Select History By User Id failed");
 		}
 		return hst;
@@ -286,7 +287,7 @@ public class UserDAOImpl implements UserDAO {
 				bm = new Bookmark(bmId, vocabId, userIdRs);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Select Bookmark By User Id failed");
 		}
 		return bm;

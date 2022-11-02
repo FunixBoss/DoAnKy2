@@ -41,7 +41,7 @@ public class ExampleDAOImpl implements ExampleDAO {
 				ex = new Example(exId, content, meaning, meaningId);
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Select A Example Failed!");
 		}
 		return ex;
@@ -88,7 +88,7 @@ public class ExampleDAOImpl implements ExampleDAO {
 			cs.setInt(3, ex.getMeaningId());
 			result = cs.executeUpdate();
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Insert Example failed!");
 		}
 		return result;
@@ -111,7 +111,7 @@ public class ExampleDAOImpl implements ExampleDAO {
 			cs.setInt(4, ex.getMeaningId());
 			result = cs.executeUpdate();
 		} catch(Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Update Example failed");
 		}
 		return result;

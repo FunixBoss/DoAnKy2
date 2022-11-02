@@ -38,7 +38,7 @@ public class RelativesDAOImpl implements RelativesDAO {
 				rel = new Relatives(relId, word, vocabId);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Select A Relatives Failed!");
 		}
 		return rel;

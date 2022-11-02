@@ -41,7 +41,7 @@ public class MeaningDAOImpl implements MeaningDAO {
 				meaning = new Meaning(meaningId, content, vocabId);
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Select A Meaning Failed!");
 		}
 		return meaning;

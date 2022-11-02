@@ -40,7 +40,7 @@ public class HistoryDAOImpl implements HistoryDAO {
 				bm = new History(bmId, vocabId, userId);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Select A History Failed!");
 		}
 		return bm;

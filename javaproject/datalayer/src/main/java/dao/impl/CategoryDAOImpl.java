@@ -41,8 +41,8 @@ public class CategoryDAOImpl implements CategoryDAO {
 				cate = new Category(cateId, name, imageIcon);
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
-			System.out.println("Select a cate failed");
+//			e.printStackTrace();
+			System.out.println("Select a Category failed");
 		}
 		return cate;
 	}
@@ -65,7 +65,7 @@ public class CategoryDAOImpl implements CategoryDAO {
 				list.add(new Category(id, name, imageIcon));
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.out.println("Select all Categories failed");
 		}
 		return list.isEmpty() ? null : list;
@@ -86,7 +86,7 @@ public class CategoryDAOImpl implements CategoryDAO {
 			cs.setString(2, cate.getImageIcon());
 			result = cs.executeUpdate();
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.out.println("Insert a cate failed");
 		}
 		return result;
@@ -108,7 +108,7 @@ public class CategoryDAOImpl implements CategoryDAO {
 			cs.setString(3, cate.getImageIcon());
 			result = cs.executeUpdate();
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.out.println("Update Category Failed");
 		}
 		return result;
@@ -128,7 +128,7 @@ public class CategoryDAOImpl implements CategoryDAO {
 			cs.setInt(1, cate.getId());
 			result = cs.executeUpdate();
 		} catch(Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Delete a cate failed");
 		}
 		return result;
@@ -159,7 +159,7 @@ public class CategoryDAOImpl implements CategoryDAO {
 					new Vocabulary(vocab_id, word, image, pronunciation, categoryId, wordTypeId));
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.out.println("Select All Vocab In Category failed");
 		}
 		return list.isEmpty() ? null : list;

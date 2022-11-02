@@ -6,8 +6,17 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.FileImageInputStream;
+import javax.imageio.stream.ImageInputStream;
+import javax.print.attribute.standard.PrinterMoreInfoManufacturer;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -22,6 +31,7 @@ import javax.swing.table.DefaultTableModel;
 
 import dao.impl.UserDAOImpl;
 import dao.impl.VocabularyDAOImpl;
+import entity.Meaning;
 import insert.FrameRelative;
 import insert.FrameVocab;
 import insert.FrameWordType;
@@ -211,13 +221,9 @@ public class PanelVocab extends JPanel {
 				.forEach(vocab -> model.addRow(new Object[] {
 					vocab.getId(),
 					vocab.getWord(),
-					null,
+					getMeaningOfWords(vocab.getId()),
 					vocab.getPronunciation(),					
-					new ImageIcon(
-						new ImageIcon(
-							PanelVocab.class.getResource("/vocabulary/" + vocab.getImage())
-						).getImage().getScaledInstance(100, 60, Image.SCALE_SMOOTH)
-					),
+					getImageByURL(vocab.getImage()),
 					"Sửa",
 					"Xóa"
 				}));
@@ -230,6 +236,33 @@ public class PanelVocab extends JPanel {
 		table.getTableHeader().setBounds(0, 0, 50, 39);
 	}
 	
+	private String getMeaningOfWords(Integer vocabId) {
+		List<Meaning> meanings = new VocabularyDAOImpl().selectAllMeaningByVocabId(vocabId);
+		if(meanings != null) {
+			
+		} 
+		return null;
+		
+	}
+	private ImageIcon getImageByURL(String imageName) {
+		var imageUrl =  PanelVocab.class.getResource("/vocabulary/" + imageName) ;
+		if(imageUrl != null) {
+			try {
+				final int ROW_HEIGHT = 59;
+				BufferedImage bimg = ImageIO.read(imageUrl);
+				int imgWidth          = bimg.getWidth();
+				int imgHeight         = bimg.getHeight();
+				int rowWidth = (ROW_HEIGHT * imgWidth) / imgHeight; 
+				return new ImageIcon(
+						new ImageIcon(imageUrl)
+							.getImage().getScaledInstance(rowWidth, ROW_HEIGHT, Image.SCALE_SMOOTH)
+					);
+			} catch (Exception e) {
+			}
+			
+		}
+		return null;
+	}
 
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
 		FrameVocab frame = new FrameVocab();
