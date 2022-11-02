@@ -19,7 +19,6 @@ public class ValidateLogin {
 		if (!(checkPassword && checkEmail)) {
 			return false;
 		}
-		
 		return ok;
 	}
 	public static void main(String[] args) {

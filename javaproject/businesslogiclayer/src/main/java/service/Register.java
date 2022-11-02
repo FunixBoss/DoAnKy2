@@ -29,7 +29,7 @@ public class Register {
 			return true;
 		}else {
 			PasswordConfirm.setBackground(Color.red);
-			sb.append("Vui Lòng Nhập Chính xác Mật Khẩu").append("\n");
+			sb.append("Mật Khẩu Không Trùng Khớp").append("\n");
 			return false;
 		}
 	}

@@ -123,3 +123,16 @@ GO
 
 
 
+DROP PROC IF EXISTS selLevelByUserEmail
+GO
+CREATE PROC selLevelByUserEmail
+@email NVARCHAR(200)
+AS
+BEGIN
+	SELECT LEVEL FROM [USER]
+	WHERE [EMAIL] = @email
+END
+GO
+
+
+

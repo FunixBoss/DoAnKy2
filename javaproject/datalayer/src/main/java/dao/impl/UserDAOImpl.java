@@ -3,12 +3,17 @@ package dao.impl;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JOptionPane;
+
+import org.mindrot.jbcrypt.BCrypt;
 
 import dao.UserDAO;
 import database.ConnectDBFromProperties;
@@ -158,29 +163,93 @@ public class UserDAOImpl implements UserDAO {
 	 * @return 1 for insert successfully
 	 */
 	public Integer insert(User user) {
+		String hashed = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
 		Integer result = 0;
 		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
 				var cs = con.prepareCall("{call insertUser(?, ?, ?, ?, ?, ?)}");) {
 			// must be validate before insert
 			cs.setString(1, user.getEmail());
-			cs.setString(2, user.getPassword());
+			cs.setString(2, hashed);
 			cs.setInt(3, user.getLevel());
 
 //			can be null
-			cs.setString(4, user.getFullname());
-			cs.setDate(5, Date.valueOf(user.getDateOfBirth()));
+			cs.setString(4, null);
 			cs.setDate(5, null);
-			cs.setString(6, user.getPhoneNumber());
+			cs.setDate(5, null);
+			cs.setString(6, null);
 
 			result = cs.executeUpdate();
 		} catch (Exception e) {
 //			e.printStackTrace();
 			System.err.println("Insert User Failed");
 		}
-
 		return result;
 	}
-
+	public static String getPassFromDbById(Integer id) {
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				PreparedStatement stmt = con.prepareStatement("SELECT PASSWORD FROM [USER] where id= ?");) {
+			stmt.setInt(1, id);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				return rs.getString(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static String getPassFromDbByAccount(String acc) {
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			PreparedStatement stmt = con.prepareStatement("SELECT PASSWORD FROM [USER] where EMAIL= ?");) {
+			stmt.setString(1, acc);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				return rs.getString(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return BCrypt.hashpw(acc, BCrypt.gensalt());
+	}
+	/**
+	 * @return 0 for update private info failed
+	 * @return 1 or 2 for update private info successfully
+	 */
+	public static int getLevelFromUser(User u) {
+		int result = 0;
+		try (
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call selLevelByUserEmail(?)}");
+		) {
+			cs.setString(1, u.getEmail());
+			var rs = cs.executeQuery();
+			if (rs.next()) {
+				Integer check = rs.getInt(1);
+				return check;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Select level By User Email Failed");
+		}
+		return 0;
+	}
+	public static boolean loginDb(User u) {
+		try {
+			if (BCrypt.checkpw(u.getPassword(),getPassFromDbByAccount(u.getEmail()))) {
+				u.setLevel(getLevelFromUser(u));
+				JOptionPane.showMessageDialog(null, "Đăng Nhập Thành Công !");
+				return true;
+			}else {
+				JOptionPane.showMessageDialog(null, "Tài Khoản Hoặc Mật Khẩu Không Chính Xác !");
+				return false;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(null, "Đăng Nhập Thất Bại Vui Lòng Kiểm Tra Lại Dữ liệu!");
+		}
+		return false;
+	}
 	@Override
 	/*
 	 * do not need
@@ -291,5 +360,9 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return bm;
 	}
-
+public static void main(String[] args) {
+//	User x = new User("hungn321@gmail.com","Aa@12345",1);
+//	System.out.println(UserDAOImpl.getLevelFromUser(x));
+	
+}
 }
