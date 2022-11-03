@@ -6,17 +6,8 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.FileImageInputStream;
-import javax.imageio.stream.ImageInputStream;
-import javax.print.attribute.standard.PrinterMoreInfoManufacturer;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -31,10 +22,15 @@ import javax.swing.table.DefaultTableModel;
 
 import dao.impl.UserDAOImpl;
 import dao.impl.VocabularyDAOImpl;
-import entity.Meaning;
+import entity.User;
+import entity.Vocabulary;
 import insert.FrameRelative;
 import insert.FrameVocab;
 import insert.FrameWordType;
+import item.ItemUser;
+import item.ItemVocab;
+
+import java.awt.Dimension;
 
 public class PanelVocab extends JPanel {
 
@@ -114,6 +110,126 @@ public class PanelVocab extends JPanel {
 		scrollPane.setBackground(new Color(255, 255, 255));
 		scrollPane.setBounds(43, 120, 995, 448);
 		add(scrollPane);
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(null);
+		panel.setPreferredSize(new Dimension(975, 600));
+		panel.setBackground(Color.WHITE);
+		scrollPane.setViewportView(panel);
+		
+		JPanel panelHeader = new JPanel();
+		panelHeader.setLayout(null);
+		panelHeader.setBounds(0, 0, 990, 40);
+		panel.add(panelHeader);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setLayout(null);
+		panel_1.setBackground(new Color(37, 57, 111));
+		panel_1.setBounds(0, 0, 55, 40);
+		panelHeader.add(panel_1);
+		
+		JLabel lblNewLabel = new JLabel("STT");
+		lblNewLabel.setForeground(Color.WHITE);
+		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 14));
+		lblNewLabel.setBounds(12, 12, 35, 13);
+		panel_1.add(lblNewLabel);
+		
+		JPanel panel_1_1 = new JPanel();
+		panel_1_1.setLayout(null);
+		panel_1_1.setBackground(new Color(37, 57, 111));
+		panel_1_1.setBounds(907, 0, 88, 40);
+		panelHeader.add(panel_1_1);
+		
+		JLabel lblXa = new JLabel("Xóa");
+		lblXa.setForeground(Color.WHITE);
+		lblXa.setFont(new Font("Arial", Font.BOLD, 14));
+		lblXa.setBounds(10, 8, 47, 20);
+		panel_1_1.add(lblXa);
+		
+		JPanel panel_1_1_1 = new JPanel();
+		panel_1_1_1.setLayout(null);
+		panel_1_1_1.setBackground(new Color(37, 57, 111));
+		panel_1_1_1.setBounds(827, 0, 88, 40);
+		panelHeader.add(panel_1_1_1);
+		
+		JLabel lblEdit = new JLabel("Sửa");
+		lblEdit.setForeground(Color.WHITE);
+		lblEdit.setFont(new Font("Arial", Font.BOLD, 14));
+		lblEdit.setBounds(0, 8, 47, 20);
+		panel_1_1_1.add(lblEdit);
+		
+		JPanel panel_1_2 = new JPanel();
+		panel_1_2.setLayout(null);
+		panel_1_2.setBackground(new Color(37, 57, 111));
+		panel_1_2.setBounds(55, 0, 136, 40);
+		panelHeader.add(panel_1_2);
+		
+		JLabel lblWord = new JLabel("Từ vựng");
+		lblWord.setForeground(Color.WHITE);
+		lblWord.setFont(new Font("Arial", Font.BOLD, 14));
+		lblWord.setBounds(36, 12, 90, 13);
+		panel_1_2.add(lblWord);
+		
+		JPanel panel_1_2_1 = new JPanel();
+		panel_1_2_1.setLayout(null);
+		panel_1_2_1.setBackground(new Color(37, 57, 111));
+		panel_1_2_1.setBounds(320, 0, 130, 40);
+		panelHeader.add(panel_1_2_1);
+		
+		JLabel lblCategory = new JLabel("Chủ đề");
+		lblCategory.setForeground(Color.WHITE);
+		lblCategory.setFont(new Font("Arial", Font.BOLD, 14));
+		lblCategory.setBounds(22, 12, 96, 13);
+		panel_1_2_1.add(lblCategory);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setLayout(null);
+		panel_2.setBackground(new Color(37, 57, 111));
+		panel_2.setBounds(450, 0, 150, 40);
+		panelHeader.add(panel_2);
+		
+		JLabel lblImage = new JLabel("Hình ảnh");
+		lblImage.setForeground(Color.WHITE);
+		lblImage.setFont(new Font("Arial", Font.BOLD, 14));
+		lblImage.setBounds(10, 12, 109, 15);
+		panel_2.add(lblImage);
+		
+		JPanel panel_2_1 = new JPanel();
+		panel_2_1.setLayout(null);
+		panel_2_1.setBackground(new Color(37, 57, 111));
+		panel_2_1.setBounds(600, 0, 234, 40);
+		panelHeader.add(panel_2_1);
+		
+		JLabel lblMeaning = new JLabel("Ý nghĩa");
+		lblMeaning.setForeground(Color.WHITE);
+		lblMeaning.setFont(new Font("Arial", Font.BOLD, 14));
+		lblMeaning.setBounds(25, 10, 109, 20);
+		panel_2_1.add(lblMeaning);
+		
+		JPanel panel_1_2_2 = new JPanel();
+		panel_1_2_2.setLayout(null);
+		panel_1_2_2.setBackground(new Color(37, 57, 111));
+		panel_1_2_2.setBounds(191, 0, 130, 40);
+		panelHeader.add(panel_1_2_2);
+		
+		JLabel lblWordType = new JLabel("Loại từ");
+		lblWordType.setForeground(Color.WHITE);
+		lblWordType.setFont(new Font("Arial", Font.BOLD, 14));
+		lblWordType.setBounds(36, 12, 90, 13);
+		panel_1_2_2.add(lblWordType);
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(Color.WHITE);
+		panel_3.setBounds(0, 40, 995, 460);
+		panel.add(panel_3);
+		panel_3.setLayout(null);
+		
+		int y = 0;
+		for(Vocabulary vocab : new VocabularyDAOImpl(). selectAll()){
+			ItemVocab vocabItem = new 	ItemVocab(vocab, y);			
+			panel_3.add(vocabItem);
+			y = y + 84;
+		}
 
 		textField = new JTextField();
 		textField.setMargin(new Insets(2, 6, 2, 2));
@@ -163,53 +279,7 @@ public class PanelVocab extends JPanel {
 		btnRelative.setBounds(560, 61, 147, 36);
 		add(btnRelative);
 
-		table = new JTable() {
-			public boolean isCellEditable(int row, int column) {                
-                return false;               
-			};
-		};
-		scrollPane.setViewportView(table);
-		DefaultTableModel model = new DefaultTableModel() {
-			public Class<?> getColumnClass(int column) {
-				switch (column) {
-				case 0 -> {
-					return Integer.class;
-				}
-				case 1 -> {
-					return String.class;
-				}
-				case 2 -> {
-					return String.class;
-				}
-				case 3 -> {
-					return String.class;
-				}
-				case 4 -> {
-					return ImageIcon.class;
-				}
-				case 5 -> {
-					return String.class;
-				}
-				case 6 -> {
-					return String.class;
-				}
-				default -> {
-					return String.class;
-				}
-				}
-			}
-		};
-		model.addColumn("Id");
-		model.addColumn("Từ");
-		model.addColumn("Nghĩa (VN)");
-		model.addColumn("Phát Âm");
-		model.addColumn("Hình Ảnh");
-		model.addColumn("Sửa");
-		model.addColumn("Xóa");
-//		model.addColumn("Date of Birth");
-//		model.addColumn("Created At");
-//		model.addColumn("Update At");
-		VocabularyDAOImpl dao = new VocabularyDAOImpl();
+		
 		totalPage = Math.ceil(totalOfRows / rowsOfPage);
 
 		// lbl
@@ -217,52 +287,9 @@ public class PanelVocab extends JPanel {
 		lblRowCount.setText("Row Count: " + totalOfRows);
 
 		// handle
-		dao.selectAll()
-				.forEach(vocab -> model.addRow(new Object[] {
-					vocab.getId(),
-					vocab.getWord(),
-					getMeaningOfWords(vocab.getId()),
-					vocab.getPronunciation(),					
-					getImageByURL(vocab.getImage()),
-					"Sửa",
-					"Xóa"
-				}));
-
-		table.setModel(model);
-		table.setRowHeight(60);
-		table.getTableHeader().setBackground(new Color(37, 57, 111));
-		table.getTableHeader().setForeground(new Color(255, 255, 255));
-		table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
-		table.getTableHeader().setBounds(0, 0, 50, 39);
+	
 	}
 	
-	private String getMeaningOfWords(Integer vocabId) {
-		List<Meaning> meanings = new VocabularyDAOImpl().selectAllMeaningByVocabId(vocabId);
-		if(meanings != null) {
-			
-		} 
-		return null;
-		
-	}
-	private ImageIcon getImageByURL(String imageName) {
-		var imageUrl =  PanelVocab.class.getResource("/vocabulary/" + imageName) ;
-		if(imageUrl != null) {
-			try {
-				final int ROW_HEIGHT = 59;
-				BufferedImage bimg = ImageIO.read(imageUrl);
-				int imgWidth          = bimg.getWidth();
-				int imgHeight         = bimg.getHeight();
-				int rowWidth = (ROW_HEIGHT * imgWidth) / imgHeight; 
-				return new ImageIcon(
-						new ImageIcon(imageUrl)
-							.getImage().getScaledInstance(rowWidth, ROW_HEIGHT, Image.SCALE_SMOOTH)
-					);
-			} catch (Exception e) {
-			}
-			
-		}
-		return null;
-	}
 
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
 		FrameVocab frame = new FrameVocab();

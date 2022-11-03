@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,7 +19,8 @@ import javax.swing.border.EmptyBorder;
 
 import entity.User;
 
-public class FrameAdmin extends JFrame {
+public class FrameMember extends JFrame {
+	
 
 	private JPanel contentPane;
 	private final JPanel panel = new JPanel();
@@ -37,7 +39,7 @@ public class FrameAdmin extends JFrame {
 			public void run() {
 				try {
 					User user = new User();
-					FrameAdmin frame = new FrameAdmin(user);
+					FrameMember frame = new FrameMember(user);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -49,7 +51,7 @@ public class FrameAdmin extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FrameAdmin(User user) {
+	public FrameMember(User user) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 885, 442);
 		contentPane = new JPanel();
@@ -59,7 +61,7 @@ public class FrameAdmin extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Sửa quản trị viên");
+		JLabel lblNewLabel = new JLabel("Sửa thành viên");
 		lblNewLabel.setForeground(new Color(37, 57, 111));
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
 		lblNewLabel.setBounds(20, 11, 219, 34);
@@ -127,6 +129,7 @@ public class FrameAdmin extends JFrame {
 		textDob.setBackground(Color.WHITE);
 		textDob.setBounds(589, 155, 239, 38);
 		contentPane.add(textDob);
+		textDob.setText(user.getDateOfBirth() != null ? user.getDateOfBirth().toString() : null);
 		
 		JButton btnAdd = new JButton("Thêm");
 		btnAdd.setBackground(new Color(67, 98, 190));
@@ -171,6 +174,7 @@ public class FrameAdmin extends JFrame {
 		contentPane.add(textFullname);
 		textFullname.setText(user.getFullname());
 	}
+
 	protected void do_btnReset_actionPerformed(ActionEvent e) {
 		textEmail.setText("");
 		textPhone.setText("");

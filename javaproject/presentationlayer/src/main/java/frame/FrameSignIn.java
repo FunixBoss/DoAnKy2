@@ -12,16 +12,10 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-
-import dao.impl.UserDAOImpl;
-import entity.User;
-import helper.ValidateLogin;
-import service.Authorization;
 
 import java.awt.ComponentOrientation;
 import javax.swing.JPasswordField;
@@ -30,7 +24,7 @@ public class FrameSignIn extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textFieldEmail;
-	private JPasswordField textFieldPassword;
+	private JPasswordField passwordField;
 	private JDesktopPane desktop;
 	/**
 	 * Launch the application.
@@ -78,26 +72,6 @@ public class FrameSignIn extends JFrame {
 		textFieldEmail.setColumns(10);
 		
 		JButton btnSignIn = new JButton("Đăng nhập");
-		btnSignIn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String account = textFieldEmail.getText();
-				String password = textFieldPassword.getText();
-				StringBuilder s = new StringBuilder();
-				try {
-					if( ValidateLogin.checkAll(textFieldEmail, textFieldPassword, s)) {
-						User user = new User(account,password,1);
-						if(UserDAOImpl.loginDb(user)) {
-							Authorization.loggedrole = user.getLevel();
-						}
-					}else {
-						JOptionPane.showMessageDialog(null,s.length()<=0 ? "Vui Lòng Kiểm Tra Lại Dữ Liệu":s.toString());
-					}
-				} catch (Exception e2) {
-					e2.printStackTrace();
-
-				}
-			}
-		});
 		btnSignIn.setBounds(117, 263, 367, 44);
 		btnSignIn.setForeground(new Color(255, 255, 255));
 		btnSignIn.setBackground(new Color(37, 57, 111));
@@ -133,10 +107,10 @@ public class FrameSignIn extends JFrame {
 		panel.setBounds(0, 0, 596, 84);
 		contentPane.add(panel);
 		
-		textFieldPassword = new JPasswordField();
-		textFieldPassword.setMargin(new Insets(2, 6, 2, 2));
-		textFieldPassword.setBounds(245, 189, 239, 38);
-		contentPane.add(textFieldPassword);
+		passwordField = new JPasswordField();
+		passwordField.setMargin(new Insets(2, 6, 2, 2));
+		passwordField.setBounds(245, 189, 239, 38);
+		contentPane.add(passwordField);
 	}
 	
 	protected void do_btnSignUp_actionPerformed(ActionEvent e) {
