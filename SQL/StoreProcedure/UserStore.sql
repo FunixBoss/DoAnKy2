@@ -135,6 +135,18 @@ END
 GO
 
 
+DROP PROC IF EXISTS selUserIfExist
+GO
+CREATE PROC selUserIfExist
+@email NVARCHAR(200)
+AS
+BEGIN
+	SELECT	[EMAIL] FROM [USER]
+	WHERE [EMAIL] = @email
+END
+GO
+
+
 
 DROP PROC IF EXISTS countUser
 GO

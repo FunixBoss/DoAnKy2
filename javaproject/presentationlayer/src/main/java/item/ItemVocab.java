@@ -38,12 +38,12 @@ public class ItemVocab extends JPanel {
 	public ItemVocab(Vocabulary vocab, int y) {
 		setLayout(null);
 		setBounds(0, y, 980, 80);
-		
+
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 77, 995, 3);
 		add(panel);
 		panel.setBackground(new Color(238, 238, 238));
-		
+
 		JPanel panelHeader_1 = new JPanel();
 		panelHeader_1.setBounds(0, 0, 980, 80);
 		add(panelHeader_1);
@@ -79,26 +79,23 @@ public class ItemVocab extends JPanel {
 		panelHeader_1.add(panel_2_1);
 		panel_2_1.setLayout(new BorderLayout(0, 0));
 
-		
 		JLabel lblMeaning = new JLabel("");
 		lblMeaning.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMeaning.setForeground(new Color(0, 0, 0));
 		lblMeaning.setFont(new Font("Arial", Font.PLAIN, 14));
-		List<Meaning> means = 
-				new VocabularyDAOImpl().selectAllMeaningByVocabId(vocab.getId());
-		if(means != null) {
-			String meansStr = means.stream()	
+		List<Meaning> means = new VocabularyDAOImpl().selectAllMeaningByVocabId(vocab.getId());
+		if (means != null) {
+			String meansStr = means.stream()
 					.limit(4)
 					.map(mean -> toCapitalize(mean.getContent()))
 					.collect(Collectors.joining("<br/>"));
-			if(means.size() > 5) {
-			meansStr += " ...";
+			if (means.size() > 5) {
+				meansStr += " ...";
 			}
-			
-			lblMeaning.setText("<html>"+ meansStr +"</html>");
+
+			lblMeaning.setText("<html>" + meansStr + "</html>");
 			panel_2_1.add(lblMeaning);
 		}
-		
 
 		JPanel panel_1_2_2 = new JPanel();
 		panel_1_2_2.setBackground(new Color(255, 255, 255));
@@ -182,7 +179,7 @@ public class ItemVocab extends JPanel {
 		}
 		return null;
 	}
-	
+
 	private String toCapitalize(String str) {
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
 	}

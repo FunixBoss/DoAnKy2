@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.regex.Pattern;
 
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 
 import helper.RegexPattern;
 
@@ -15,20 +16,19 @@ public class Register {
 		boolean ok = true;
 		if (field.getText().equals("")) {
 			sb.append(msg).append("\n");
-			field.setBackground(Color.red);
+			field.setBorder(new LineBorder(Color.red, 2));
 			ok = false;
 		} else {
 			ok = true;
-			field.setBackground(Color.white);
 		}
 		return ok;
 	}
 	public static boolean checkPasswordConfirm(JTextField password,JTextField PasswordConfirm,StringBuilder sb) {
-		if(password.getText().equals(PasswordConfirm.getText()) && !(password.getText().equals(""))) {
-			PasswordConfirm.setBackground(Color.white);
+		if(password.getText().equals(PasswordConfirm.getText()) && !PasswordConfirm.getText().equals("") ) {
+			PasswordConfirm.setBorder(new LineBorder(Color.GREEN, 2));
 			return true;
 		}else {
-			PasswordConfirm.setBackground(Color.red);
+			PasswordConfirm.setBorder(new LineBorder(Color.RED, 2));
 			sb.append("Mật Khẩu Không Trùng Khớp").append("\n");
 			return false;
 		}
@@ -45,6 +45,13 @@ public class Register {
 			ok = false;
 		}
 		return ok;
+	}
+	public static void checkColorText(String regex, JTextField message, StringBuilder sb,String fieldComponent) {
+		if(checkRegexRegister(regex, message, sb, fieldComponent)){
+			message.setBorder(new LineBorder(Color.GREEN, 2));
+		}else {
+			message.setBorder(new LineBorder(Color.RED, 2));
+		}
 	}
 	
 

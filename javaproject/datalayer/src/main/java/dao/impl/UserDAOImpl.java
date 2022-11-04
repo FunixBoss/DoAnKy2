@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
+import java.sql.Types;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -24,10 +24,10 @@ import entity.User;
 import entity.Vocabulary;
 
 public class UserDAOImpl implements UserDAO {
-//	fields
+	// fields
 	private List<User> list;
 
-//	constructors
+	// constructors
 	public UserDAOImpl(Integer level) {
 		if (list == null) {
 			list = getList(level);
@@ -75,7 +75,7 @@ public class UserDAOImpl implements UserDAO {
 					cs.close();
 				}
 			} catch (Exception e2) {
-//				e2.printStackTrace();
+				// e2.printStackTrace();
 				System.out.println("Get list " + (level == 1 ? "Admin" : "User") + "Failed");
 			}
 		}
@@ -98,11 +98,11 @@ public class UserDAOImpl implements UserDAO {
 				Integer user_id = rs.getInt(1);
 				String email = rs.getString(2);
 
-//				Can be null
-//				String fullname = null;
+				// Can be null
+				// String fullname = null;
 				String fullname = rs.getString(3);
 
-//				String phoneNumber = null;
+				// String phoneNumber = null;
 				String phoneNumber = rs.getString(4);
 				LocalDate dob = null;
 				if (rs.getDate(5) != null) {
@@ -119,7 +119,7 @@ public class UserDAOImpl implements UserDAO {
 				return null;
 			}
 		} catch (Exception e) {
-//			e.printStackTrace();
+			// e.printStackTrace();
 			System.err.println("Get a user failed!");
 		}
 		return user;
@@ -139,7 +139,7 @@ public class UserDAOImpl implements UserDAO {
 				Integer id = rs.getInt(1);
 				String email = rs.getString(2);
 
-//				Can be null
+				// Can be null
 				String fullname = null;
 				if (rs.getString(3) != null) {
 					fullname = rs.getString(3);
@@ -162,7 +162,7 @@ public class UserDAOImpl implements UserDAO {
 				list.add(new User(id, email, null, level, fullname, phoneNumber, dob, createdAt, updatedAt));
 			}
 		} catch (Exception e) {
-//			e.printStackTrace();
+			// e.printStackTrace();
 			System.err.println("Get list of user failed!");
 		}
 
@@ -175,25 +175,48 @@ public class UserDAOImpl implements UserDAO {
 	 * @return 1 for insert successfully
 	 */
 	public Integer insert(User user) {
-		String hashed = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
-		Integer result = 0;
+		if (!checkExistEmail(user)) {
+			String hashed = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+			Integer result = 0;
+			try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+					var cs = con.prepareCall("{call insertUser(?, ?, ?, ?, ?, ?)}");) {
+				// must be validate before insert
+				cs.setString(1, user.getEmail());
+				cs.setString(2, hashed);
+				cs.setInt(3, user.getLevel());
+
+				// can be null
+				cs.setString(4, user.getFullname());
+				if (user.getDateOfBirth() != null) {
+					cs.setDate(5, Date.valueOf(user.getDateOfBirth()));
+				} else {
+					cs.setDate(5, null);
+				}
+				cs.setString(6, user.getPhoneNumber());
+				result = cs.executeUpdate();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.err.println("email da ton tai asd ");
+			}
+			return result;
+		} else {
+			JOptionPane.showMessageDialog(null, "Tên Đăng Nhập Đã tồn Taij");
+		}
+		return 0;
+	}
+
+	public static boolean checkExistEmail(User u) {
+		boolean result = false;
 		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
-				var cs = con.prepareCall("{call insertUser(?, ?, ?, ?, ?, ?)}");) {
-			// must be validate before insert
-			cs.setString(1, user.getEmail());
-			cs.setString(2, hashed);
-			cs.setInt(3, user.getLevel());
-
-//			can be null
-			cs.setString(4, null);
-			cs.setDate(5, null);
-			cs.setDate(5, null);
-			cs.setString(6, null);
-
-			result = cs.executeUpdate();
+				var cs = con.prepareCall("{call selUserIfExist(?)}");) {
+			cs.setString(1, u.getEmail());
+			var rs = cs.executeQuery();
+			if (rs.next()) {
+				return true;
+			}
 		} catch (Exception e) {
-//			e.printStackTrace();
-			System.err.println("Insert User Failed");
+			// e.printStackTrace();
+			System.err.println("vui long kiem tra lai du lieu");
 		}
 		return result;
 	}
@@ -288,7 +311,7 @@ public class UserDAOImpl implements UserDAO {
 			cs.setString(4, user.getPhoneNumber());
 			result = cs.executeUpdate();
 		} catch (Exception e) {
-//			e.printStackTrace();
+			// e.printStackTrace();
 			System.out.println("Update User Failed");
 		}
 		return result;
@@ -325,7 +348,7 @@ public class UserDAOImpl implements UserDAO {
 			cs.setInt(1, user.getId());
 			result = cs.executeUpdate();
 		} catch (Exception e) {
-//			e.printStackTrace();
+			// e.printStackTrace();
 			System.out.println("Delete a user failed!");
 		}
 		return result;
@@ -345,7 +368,7 @@ public class UserDAOImpl implements UserDAO {
 				hst = new History(bmId, vocabId, userIdRs);
 			}
 		} catch (Exception e) {
-//			e.printStackTrace();
+			// e.printStackTrace();
 			System.err.println("Select History By User Id failed");
 		}
 		return hst;
@@ -365,12 +388,11 @@ public class UserDAOImpl implements UserDAO {
 				bm = new Bookmark(bmId, vocabId, userIdRs);
 			}
 		} catch (Exception e) {
-//			e.printStackTrace();
+			// e.printStackTrace();
 			System.err.println("Select Bookmark By User Id failed");
 		}
 		return bm;
 	}
-
 
 	@Override
 	public List<User> selectByPages(int pageNumber, int rowOfPages) {
@@ -383,7 +405,7 @@ public class UserDAOImpl implements UserDAO {
 				Integer id = rs.getInt(1);
 				String email = rs.getString(2);
 
-//			Can be null
+				// Can be null
 				String fullname = null;
 				if (rs.getString(3) != null) {
 					fullname = rs.getString(3);
@@ -429,7 +451,7 @@ public class UserDAOImpl implements UserDAO {
 
 		return count;
 	}
-	
+
 	@Override
 	public List<User> selectAdminByPages(int pageNumber, int rowOfPages) {
 		List<User> list = new ArrayList<>();
@@ -441,7 +463,7 @@ public class UserDAOImpl implements UserDAO {
 				Integer id = rs.getInt(1);
 				String email = rs.getString(2);
 
-//			Can be null
+				// Can be null
 				String fullname = null;
 				if (rs.getString(3) != null) {
 					fullname = rs.getString(3);
