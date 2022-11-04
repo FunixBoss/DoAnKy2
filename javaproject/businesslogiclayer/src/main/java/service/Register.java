@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.JTextField;
 
-import helper.regexPattern;
+import helper.RegexPattern;
 
 public class Register {
 	private static JTextField email;

@@ -83,3 +83,29 @@ BEGIN
 	WHERE VOCABULARY.CATEGORY_ID = @cate_id
 END
 GO	
+
+
+DROP PROC IF EXISTS countCate
+GO
+CREATE PROC countCate
+AS
+BEGIN
+	SELECT COUNT(ID) total FROM CATEGORY
+END
+GO
+
+
+DROP PROC IF EXISTS selCateByPages
+GO
+CREATE PROC selCateByPages
+@PageNumber AS INT, @RowsOfPage AS INT
+AS
+BEGIN
+	SELECT * FROM CATEGORY
+	ORDER BY ID
+	OFFSET (@pageNumber - 1) * @RowsOfPage ROWS
+	FETCH NEXT @RowsOfPage ROWS ONLY
+END
+GO 
+
+--- EXEC selCateByPages 2, 10

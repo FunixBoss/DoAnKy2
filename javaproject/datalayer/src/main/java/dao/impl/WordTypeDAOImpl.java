@@ -46,8 +46,21 @@ public class WordTypeDAOImpl implements WordTypeDAO{
 
 	@Override
 	public WordType select(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		WordType wt = null;
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call selWordType(?)}");
+		){
+			cs.setInt(1, id);
+			var rs = cs.executeQuery();
+			if(rs.next()) {
+				wt = new WordType(rs.getString(2));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Select WordType failed");
+		}
+		return wt;
 	}
 
 	@Override

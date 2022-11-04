@@ -1,9 +1,13 @@
 package dao.impl;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import database.CallableStatementUtils;
 import database.ConnectDBFromProperties;
 import entity.Meaning;
 import entity.Relatives;
@@ -14,7 +18,7 @@ public class VocabularyDAOImpl implements VocabularyDAO {
 	private List<Vocabulary> list;
 
 	public VocabularyDAOImpl() {
-		if (list == null) {
+		if(list == null) {
 			list = selectAll();
 		}
 	}
@@ -216,4 +220,51 @@ public class VocabularyDAOImpl implements VocabularyDAO {
 		}
 		return list.isEmpty() ? null : list;
 	}
+	
+	@Override
+	
+	public List<Vocabulary> selectByPages(int pageNumber, int rowOfPages) {
+		List<Vocabulary> list = new ArrayList<>();
+		
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = CallableStatementUtils.createCS(con, "{call selVocabByPages(?, ?)}", pageNumber, rowOfPages);
+			var rs = cs.executeQuery();
+		){
+			while(rs.next()) {
+				Integer vocab_id = rs.getInt(1);
+				String word = rs.getString(2);
+				String image = rs.getString(3);
+				String pronunciation = rs.getString(4);
+				Integer categoryId = rs.getInt(5);
+				Integer wordTypeId = rs.getInt(6);
+				list.add(
+					new Vocabulary(vocab_id, word, image, pronunciation, categoryId, wordTypeId));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Select Vocab By Pages Failed");
+		}
+		return list.isEmpty() ? null : list;
+	}
+
+	@Override
+	public Integer countNumberOfVocab() {
+		int count = 0;
+		
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call countVocab}");
+			var rs = cs.executeQuery();
+		){
+			if(rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return count;
+	}
+	
 }

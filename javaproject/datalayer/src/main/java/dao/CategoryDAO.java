@@ -7,4 +7,7 @@ import entity.Vocabulary;
 
 public interface CategoryDAO extends DAO<Category> {
 	List<Vocabulary> selectAllVocabByCategoryId(Integer cateId);
+	List<Category> selectByPages(int pageNumber, int rowOfPages);
+	Integer countNumberOfCate();
+	
 }

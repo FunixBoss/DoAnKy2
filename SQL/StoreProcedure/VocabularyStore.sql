@@ -91,3 +91,31 @@ BEGIN
 END
 GO
   
+
+
+DROP PROC IF EXISTS countVocab
+GO
+CREATE PROC countVocab
+AS
+BEGIN
+	SELECT COUNT(ID) total FROM VOCABULARY
+END
+GO
+ EXEC countVocab
+
+-- phan trang lay bao nhieu dong tiep theo
+
+DROP PROC IF EXISTS selVocabByPages
+GO
+CREATE PROC selVocabByPages
+@PageNumber AS INT, @RowsOfPage AS INT
+AS
+BEGIN
+	SELECT * FROM VOCABULARY
+	ORDER BY ID
+	OFFSET (@pageNumber - 1) * @RowsOfPage ROWS
+	FETCH NEXT @RowsOfPage ROWS ONLY
+END
+GO 
+
+--- EXEC selVocabByPages 2, 10

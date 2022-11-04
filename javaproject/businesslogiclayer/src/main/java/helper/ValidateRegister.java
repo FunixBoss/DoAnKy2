@@ -19,8 +19,8 @@ public class ValidateRegister {
 
 	public static boolean checkAll(JTextField textFieldEmail,JTextField textFieldPassword,JTextField textFieldPasswordConfirm,StringBuilder s) {
 		boolean ok = true;
-		boolean checkEmail=  Register.checkRegexRegister(regexPattern.EMAIL, textFieldEmail,s, "email");
-		boolean checkPassword= Register.checkRegexRegister(regexPattern.PASSWORD, textFieldPassword, s,"password");
+		boolean checkEmail=  Register.checkRegexRegister(RegexPattern.EMAIL, textFieldEmail,s, "email");
+		boolean checkPassword= Register.checkRegexRegister(RegexPattern.PASSWORD, textFieldPassword, s,"password");
 		boolean checkPasswordConfirm= Register.checkPasswordConfirm( textFieldPassword,textFieldPasswordConfirm, s);
 		if (!(checkPassword &&checkEmail&&checkPasswordConfirm)) {
 			return false;

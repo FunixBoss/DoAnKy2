@@ -16,17 +16,28 @@ import javax.swing.JOptionPane;
 import org.mindrot.jbcrypt.BCrypt;
 
 import dao.UserDAO;
+import database.CallableStatementUtils;
 import database.ConnectDBFromProperties;
 import entity.Bookmark;
 import entity.History;
 import entity.User;
+import entity.Vocabulary;
 
 public class UserDAOImpl implements UserDAO {
 //	fields
 	private List<User> list;
 
 //	constructors
+	public UserDAOImpl(Integer level) {
+		if (list == null) {
+			list = getList(level);
+		}
+	}
+
 	public UserDAOImpl() {
+		if (list == null) {
+			list = selectAll();
+		}
 	}
 
 	public List<User> getList(int level) {
@@ -186,6 +197,7 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return result;
 	}
+
 	public static String getPassFromDbById(Integer id) {
 		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
 				PreparedStatement stmt = con.prepareStatement("SELECT PASSWORD FROM [USER] where id= ?");) {
@@ -199,10 +211,10 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return null;
 	}
-	
+
 	public static String getPassFromDbByAccount(String acc) {
 		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
-			PreparedStatement stmt = con.prepareStatement("SELECT PASSWORD FROM [USER] where EMAIL= ?");) {
+				PreparedStatement stmt = con.prepareStatement("SELECT PASSWORD FROM [USER] where EMAIL= ?");) {
 			stmt.setString(1, acc);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -213,16 +225,15 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return BCrypt.hashpw(acc, BCrypt.gensalt());
 	}
+
 	/**
 	 * @return 0 for update private info failed
 	 * @return 1 or 2 for update private info successfully
 	 */
 	public static int getLevelFromUser(User u) {
 		int result = 0;
-		try (
-			var con = ConnectDBFromProperties.getConnectionFromClassPath();
-			var cs = con.prepareCall("{call selLevelByUserEmail(?)}");
-		) {
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call selLevelByUserEmail(?)}");) {
 			cs.setString(1, u.getEmail());
 			var rs = cs.executeQuery();
 			if (rs.next()) {
@@ -235,13 +246,14 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return 0;
 	}
+
 	public static boolean loginDb(User u) {
 		try {
-			if (BCrypt.checkpw(u.getPassword(),getPassFromDbByAccount(u.getEmail()))) {
+			if (BCrypt.checkpw(u.getPassword(), getPassFromDbByAccount(u.getEmail()))) {
 				u.setLevel(getLevelFromUser(u));
 				JOptionPane.showMessageDialog(null, "Đăng Nhập Thành Công !");
 				return true;
-			}else {
+			} else {
 				JOptionPane.showMessageDialog(null, "Tài Khoản Hoặc Mật Khẩu Không Chính Xác !");
 				return false;
 			}
@@ -251,6 +263,7 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return false;
 	}
+
 	@Override
 	/*
 	 * do not need
@@ -321,10 +334,8 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public History selectHistoryByUserId(Integer userId) {
 		History hst = null;
-		try (
-			var con = ConnectDBFromProperties.getConnectionFromClassPath();
-			var cs = con.prepareCall("{call selHistoryByUserId(?)}");
-		) {
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call selHistoryByUserId(?)}");) {
 			cs.setInt(1, userId);
 			var rs = cs.executeQuery();
 			if (rs.next()) {
@@ -343,10 +354,8 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public Bookmark selectBookmarkByUserId(Integer userId) {
 		Bookmark bm = null;
-		try (
-			var con = ConnectDBFromProperties.getConnectionFromClassPath();
-			var cs = con.prepareCall("{call selBookmarkByUserId(?)}");
-		) {
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call selBookmarkByUserId(?)}");) {
 			cs.setInt(1, userId);
 			var rs = cs.executeQuery();
 			if (rs.next()) {
@@ -361,9 +370,121 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return bm;
 	}
-public static void main(String[] args) {
-//	User x = new User("hungn321@gmail.com","Aa@12345",1);
-//	System.out.println(UserDAOImpl.getLevelFromUser(x));
+
+
+	@Override
+	public List<User> selectByPages(int pageNumber, int rowOfPages) {
+		List<User> list = new ArrayList<>();
+
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = CallableStatementUtils.createCS(con, "{call selUserByPages(?, ?)}", pageNumber, rowOfPages);
+				var rs = cs.executeQuery();) {
+			while (rs.next()) {
+				Integer id = rs.getInt(1);
+				String email = rs.getString(2);
+
+//			Can be null
+				String fullname = null;
+				if (rs.getString(3) != null) {
+					fullname = rs.getString(3);
+				}
+
+				String phoneNumber = null;
+				if (rs.getString(4) != null) {
+					phoneNumber = rs.getString(4);
+				}
+				LocalDate dob = null;
+				if (rs.getDate(5) != null) {
+					dob = LocalDate.parse(rs.getDate(5).toString(), DateTimeFormatter.ofPattern("[yyyy-MM-dd]"));
+				}
+				Integer level = rs.getInt(6);
+
+				LocalDate createdAt = LocalDate.parse(rs.getDate(7).toString(),
+						DateTimeFormatter.ofPattern("[yyyy-MM-dd]"));
+				LocalDate updatedAt = LocalDate.parse(rs.getDate(8).toString(),
+						DateTimeFormatter.ofPattern("[yyyy-MM-dd]"));
+
+				list.add(new User(id, email, null, level, fullname, phoneNumber, dob, createdAt, updatedAt));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Select User By Pages Failed");
+		}
+		return list.isEmpty() ? null : list;
+	}
+
+	@Override
+	public Integer countNumberOfUser() {
+		int count = 0;
+
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call countUser}");
+				var rs = cs.executeQuery();) {
+			if (rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return count;
+	}
 	
-}
+	@Override
+	public List<User> selectAdminByPages(int pageNumber, int rowOfPages) {
+		List<User> list = new ArrayList<>();
+
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = CallableStatementUtils.createCS(con, "{call selAdminByPages(?, ?)}", pageNumber, rowOfPages);
+				var rs = cs.executeQuery();) {
+			while (rs.next()) {
+				Integer id = rs.getInt(1);
+				String email = rs.getString(2);
+
+//			Can be null
+				String fullname = null;
+				if (rs.getString(3) != null) {
+					fullname = rs.getString(3);
+				}
+
+				String phoneNumber = null;
+				if (rs.getString(4) != null) {
+					phoneNumber = rs.getString(4);
+				}
+				LocalDate dob = null;
+				if (rs.getDate(5) != null) {
+					dob = LocalDate.parse(rs.getDate(5).toString(), DateTimeFormatter.ofPattern("[yyyy-MM-dd]"));
+				}
+				Integer level = rs.getInt(6);
+
+				LocalDate createdAt = LocalDate.parse(rs.getDate(7).toString(),
+						DateTimeFormatter.ofPattern("[yyyy-MM-dd]"));
+				LocalDate updatedAt = LocalDate.parse(rs.getDate(8).toString(),
+						DateTimeFormatter.ofPattern("[yyyy-MM-dd]"));
+
+				list.add(new User(id, email, null, level, fullname, phoneNumber, dob, createdAt, updatedAt));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Select User By Pages Failed");
+		}
+		return list.isEmpty() ? null : list;
+	}
+
+	@Override
+	public Integer countNumberOfAdmin() {
+		int count = 0;
+
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call countAdmin}");
+				var rs = cs.executeQuery();) {
+			if (rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return count;
+	}
 }

@@ -2,21 +2,27 @@ package dao;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import dao.impl.UserDAOImpl;
+import entity.Bookmark;
+import entity.History;
 import entity.User;
 
-public class TestUserDAOImpl {
+public class TestUserDAOImpl{
 	public static void main(String[] args) {
+		TestUserDAOImpl test = new TestUserDAOImpl();
 		User user = new User("daohoangmy@gmail.com", "123123", 1, null, null, null , null, null);
 //		showListUser(); // done
-		showListUserByLevel(1);
+//		showListUserByLevel(1);
 //		System.out.println(selectAUser(3)); // done
 		
 //		System.out.println(insertAUser(user)); // done
 //		System.out.println(updatePrivateInformationUser()); // done
 //		System.out.println(updatePasswordUser()); done
 //		System.out.println(deleteUser(selectAUser(9)));
+//		System.out.println(test.countNumberOfUser());
+		test.selectByPages(3, 10).forEach(System.out::println);
 	}
 	
 	public static void showListUser() {
@@ -49,5 +55,13 @@ public class TestUserDAOImpl {
 	
 	public static int deleteUser(User user) {
 		return new UserDAOImpl().delete(user);
+	}
+
+	public List<User> selectByPages(int pageNumber, int rowOfPages) {
+		return new UserDAOImpl().selectByPages(pageNumber, rowOfPages);
+	}
+
+	public Integer countNumberOfUser() {
+		return  new UserDAOImpl().countNumberOfUser();
 	}
 }

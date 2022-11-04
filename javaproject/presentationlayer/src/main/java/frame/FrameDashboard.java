@@ -234,17 +234,16 @@ public class FrameDashboard extends JFrame {
 		lblIconHome.setBounds(30, 18, 46, 29);
 		panelHome.add(lblIconHome);
 		lblIconHome.setIcon(new ImageIcon(homeImg));
-		
 		panelCategory = new JPanel();
+		panelCategory.setLayout(null);
+		panelCategory.setBackground(Color.WHITE);
+		panelCategory.setBounds(0, 288, 217, 70);
 		panelCategory.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				do_panelCategory_mouseClicked(e);
 			}
 		});
-		panelCategory.setLayout(null);
-		panelCategory.setBackground(Color.WHITE);
-		panelCategory.setBounds(0, 288, 217, 70);
 		panel.add(panelCategory);
 		
 		JLabel lblIconCategory = new JLabel("");
@@ -302,6 +301,8 @@ public class FrameDashboard extends JFrame {
 		jpMember.setVisible(false);
 		jpVocab.setVisible(false);
 		jpAdmin.setVisible(false);
+		jpCategory.setVisible(false);
+		jpDashboard.setVisible(false);
 		panel.setVisible(true);
 	}
 	public void menuChanged(JPanel panel, JLabel label) {
@@ -324,6 +325,7 @@ public class FrameDashboard extends JFrame {
 		menuClicked(jpVocab);
 		menuChanged(panelVocab,lblVocab);
 	}
+	
 	protected void do_panelMember_mouseClicked(MouseEvent e) {
 		menuClicked(jpMember);	
 		menuChanged(panelMember,lblMember);

@@ -4,6 +4,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import database.CallableStatementUtils;
 import database.ConnectDBFromProperties;
 import entity.Category;
 import entity.Vocabulary;
@@ -163,6 +164,47 @@ public class CategoryDAOImpl implements CategoryDAO {
 			System.out.println("Select All Vocab In Category failed");
 		}
 		return list.isEmpty() ? null : list;
+	}
+
+	@Override
+	public List<Category> selectByPages(int pageNumber, int rowOfPages) {
+		List<Category> list = new ArrayList<>();
+		
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = CallableStatementUtils.createCS(con, "{call selCateByPages(?, ?)}", pageNumber, rowOfPages);
+			var rs = cs.executeQuery();
+		){
+			while(rs.next()) {
+				Integer id = rs.getInt(1);
+				String name = rs.getString(2);
+				String imageIcon = rs.getString(3);
+				list.add(new Category(id, name, imageIcon));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Select Vocab By Pages Failed");
+		}
+		return list.isEmpty() ? null : list;
+	}
+
+	@Override
+	public Integer countNumberOfCate() {
+		int count = 0;
+		
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call countCate}");
+			var rs = cs.executeQuery();
+		){
+			if(rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return count;
 	}
 
 }

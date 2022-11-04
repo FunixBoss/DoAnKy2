@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.JTextField;
 
-public class checkRegex {
+public class Validation {
 	public static boolean regexPatternOfvalidator(String regex, JTextField message, StringBuilder sb) {
 		boolean ok = true;
 		

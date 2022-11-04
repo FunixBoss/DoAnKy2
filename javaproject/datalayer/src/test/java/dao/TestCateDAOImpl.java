@@ -51,4 +51,16 @@ public class TestCateDAOImpl implements CategoryDAO{
 		return new CategoryDAOImpl().selectAllVocabByCategoryId(cateId);
 	}
 
+	@Override
+	public List<Category> selectByPages(int pageNumber, int rowOfPages) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer countNumberOfCate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
