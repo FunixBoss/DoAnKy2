@@ -108,7 +108,7 @@ public class ItemVocab extends JPanel {
 		JPanel panel_2_1 = new JPanel();
 		panel_2_1.setLayout(null);
 		panel_2_1.setBackground(new Color(255, 255, 255));
-		panel_2_1.setBounds(600, 0, 210, 80);
+		panel_2_1.setBounds(610, 0, 210, 80);
 		panelHeader_1.add(panel_2_1);
 		
 		JLabel lblMeaning = new JLabel("");

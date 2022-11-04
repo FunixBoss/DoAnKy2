@@ -5,6 +5,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
+
+import helper.regexPattern;
 
 public class Login {
 	
@@ -12,11 +15,11 @@ public class Login {
 		boolean ok = true;
 		if (field.getText().equals("")) {
 			sb.append(msg).append("\n");
-			field.setBackground(Color.red);
+			field.setBorder(new LineBorder(Color.red, 2));
 			ok = false;
 		} else {
 			ok = true;
-			field.setBackground(Color.white);
+//			field.setBorder(new LineBorder(Color.GREEN, 2));
 		}
 		return ok;
 	}
@@ -35,4 +38,12 @@ public class Login {
 		}
 		return ok;
 	}
+	public static void checkColorText(String regex, JTextField message, StringBuilder sb,String fieldComponent) {
+		if(checkRegexLogin(regex, message, sb, fieldComponent)){
+			message.setBorder(new LineBorder(Color.GREEN, 2));
+		}else {
+			message.setBorder(new LineBorder(Color.RED, 2));
+		}
+	}
+	
 }

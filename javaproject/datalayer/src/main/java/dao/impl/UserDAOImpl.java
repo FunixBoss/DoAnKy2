@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
+import java.sql.Types;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -164,28 +164,53 @@ public class UserDAOImpl implements UserDAO {
 	 * @return 1 for insert successfully
 	 */
 	public Integer insert(User user) {
-		String hashed = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
-		Integer result = 0;
-		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
-				var cs = con.prepareCall("{call insertUser(?, ?, ?, ?, ?, ?)}");) {
-			// must be validate before insert
-			cs.setString(1, user.getEmail());
-			cs.setString(2, hashed);
-			cs.setInt(3, user.getLevel());
-
+		if(!checkExistEmail(user)) {
+			String hashed = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+			Integer result = 0;
+			try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+					var cs = con.prepareCall("{call insertUser(?, ?, ?, ?, ?, ?)}");) {
+				// must be validate before insert
+				cs.setString(1, user.getEmail());
+				cs.setString(2, hashed);
+				cs.setInt(3, user.getLevel());
+				
 //			can be null
-			cs.setString(4, null);
-			cs.setDate(5, null);
-			cs.setDate(5, null);
-			cs.setString(6, null);
+				cs.setString(4, user.getFullname());
+				if(user.getDateOfBirth() != null) {
+					cs.setDate(5, Date.valueOf(user.getDateOfBirth()));
+				} else {
+					cs.setDate(5, null);
+				}
+				cs.setString(6, user.getPhoneNumber());
+				result = cs.executeUpdate();
+			} catch (Exception e) {
+			e.printStackTrace();
+				System.err.println("email da ton tai asd ");
+			}
+			return result;
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "Tên Đăng Nhập Đã tồn Taij");
+		}
+		return 0;
+	}
 
-			result = cs.executeUpdate();
+	public static boolean checkExistEmail(User u) {
+		boolean result = false;
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call selUserIfExist(?)}");) {
+			cs.setString(1, u.getEmail());
+			var rs = cs.executeQuery();
+			if (rs.next()) {
+				return true;
+			}
 		} catch (Exception e) {
 //			e.printStackTrace();
-			System.err.println("Insert User Failed");
+			System.err.println("vui long kiem tra lai du lieu");
 		}
 		return result;
 	}
+
 	public static String getPassFromDbById(Integer id) {
 		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
 				PreparedStatement stmt = con.prepareStatement("SELECT PASSWORD FROM [USER] where id= ?");) {
@@ -199,10 +224,10 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return null;
 	}
-	
+
 	public static String getPassFromDbByAccount(String acc) {
 		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
-			PreparedStatement stmt = con.prepareStatement("SELECT PASSWORD FROM [USER] where EMAIL= ?");) {
+				PreparedStatement stmt = con.prepareStatement("SELECT PASSWORD FROM [USER] where EMAIL= ?");) {
 			stmt.setString(1, acc);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -213,16 +238,15 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return BCrypt.hashpw(acc, BCrypt.gensalt());
 	}
+
 	/**
 	 * @return 0 for update private info failed
 	 * @return 1 or 2 for update private info successfully
 	 */
 	public static int getLevelFromUser(User u) {
 		int result = 0;
-		try (
-			var con = ConnectDBFromProperties.getConnectionFromClassPath();
-			var cs = con.prepareCall("{call selLevelByUserEmail(?)}");
-		) {
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call selLevelByUserEmail(?)}");) {
 			cs.setString(1, u.getEmail());
 			var rs = cs.executeQuery();
 			if (rs.next()) {
@@ -235,13 +259,14 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return 0;
 	}
+
 	public static boolean loginDb(User u) {
 		try {
-			if (BCrypt.checkpw(u.getPassword(),getPassFromDbByAccount(u.getEmail()))) {
+			if (BCrypt.checkpw(u.getPassword(), getPassFromDbByAccount(u.getEmail()))) {
 				u.setLevel(getLevelFromUser(u));
 				JOptionPane.showMessageDialog(null, "Đăng Nhập Thành Công !");
 				return true;
-			}else {
+			} else {
 				JOptionPane.showMessageDialog(null, "Tài Khoản Hoặc Mật Khẩu Không Chính Xác !");
 				return false;
 			}
@@ -251,6 +276,7 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return false;
 	}
+
 	@Override
 	/*
 	 * do not need
@@ -321,10 +347,8 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public History selectHistoryByUserId(Integer userId) {
 		History hst = null;
-		try (
-			var con = ConnectDBFromProperties.getConnectionFromClassPath();
-			var cs = con.prepareCall("{call selHistoryByUserId(?)}");
-		) {
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call selHistoryByUserId(?)}");) {
 			cs.setInt(1, userId);
 			var rs = cs.executeQuery();
 			if (rs.next()) {
@@ -343,10 +367,8 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public Bookmark selectBookmarkByUserId(Integer userId) {
 		Bookmark bm = null;
-		try (
-			var con = ConnectDBFromProperties.getConnectionFromClassPath();
-			var cs = con.prepareCall("{call selBookmarkByUserId(?)}");
-		) {
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call selBookmarkByUserId(?)}");) {
 			cs.setInt(1, userId);
 			var rs = cs.executeQuery();
 			if (rs.next()) {
@@ -361,9 +383,14 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return bm;
 	}
-public static void main(String[] args) {
-//	User x = new User("hungn321@gmail.com","Aa@12345",1);
+
+	public static void main(String[] args) {
+	User x = new User("ph22@gmail.com","Aa@12345",1);
+	UserDAOImpl y = new UserDAOImpl();
+	y.insert(x);
+//	x.insert(x);
+//	System.out.println(checkExistEmail(x));
 //	System.out.println(UserDAOImpl.getLevelFromUser(x));
-	
-}
+
+	}
 }

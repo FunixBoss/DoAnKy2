@@ -12,19 +12,30 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
+
+import dao.impl.UserDAOImpl;
+import entity.User;
+import helper.ValidateLogin;
+import helper.regexPattern;
+import service.Authorization;
+import service.Login;
 
 import java.awt.ComponentOrientation;
 import javax.swing.JPasswordField;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class FrameSignIn extends JFrame {
-
 	private JPanel contentPane;
 	private JTextField textFieldEmail;
-	private JPasswordField passwordField;
+	private JPasswordField textFieldPassword;
 	private JDesktopPane desktop;
 	/**
 	 * Launch the application.
@@ -63,6 +74,15 @@ public class FrameSignIn extends JFrame {
 		lblPassword.setFont(new Font("Arial", Font.PLAIN, 14));
 		
 		textFieldEmail = new JTextField();
+		textFieldEmail.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				StringBuilder s = new StringBuilder();
+				Login.checkColorText(regexPattern.EMAIL, textFieldEmail, s , "email");
+			}
+		});
+//		textFieldEmail.setBorder(new LineBorder(Color.red, 2));
+		textFieldEmail.setCaretColor(new Color(0, 0, 0));
 		lblEmail.setLabelFor(textFieldEmail);
 		textFieldEmail.setMargin(new Insets(2, 6, 2, 2));
 		textFieldEmail.setBounds(245, 118, 239, 38);
@@ -72,6 +92,26 @@ public class FrameSignIn extends JFrame {
 		textFieldEmail.setColumns(10);
 		
 		JButton btnSignIn = new JButton("Đăng nhập");
+		btnSignIn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String account = textFieldEmail.getText();
+				String password = textFieldPassword.getText();
+				StringBuilder s = new StringBuilder();
+				try {
+					if( ValidateLogin.checkAll(textFieldEmail, textFieldPassword, s)) {
+						User user = new User(account,password,1);
+						if(UserDAOImpl.loginDb(user)) {
+							Authorization authInfoUser = new Authorization(account, password, user.getLevel());
+						}
+					}else {
+						JOptionPane.showMessageDialog(null,s.length()<=0 ? "Vui Lòng Kiểm Tra Lại Dữ Liệu":s.toString());
+					}
+				} catch (Exception e2) {
+					e2.printStackTrace();
+
+				}
+			}
+		});
 		btnSignIn.setBounds(117, 263, 367, 44);
 		btnSignIn.setForeground(new Color(255, 255, 255));
 		btnSignIn.setBackground(new Color(37, 57, 111));
@@ -107,10 +147,27 @@ public class FrameSignIn extends JFrame {
 		panel.setBounds(0, 0, 596, 84);
 		contentPane.add(panel);
 		
-		passwordField = new JPasswordField();
-		passwordField.setMargin(new Insets(2, 6, 2, 2));
-		passwordField.setBounds(245, 189, 239, 38);
-		contentPane.add(passwordField);
+		textFieldPassword = new JPasswordField();
+		textFieldPassword.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				StringBuilder s = new StringBuilder();
+				Login.checkColorText(regexPattern.PASSWORD, textFieldPassword, s , "password");
+			}
+		});
+		textFieldPassword.setMargin(new Insets(2, 6, 2, 2));
+		textFieldPassword.setBounds(245, 189, 239, 38);
+		contentPane.add(textFieldPassword);
+		
+		JLabel textMess1 = new JLabel("");
+		textMess1.setAlignmentX(Component.CENTER_ALIGNMENT);
+		textMess1.setBounds(495, 117, 57, 38);
+		contentPane.add(textMess1);
+		
+		JLabel textmess2 = new JLabel("");
+		textmess2.setAlignmentX(0.5f);
+		textmess2.setBounds(494, 189, 57, 38);
+		contentPane.add(textmess2);
 	}
 	
 	protected void do_btnSignUp_actionPerformed(ActionEvent e) {

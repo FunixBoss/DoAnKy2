@@ -8,13 +8,23 @@ import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import dao.impl.UserDAOImpl;
+import entity.User;
+import helper.ValidateRegister;
+import helper.regexPattern;
+import service.Register;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class FrameAdmin extends JFrame {
 
@@ -24,8 +34,8 @@ public class FrameAdmin extends JFrame {
 	private JTextField textPhone;
 	private JTextField textDob;
 	private JTextField txtLevel;
-	private JPasswordField passwordFieldPassword;
-	private JPasswordField passwordFieldResetPassword;
+	private JPasswordField passwordField;
+	private JPasswordField passwordFieldConfirm;
 	/**
 	 * Launch the application.
 	 */
@@ -71,6 +81,13 @@ public class FrameAdmin extends JFrame {
 		contentPane.add(panel);
 		
 		textEmail = new JTextField();
+		textEmail.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				StringBuilder s = new StringBuilder();
+				Register.checkColorText(regexPattern.EMAIL, textEmail, s , "email");
+			}
+		});
 		textEmail.setMargin(new Insets(2, 6, 2, 2));
 		textEmail.setHorizontalAlignment(SwingConstants.LEFT);
 		textEmail.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -128,6 +145,32 @@ public class FrameAdmin extends JFrame {
 		contentPane.add(lblLevel);
 		
 		JButton btnAdd = new JButton("Thêm");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String email =textEmail.getText();
+				String password = passwordField.getText();
+				StringBuilder s = new StringBuilder();
+				User user;
+				try {
+					if( ValidateRegister.checkAll(textEmail, passwordField,passwordFieldConfirm, s)) {
+						if(txtLevel.getText() == "Admin") {
+							user = new User(email,password,1);
+						}else {
+							user = new User(email,password,0);
+						}
+						if(new UserDAOImpl().insert(user)==1) {
+							JOptionPane.showMessageDialog(null, "Bạn Đã Đăng Kí Thành Công");
+						}
+						
+					}else {
+							JOptionPane.showMessageDialog(null,s.length()<=0 ? "vui lòng nhập chính xác dữ liệu!!"+s.toString():s.toString());
+					}
+				} catch (Exception e2) {
+					e2.printStackTrace();
+
+				}
+			}
+		});
 		btnAdd.setBackground(new Color(67, 98, 190));
 		btnAdd.setForeground(new Color(255, 255, 255));
 		btnAdd.setFont(new Font("Arial", Font.BOLD, 16));
@@ -148,7 +191,7 @@ public class FrameAdmin extends JFrame {
 		
 		txtLevel = new JTextField();
 		txtLevel.setEditable(false);
-		txtLevel.setText("Quản trị viên");
+		txtLevel.setText("Admin");
 		txtLevel.setMargin(new Insets(2, 6, 2, 2));
 		txtLevel.setHorizontalAlignment(SwingConstants.LEFT);
 		txtLevel.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -157,19 +200,33 @@ public class FrameAdmin extends JFrame {
 		txtLevel.setBounds(589, 220, 239, 38);
 		contentPane.add(txtLevel);
 		
-		passwordFieldPassword = new JPasswordField();
-		passwordFieldPassword.setBounds(186, 157, 239, 38);
-		contentPane.add(passwordFieldPassword);
+		passwordField = new JPasswordField();
+		passwordField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				StringBuilder s = new StringBuilder();
+				Register.checkColorText(regexPattern.PASSWORD, passwordField, s , "email");
+			}
+		});
+		passwordField.setBounds(186, 157, 239, 38);
+		contentPane.add(passwordField);
 		
-		passwordFieldResetPassword = new JPasswordField();
-		passwordFieldResetPassword.setBounds(186, 221, 239, 38);
-		contentPane.add(passwordFieldResetPassword);
+		passwordFieldConfirm = new JPasswordField();
+		passwordFieldConfirm.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				StringBuilder s = new StringBuilder();
+				Register.checkPasswordConfirm(passwordField, passwordFieldConfirm, s);
+			}
+		});
+		passwordFieldConfirm.setBounds(186, 221, 239, 38);
+		contentPane.add(passwordFieldConfirm);
 	}
 
 	protected void do_btnReset_actionPerformed(ActionEvent e) {
 		textEmail.setText("");
-		passwordFieldPassword.setText("");
-		passwordFieldResetPassword.setText("");
+		passwordField.setText("");
+		passwordFieldConfirm.setText("");
 		textPhone.setText("");
 		textDob.setText("");
 	}
