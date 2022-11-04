@@ -5,8 +5,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import dao.impl.ExampleDAOImpl;
 import dao.impl.MeaningDAOImpl;
 import dao.impl.VocabularyDAOImpl;
 import dao.impl.WordTypeDAOImpl;
@@ -16,6 +14,7 @@ import entity.Vocabulary;
 import entity.WordType;
 import item.ItemContent;
 import item.ItemVocab;
+import jaco.mp3.player.MP3Player;
 
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -25,6 +24,8 @@ import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.net.URL;
 
 public class FrameDetailVocab extends JFrame {
 
@@ -86,7 +87,6 @@ public class FrameDetailVocab extends JFrame {
 			}
 		}
 
-
 		lblImage = new JLabel();
 		lblImage.setIcon(new ImageIcon());
 		lblImage.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -94,7 +94,15 @@ public class FrameDetailVocab extends JFrame {
 		contentPane.add(lblImage);
 		lblImage.setIcon(getImageByURL(vocab.getImage()));
 		
+
+		MP3Player mp3 = new MP3Player(getSongByURL("football.mp3"));
 		lblPronunciation = new JLabel("");
+		lblPronunciation.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mp3.play();
+			}
+		});
 		lblPronunciation.setIcon(new ImageIcon(FrameDetailVocab.class.getResource("/jaco/mp3/player/plaf/resources/mp3PlayerSoundOn.png")));
 		lblPronunciation.setBounds(161, 59, 31, 27);
 		contentPane.add(lblPronunciation);
@@ -104,6 +112,13 @@ public class FrameDetailVocab extends JFrame {
 		lblStar.setIcon(new ImageIcon(starAltImg));
 	}
 	
+	private File getSongByURL (String songName) {
+		var songUrl = getClass().getResource("/pronunciation/" + songName).getFile();
+		if (songUrl != null) {
+			return new File(new File(songUrl), songUrl);
+		} return null; 
+	}
+
 	private ImageIcon getImageByURL(String imageName) {
 		var imageUrl = ItemVocab.class.getResource("/vocabulary/" + imageName);
 		if (imageUrl != null) {
