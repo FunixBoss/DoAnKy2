@@ -250,10 +250,6 @@ public class PanelVocab extends JPanel {
 		lblImage.setFont(new Font("Arial", Font.BOLD, 14));
 		panel_2.add(lblImage);
 		
-		
-		
-		
-		
 		JPanel panel_1_2_1 = new JPanel();
 		panel_1_2_1.setBackground(new Color(37, 57, 111));
 		panelHeader.add(panel_1_2_1);
@@ -320,7 +316,7 @@ public class PanelVocab extends JPanel {
 	
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
 		FrameVocab frame = new FrameVocab();
-		frame.setLocation(200, 200);
+		frame.setLocation(150, 150);
 		frame.setVisible(true);
 	}
 	

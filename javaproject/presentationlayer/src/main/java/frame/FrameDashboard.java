@@ -5,19 +5,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Toolkit;
 import java.awt.Color;
-import java.awt.Component;
-
 import javax.swing.JButton;
-import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.Font;
-import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.Insets;
-import update.FrameAdmin;
 import panel.PanelAdmin;
 import panel.PanelCategory;
 import panel.PanelDashboard;
@@ -36,7 +30,6 @@ public class FrameDashboard extends JFrame {
 	private Image memberImg = new ImageIcon(getClass().getResource("/image/member.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 	private Image adminImg = new ImageIcon(getClass().getResource("/image/admin.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 	private Image vocabImg = new ImageIcon(getClass().getResource("/image/vocab.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-	private Image searchImg = new ImageIcon(getClass().getResource("/image/search.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 	private Image homeImg = new ImageIcon(getClass().getResource("/image/home.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 	private Image dashboardImg = new ImageIcon(getClass().getResource("/image/dashboard.png")).getImage().getScaledInstance(20,20, Image.SCALE_SMOOTH);
 	private Image topicImg = new ImageIcon(getClass().getResource("/image/topic.png")).getImage().getScaledInstance(20,20, Image.SCALE_SMOOTH);
@@ -91,6 +84,7 @@ public class FrameDashboard extends JFrame {
 		jpVocab = new PanelVocab();
 		jpAdmin = new PanelAdmin();
 		jpDashboard = new PanelDashboard();
+		jpDashboard.setBounds(0, 0, 1085, 729);
 		jpCategory = new PanelCategory();
 		
 		JPanel panel = new JPanel();
@@ -266,17 +260,6 @@ public class FrameDashboard extends JFrame {
 		panelMain.setLayout(null);
 		panelMain.add(jpAdmin);
 		
-		JButton btnNewButton = new JButton("");
-		btnNewButton.setBounds(329, 44, 38, 36);
-		jpAdmin.add(btnNewButton);
-		btnNewButton.setIcon(new ImageIcon(searchImg));
-		btnNewButton.setBorder(null);
-		btnNewButton.setBackground(new Color(67, 98, 190));
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				do_btnNewButton_actionPerformed(e);
-			}
-		});
 		panelMain.add(jpAdmin);
 		panelMain.add(jpMember);
 		panelMain.add(jpVocab);

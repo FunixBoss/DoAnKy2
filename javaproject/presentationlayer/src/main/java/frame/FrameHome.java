@@ -26,6 +26,8 @@ import home.PanelVocab;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JPopupMenu;
+import java.awt.Component;
 
 
 
@@ -46,12 +48,14 @@ public class FrameHome extends JFrame {
 	private JPanel panelCategory;
 	private JPanel panelBookmark;
 	private JPanel panelHistory;
-	private JPanel panelLogIn;
+	private JPanel panelSignIn;
 	private JLabel lblSignIn;
 	private JLabel lblVocab;
 	private JLabel lblBookmark;
 	private JLabel lblHistory;
 	private JLabel lblCategory;
+	private JPanel panelSignUp;
+	private JLabel lblSignUp;
 
 	/**
 	 * Launch the application.
@@ -87,6 +91,7 @@ public class FrameHome extends JFrame {
 		contentPane.setLayout(null);
 		
 		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(null);
 		panel_1.setBounds(217, 0, 1085, 77);
 		contentPane.add(panel_1);
 		panel_1.setBackground(new Color(37, 57, 111));
@@ -101,7 +106,7 @@ public class FrameHome extends JFrame {
 				do_btnNewButton_actionPerformed(e);
 			}
 		});
-		btnNewButton.setBounds(489, 19, 35, 35);
+		btnNewButton.setBounds(447, 18, 35, 35);
 		panel_1.add(btnNewButton);
 		
 		txtFieldSearch = new JTextField();
@@ -109,7 +114,7 @@ public class FrameHome extends JFrame {
 		txtFieldSearch.setHorizontalAlignment(SwingConstants.LEFT);
 		txtFieldSearch.setFont(new Font("Arial", Font.PLAIN, 14));
 		txtFieldSearch.setBorder(null);
-		txtFieldSearch.setBounds(71, 18, 408, 36);
+		txtFieldSearch.setBounds(29, 18, 408, 36);
 		panel_1.add(txtFieldSearch);
 		txtFieldSearch.setColumns(10);
 		
@@ -121,7 +126,7 @@ public class FrameHome extends JFrame {
 			}
 		});
 		panelVocab.setBackground(new Color(255, 255, 255));
-		panelVocab.setBounds(610, 32, 93, 45);
+		panelVocab.setBounds(517, 32, 93, 45);
 		panel_1.add(panelVocab);
 		panelVocab.setLayout(null);
 		
@@ -140,7 +145,7 @@ public class FrameHome extends JFrame {
 		});
 		panelCategory.setLayout(null);
 		panelCategory.setBackground(Color.WHITE);
-		panelCategory.setBounds(703, 32, 93, 45);
+		panelCategory.setBounds(610, 32, 93, 45);
 		panel_1.add(panelCategory);
 		
 		lblCategory = new JLabel("Chủ đề");
@@ -158,7 +163,7 @@ public class FrameHome extends JFrame {
 		});
 		panelBookmark.setLayout(null);
 		panelBookmark.setBackground(Color.WHITE);
-		panelBookmark.setBounds(796, 32, 93, 45);
+		panelBookmark.setBounds(703, 32, 93, 45);
 		panel_1.add(panelBookmark);
 		
 		lblBookmark = new JLabel("Ưu thích");
@@ -176,7 +181,7 @@ public class FrameHome extends JFrame {
 		});
 		panelHistory.setLayout(null);
 		panelHistory.setBackground(Color.WHITE);
-		panelHistory.setBounds(889, 32, 93, 45);
+		panelHistory.setBounds(796, 32, 93, 45);
 		panel_1.add(panelHistory);
 		
 		lblHistory = new JLabel("Lịch sử");
@@ -185,23 +190,41 @@ public class FrameHome extends JFrame {
 		lblHistory.setBounds(10, 11, 73, 23);
 		panelHistory.add(lblHistory);
 		
-		panelLogIn = new JPanel();
-		panelLogIn.addMouseListener(new MouseAdapter() {
+		panelSignIn = new JPanel();
+		panelSignIn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				do_panelLogIn_mouseClicked(e);
 			}
 		});
-		panelLogIn.setLayout(null);
-		panelLogIn.setBackground(Color.WHITE);
-		panelLogIn.setBounds(982, 32, 93, 45);
-		panel_1.add(panelLogIn);
+		panelSignIn.setLayout(null);
+		panelSignIn.setBackground(Color.WHITE);
+		panelSignIn.setBounds(889, 32, 93, 45);
+		panel_1.add(panelSignIn);
 		
 		lblSignIn = new JLabel("Đăng nhập");
 		lblSignIn.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSignIn.setFont(new Font("Arial", Font.BOLD, 14));
 		lblSignIn.setBounds(6, 11, 83, 23);
-		panelLogIn.add(lblSignIn);
+		panelSignIn.add(lblSignIn);
+		
+		panelSignUp = new JPanel();
+		panelSignUp.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				do_panelSignUp_mouseClicked(e);
+			}
+		});
+		panelSignUp.setBounds(982, 32, 93, 45);
+		panel_1.add(panelSignUp);
+		panelSignUp.setLayout(null);
+		panelSignUp.setBackground(Color.WHITE);
+		
+		lblSignUp = new JLabel("Đăng ký");
+		lblSignUp.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSignUp.setFont(new Font("Arial", Font.BOLD, 14));
+		lblSignUp.setBounds(10, 11, 73, 23);
+		panelSignUp.add(lblSignUp);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(37, 57, 111));
@@ -272,6 +295,10 @@ public class FrameHome extends JFrame {
 		panelCategory.setBackground(new Color(255, 255, 255));
 		lblBookmark.setForeground(new Color(37, 57, 111));
 		panelBookmark.setBackground(new Color(255, 255, 255));
+		lblSignUp.setForeground(new Color(37, 57, 111));
+		panelSignUp.setBackground(new Color(255, 255, 255));
+		lblSignIn.setForeground(new Color(37, 57, 111));
+		panelSignIn.setBackground(new Color(255, 255, 255));
 		label.setForeground(new Color(255, 255, 255));
 		panel.setBackground(new Color(37, 57, 111));
 	}
@@ -298,8 +325,17 @@ public class FrameHome extends JFrame {
 		menuChanged(panelHistory,lblHistory);
 	}
 	protected void do_panelLogIn_mouseClicked(MouseEvent e) {
+		menuChanged(panelSignIn,lblSignIn);
 		FrameSignIn fr = new FrameSignIn();
 		fr.setVisible(true);
 		fr.setLocation(400, 300);
+		
+	}
+	protected void do_panelSignUp_mouseClicked(MouseEvent e) {
+		menuChanged(panelSignUp,lblSignUp);
+		FrameSignUp fr = new FrameSignUp();
+		fr.setVisible(true);
+		fr.setLocation(400, 300);
+		
 	}
 }

@@ -2,5 +2,5 @@
 @echo Executing Files
 @echo off
 @echo Excuting
-for %%G in (*.sql) do sqlcmd -S DESKTOP-RNFI65U\SQLEXPRESS -d Dictionary -E -i "%%G"
+for %%G in (*.sql) do sqlcmd -S DESKTOP-E2TC3PE -d Dictionary -E -i "%%G"
 Pause

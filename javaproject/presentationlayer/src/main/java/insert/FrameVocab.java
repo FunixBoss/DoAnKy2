@@ -299,4 +299,6 @@ public class FrameVocab extends JFrame {
 		textExample3.setText("");
 		textMeaning3.setText("");
 	}
+	
+	
 }

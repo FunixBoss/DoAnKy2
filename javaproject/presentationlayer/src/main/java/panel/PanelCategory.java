@@ -21,13 +21,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import dao.impl.CategoryDAOImpl;
-import dao.impl.VocabularyDAOImpl;
 import entity.Category;
-import entity.Vocabulary;
-import insert.FrameVocab;
-import insert.FrameWordType;
+import insert.FrameCategory;
 import item.ItemCategory;
-import item.ItemVocab;
+
 
 public class PanelCategory extends JPanel {
 	private JLabel lblStatusPage;
@@ -56,7 +53,7 @@ public class PanelCategory extends JPanel {
 		JLabel lblDashboard = new JLabel("Chủ đề");
 		lblDashboard.setForeground(new Color(37, 57, 111));
 		lblDashboard.setFont(new Font("Arial", Font.BOLD, 20));
-		lblDashboard.setBounds(41, 11, 134, 39);
+		lblDashboard.setBounds(43, 11, 134, 39);
 		add(lblDashboard);
 		
 		printTopPageComponent();
@@ -103,7 +100,7 @@ public class PanelCategory extends JPanel {
 		txtSearch.setFont(new Font("Arial", Font.PLAIN, 14));
 		txtSearch.setColumns(10);
 		txtSearch.setBorder(null);
-		txtSearch.setBounds(45, 61, 273, 36);
+		txtSearch.setBounds(43, 61, 273, 36);
 		add(txtSearch);
 	}
 
@@ -293,8 +290,8 @@ public class PanelCategory extends JPanel {
 	}
 	
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
-		FrameVocab frame = new FrameVocab();
-		frame.setLocation(200, 200);
+		FrameCategory frame = new FrameCategory();
+		frame.setLocation(500, 300);
 		frame.setVisible(true);
 	}
 	

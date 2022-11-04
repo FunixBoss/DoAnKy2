@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDate;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -19,7 +18,6 @@ import javax.swing.SwingConstants;
 import dao.impl.UserDAOImpl;
 import entity.User;
 import insert.FrameAdmin;
-import insert.FrameMember;
 import item.ItemUser;
 
 public class PanelAdmin extends JPanel {
@@ -46,7 +44,7 @@ public class PanelAdmin extends JPanel {
 		setLayout(null);
 		setBounds(0, 0, 1085, 699);
 		setBackground(new Color(242, 247, 255));
-		JLabel lblDashboard = new JLabel("Admin");
+		JLabel lblDashboard = new JLabel("Quản trị viên");
 		lblDashboard.setForeground(new Color(37, 57, 111));
 		lblDashboard.setFont(new Font("Arial", Font.BOLD, 20));
 		lblDashboard.setBounds(41, 11, 134, 39);
@@ -69,12 +67,12 @@ public class PanelAdmin extends JPanel {
 		loadData();
 	}
 	private void printTopPageComponent() {
-		JLabel lblBreadcrumb = new JLabel("Trang chủ / Thành viên");
+		JLabel lblBreadcrumb = new JLabel("Trang chủ / Quản trị viên");
 		lblBreadcrumb.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblBreadcrumb.setBounds(904, 21, 134, 14);
+		lblBreadcrumb.setBounds(890, 21, 148, 14);
 		add(lblBreadcrumb);
 		
-		JButton btnAdd = new JButton("Thêm thành viên");
+		JButton btnAdd = new JButton("Thêm quản trị viên");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				do_btnAdd_actionPerformed(e);
@@ -84,7 +82,7 @@ public class PanelAdmin extends JPanel {
 		btnAdd.setFont(new Font("Arial", Font.BOLD, 14));
 		btnAdd.setBorder(null);
 		btnAdd.setBackground(new Color(67, 98, 190));
-		btnAdd.setBounds(891, 61, 147, 36);
+		btnAdd.setBounds(890, 60, 147, 36);
 		add(btnAdd);
 		
 		textField = new JTextField();
@@ -298,7 +296,7 @@ public class PanelAdmin extends JPanel {
 			
 	}
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
-		FrameMember frame = new FrameMember();
+		FrameAdmin frame = new FrameAdmin();
 		frame.setLocation(300, 300);
 		frame.setVisible(true);
 	}

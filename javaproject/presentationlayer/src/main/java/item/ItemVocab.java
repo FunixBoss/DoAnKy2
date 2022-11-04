@@ -6,6 +6,8 @@ import javax.swing.JPanel;
 
 import entity.Meaning;
 import entity.Vocabulary;
+import update.FrameVocab;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Image;
@@ -29,6 +31,8 @@ import dao.impl.VocabularyDAOImpl;
 import dao.impl.WordTypeDAOImpl;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ItemVocab extends JPanel {
 
@@ -141,6 +145,12 @@ public class ItemVocab extends JPanel {
 		panel_1_1_1.setLayout(null);
 
 		JButton btnEdit = new JButton("Sửa");
+		btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FrameVocab fr = new FrameVocab(vocab);
+				fr.setVisible(true);
+			}
+		});
 		btnEdit.setBounds(32, 25, 58, 30);
 		btnEdit.setForeground(Color.WHITE);
 		btnEdit.setFont(new Font("Arial", Font.BOLD, 14));
