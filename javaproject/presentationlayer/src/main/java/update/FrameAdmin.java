@@ -118,7 +118,6 @@ public class FrameAdmin extends JFrame {
 		lblDob.setBounds(466, 164, 102, 21);
 		contentPane.add(lblDob);
 		
-		
 		textDob = new JTextField();
 		textDob.setMargin(new Insets(2, 6, 2, 2));
 		textDob.setHorizontalAlignment(SwingConstants.LEFT);
@@ -127,6 +126,7 @@ public class FrameAdmin extends JFrame {
 		textDob.setBackground(Color.WHITE);
 		textDob.setBounds(589, 155, 239, 38);
 		contentPane.add(textDob);
+		textDob.setText(user.getDateOfBirth().toString());
 		
 		JButton btnAdd = new JButton("Thêm");
 		btnAdd.setBackground(new Color(67, 98, 190));

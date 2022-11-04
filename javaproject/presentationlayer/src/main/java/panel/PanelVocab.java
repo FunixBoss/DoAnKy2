@@ -27,7 +27,7 @@ import entity.Vocabulary;
 import insert.FrameRelative;
 import insert.FrameVocab;
 import insert.FrameWordType;
-import item.ItemUser;
+import item.ItemMember;
 import item.ItemVocab;
 
 import java.awt.Dimension;

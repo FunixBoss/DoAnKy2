@@ -18,7 +18,7 @@ import javax.swing.SwingConstants;
 import dao.impl.UserDAOImpl;
 import entity.User;
 import insert.FrameAdmin;
-import item.ItemUser;
+import item.ItemAdmin;
 
 public class PanelAdmin extends JPanel {
 	
@@ -44,7 +44,7 @@ public class PanelAdmin extends JPanel {
 		
 		JLabel lblBreadcrumb = new JLabel("Trang chủ / Quản trị viên");
 		lblBreadcrumb.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblBreadcrumb.setBounds(877, 0, 166, 14);
+		lblBreadcrumb.setBounds(865, 0, 166, 14);
 		add(lblBreadcrumb);
 		
 		lblStatusPage = new JLabel("Trang 1 of 0");
@@ -100,33 +100,33 @@ public class PanelAdmin extends JPanel {
 		add(scrollPane);
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(new Color(255, 255, 255));
-		scrollPane.setViewportView(panel);
 		panel.setLayout(null);
-		panel.setPreferredSize(new Dimension(980, 600));
+		panel.setPreferredSize(new Dimension(980, 200));
+		panel.setBackground(new Color(242, 247, 255));
+		scrollPane.setViewportView(panel);
 		
 		JPanel panelHeader = new JPanel();
+		panelHeader.setLayout(null);
 		panelHeader.setBounds(0, 0, 990, 40);
 		panel.add(panelHeader);
-		panelHeader.setLayout(null);
 		
 		JPanel panel_1 = new JPanel();
+		panel_1.setLayout(null);
 		panel_1.setBackground(new Color(37, 57, 111));
 		panel_1.setBounds(0, 0, 55, 40);
 		panelHeader.add(panel_1);
-		panel_1.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("STT");
-		lblNewLabel.setForeground(new Color(255, 255, 255));
+		JLabel lblNewLabel = new JLabel("ID");
+		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 14));
-		lblNewLabel.setBounds(12, 12, 35, 13);
+		lblNewLabel.setBounds(17, 12, 35, 13);
 		panel_1.add(lblNewLabel);
 		
 		JPanel panel_1_1 = new JPanel();
-		panel_1_1.setBackground(new Color(37, 57, 111));
-		panel_1_1.setBounds(907, 0, 88, 40);
-		panelHeader.add(panel_1_1);
 		panel_1_1.setLayout(null);
+		panel_1_1.setBackground(new Color(37, 57, 111));
+		panel_1_1.setBounds(915, 0, 88, 40);
+		panelHeader.add(panel_1_1);
 		
 		JLabel lblXa = new JLabel("Xóa");
 		lblXa.setForeground(Color.WHITE);
@@ -135,10 +135,10 @@ public class PanelAdmin extends JPanel {
 		panel_1_1.add(lblXa);
 		
 		JPanel panel_1_1_1 = new JPanel();
+		panel_1_1_1.setLayout(null);
 		panel_1_1_1.setBackground(new Color(37, 57, 111));
 		panel_1_1_1.setBounds(827, 0, 88, 40);
 		panelHeader.add(panel_1_1_1);
-		panel_1_1_1.setLayout(null);
 		
 		JLabel lblSa = new JLabel("Sửa");
 		lblSa.setForeground(Color.WHITE);
@@ -147,10 +147,10 @@ public class PanelAdmin extends JPanel {
 		panel_1_1_1.add(lblSa);
 		
 		JPanel panel_1_2 = new JPanel();
+		panel_1_2.setLayout(null);
 		panel_1_2.setBackground(new Color(37, 57, 111));
 		panel_1_2.setBounds(55, 0, 270, 40);
 		panelHeader.add(panel_1_2);
-		panel_1_2.setLayout(null);
 		
 		JLabel lblEmail = new JLabel("Email");
 		lblEmail.setForeground(Color.WHITE);
@@ -159,10 +159,10 @@ public class PanelAdmin extends JPanel {
 		panel_1_2.add(lblEmail);
 		
 		JPanel panel_1_2_1 = new JPanel();
+		panel_1_2_1.setLayout(null);
 		panel_1_2_1.setBackground(new Color(37, 57, 111));
 		panel_1_2_1.setBounds(325, 0, 197, 40);
 		panelHeader.add(panel_1_2_1);
-		panel_1_2_1.setLayout(null);
 		
 		JLabel lblHVTn = new JLabel("Họ và tên");
 		lblHVTn.setForeground(Color.WHITE);
@@ -171,10 +171,10 @@ public class PanelAdmin extends JPanel {
 		panel_1_2_1.add(lblHVTn);
 		
 		JPanel panel_2 = new JPanel();
+		panel_2.setLayout(null);
 		panel_2.setBackground(new Color(37, 57, 111));
 		panel_2.setBounds(520, 0, 150, 40);
 		panelHeader.add(panel_2);
-		panel_2.setLayout(null);
 		
 		JLabel lblPhone = new JLabel("Số điện thoại");
 		lblPhone.setForeground(Color.WHITE);
@@ -183,10 +183,10 @@ public class PanelAdmin extends JPanel {
 		panel_2.add(lblPhone);
 		
 		JPanel panel_2_1 = new JPanel();
+		panel_2_1.setLayout(null);
 		panel_2_1.setBackground(new Color(37, 57, 111));
 		panel_2_1.setBounds(670, 0, 165, 40);
 		panelHeader.add(panel_2_1);
-		panel_2_1.setLayout(null);
 		
 		JLabel lblNgySinh = new JLabel("Ngày sinh");
 		lblNgySinh.setForeground(Color.WHITE);
@@ -195,15 +195,18 @@ public class PanelAdmin extends JPanel {
 		panel_2_1.add(lblNgySinh);
 		
 		JPanel panel_3 = new JPanel();
-		panel_3.setBackground(new Color(255, 255, 255));
-		panel_3.setBounds(0, 40, 995, 460);
-		panel.add(panel_3);
 		panel_3.setLayout(null);
+		panel_3.setBackground(Color.WHITE);
+		panel_3.setBounds(0, 40, 990, 460);
+		panel.add(panel_3);
 		int y = 0;
+		int x = 0;
 		for(User user : new UserDAOImpl().getList(1)){
-			ItemUser userItem = new ItemUser(user, y);			
+			ItemAdmin userItem = new ItemAdmin(user, y);			
 			panel_3.add(userItem);
 			y = y + 42;
+			x = x + 44;
+			panel.setPreferredSize(new Dimension(980, 40 + x));
 		}
 		
 		textField = new JTextField();
@@ -215,7 +218,7 @@ public class PanelAdmin extends JPanel {
 		textField.setBounds(41, 42, 273, 36);
 		add(textField);
 		
-		JButton btnAdd = new JButton("Thêm thành viên");
+		JButton btnAdd = new JButton("Thêm quản trị viên");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				do_btnAdd_actionPerformed(e);
@@ -225,7 +228,7 @@ public class PanelAdmin extends JPanel {
 		btnAdd.setFont(new Font("Arial", Font.BOLD, 14));
 		btnAdd.setBorder(null);
 		btnAdd.setBackground(new Color(67, 98, 190));
-		btnAdd.setBounds(896, 44, 147, 36);
+		btnAdd.setBounds(884, 41, 147, 36);
 		add(btnAdd);
 
 		totalPage = Math.ceil(totalOfRows/ rowsOfPage);

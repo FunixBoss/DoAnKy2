@@ -1,11 +1,9 @@
-package panel;
+package home;
 
 import java.awt.Color;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
-import javax.swing.SwingConstants;
 import java.awt.Font;
 
 public class PanelHome extends JPanel {
@@ -15,24 +13,19 @@ public class PanelHome extends JPanel {
 	 */
 	public PanelHome() {
 		setBorder(null);
-		setBackground(new Color(242, 247, 255));
-		setBounds(0, 0, 1085, 702);
+		setBackground(new Color(37, 57, 111));
+		setBounds(0, 0, 1302, 702);
 		setLayout(null);
-		
-		JLabel lblBreadcrumb = new JLabel("Trang chủ /");
-		lblBreadcrumb.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblBreadcrumb.setBounds(916, 11, 114, 14);
-		add(lblBreadcrumb);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));
-		panel.setBounds(50, 57, 981, 597);
+		panel.setBounds(10, 0, 1282, 691);
 		add(panel);
 		panel.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Chào mừng mọi người đến với từ điển Anh-Việt !!!!");
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
-		lblNewLabel.setBounds(240, 178, 537, 156);
+		lblNewLabel.setBounds(354, 202, 544, 154);
 		panel.add(lblNewLabel);
 	}
 

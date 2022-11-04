@@ -4,31 +4,37 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDate;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
 import entity.User;
-import update.FrameMember;
+import update.FrameAdmin;
 
-public class ItemUser extends JPanel {
+public class ItemAdmin extends JPanel {
 
+	private JLabel lblEmail;
+	private JLabel lblFullname;
 	private JLabel lblPhone;
 	private JLabel lblDob;
-	private JLabel lblFullname;
-	private JLabel lblEmail;
+
 	/**
 	 * Create the panel.
 	 */
-	public ItemUser(User user, int y) {
+	public ItemAdmin(User user, int y) {
 		setLayout(null);
-		setBounds(0, y, 995, 40);
+		setBounds(0, y, 995, 43);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(1, 40, 994, 1);
+		add(panel);
+		panel.setBackground(new Color(37, 57, 111));
 		JPanel panelHeader = new JPanel();
 		panelHeader.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
 		panelHeader.setLayout(null);
-		panelHeader.setBounds(0, 0, 995, 42);
+		panelHeader.setBounds(0, 0, 995, 40);
 		add(panelHeader);
 		
 		JPanel panel_1 = new JPanel();
@@ -60,7 +66,7 @@ public class ItemUser extends JPanel {
 		btnDelete.setForeground(Color.WHITE);
 		btnDelete.setFont(new Font("Arial", Font.BOLD, 14));
 		btnDelete.setBackground(new Color(205, 16, 64));
-		btnDelete.setBounds(5, 5, 60, 30);
+		btnDelete.setBounds(10, 5, 60, 30);
 		panel_1_1.add(btnDelete);
 		
 		JPanel panel_1_1_1 = new JPanel();
@@ -72,7 +78,9 @@ public class ItemUser extends JPanel {
 		JButton btnEdit = new JButton("Sửa ");
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				do_btnEdit_actionPerformed(e);
+				FrameAdmin fr = new FrameAdmin(user);
+				fr.setVisible(true);
+				fr.setLocation(300, 300);
 			}
 		});
 		btnEdit.setBorder(null);
@@ -134,16 +142,7 @@ public class ItemUser extends JPanel {
 		panel_2_1.add(lblDob);
 		lblDob.setText(user.getDateOfBirth().toString());
 	}
-	protected void do_btnEdit_actionPerformed(ActionEvent e) {
-		User user = new User();
-		user.setFullname(lblFullname.getText());
-		user.setPhoneNumber(lblPhone.getText());
-		user.setDateOfBirth(LocalDate.parse(lblDob.getText()));
-		user.setEmail(lblEmail.getText());
-		FrameMember fr = new FrameMember(user);
-		fr.setVisible(true);
-		fr.setLocation(300, 300);
-	}
+
 	protected void do_btnDelete_actionPerformed(ActionEvent e) {
 		
 	}

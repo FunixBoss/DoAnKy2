@@ -114,7 +114,7 @@ public class FrameDashboard extends JFrame {
 		JLabel lblIconVocab = new JLabel("");
 		lblIconVocab.setBackground(new Color(255, 255, 255));
 		lblIconVocab.setForeground(new Color(255, 255, 255));
-		lblIconVocab.setBounds(30, 16, 29, 31);
+		lblIconVocab.setBounds(30, 18, 29, 31);
 		panelVocab.add(lblIconVocab);
 		lblIconVocab.setIcon(new ImageIcon(vocabImg));
 		
@@ -143,7 +143,7 @@ public class FrameDashboard extends JFrame {
 		lblMember.setFont(new Font("Arial", Font.BOLD, 16));
 		
 		JLabel lblIconMember = new JLabel("");
-		lblIconMember.setBounds(30, 16, 35, 28);
+		lblIconMember.setBounds(30, 18, 35, 28);
 		panelMember.add(lblIconMember);
 		lblIconMember.setIcon(new ImageIcon(memberImg));
 		
@@ -166,7 +166,7 @@ public class FrameDashboard extends JFrame {
 		panelAdmin.add(lblAdmin);
 		
 		JLabel lblIconAdmin = new JLabel("");
-		lblIconAdmin.setBounds(30, 16, 46, 24);
+		lblIconAdmin.setBounds(30, 18, 46, 24);
 		panelAdmin.add(lblIconAdmin);
 		lblIconAdmin.setIcon(new ImageIcon(adminImg));
 		
@@ -250,7 +250,7 @@ public class FrameDashboard extends JFrame {
 		JLabel lblIconCategory = new JLabel("");
 		lblIconCategory.setForeground(Color.WHITE);
 		lblIconCategory.setBackground(Color.WHITE);
-		lblIconCategory.setBounds(30, 16, 29, 31);
+		lblIconCategory.setBounds(30, 18, 29, 31);
 		panelCategory.add(lblIconCategory);
 		lblIconCategory.setIcon(new ImageIcon(topicImg));
 		

@@ -5,14 +5,22 @@ import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
+import entity.User;
 import entity.Vocabulary;
+import update.FrameMember;
+import update.FrameVocab;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.awt.event.ActionEvent;
 
 public class ItemVocab extends JPanel {
 
+	private JLabel lblWord;
 	/**
 	 * Create the panel.
 	 */
@@ -59,6 +67,11 @@ public class ItemVocab extends JPanel {
 		panelHeader_1.add(panel_1_1_1);
 		
 		JButton btnEdit = new JButton("Sửa ");
+		btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				do_btnEdit_actionPerformed(e);
+			}
+		});
 		btnEdit.setForeground(Color.WHITE);
 		btnEdit.setFont(new Font("Arial", Font.BOLD, 14));
 		btnEdit.setBorder(null);
@@ -72,7 +85,7 @@ public class ItemVocab extends JPanel {
 		panel_1_2.setBounds(55, 0, 136, 80);
 		panelHeader_1.add(panel_1_2);
 		
-		JLabel lblWord = new JLabel("Từ vựng");
+		lblWord = new JLabel("Từ vựng");
 		lblWord.setForeground(new Color(0, 0, 0));
 		lblWord.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblWord.setBounds(36, 12, 90, 13);
@@ -129,5 +142,12 @@ public class ItemVocab extends JPanel {
 		lblWordType.setBounds(36, 12, 90, 13);
 		panel_1_2_2.add(lblWordType);
 		lblWordType.setText(vocab.getWordTypeId().toString());
+	}
+	protected void do_btnEdit_actionPerformed(ActionEvent e) {
+		Vocabulary vocab = new Vocabulary();
+		vocab.setWord(lblWord.getText());
+		FrameVocab fr = new FrameVocab(vocab);
+		fr.setVisible(true);
+		fr.setLocation(100, 100);
 	}
 }

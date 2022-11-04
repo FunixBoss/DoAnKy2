@@ -1,52 +1,38 @@
-package insert;
+package update;
 
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Image;
-import java.awt.Insets;
+import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
-import javax.swing.AbstractButton;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import dao.impl.VocabularyDAOImpl;
 import dao.impl.WordTypeDAOImpl;
 import entity.Vocabulary;
-
-import javax.swing.JTextPane;
-import javax.swing.JTextArea;
-import java.awt.Panel;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.ArrayList;
-import java.awt.event.ActionEvent;
-import javax.swing.JScrollPane;
-import javax.swing.JCheckBox;
 
 public class FrameVocab extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textWord;
-	private JTextArea textExample3;
-	private JTextArea textExample1;
 	private JTextArea textMeaning3;
-	private JTextArea textMeaning2;
-	private JTextArea textMeaning1;
+	private JTextArea textExample1;
 	private JTextArea textExample2;
-
+	private JTextArea textExample3;
+	private JTextArea textMeaning1;
+	private JTextArea textMeaning2;
+	private JTextField textWord;
 
 	/**
 	 * Launch the application.
@@ -55,7 +41,8 @@ public class FrameVocab extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FrameVocab frame = new FrameVocab();
+					Vocabulary vocab = new Vocabulary();
+					FrameVocab frame = new FrameVocab(vocab);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -67,7 +54,7 @@ public class FrameVocab extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FrameVocab() {
+	public FrameVocab( Vocabulary vocab) {
 		setResizable(false);
 		setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1129, 779);
@@ -110,13 +97,13 @@ public class FrameVocab extends JFrame {
 		contentPane.add(btnReset);
 		
 		JLabel lblWordType = new JLabel("Loại từ");
-		lblWordType.setBounds(348, 99, 96, 21);
+		lblWordType.setBounds(578, 99, 96, 21);
 		lblWordType.setForeground(Color.BLACK);
 		lblWordType.setFont(new Font("Arial", Font.PLAIN, 14));
 		contentPane.add(lblWordType);
 		
 		JComboBox<String> comboWordType = new JComboBox<>();
-		comboWordType.setBounds(443, 88, 173, 38);
+		comboWordType.setBounds(673, 88, 173, 38);
 		comboWordType.setBackground(new Color(255, 255, 255));
 		comboWordType.setFont(new Font("Arial", Font.PLAIN, 14));
 		contentPane.add(comboWordType);
@@ -126,6 +113,7 @@ public class FrameVocab extends JFrame {
 		textWord.setBounds(122, 90, 175, 37);
 		contentPane.add(textWord);
 		textWord.setColumns(10);
+		textWord.setText(vocab.getWord());
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 0, 1120, 62);
@@ -139,13 +127,13 @@ public class FrameVocab extends JFrame {
 		contentPane.add(lblPronunciation);
 		
 		JLabel lblImage = new JLabel("Hình ảnh");
-		lblImage.setBounds(348, 166, 96, 21);
+		lblImage.setBounds(578, 166, 96, 21);
 		lblImage.setForeground(Color.BLACK);
 		lblImage.setFont(new Font("Arial", Font.PLAIN, 14));
 		contentPane.add(lblImage);
 		
 		JButton btnImage = new JButton("Tải ảnh lên");
-		btnImage.setBounds(443, 156, 175, 37);
+		btnImage.setBounds(673, 156, 175, 37);
 		btnImage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				do_btnImage_actionPerformed(e);
@@ -269,23 +257,8 @@ public class FrameVocab extends JFrame {
 		lblExample3.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblExample3.setBounds(578, 509, 96, 21);
 		contentPane.add(lblExample3);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(672, 88, 363, 102);
-		contentPane.add(scrollPane);
-		
-		JPanel panel_1 = new JPanel();
-		scrollPane.setViewportView(panel_1);
-		panel_1.setLayout(null);
-		
-		int x = 6; 
-		for (Vocabulary vocab : new VocabularyDAOImpl().selectAll()) {
-			JCheckBox vocab1 = new JCheckBox(vocab.getWord());
-			vocab1.setBounds(x, 6, 93, 21);
-			panel_1.add(vocab1 );
-			x = x + 6;
-		}
 	}
+
 	protected void do_btnImage_actionPerformed(ActionEvent e) {
 		JFileChooser chooser = new JFileChooser("c://");
 		chooser.setDialogTitle("Hình ảnh");
@@ -298,6 +271,7 @@ public class FrameVocab extends JFrame {
 			File f = chooser.getSelectedFile();
 		}
 	}
+	
 	protected void do_btnPronunciation_actionPerformed(ActionEvent e) {
 		JFileChooser chooser = new JFileChooser("c://");
 		chooser.setDialogTitle("Âm thanh");

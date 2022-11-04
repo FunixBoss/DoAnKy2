@@ -17,7 +17,7 @@ import javax.swing.SwingConstants;
 import dao.impl.UserDAOImpl;
 import entity.User;
 import insert.FrameMember;
-import item.ItemUser;
+import item.ItemMember;
 
 public class PanelMember extends JPanel {
 	Integer pageNumber = 1;
@@ -42,7 +42,7 @@ public class PanelMember extends JPanel {
 		
 		JLabel lblBreadcrumb = new JLabel("Trang chủ / Thành viên");
 		lblBreadcrumb.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblBreadcrumb.setBounds(909, 2, 134, 14);
+		lblBreadcrumb.setBounds(885, 0, 147, 13);
 		add(lblBreadcrumb);
 		
 		lblStatusPage = new JLabel("Trang 1 of 0");
@@ -99,8 +99,8 @@ public class PanelMember extends JPanel {
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
-		panel.setPreferredSize(new Dimension(980, 600));
-		panel.setBackground(Color.WHITE);
+		panel.setPreferredSize(new Dimension(980, 400));
+		panel.setBackground(new Color(242, 247, 255));
 		scrollPane.setViewportView(panel);
 		
 		JPanel panelHeader = new JPanel();
@@ -114,16 +114,16 @@ public class PanelMember extends JPanel {
 		panel_1.setBounds(0, 0, 55, 40);
 		panelHeader.add(panel_1);
 		
-		JLabel lblNewLabel = new JLabel("STT");
+		JLabel lblNewLabel = new JLabel("ID");
 		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 14));
-		lblNewLabel.setBounds(12, 12, 35, 13);
+		lblNewLabel.setBounds(17, 12, 35, 13);
 		panel_1.add(lblNewLabel);
 		
 		JPanel panel_1_1 = new JPanel();
 		panel_1_1.setLayout(null);
 		panel_1_1.setBackground(new Color(37, 57, 111));
-		panel_1_1.setBounds(907, 0, 88, 40);
+		panel_1_1.setBounds(915, 0, 88, 40);
 		panelHeader.add(panel_1_1);
 		
 		JLabel lblXa = new JLabel("Xóa");
@@ -195,13 +195,16 @@ public class PanelMember extends JPanel {
 		JPanel panel_3 = new JPanel();
 		panel_3.setLayout(null);
 		panel_3.setBackground(Color.WHITE);
-		panel_3.setBounds(0, 40, 995, 460);
+		panel_3.setBounds(0, 40, 990, 460);
 		panel.add(panel_3);
 		int y = 0;
+		int x = 0;
 		for(User user : new UserDAOImpl().getList(2)){
-			ItemUser userItem = new ItemUser(user, y);			
+			ItemMember userItem = new ItemMember(user, y);			
 			panel_3.add(userItem);
 			y = y + 42;
+			x = x + 44;
+			panel.setPreferredSize(new Dimension(980, 40 + x));
 		}
 		
 		textField = new JTextField();
@@ -223,7 +226,7 @@ public class PanelMember extends JPanel {
 		btnAdd.setFont(new Font("Arial", Font.BOLD, 14));
 		btnAdd.setBorder(null);
 		btnAdd.setBackground(new Color(67, 98, 190));
-		btnAdd.setBounds(896, 44, 147, 36);
+		btnAdd.setBounds(885, 41, 147, 36);
 		add(btnAdd);
 
 		totalPage = Math.ceil(totalOfRows/ rowsOfPage);

@@ -38,11 +38,12 @@ public class FrameMember extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Thêm thành viên");
-		lblNewLabel.setForeground(new Color(37, 57, 111));
-		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
-		lblNewLabel.setBounds(20, 11, 219, 34);
-		contentPane.add(lblNewLabel);
+		JLabel lblTitle = new JLabel();
+		lblTitle.setForeground(new Color(37, 57, 111));
+		lblTitle.setFont(new Font("Arial", Font.BOLD, 20));
+		lblTitle.setBounds(20, 11, 219, 34);
+		contentPane.add(lblTitle);
+		lblTitle.setText("Thêm thành viên");
 		
 		JLabel lblEmail = new JLabel("Email ");
 		lblEmail.setForeground(Color.BLACK);
