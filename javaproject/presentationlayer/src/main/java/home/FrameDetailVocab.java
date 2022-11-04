@@ -5,7 +5,16 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import dao.impl.ExampleDAOImpl;
+import dao.impl.MeaningDAOImpl;
+import dao.impl.VocabularyDAOImpl;
+import dao.impl.WordTypeDAOImpl;
+import entity.Example;
+import entity.Meaning;
 import entity.Vocabulary;
+import entity.WordType;
+import item.ItemContent;
 import item.ItemVocab;
 
 import java.awt.Color;
@@ -23,19 +32,13 @@ public class FrameDetailVocab extends JFrame {
 	private Image starImg = new ImageIcon(getClass().getResource("/image/star.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 	private Image starAltImg = new ImageIcon(getClass().getResource("/image/star-alt.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 	private JLabel lblStar;
-	private JLabel lblMeaning;
-	private JLabel lblExample;
-	private JLabel lblContent;
 	private JLabel lblImage;
 	private JLabel lblPronunciation;
-	/**
-	 * Launch the application.
-	 */
-
 	/**
 	 * Create the frame.
 	 */
 	public FrameDetailVocab(Vocabulary vocab) {
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 892, 609);
 		contentPane = new JPanel();
@@ -68,29 +71,26 @@ public class FrameDetailVocab extends JFrame {
 		lblWordType.setFont(new Font("Arial", Font.PLAIN, 12));
 		lblWordType.setBounds(35, 64, 87, 27);
 		contentPane.add(lblWordType);
-		lblWordType.setText(vocab.getWordTypeId().toString());
 		
-		lblMeaning = new JLabel("New label");
-		lblMeaning.setForeground(new Color(37, 57, 111));
-		lblMeaning.setBackground(new Color(0, 0, 0));
-		lblMeaning.setFont(new Font("Arial", Font.BOLD, 14));
-		lblMeaning.setBounds(45, 97, 344, 27);
-		contentPane.add(lblMeaning);
+		WordTypeDAOImpl wordTypeDao = new WordTypeDAOImpl();
+		WordType wordType = new WordType();
+		wordType = wordTypeDao.select(vocab.getWordTypeId());
+		lblWordType.setText(wordType.getType());
 		
-		lblExample = new JLabel("New label");
-		lblExample.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblExample.setBounds(45, 126, 344, 27);
-		contentPane.add(lblExample);
-		
-		lblContent = new JLabel("New label");
-		lblContent.setFont(new Font("Arial", Font.ITALIC, 14));
-		lblContent.setBounds(45, 154, 344, 27);
-		contentPane.add(lblContent);
-		
+		int y = 90;
+		for ( Meaning meaning : new VocabularyDAOImpl().selectAllMeaningByVocabId(vocab.getId())) {
+			for(Example ex : new MeaningDAOImpl().selectAllExampleByMeaningId(meaning.getId())) {
+				ItemContent contentItem = new ItemContent(meaning, ex, y);
+				contentPane.add(contentItem);
+				y = y + 106;
+			}
+		}
+
+
 		lblImage = new JLabel();
 		lblImage.setIcon(new ImageIcon());
 		lblImage.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblImage.setBounds(516, 60, 271, 279);
+		lblImage.setBounds(561, 79, 271, 279);
 		contentPane.add(lblImage);
 		lblImage.setIcon(getImageByURL(vocab.getImage()));
 		

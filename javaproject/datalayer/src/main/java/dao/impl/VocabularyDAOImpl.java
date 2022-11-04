@@ -46,12 +46,12 @@ public class VocabularyDAOImpl implements VocabularyDAO {
 				String word = rs.getString(2);
 				String image = rs.getString(3);
 				String pronunciation = rs.getString(4);
-				Integer categoryId = rs.getInt(6);
-				Integer wordTypeId = rs.getInt(7);
+				Integer categoryId = rs.getInt(5);
+				Integer wordTypeId = rs.getInt(6);
 				vocab = new Vocabulary(vocab_id, word, image, pronunciation, categoryId, wordTypeId);
 			}
 		} catch(Exception e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Select A Vocabulary Failed!");
 		}
 		return vocab;

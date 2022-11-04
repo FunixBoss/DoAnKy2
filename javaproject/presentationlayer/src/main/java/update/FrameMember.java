@@ -52,6 +52,7 @@ public class FrameMember extends JFrame {
 	 * Create the frame.
 	 */
 	public FrameMember(User user) {
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 885, 442);
 		contentPane = new JPanel();

@@ -19,6 +19,7 @@ public class FrameListCategory extends JFrame {
 	 * Create the frame.
 	 */
 	public FrameListCategory(int id) {
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(0, 0, 1300, 700);
 		contentPane = new JPanel();
