@@ -54,7 +54,7 @@ public class VocabularyDAOImpl implements VocabularyDAO {
 				vocab = new Vocabulary(vocab_id, word, image, pronunciation, categoryId, wordTypeId);
 			}
 		} catch(Exception e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Select A Vocabulary Failed!");
 		}
 		return vocab;
