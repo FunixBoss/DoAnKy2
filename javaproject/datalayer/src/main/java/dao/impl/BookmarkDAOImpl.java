@@ -156,4 +156,42 @@ public class BookmarkDAOImpl implements BookmarkDAO {
 		}
 		return list.isEmpty() ? null : list;
 	}
+
+	@Override
+	public Integer delByUserId(Integer userId) {
+		Integer result = 0;
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call delBookmarkByUserId(?)}");
+		){
+			cs.setInt(1, userId);
+			result = cs.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Delete History by User Id Failed");
+		}
+		return result;
+	}
+
+	@Override
+	public List<Bookmark> selBookmarkByVocabId(Integer vocabId) {
+		List<Bookmark> list = new ArrayList<>();
+		try (
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call selBookmarkByVocabId(?)}");
+		) {
+			cs.setInt(1, vocabId);
+			var rs = cs.executeQuery();
+			while (rs.next()) {
+				Integer bmId = rs.getInt(1);
+				Integer vocabIRs = rs.getInt(2);
+				Integer userId = rs.getInt(3);
+				list.add(new Bookmark(bmId, vocabIRs, userId));
+			}
+		} catch (Exception e) {
+//			e.printStackTrace();
+			System.err.println("Select all Bookmark by Vocabid failed!");
+		}
+		return list.isEmpty() ? null : list;
+	}
 }

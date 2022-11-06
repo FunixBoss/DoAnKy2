@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import dao.impl.UserDAOImpl;
 import entity.User;
-import insert.FrameAdmin;
+import insert.FrameInsertAdmin;
 import item.ItemUser;
 
 public class PanelAdmin extends JPanel {
@@ -39,7 +39,7 @@ public class PanelAdmin extends JPanel {
 	public PanelAdmin() {
 		dao = new UserDAOImpl();
 		pageNumber = 1;
-		rowsOfPage = 10;
+		rowsOfPage = dao.countNumberOfAdmin() > 10 ? 10 : dao.countNumberOfAdmin();
 		
 		setLayout(null);
 		setBounds(0, 0, 1085, 699);
@@ -296,7 +296,7 @@ public class PanelAdmin extends JPanel {
 			
 	}
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
-		FrameAdmin frame = new FrameAdmin();
+		FrameInsertAdmin frame = new FrameInsertAdmin();
 		frame.setLocation(300, 300);
 		frame.setVisible(true);
 	}

@@ -22,6 +22,10 @@ INSERT INTO [USER] (EMAIL, [PASSWORD], [LEVEL], FULLNAME, BIRTHDAY, PHONE_NUMBER
 VALUES (N'phamphu1578@gmail.com', N'124523', 2, N'Nguyễn Phú', '2005-12-15', N'0651372372', GETDATE(), GETDATE())
 INSERT INTO [USER] (EMAIL, [PASSWORD], [LEVEL], FULLNAME, BIRTHDAY, PHONE_NUMBER, CREATED_AT, UPDATED_AT)
 VALUES (N'nguyenhuucanh@gmail.com', N'126423', 2, N'Nguyễn Hữu Cảnh', '2005-12-15', N'0289672372', GETDATE(), GETDATE())
+INSERT INTO [USER] (EMAIL, [PASSWORD], [LEVEL], FULLNAME, BIRTHDAY, PHONE_NUMBER, CREATED_AT, UPDATED_AT)
+VALUES (N'user3@gmail.com', N'126423', 2, N'Nguyễn Hữu Cảnh', '2005-12-15', N'0289672372', GETDATE(), GETDATE())
+INSERT INTO [USER] (EMAIL, [PASSWORD], [LEVEL], FULLNAME, BIRTHDAY, PHONE_NUMBER, CREATED_AT, UPDATED_AT)
+VALUES (N'user5@gmail.com', N'126423', 2, null, null, null, GETDATE(), GETDATE())
 GO
 
 
@@ -45,9 +49,25 @@ INSERT INTO CATEGORY VALUES (N'fruit', N'fruit.jpg')
 INSERT INTO CATEGORY VALUES (N'food', N'food.jpg')
 INSERT INTO CATEGORY VALUES (N'furniture', N'furniture.jpg')
 INSERT INTO CATEGORY VALUES (N'subject', N'subject.jpg')
+INSERT INTO CATEGORY VALUES (N'drink', N'drink.jpg')
+INSERT INTO CATEGORY VALUES (N'cloths', N'cloths.jpg')
+INSERT INTO CATEGORY VALUES (N'family', N'family.jpg')
+INSERT INTO CATEGORY VALUES (N'body', N'body.jpg')
+INSERT INTO CATEGORY VALUES (N'school', N'school.jpg')
+INSERT INTO CATEGORY VALUES (N'job', N'job.jpg')
 GO 
 
 INSERT INTO VOCABULARY VALUES (N'football', N'football.png', N'football.mp3', 1, 1) -- sport
+INSERT INTO VOCABULARY VALUES (N'ski', N'ski.png', N'ski.mp3', 1, 1) 
+INSERT INTO VOCABULARY VALUES (N'dive', N'dive.png', N'dive.mp3', 1, 1) 
+INSERT INTO VOCABULARY VALUES (N'skate', N'skate.png', N'skate.mp3', 1, 1) 
+INSERT INTO VOCABULARY VALUES (N'ride bike', N'ride_bike.png', N'ride_bike.mp3', 1, 1) 
+INSERT INTO VOCABULARY VALUES (N'skip', N'skip.png', N'skip.mp3', 1, 1) 
+INSERT INTO VOCABULARY VALUES (N'sail', N'sail.png', N'sail.mp3', 1, 1) 
+INSERT INTO VOCABULARY VALUES (N'surf', N'surf.png', N'surf.mp3', 1, 1) 
+INSERT INTO VOCABULARY VALUES (N'climb', N'climb.png', N'climb.mp3', 1, 1) 
+INSERT INTO VOCABULARY VALUES (N'swim', N'swim.png', N'swim.mp3', 1, 1) 
+INSERT INTO VOCABULARY VALUES (N'tennis', N'tennis.png', N'tennis.mp3', 1, 1) 
 INSERT INTO VOCABULARY VALUES (N'aerobics', N'aerobics.png', N'aerobics.mp3', 1, 1)
 INSERT INTO VOCABULARY VALUES (N'archery', N'archery.png', N'archery.mp3', 1, 1)
 INSERT INTO VOCABULARY VALUES (N'badminton', N'badminton.png', N'badminton.mp3', 1, 1)
@@ -56,11 +76,25 @@ INSERT INTO VOCABULARY VALUES (N'apple', N'apple.png', N'apple.mp3', 2, 1) -- fr
 INSERT INTO VOCABULARY VALUES (N'banana', N'banana.png', N'banana.mp3', 2, 1)
 INSERT INTO VOCABULARY VALUES (N'pear', N'pear.png', N'pear.mp3', 2, 1)
 INSERT INTO VOCABULARY VALUES (N'orange', N'orange.png', N'orange.mp3', 2, 1)
+INSERT INTO VOCABULARY VALUES (N'grapes', N'grapes.png', N'grapes.mp3', 2, 1)
+INSERT INTO VOCABULARY VALUES (N'avocado', N'avocado.png', N'avocado.mp3', 2, 1)
+INSERT INTO VOCABULARY VALUES (N'peach', N'peach.png', N'peach.mp3', 2, 1)
+INSERT INTO VOCABULARY VALUES (N'cherries', N'cherries.png', N'cherries.mp3', 2, 1)
+INSERT INTO VOCABULARY VALUES (N'watermelon', N'watermelon.png', N'watermelon.mp3', 2, 1)
+INSERT INTO VOCABULARY VALUES (N'melon', N'melon.png', N'melon.mp3', 2, 1)
+
+
 
 INSERT INTO VOCABULARY VALUES (N'pork', N'pork.png', N'pork.mp3', 3, 1) -- food
 INSERT INTO VOCABULARY VALUES (N'meat', N'meat.png', N'meat.mp3', 3, 1)
 INSERT INTO VOCABULARY VALUES (N'steamed sticky rice', N'steamed_sticky_rice.png', N'steamed_sticky_rice.mp3', 3, 1)
 INSERT INTO VOCABULARY VALUES (N'rice noodles', N'rice_noodles.png', N'rice_noodles.mp3', 3, 1)
+INSERT INTO VOCABULARY VALUES (N'egg', N'egg.png', N'egg.mp3', 3, 1)
+INSERT INTO VOCABULARY VALUES (N'bacon', N'bacon.png', N'bacon.mp3', 3, 1)
+INSERT INTO VOCABULARY VALUES (N'hamburger', N'hamburger.png', N'hamburger.mp3', 3, 1)
+INSERT INTO VOCABULARY VALUES (N'sausage', N'sausage.png', N'sausage.mp3', 3, 1)
+INSERT INTO VOCABULARY VALUES (N'cheese', N'cheese.png', N'cheese.mp3', 3, 1)
+INSERT INTO VOCABULARY VALUES (N'sandwich', N'sandwich.png', N'sandwich.mp3', 3, 1)
 
 INSERT INTO VOCABULARY VALUES (N'desk', N'desk.png', N'desk.mp3', 4, 1) -- furniture
 INSERT INTO VOCABULARY VALUES (N'chair', N'chair.png', N'chair.mp3', 4, 1)
@@ -165,11 +199,13 @@ GO
 
 
 
-INSERT INTO BOOKMARK VALUES (1, 1) 
+INSERT INTO BOOKMARK VALUES (3, 1) 
 INSERT INTO BOOKMARK VALUES (2, 1) 
 INSERT INTO BOOKMARK VALUES (3, 1) 
 INSERT INTO BOOKMARK VALUES (4, 1) 
 
+
+INSERT INTO BOOKMARK VALUES (3, 1) 
 INSERT INTO BOOKMARK VALUES (5, 2)
 INSERT INTO BOOKMARK VALUES (6, 2)
 INSERT INTO BOOKMARK VALUES (7, 2)

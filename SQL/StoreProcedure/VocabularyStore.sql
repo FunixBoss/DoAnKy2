@@ -101,7 +101,7 @@ BEGIN
 	SELECT COUNT(ID) total FROM VOCABULARY
 END
 GO
- EXEC countVocab
+ --EXEC countVocab
 
 -- phan trang lay bao nhieu dong tiep theo
 

@@ -16,9 +16,10 @@ public class TestCateDAOImpl implements CategoryDAO{
 //		System.out.println(test.insert(cate)); // done
 //		System.out.println(test.update(cate2));
 //		System.out.println(test.delete(cate2));
-		test.selectAllVocabByCategoryId(1).forEach(System.out::println); 
+//		test.selectAllVocabByCategoryId(1).forEach(System.out::println); 
 
-		test.selectAll().forEach(System.out::println);
+//		test.selectAll().forEach(System.out::println);
+		System.out.println(test.getIdFromCateName("fashjdood"));
 	}
 	
 	@Override
@@ -59,8 +60,13 @@ public class TestCateDAOImpl implements CategoryDAO{
 
 	@Override
 	public Integer countNumberOfCate() {
-		// TODO Auto-generated method stub
+//		return new CategoryDAOImpl().getIdFromCateName(null);
 		return null;
+	}
+
+	@Override
+	public Integer getIdFromCateName(String name) {
+		return new CategoryDAOImpl().getIdFromCateName(name);
 	}
 
 }

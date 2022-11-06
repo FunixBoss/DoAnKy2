@@ -1,4 +1,4 @@
-﻿DROP PROC IF EXISTS selUser
+﻿	DROP PROC IF EXISTS selUser
 GO
 CREATE PROC selUser
 @id INT
@@ -204,3 +204,14 @@ END
 GO
 
 --- EXEC selAdminByPages 1, 10
+DROP PROC IF EXISTS selIdByUserEmail
+GO
+CREATE PROC selIdByUserEmail
+@email NVARCHAR(200)
+AS
+BEGIN
+	SELECT	[ID] FROM [USER]
+	WHERE [EMAIL] = @email
+END
+GO
+

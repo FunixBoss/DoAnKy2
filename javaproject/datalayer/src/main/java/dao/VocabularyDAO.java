@@ -11,4 +11,5 @@ public interface VocabularyDAO extends DAO<Vocabulary> {
 	List<Relatives> selectAllRelativesByVocabId(Integer vocabId);
 	List<Vocabulary> selectByPages(int pageNumber, int rowOfPages);
 	Integer countNumberOfVocab();
+	Integer insertGetId(Vocabulary vocab);
 }

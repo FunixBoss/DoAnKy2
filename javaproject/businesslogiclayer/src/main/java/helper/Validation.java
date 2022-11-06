@@ -1,5 +1,6 @@
 package helper;
 
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import javax.swing.JTextField;
@@ -18,5 +19,17 @@ public class Validation {
 			ok = false;
 		}
 		return ok;
+	}
+	
+	public static boolean checkLength(String str, int minLength, int maxLength) {
+		return (str.length() >= minLength && str.length() <= maxLength);
+	}
+	
+	public static boolean checkRegex(String regex, String str) {
+		return (Pattern.compile(regex).matcher(str).matches()) ? true : false;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(checkRegex(RegexPattern.EMAIL, "nguyenphu1147@gmail.com"));
 	}
 }

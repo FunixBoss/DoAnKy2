@@ -109,3 +109,16 @@ END
 GO 
 
 --- EXEC selCateByPages 2, 10
+
+DROP PROC IF EXISTS selCateIfExist
+GO
+CREATE PROC selCateIfExist
+@name NVARCHAR(50)
+AS
+BEGIN
+	SELECT	ID FROM CATEGORY
+	WHERE [NAME] = @name
+END
+GO
+
+-- EXEC selCateIfExist N'foasdod'

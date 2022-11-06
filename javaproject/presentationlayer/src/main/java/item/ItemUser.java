@@ -7,11 +7,13 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
 import entity.User;
-import update.FrameMember;
+import service.UserService;
+import update.FrameUpdateMember;
 
 public class ItemUser extends JPanel {
 
@@ -19,6 +21,7 @@ public class ItemUser extends JPanel {
 	private JLabel lblDob;
 	private JLabel lblFullname;
 	private JLabel lblEmail;
+	private UserService userService;
 	/**
 	 * Create the panel.
 	 */
@@ -59,7 +62,7 @@ public class ItemUser extends JPanel {
 		JButton btnDelete = new JButton("Xóa");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				do_btnDelete_actionPerformed(e);
+				do_btnDelete_actionPerformed(e, user);
 			}
 		});
 		btnDelete.setBorder(null);
@@ -78,7 +81,7 @@ public class ItemUser extends JPanel {
 		JButton btnEdit = new JButton("Sửa ");
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				do_btnEdit_actionPerformed(e);
+				do_btnEdit_actionPerformed(e, user);
 			}
 		});
 		btnEdit.setBorder(null);
@@ -138,19 +141,20 @@ public class ItemUser extends JPanel {
 		lblDob.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblDob.setBounds(10, 18, 125, 18);
 		panel_2_1.add(lblDob);
-		lblDob.setText(user.getDateOfBirth().toString());
+		lblDob.setText(user.getDateOfBirth() == null ? null : user.getDateOfBirth().toString());
 	}
-	protected void do_btnEdit_actionPerformed(ActionEvent e) {
-		User user = new User();
-		user.setFullname(lblFullname.getText());
-		user.setPhoneNumber(lblPhone.getText());
-		user.setDateOfBirth(LocalDate.parse(lblDob.getText()));
-		user.setEmail(lblEmail.getText());
-		FrameMember fr = new FrameMember(user);
+	protected void do_btnEdit_actionPerformed(ActionEvent e, User user) {
+		FrameUpdateMember fr = new FrameUpdateMember(user);
 		fr.setVisible(true);
 		fr.setLocation(300, 300);
 	}
-	protected void do_btnDelete_actionPerformed(ActionEvent e) {
-		
+	protected void do_btnDelete_actionPerformed(ActionEvent e, User user) {
+		int option = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn xóa user này?", "Xóa user", JOptionPane.YES_NO_OPTION);
+		if(option == JOptionPane.YES_OPTION) {
+			userService = new UserService();
+			if(userService.delete(user)) {
+				JOptionPane.showMessageDialog(this, "Xoá User thành công!");
+			}
+		}
 	}
 }

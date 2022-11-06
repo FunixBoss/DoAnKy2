@@ -94,3 +94,29 @@ END
 GO
 
 --EXEC selAllVocabularyInBookmarkByUserId 1
+
+
+DROP PROC IF  EXISTS delBookmarkByUserId 
+GO
+CREATE PROC delBookmarkByUserId
+@user_id INT
+AS
+BEGIN
+	DELETE FROM BOOKMARK
+	WHERE [USER_ID] = @user_id
+END
+GO
+-- EXEC delBookmarkByUserId 2
+
+DROP PROC IF EXISTS selBookmarkByVocabId 
+GO
+CREATE PROC selBookmarkByVocabId
+@vocab_id INT
+AS
+BEGIN
+	SELECT * FROM BOOKMARK
+	WHERE VOCABULARY_ID = @vocab_id
+END
+GO
+
+-- EXEC selBookmarkByVocabId 3

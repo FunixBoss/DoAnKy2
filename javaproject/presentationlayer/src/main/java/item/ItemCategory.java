@@ -6,9 +6,13 @@ import javax.swing.JPanel;
 
 import entity.Category;
 import home.FrameListCategory;
-import update.FrameCategory;
+import service.CategoryService;
+import service.UserService;
+import update.FrameUpdateCategory;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -24,6 +28,7 @@ import java.awt.event.ActionEvent;
 
 public class ItemCategory extends JPanel {
 
+	private CategoryService cateService;
 	/**
 	 * Create the panel.
 	 */
@@ -109,7 +114,7 @@ public class ItemCategory extends JPanel {
 		JButton btnEdit = new JButton("Sửa");
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FrameCategory fr = new FrameCategory(cate);
+				FrameUpdateCategory fr = new FrameUpdateCategory(cate);
 				fr.setVisible(true);
 				fr.setLocation(500, 250);
 			}
@@ -127,6 +132,11 @@ public class ItemCategory extends JPanel {
 		panelHeader_1.add(panel_1_1);
 
 		JButton btnDelete = new JButton("Xóa");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnDeleteActionPerformed(e, cate);
+			}
+		});
 		btnDelete.setForeground(Color.WHITE);
 		btnDelete.setFont(new Font("Arial", Font.BOLD, 14));
 		btnDelete.setBorder(null);
@@ -157,5 +167,14 @@ public class ItemCategory extends JPanel {
 	
 	private String toCapitalize(String str) {
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
+	}
+	protected void btnDeleteActionPerformed(ActionEvent e, Category category) {
+		int option = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn xóa chủ đề này này?", "Xóa chủ đề", JOptionPane.YES_NO_OPTION);
+		if(option == JOptionPane.YES_OPTION) {
+			cateService = new CategoryService();
+			if(cateService.delete(category)) {
+				JOptionPane.showMessageDialog(this, "Xoá chủ đề thành công!");
+			}
+		}
 	}
 }

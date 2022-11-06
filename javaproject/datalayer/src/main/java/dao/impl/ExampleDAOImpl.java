@@ -1,5 +1,6 @@
 package dao.impl;
 
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +67,7 @@ public class ExampleDAOImpl implements ExampleDAO {
 				list.add(new Example(exId, content, meaning, meaningId));
 			}
 		} catch(Exception e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Select all Example failed!");
 		}
 		return list.isEmpty() ? null : list;
@@ -84,11 +85,15 @@ public class ExampleDAOImpl implements ExampleDAO {
 			var cs = con.prepareCall("{call insertEx(?, ?, ?)}")
 		){
 			cs.setString(1, ex.getContent());
-			cs.setString(2, ex.getMeaning());
+			if(ex.getMeaning() != null) {
+				cs.setString(2, ex.getMeaning());
+			} else {
+				cs.setNull(2, Types.NVARCHAR);
+			}
 			cs.setInt(3, ex.getMeaningId());
 			result = cs.executeUpdate();
 		} catch (Exception e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Insert Example failed!");
 		}
 		return result;

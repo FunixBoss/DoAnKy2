@@ -109,7 +109,7 @@ public class CategoryDAOImpl implements CategoryDAO {
 			cs.setString(3, cate.getImageIcon());
 			result = cs.executeUpdate();
 		} catch (Exception e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.out.println("Update Category Failed");
 		}
 		return result;
@@ -205,6 +205,31 @@ public class CategoryDAOImpl implements CategoryDAO {
 		}
 		
 		return count;
+	}
+
+	@Override
+	/**
+	 *  @return -1 if do not exists
+	 */
+	public Integer getIdFromCateName(String name) {
+		int id = 0;
+		
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call selCateIfExist(?)}");
+		){
+			cs.setString(1, name);
+			var rs = cs.executeQuery();
+			if(rs.next()) {
+				id = rs.getInt(1);
+			} else {
+				return -1;
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return id;		
 	}
 
 }

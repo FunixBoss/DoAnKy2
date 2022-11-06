@@ -33,14 +33,11 @@ public class User extends Entity {
 	}
 	
 	public User(String email, String password, Integer level,
-			 String fullname, String phoneNumber, LocalDate dateOfBirth,
-			 LocalDate createdAt, LocalDate updatedAt) {
+			 String fullname, String phoneNumber, LocalDate dateOfBirth) {
 		super();
 		this.email = email;
 		this.password = password;
 		this.level = level;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
 		this.fullname = fullname;
 		this.phoneNumber = phoneNumber;
 		this.dateOfBirth = dateOfBirth;

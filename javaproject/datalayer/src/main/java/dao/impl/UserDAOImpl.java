@@ -175,7 +175,7 @@ public class UserDAOImpl implements UserDAO {
 	 * @return 1 for insert successfully
 	 */
 	public Integer insert(User user) {
-		if (!checkExistEmail(user)) {
+		if (!checkExistEmail(user.getEmail())) {
 			String hashed = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
 			Integer result = 0;
 			try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
@@ -205,11 +205,11 @@ public class UserDAOImpl implements UserDAO {
 		return 0;
 	}
 
-	public static boolean checkExistEmail(User u) {
+	public boolean checkExistEmail(String email) {
 		boolean result = false;
 		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
 				var cs = con.prepareCall("{call selUserIfExist(?)}");) {
-			cs.setString(1, u.getEmail());
+			cs.setString(1, email);
 			var rs = cs.executeQuery();
 			if (rs.next()) {
 				return true;
@@ -305,13 +305,27 @@ public class UserDAOImpl implements UserDAO {
 		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
 				var cs = con.prepareCall("{call updatePrivateInfoUser(?, ?, ?, ?)}");) {
 			cs.setInt(1, user.getId());
-			cs.setString(2, user.getFullname());
-			cs.setDate(3, Date.valueOf(user.getDateOfBirth()));
-			cs.setDate(3, null);
-			cs.setString(4, user.getPhoneNumber());
+			
+			if(user.getFullname() != null) {
+				cs.setString(2, user.getFullname());
+			} else {
+				cs.setNull(2, Types.NVARCHAR);
+			}
+			
+			if(user.getDateOfBirth() != null) {
+				cs.setDate(3, Date.valueOf(user.getDateOfBirth()));
+			} else {
+				cs.setNull(3, Types.DATE);
+			}
+			
+			if(user.getPhoneNumber() != null) {
+				cs.setString(4, user.getPhoneNumber());
+			} else {
+				cs.setNull(3, Types.NVARCHAR);
+			}
 			result = cs.executeUpdate();
 		} catch (Exception e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			System.out.println("Update User Failed");
 		}
 		return result;

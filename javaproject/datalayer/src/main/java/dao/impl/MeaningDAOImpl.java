@@ -1,5 +1,10 @@
 package dao.impl;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -157,10 +162,42 @@ public class MeaningDAOImpl implements MeaningDAO {
 				list.add(new Example(exId, content, meaning, meaningIdRs));
 			}
 		} catch(Exception e) {
-//			e.printStackTrace();
-			System.err.println("Select all Example failed!");
+			e.printStackTrace();
+			System.err.println("selectAllExampleByMeaningId failed!");
 		}
 		return list.isEmpty() ? null : list;
+	}
+
+	@Override
+	public Integer insertGetId(Meaning meaning) {
+		String sql = "INSERT INTO MEANING VALUES (?, ?)";
+		int result = -1;
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			PreparedStatement  ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		){
+			ps.setString(1, meaning.getContent());
+			ps.setInt(2, meaning.getVocabularyId());
+			
+			int affectedRows = ps.executeUpdate();
+
+	        if (affectedRows == 0) {
+	            throw new SQLException("Creating user failed, no rows affected.");
+	        }
+
+	        try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+	            if (generatedKeys.next()) {
+	            	result =  generatedKeys.getInt(1);
+	            }
+	            else {
+	                throw new SQLException("Insert get id meaning failed, no ID obtained.");
+	            }
+	        }
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Insert get id meaning failed");
+		}
+		return result;
 	}
 
 }

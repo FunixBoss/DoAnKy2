@@ -22,7 +22,7 @@ import javax.swing.SwingConstants;
 
 import dao.impl.CategoryDAOImpl;
 import entity.Category;
-import insert.FrameCategory;
+import insert.FrameInsertCategory;
 import item.ItemCategory;
 
 
@@ -45,7 +45,7 @@ public class PanelCategory extends JPanel {
 	public PanelCategory() {
 		dao = new CategoryDAOImpl();
 		pageNumber = 1;
-		rowsOfPage = 5;
+		rowsOfPage =  dao.countNumberOfCate() > 10 ? 10 : dao.countNumberOfCate();
 		
 		setLayout(null);
 		setBounds(0, 0, 1085, 699);
@@ -274,7 +274,6 @@ public class PanelCategory extends JPanel {
 			panel.setPreferredSize(new Dimension(975, rowsOfPage * 89));
 
 			int y = 40;
-			
 			printTitleComponent(panel);
 			scrollPane.setViewportView(panel);
 			for(Category cate : dao.selectByPages(pageNumber, rowsOfPage)){
@@ -290,7 +289,7 @@ public class PanelCategory extends JPanel {
 	}
 	
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
-		FrameCategory frame = new FrameCategory();
+		FrameInsertCategory frame = new FrameInsertCategory();
 		frame.setLocation(500, 300);
 		frame.setVisible(true);
 	}
