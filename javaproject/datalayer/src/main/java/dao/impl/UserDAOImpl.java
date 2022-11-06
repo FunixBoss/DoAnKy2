@@ -248,7 +248,20 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return BCrypt.hashpw(acc, BCrypt.gensalt());
 	}
-
+	public static int getIdFromDbByAccount(String acc) {
+		int result = -1;
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				PreparedStatement stmt = con.prepareStatement("SELECT ID FROM [USER] where EMAIL= ?");) {
+			stmt.setString(1, acc);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	/**
 	 * @return 0 for update private info failed
 	 * @return 1 or 2 for update private info successfully
@@ -509,4 +522,28 @@ public class UserDAOImpl implements UserDAO {
 
 		return count;
 	}
+
+	@Override
+	public Integer selectIdByUserEmail(String email) {
+		Integer id = null;
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call selIdByUserEmail(?)}");) {
+			cs.setString(1,email );
+			var rs = cs.executeQuery();
+			System.out.println(rs);
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (Exception e) {
+			 e.printStackTrace();
+			System.err.println("Select id By User email failed");
+		}
+		return id;
+	}
+
+	public static void main(String[] args) {
+//		System.out.println(new UserDAOImpl().selectIdByUserEmail("hung23n@gmail.com"));
+	}
+
+	
 }

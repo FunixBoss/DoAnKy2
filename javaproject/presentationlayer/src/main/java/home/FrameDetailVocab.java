@@ -5,17 +5,30 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import dao.impl.BookmarkDAOImpl;
+import dao.impl.UserDAOImpl;
+import entity.Bookmark;
 import entity.Vocabulary;
 import item.ItemVocab;
+import service.Authorization;
 
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Image;
 import javax.swing.SwingConstants;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.List;
+
+import javax.swing.JToggleButton;
 
 public class FrameDetailVocab extends JFrame {
 
@@ -28,6 +41,7 @@ public class FrameDetailVocab extends JFrame {
 	private JLabel lblContent;
 	private JLabel lblImage;
 	private JLabel lblPronunciation;
+	private JToggleButton tglbtnNewToggleButton;
 	/**
 	 * Launch the application.
 	 */
@@ -98,6 +112,51 @@ public class FrameDetailVocab extends JFrame {
 		lblPronunciation.setIcon(new ImageIcon(FrameDetailVocab.class.getResource("/jaco/mp3/player/plaf/resources/mp3PlayerSoundOn.png")));
 		lblPronunciation.setBounds(161, 59, 31, 27);
 		contentPane.add(lblPronunciation);
+		
+		tglbtnNewToggleButton = new JToggleButton("");
+		tglbtnNewToggleButton.setContentAreaFilled(false);
+		tglbtnNewToggleButton.setBorder(null);
+		tglbtnNewToggleButton.setBorderPainted(false);
+		tglbtnNewToggleButton.setBounds(693, 0, 65, 61);
+		
+		//set Icon
+		try {
+			if(new BookmarkDAOImpl().checkExistBookmarkInDb(new UserDAOImpl().selectIdByUserEmail(Authorization.email),vocab.getId())== null) {
+				tglbtnNewToggleButton.setIcon((new ImageIcon(starAltImg)));
+			}else {
+				tglbtnNewToggleButton.setIcon(new ImageIcon(starImg));
+			}
+			
+		} catch (Exception e2) {
+			// TODO: handle exception
+		}
+		
+		
+		
+		tglbtnNewToggleButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(((JToggleButton)e.getSource()).isSelected() == true) {
+					if(Authorization.email!=null ) {
+						if(new BookmarkDAOImpl().checkExistBookmark( new UserDAOImpl().selectIdByUserEmail(Authorization.email),vocab.getId()) ==null) {
+							new BookmarkDAOImpl().insert(new Bookmark(vocab.getId(), new UserDAOImpl().selectIdByUserEmail(Authorization.email)));
+						}
+						tglbtnNewToggleButton.setIcon(new ImageIcon(starImg));
+					}
+				}else if(((JToggleButton)e.getSource()).isSelected() == false) {
+					if(Authorization.email!=null) {
+						List<Bookmark> x = new BookmarkDAOImpl().checkExistBookmark( new UserDAOImpl().selectIdByUserEmail(Authorization.email),vocab.getId());
+						if(x != null) {
+							x.forEach(y->new BookmarkDAOImpl().delete(y));
+						}
+						tglbtnNewToggleButton.setIcon((new ImageIcon(starAltImg)));
+						
+					}
+				}
+				
+			}
+	      });
+		contentPane.add(tglbtnNewToggleButton);
 	}
 
 	protected void do_lblStar_mouseClicked(MouseEvent e) {

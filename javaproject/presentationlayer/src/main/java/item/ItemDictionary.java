@@ -2,20 +2,31 @@ package item;
 
 import javax.swing.JPanel;
 
+import dao.impl.HistoryDAOImpl;
+import dao.impl.UserDAOImpl;
+import dao.impl.VocabularyDAOImpl;
+import entity.History;
 import entity.Vocabulary;
 import home.FrameDetailVocab;
+import service.Authorization;
 
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 public class ItemDictionary extends JPanel {
 
 	private JLabel lblWord;
 	private JLabel lblWordType;
 
+	
+	public static void main(String[] args) {
+//		List<Vocabulary> vocabs = new HistoryDAOImpl().selectAllVocabByUserId(1);
+//		vocabs.forEach(System.out::println);
+	}
 	/**
 	 * Create the panel.
 	 */
@@ -24,6 +35,10 @@ public class ItemDictionary extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				FrameDetailVocab fr = new FrameDetailVocab(vocab);
+				UserDAOImpl dao = new UserDAOImpl();
+				if(new HistoryDAOImpl().checkAllExistHistory(dao.selectIdByUserEmail(Authorization.email), vocab.getId()) ==null) {
+					new HistoryDAOImpl().insert(new History(vocab.getId(),dao.selectIdByUserEmail(Authorization.email)));
+				}
 				fr.setVisible(true);
 				fr.setLocation(200, 200);
 			}

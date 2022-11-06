@@ -18,20 +18,26 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import entity.History;
 import home.PanelBookmark;
 import home.PanelCategory;
 import home.PanelHistory;
 import home.PanelHome;
 import home.PanelVocab;
+import service.Authorization;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 
 
 
 public class FrameHome extends JFrame {
-
+	public FrameHome frOut;
+	public FrameSignIn frIn;
+	public static String flag= "PanelVocab";
 	private JPanel contentPane;
 	private JTextField txtFieldSearch;
 	private Image logoImg = new ImageIcon(getClass().getResource("/image/dictionary-icon.png")).getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
@@ -46,7 +52,7 @@ public class FrameHome extends JFrame {
 	private JPanel panelCategory;
 	private JPanel panelBookmark;
 	private JPanel panelHistory;
-	private JPanel panelLogIn;
+	private JPanel fieldAuthor;
 	private JLabel lblSignIn;
 	private JLabel lblVocab;
 	private JLabel lblBookmark;
@@ -105,6 +111,12 @@ public class FrameHome extends JFrame {
 		panel_1.add(btnNewButton);
 		
 		txtFieldSearch = new JTextField();
+		txtFieldSearch.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				txtFieldSearchKeyReleased(e);
+			}
+		});
 		txtFieldSearch.setMargin(new Insets(2, 10, 2, 2));
 		txtFieldSearch.setHorizontalAlignment(SwingConstants.LEFT);
 		txtFieldSearch.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -185,23 +197,32 @@ public class FrameHome extends JFrame {
 		lblHistory.setBounds(10, 11, 73, 23);
 		panelHistory.add(lblHistory);
 		
-		panelLogIn = new JPanel();
-		panelLogIn.addMouseListener(new MouseAdapter() {
+		fieldAuthor = new JPanel();
+		fieldAuthor.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				do_panelLogIn_mouseClicked(e);
+				if(Authorization.email==null) {
+					do_panelLogIn_mouseClicked(e);
+				}else {
+					do_panelLogOut_mouseClicked(e);
+				}
 			}
 		});
-		panelLogIn.setLayout(null);
-		panelLogIn.setBackground(Color.WHITE);
-		panelLogIn.setBounds(982, 32, 93, 45);
-		panel_1.add(panelLogIn);
+		fieldAuthor.setLayout(null);
+		fieldAuthor.setBackground(Color.WHITE);
+		fieldAuthor.setBounds(982, 32, 93, 45);
+		panel_1.add(fieldAuthor);
 		
-		lblSignIn = new JLabel("Đăng nhập");
+		if(Authorization.email==null) {
+			lblSignIn = new JLabel("Đăng nhập");
+			
+		}else {
+			lblSignIn = new JLabel("Đăng Xuất");
+		}
 		lblSignIn.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSignIn.setFont(new Font("Arial", Font.BOLD, 14));
 		lblSignIn.setBounds(6, 11, 83, 23);
-		panelLogIn.add(lblSignIn);
+		fieldAuthor.add(lblSignIn);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(37, 57, 111));
@@ -234,12 +255,18 @@ public class FrameHome extends JFrame {
 		panelLogo.add(lblIconLogo);
 		lblIconLogo.setBackground(new Color(0, 0, 0));
 		lblIconLogo.setIcon(new ImageIcon(logoImg));
+		
+		
+		
 		jpHome = new PanelHome();
 		jpHome.setBackground(new Color(37, 57, 111));
 		jpCategory = new PanelCategory();
 		jpHistory = new PanelHistory();
 		jpVocab = new PanelVocab();
 		jpBookmark = new PanelBookmark();
+		 
+		
+		
 		
 		panelMain = new JPanel();
 		panelMain.setBackground(new Color(255, 255, 255));
@@ -255,11 +282,25 @@ public class FrameHome extends JFrame {
 	}
 	
 	public void menuClicked(JPanel panel) {
+		if(panel.getClass().getName().equals("home.PanelHistory")) {
+			flag = "PanelHistory";
+			jpHistory.initConstructor();
+		}else if (panel.getClass().getName().equals("home.PanelCategory")) {
+			flag = "PanelCategory";
+			jpCategory.initConstructor();
+		}else if (panel.getClass().getName().equals("home.PanelVocab")) {
+			flag = "PanelVocab";
+			jpVocab.initConstructor();
+		}else if (panel.getClass().getName().equals("home.PanelBookmark")) {
+			flag = "PanelBookmark";
+			jpBookmark.initConstructor();
+		}
 		jpHistory.setVisible(false);
 		jpVocab.setVisible(false);
 		jpCategory.setVisible(false);
 		jpBookmark.setVisible(false);
 		jpHome.setVisible(false);
+		
 		panel.setVisible(true);
 	}
 	
@@ -274,6 +315,7 @@ public class FrameHome extends JFrame {
 		panelBookmark.setBackground(new Color(255, 255, 255));
 		label.setForeground(new Color(255, 255, 255));
 		panel.setBackground(new Color(37, 57, 111));
+		
 	}
 	protected void do_btnNewButton_actionPerformed(ActionEvent e) {
 		
@@ -298,8 +340,23 @@ public class FrameHome extends JFrame {
 		menuChanged(panelHistory,lblHistory);
 	}
 	protected void do_panelLogIn_mouseClicked(MouseEvent e) {
-		FrameSignIn fr = new FrameSignIn();
-		fr.setVisible(true);
-		fr.setLocation(400, 300);
+		frIn = new FrameSignIn();
+		frIn.setVisible(true);
+		frIn.setLocation(400, 300);
+		dispose();
+	}
+	protected void do_panelLogOut_mouseClicked(MouseEvent e) {
+		Authorization.setNull();
+		dispose();
+		 frOut = new FrameHome();
+		 frOut.setLocation(400, 300);
+		 frOut.setVisible(true);
+	}
+	
+	protected void txtFieldSearchKeyReleased(KeyEvent e) {
+		if(flag == "PanelVocab") {
+			jpVocab.initConstructor(txtFieldSearch.getText());
+		}
+		
 	}
 }

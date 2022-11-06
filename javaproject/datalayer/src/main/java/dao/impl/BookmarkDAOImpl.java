@@ -120,10 +120,24 @@ public class BookmarkDAOImpl implements BookmarkDAO {
 			cs.setInt(1, bm.getId());
 			result = cs.executeUpdate();
 		} catch (Exception e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Delete a Bookmark failed");
 		}
 		return result;
+	}
+	public List<Bookmark> deleteAll(Bookmark bm) {
+		Integer result = 0;
+		try (
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call deleteBookmark(?)}");
+		) {
+			cs.setInt(1, bm.getId());
+			result = cs.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Delete a Bookmark failed");
+		}
+		return list.isEmpty() ? null :list;
 	}
 
 
@@ -155,5 +169,53 @@ public class BookmarkDAOImpl implements BookmarkDAO {
 			System.err.println("Select all vocabulary In Bookmark by User Id failed!");
 		}
 		return list.isEmpty() ? null : list;
+	}
+	
+	public List<Bookmark> checkExistBookmark(Integer userId,Integer vocabId) {
+		List<Bookmark> list = new ArrayList<>();
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call checkVocabularyExistInBookmark(?,?)}");) {
+			cs.setInt(1, userId);
+			cs.setInt(2, vocabId);
+			var rs = cs.executeQuery();
+
+			if (rs.next()) {
+				Integer id_bm = rs.getInt(1);
+				Integer id_vocab = rs.getInt(2);
+				Integer id_user = rs.getInt(3);
+				list.add(new Bookmark(id_bm, id_vocab, id_user));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("checkExistBookmark Failed!");
+		}
+		return list.isEmpty() ? null : list;
+	}
+	public Bookmark checkExistBookmarkInDb(Integer userId,Integer vocabId) {
+		Bookmark bm = null;
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call checkVocabularyExistInBookmark(?,?)}");) {
+			cs.setInt(1, userId);
+			cs.setInt(2, vocabId);
+			var rs = cs.executeQuery();
+
+			if (rs.next()) {
+				Integer id_bm = rs.getInt(1);
+				Integer id_vocab = rs.getInt(2);
+				Integer id_user = rs.getInt(3);
+				bm = new Bookmark(id_bm, id_vocab, id_user);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("checkExistBookmarkInDb Failed!");
+		}
+		return bm;
+	}
+	
+	
+	
+	
+	
+	public static void main(String[] args) {
 	}
 }

@@ -94,3 +94,18 @@ END
 GO
 
 --EXEC selAllVocabularyInBookmarkByUserId 1
+use DICTIONARY
+ 
+DROP PROC IF EXISTS checkVocabularyExistInBookmark
+GO
+CREATE PROC checkVocabularyExistInBookmark
+@user_id INT,
+@vocabulary_id INT
+AS
+BEGIN 
+	SELECT * FROM  BOOKMARK
+	WHERE [USER_ID] = @user_id AND VOCABULARY_ID = @vocabulary_id
+END
+GO
+
+EXEC checkVocabularyExistInBookmark 10, 30

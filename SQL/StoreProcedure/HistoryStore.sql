@@ -16,9 +16,12 @@ GO
 DROP PROC IF EXISTS selAllHistory
 GO
 CREATE PROC selAllHistory
+@vocabId int,
+@userId int
 AS
 BEGIN
 	SELECT * FROM HISTORY 
+	WHERE 
 END
 GO
 --EXEC selAllHistory
@@ -86,10 +89,46 @@ CREATE PROC selAllVocabularyInHistoryByUserId
 @user_id INT
 AS
 BEGIN
-	SELECT VOCABULARY.* FROM VOCABULARY
+	SELECT  VOCABULARY.* FROM VOCABULARY
 	INNER JOIN HISTORY ON HISTORY.VOCABULARY_ID = VOCABULARY.ID
 	WHERE HISTORY.[USER_ID] = @user_id
 END
 GO
 
 -- EXEC selAllVocabularyInHistoryByUserId 1
+
+
+
+cai nay
+
+
+DROP PROC IF EXISTS selAllVocabularyInHistoryByUserId
+GO
+CREATE PROC selAllVocabularyInHistoryByUserId
+@user_id INT
+AS
+BEGIN
+	SELECT  VOCABULARY.* FROM VOCABULARY
+	INNER JOIN HISTORY ON HISTORY.VOCABULARY_ID = VOCABULARY.ID
+	WHERE HISTORY.[USER_ID] = @user_id
+END
+GO
+
+DROP PROC IF EXISTS checkVocabularyExistInHistory
+GO
+CREATE PROC checkVocabularyExistInHistory
+@user_id INT,
+@vocabulary_id INT
+AS
+BEGIN 
+	SELECT * FROM HISTORY 
+	WHERE [USER_ID] = @user_id AND VOCABULARY_ID = @vocabulary_id
+END
+GO
+
+EXEC checkVocabularyExistInHistory 10, 4
+
+
+
+
+

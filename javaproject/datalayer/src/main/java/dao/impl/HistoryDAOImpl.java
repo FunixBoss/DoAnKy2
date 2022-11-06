@@ -67,7 +67,6 @@ public class HistoryDAOImpl implements HistoryDAO {
 		}
 		return list.isEmpty() ? null : list;
 	}
-	
 	@Override
 	/**
 	 * @return 0 for insert failed
@@ -150,6 +149,76 @@ public class HistoryDAOImpl implements HistoryDAO {
 		} catch(Exception e) {
 			e.printStackTrace();
 			System.err.println("Select all vocabulary In History by User Id failed!");
+		}
+		return list.isEmpty() ? null : list;
+	}
+	
+	
+	
+	public History checkExistHistory(Integer userId,Integer vocabId) {
+		History hs = null;
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call checkVocabularyExistInHistory(?,?)}");) {
+			cs.setInt(1, userId);
+			cs.setInt(2, vocabId);
+			var rs = cs.executeQuery();
+
+			if (rs.next()) {
+				Integer id_his = rs.getInt(1);
+				Integer id_vocab = rs.getInt(2);
+				Integer id_user = rs.getInt(3);
+				hs = new History(id_his, id_vocab, id_user);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("checkExistHistory Failed!");
+		}
+		return hs;
+	}
+	public List<History> checkAllExistHistory(Integer userId,Integer vocabId) {
+		List<History> list = new ArrayList<>();
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call checkVocabularyExistInHistory(?,?)}");) {
+			cs.setInt(1, userId);
+			cs.setInt(2, vocabId);
+			var rs = cs.executeQuery();
+
+			if (rs.next()) {
+				Integer id_his = rs.getInt(1);
+				Integer id_vocab = rs.getInt(2);
+				Integer id_user = rs.getInt(3);
+				list.add( new History(id_his, id_vocab, id_user));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("checkExistHistory Failed!");
+		}
+		return list.isEmpty() ? null : list;
+	}
+	public static void main(String[] args) {
+	}
+	
+	
+	public List<History> searchAll(String str) {
+		List<History> list = new ArrayList<>();
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call searchAll(?)}");
+		){
+			cs.setString(1,str );
+			var rs = cs.executeQuery();
+			while(rs.next()) {
+				Integer id = rs.getInt(1);
+				Integer x = rs.getInt(2);
+				Integer t = rs.getInt(3);
+				
+				
+				list.add(
+					new History(id,x,t));
+			}
+		} catch(Exception e) {
+//			e.printStackTrace();
+			System.err.println("search all History failed!");
 		}
 		return list.isEmpty() ? null : list;
 	}

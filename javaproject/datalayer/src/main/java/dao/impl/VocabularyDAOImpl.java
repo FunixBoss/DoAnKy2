@@ -267,4 +267,37 @@ public class VocabularyDAOImpl implements VocabularyDAO {
 		return count;
 	}
 	
+	
+	public List<Vocabulary> searchAll(String str) {
+		List<Vocabulary> list = new ArrayList<>();
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call searchAll(?)}");
+		){
+			cs.setString(1,str );
+			var rs = cs.executeQuery();
+			while(rs.next()) {
+				Integer vocab_id = rs.getInt(1);
+				String word = rs.getString(2);
+				String image = rs.getString(3);
+				String pronunciation = rs.getString(4);
+				Integer categoryId = rs.getInt(5);
+				Integer wordTypeId = rs.getInt(6);
+				
+				list.add(
+					new Vocabulary(vocab_id, word, image, pronunciation, categoryId, wordTypeId));
+			}
+		} catch(Exception e) {
+//			e.printStackTrace();
+			System.err.println("search all vocabulary failed!");
+		}
+		return list.isEmpty() ? null : list;
+	}
+	
+	
+	public static void main(String[] args) {
+		System.out.println(new VocabularyDAOImpl().searchAll("a"));
+	}
+
+	
 }

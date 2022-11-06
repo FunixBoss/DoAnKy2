@@ -119,3 +119,16 @@ END
 GO 
 
 --- EXEC selVocabByPages 2, 10
+
+DROP PROC IF EXISTS searchAll
+GO
+CREATE PROC searchAll
+@data NVARCHAR(200)
+AS 
+BEGIN
+	SELECT * FROM VOCABULARY
+	WHERE WORD like @data+'%'
+END
+GO
+
+EXEC searchAll 'a'

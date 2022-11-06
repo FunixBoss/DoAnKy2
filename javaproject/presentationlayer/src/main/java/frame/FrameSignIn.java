@@ -8,6 +8,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -33,6 +34,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class FrameSignIn extends JFrame {
+	private FrameSignIn jfSignIn;
 	private JPanel contentPane;
 	private JTextField textFieldEmail;
 	private JPasswordField textFieldPassword;
@@ -76,10 +78,8 @@ public class FrameSignIn extends JFrame {
 
 		textFieldEmail = new JTextField();
 		textFieldEmail.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				StringBuilder s = new StringBuilder();
-				Login.checkColorText(RegexPattern.EMAIL, textFieldEmail, s, "email");
+			public void keyReleased(KeyEvent e) {
+				textFieldEmailKeyReleased(e);
 			}
 		});
 		// textFieldEmail.setBorder(new LineBorder(Color.red, 2));
@@ -103,6 +103,9 @@ public class FrameSignIn extends JFrame {
 						User user = new User(account, password, 1);
 						if (UserDAOImpl.loginDb(user)) {
 							Authorization authInfoUser = new Authorization(account, password, user.getLevel());
+							dispose();
+							FrameHome frame = new FrameHome();
+							frame.setVisible(true);
 						}
 					} else {
 						JOptionPane.showMessageDialog(null,
@@ -177,5 +180,19 @@ public class FrameSignIn extends JFrame {
 		FrameSignUp signUp = new FrameSignUp();
 		signUp.setVisible(true);
 		desktop.add(signUp);
+	}
+	protected void textFieldEmailKeyReleased(KeyEvent e) {
+		StringBuilder s = new StringBuilder();
+		Login.checkColorText(RegexPattern.EMAIL, textFieldEmail, s, "email");
+	}
+
+	
+
+	public FrameSignIn getJfSignIn() {
+		return jfSignIn;
+	}
+
+	public void setJfSignIn(FrameSignIn jfSignIn) {
+		this.jfSignIn = jfSignIn;
 	}
 }

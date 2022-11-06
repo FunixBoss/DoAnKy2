@@ -2,6 +2,8 @@ package dao;
 
 import java.util.List;
 
+import entity.Vocabulary;
+
 public interface DAO<T> {
 	/**
 	 * @return null if it doesn't exists 
@@ -30,4 +32,8 @@ public interface DAO<T> {
 	 * @return 1 for delete successfully
 	 */
 	Integer delete(T t);
+	
+
+
+	
 }

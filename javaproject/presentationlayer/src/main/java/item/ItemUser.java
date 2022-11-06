@@ -138,7 +138,7 @@ public class ItemUser extends JPanel {
 		lblDob.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblDob.setBounds(10, 18, 125, 18);
 		panel_2_1.add(lblDob);
-		lblDob.setText(user.getDateOfBirth().toString());
+		lblDob.setText(user.getDateOfBirth()== null ? "" :  user.getDateOfBirth().toString());
 	}
 	protected void do_btnEdit_actionPerformed(ActionEvent e) {
 		User user = new User();
