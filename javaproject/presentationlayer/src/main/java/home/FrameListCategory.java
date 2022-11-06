@@ -36,8 +36,9 @@ public class FrameListCategory extends JFrame {
 	}
 
 	public FrameListCategory(int id) {
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(200, 200, 1300, 700);
+		setBounds(0, 0, 1300, 700);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

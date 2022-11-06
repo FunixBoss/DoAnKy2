@@ -21,7 +21,7 @@ public class HistoryDAOImpl implements HistoryDAO {
 	public List<History> getList() {
 		return list;
 	}
-	
+
 	@Override
 	/**
 	 * @return null if it doesn't exist
@@ -40,12 +40,12 @@ public class HistoryDAOImpl implements HistoryDAO {
 				bm = new History(bmId, vocabId, userId);
 			}
 		} catch (Exception e) {
-//			e.printStackTrace();
+			// e.printStackTrace();
 			System.err.println("Select A History Failed!");
 		}
 		return bm;
 	}
-	
+
 	@Override
 	/**
 	 * @return null if doesn't have any
@@ -62,11 +62,12 @@ public class HistoryDAOImpl implements HistoryDAO {
 				list.add(new History(bmId, vocabId, userId));
 			}
 		} catch (Exception e) {
-//			e.printStackTrace();
+			// e.printStackTrace();
 			System.err.println("Select all History failed!");
 		}
 		return list.isEmpty() ? null : list;
 	}
+
 	@Override
 	/**
 	 * @return 0 for insert failed
@@ -80,12 +81,12 @@ public class HistoryDAOImpl implements HistoryDAO {
 			cs.setInt(2, hst.getUserId());
 			result = cs.executeUpdate();
 		} catch (Exception e) {
-//			e.printStackTrace();
+			// e.printStackTrace();
 			System.err.println("Insert History failed!");
 		}
 		return result;
 	}
-	
+
 	@Override
 	/**
 	 * @return 0 for update failed
@@ -100,12 +101,12 @@ public class HistoryDAOImpl implements HistoryDAO {
 			cs.setInt(3, hst.getUserId());
 			result = cs.executeUpdate();
 		} catch (Exception e) {
-//			e.printStackTrace();
+			// e.printStackTrace();
 			System.err.println("Update History failed");
 		}
 		return result;
 	}
-	
+
 	@Override
 	/**
 	 * @return 0 for delete failed
@@ -114,13 +115,12 @@ public class HistoryDAOImpl implements HistoryDAO {
 	public Integer delete(History hst) {
 		Integer result = 0;
 		try (
-			var con = ConnectDBFromProperties.getConnectionFromClassPath();
-			var cs = con.prepareCall("{call deleteHistory(?)}");
-		) {
+				var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call deleteHistory(?)}");) {
 			cs.setInt(1, hst.getId());
 			result = cs.executeUpdate();
 		} catch (Exception e) {
-//			e.printStackTrace();
+			// e.printStackTrace();
 			System.err.println("Delete a History failed");
 		}
 		return result;
@@ -129,33 +129,30 @@ public class HistoryDAOImpl implements HistoryDAO {
 	@Override
 	public List<Vocabulary> selectAllVocabByUserId(Integer userId) {
 		List<Vocabulary> list = new ArrayList<>();
-		try(
-			var con = ConnectDBFromProperties.getConnectionFromClassPath();
-			var cs = con.prepareCall("{call selAllVocabularyInHistoryByUserId(?)}");
-		){
+		try (
+				var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call selAllVocabularyInHistoryByUserId(?)}");) {
 			cs.setInt(1, userId);
 			var rs = cs.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				Integer vocab_id = rs.getInt(1);
 				String word = rs.getString(2);
 				String image = rs.getString(3);
 				String pronunciation = rs.getString(4);
 				Integer categoryId = rs.getInt(5);
 				Integer wordTypeId = rs.getInt(6);
-				
+
 				list.add(
-					new Vocabulary(vocab_id, word, image, pronunciation, categoryId, wordTypeId));
+						new Vocabulary(vocab_id, word, image, pronunciation, categoryId, wordTypeId));
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println("Select all vocabulary In History by User Id failed!");
 		}
 		return list.isEmpty() ? null : list;
 	}
-	
-	
-	
-	public History checkExistHistory(Integer userId,Integer vocabId) {
+
+	public History checkExistHistory(Integer userId, Integer vocabId) {
 		History hs = null;
 		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
 				var cs = con.prepareCall("{call checkVocabularyExistInHistory(?,?)}");) {
@@ -175,7 +172,8 @@ public class HistoryDAOImpl implements HistoryDAO {
 		}
 		return hs;
 	}
-	public List<History> checkAllExistHistory(Integer userId,Integer vocabId) {
+
+	public List<History> checkAllExistHistory(Integer userId, Integer vocabId) {
 		List<History> list = new ArrayList<>();
 		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
 				var cs = con.prepareCall("{call checkVocabularyExistInHistory(?,?)}");) {
@@ -187,7 +185,7 @@ public class HistoryDAOImpl implements HistoryDAO {
 				Integer id_his = rs.getInt(1);
 				Integer id_vocab = rs.getInt(2);
 				Integer id_user = rs.getInt(3);
-				list.add( new History(id_his, id_vocab, id_user));
+				list.add(new History(id_his, id_vocab, id_user));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -195,30 +193,62 @@ public class HistoryDAOImpl implements HistoryDAO {
 		}
 		return list.isEmpty() ? null : list;
 	}
-	public static void main(String[] args) {
-	}
-	
-	
+
 	public List<History> searchAll(String str) {
 		List<History> list = new ArrayList<>();
-		try(
-			var con = ConnectDBFromProperties.getConnectionFromClassPath();
-			var cs = con.prepareCall("{call searchAll(?)}");
-		){
-			cs.setString(1,str );
+		try (
+				var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call searchAll(?)}");) {
+			cs.setString(1, str);
 			var rs = cs.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				Integer id = rs.getInt(1);
 				Integer x = rs.getInt(2);
 				Integer t = rs.getInt(3);
-				
-				
+
 				list.add(
-					new History(id,x,t));
+						new History(id, x, t));
 			}
-		} catch(Exception e) {
-//			e.printStackTrace();
+		} catch (Exception e) {
+			// e.printStackTrace();
 			System.err.println("search all History failed!");
+		}
+		return list;
+	}
+
+	
+	@Override
+	public Integer delByUserId(Integer userId) {
+		Integer result = 0;
+		try (
+				var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call delHistoryByUserId(?)}");) {
+			cs.setInt(1, userId);
+			result = cs.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Delete History by User Id Failed");
+		}
+		return result;
+	}
+
+	@Override
+	public List<History> selHistoryByVocabId(Integer vocabId) {
+		List<History> list = new ArrayList<>();
+		try (
+				var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call selHistoryByVocabId(?)}");) {
+			cs.setInt(1, vocabId);
+			var rs = cs.executeQuery();
+			while (rs.next()) {
+				Integer bmId = rs.getInt(1);
+				Integer vocabIRs = rs.getInt(2);
+				Integer userId = rs.getInt(3);
+				list.add(new History(bmId, vocabIRs, userId));
+			}
+		} catch (Exception e) {
+			// e.printStackTrace();
+			System.err.println("Select all Bookmark by Vocabid failed!");
 		}
 		return list.isEmpty() ? null : list;
 	}

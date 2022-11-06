@@ -21,7 +21,7 @@ import dao.impl.UserDAOImpl;
 import dao.impl.VocabularyDAOImpl;
 import entity.User;
 import entity.Vocabulary;
-import insert.FrameMember;
+import insert.FrameInsertMember;
 import item.ItemUser;
 import item.ItemVocab;
 
@@ -44,7 +44,7 @@ public class PanelMember extends JPanel {
 	public PanelMember() {
 		dao = new UserDAOImpl();
 		pageNumber = 1;
-		rowsOfPage = 10;
+		rowsOfPage = dao.countNumberOfUser() > 10 ? 10 : dao.countNumberOfUser();
 		
 		setLayout(null);
 		setBounds(0, 0, 1085, 699);
@@ -283,7 +283,7 @@ public class PanelMember extends JPanel {
 			totalPage = (int) Math.ceil((double) totalOfRows / rowsOfPage);
 			lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
 			lblRowCount.setText("Số dòng: " + totalOfRows);
-			panel.setPreferredSize(new Dimension(975, rowsOfPage * 57));
+			panel.setPreferredSize(new Dimension(975, rowsOfPage * 63));
 
 			int y = 40;
 			printTitleComponent(panel);
@@ -301,9 +301,11 @@ public class PanelMember extends JPanel {
 			
 	}
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
-		FrameMember frame = new FrameMember();
-		frame.setLocation(300, 300);
-		frame.setVisible(true);
+		FrameInsertMember frame = FrameInsertMember.getMyInstance();
+		if(!frame.isVisible()) {
+			frame.setLocation(300, 300);
+			frame.setVisible(true);
+		}
 	}
 	
 	protected void txtPageActionPerformed(ActionEvent e) {

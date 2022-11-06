@@ -3,11 +3,15 @@ package update;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -22,6 +26,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import dao.impl.WordTypeDAOImpl;
 import entity.Vocabulary;
+import item.ItemCategory;
 
 public class FrameVocab extends JFrame {
 
@@ -97,13 +102,13 @@ public class FrameVocab extends JFrame {
 		contentPane.add(btnReset);
 		
 		JLabel lblWordType = new JLabel("Loại từ");
-		lblWordType.setBounds(578, 99, 96, 21);
+		lblWordType.setBounds(388, 97, 96, 21);
 		lblWordType.setForeground(Color.BLACK);
 		lblWordType.setFont(new Font("Arial", Font.PLAIN, 14));
 		contentPane.add(lblWordType);
 		
 		JComboBox<String> comboWordType = new JComboBox<>();
-		comboWordType.setBounds(673, 88, 173, 38);
+		comboWordType.setBounds(498, 88, 173, 38);
 		comboWordType.setBackground(new Color(255, 255, 255));
 		comboWordType.setFont(new Font("Arial", Font.PLAIN, 14));
 		contentPane.add(comboWordType);
@@ -126,14 +131,14 @@ public class FrameVocab extends JFrame {
 		lblPronunciation.setFont(new Font("Arial", Font.PLAIN, 14));
 		contentPane.add(lblPronunciation);
 		
-		JLabel lblImage = new JLabel("Hình ảnh");
-		lblImage.setBounds(578, 166, 96, 21);
+		JLabel lblImage = new JLabel("Ảnh mới");
+		lblImage.setBounds(388, 164, 96, 21);
 		lblImage.setForeground(Color.BLACK);
 		lblImage.setFont(new Font("Arial", Font.PLAIN, 14));
 		contentPane.add(lblImage);
 		
 		JButton btnImage = new JButton("Tải ảnh lên");
-		btnImage.setBounds(673, 156, 175, 37);
+		btnImage.setBounds(496, 156, 175, 37);
 		btnImage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				do_btnImage_actionPerformed(e);
@@ -257,6 +262,17 @@ public class FrameVocab extends JFrame {
 		lblExample3.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblExample3.setBounds(578, 509, 96, 21);
 		contentPane.add(lblExample3);
+		
+		JLabel lblImageIcon = new JLabel("Ảnh hiện tại");
+		lblImageIcon.setForeground(Color.BLACK);
+		lblImageIcon.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblImageIcon.setBounds(756, 97, 113, 21);
+		contentPane.add(lblImageIcon);
+		
+		JLabel lblPic = new JLabel("");
+		lblPic.setBounds(855, 88, 180, 105);
+		contentPane.add(lblPic);
+		lblPic.setIcon(getImageByURL(vocab.getImage()));
 	}
 
 	protected void do_btnImage_actionPerformed(ActionEvent e) {
@@ -292,5 +308,22 @@ public class FrameVocab extends JFrame {
 		textMeaning2.setText("");
 		textExample3.setText("");
 		textMeaning3.setText("");
+	}
+	private ImageIcon getImageByURL(String imageName) {
+		var imageUrl = ItemCategory.class.getResource("/vocabulary/" + imageName);
+		if (imageUrl != null) {
+			try {
+				final int ROW_HEIGHT = 60;
+				BufferedImage bimg = ImageIO.read(imageUrl);
+				int imgWidth = bimg.getWidth();
+				int imgHeight = bimg.getHeight();
+				int rowWidth = (ROW_HEIGHT * imgWidth) / imgHeight;
+				return new ImageIcon(
+						new ImageIcon(imageUrl).getImage().getScaledInstance(rowWidth, ROW_HEIGHT, Image.SCALE_SMOOTH));
+			} catch (Exception e) {
+			}
+
+		}
+		return null;
 	}
 }

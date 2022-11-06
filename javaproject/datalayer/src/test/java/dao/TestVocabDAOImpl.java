@@ -12,7 +12,7 @@ import entity.WordType;
 
 public class TestVocabDAOImpl implements VocabularyDAO {
 	public static void main(String[] args) {
-		Vocabulary vocab = new Vocabulary("Hello Em Yeu", "/image/hello.jpg", "/pronunciation/hello.mp3", null, 2);
+		Vocabulary vocab = new Vocabulary("Hello Em Yeu", "hello.jpg", "hello.mp3", null, 2);
 		Vocabulary vocab2 = new Vocabulary(1, "Fuck", "/image/abc.jpg", "/image/abc.jpg", null, 1);
 		TestVocabDAOImpl test = new TestVocabDAOImpl();
 //		System.out.println(type);
@@ -23,8 +23,9 @@ public class TestVocabDAOImpl implements VocabularyDAO {
 //		test.selectAll().forEach(System.out::println);
 //		test.selectAllMeaningByVocabId(1).forEach(System.out::println);
 //		test.selectAllRelativesByVocabId(1).forEach(System.out::println);
-		test.selectByPages(11, 10).forEach(System.out::println);
+//		test.selectByPages(11, 10).forEach(System.out::println);
 //		System.out.println(test.countNumberOfVocab());
+//		System.out.println(test.insertGetId(vocab2));;
 	}
 	
 
@@ -73,5 +74,10 @@ public class TestVocabDAOImpl implements VocabularyDAO {
 	@Override
 	public Integer countNumberOfVocab() {
 		return new VocabularyDAOImpl().countNumberOfVocab();
+	}
+
+	@Override
+	public Integer insertGetId(Vocabulary vocab) {
+		 return new VocabularyDAOImpl().insertGetId(vocab);
 	}
 }

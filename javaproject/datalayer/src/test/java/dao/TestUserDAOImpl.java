@@ -12,7 +12,6 @@ import entity.User;
 public class TestUserDAOImpl{
 	public static void main(String[] args) {
 		TestUserDAOImpl test = new TestUserDAOImpl();
-		User user = new User("daohoangmy@gmail.com", "123123", 1, null, null, null , null, null);
 //		showListUser(); // done
 //		showListUserByLevel(1);
 //		System.out.println(selectAUser(3)); // done

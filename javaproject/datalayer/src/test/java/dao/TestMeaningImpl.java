@@ -17,6 +17,7 @@ public class TestMeaningImpl implements MeaningDAO {
 //		test.delete(test.select(1));
 //		test.update(new Meaning(10, "updated", 1));
 //		test.selectAll().forEach(System.out::println);
+		System.out.println(test.insertGetId(mn));
 	}
 	@Override
 	public Meaning select(Integer id) {
@@ -45,5 +46,9 @@ public class TestMeaningImpl implements MeaningDAO {
 	@Override
 	public List<Example> selectAllExampleByMeaningId(Integer meaningId) {
 		return new MeaningDAOImpl().selectAllExampleByMeaningId(meaningId);
+	}
+	@Override
+	public Integer insertGetId(Meaning meaning) {
+		return new MeaningDAOImpl().insertGetId(meaning);
 	}
 }

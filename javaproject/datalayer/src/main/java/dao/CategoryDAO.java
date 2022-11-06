@@ -10,4 +10,6 @@ public interface CategoryDAO extends DAO<Category> {
 	List<Category> selectByPages(int pageNumber, int rowOfPages);
 	Integer countNumberOfCate();
 	
+	Integer getIdFromCateName(String name);
+	
 }

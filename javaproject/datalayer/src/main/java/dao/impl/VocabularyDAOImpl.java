@@ -2,7 +2,10 @@ package dao.impl;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +49,12 @@ public class VocabularyDAOImpl implements VocabularyDAO {
 				String word = rs.getString(2);
 				String image = rs.getString(3);
 				String pronunciation = rs.getString(4);
-				Integer categoryId = rs.getInt(6);
-				Integer wordTypeId = rs.getInt(7);
+				Integer categoryId = rs.getInt(5);
+				Integer wordTypeId = rs.getInt(6);
 				vocab = new Vocabulary(vocab_id, word, image, pronunciation, categoryId, wordTypeId);
 			}
 		} catch(Exception e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Select A Vocabulary Failed!");
 		}
 		return vocab;
@@ -127,12 +130,20 @@ public class VocabularyDAOImpl implements VocabularyDAO {
 		Integer result = 0;
 		try(
 			var con = ConnectDBFromProperties.getConnectionFromClassPath();
-			var cs = con.prepareCall("{call updateVocab(?, ?, ?, ?, ?, ?, ?)}");
+			var cs = con.prepareCall("{call updateVocab(?, ?, ?, ?, ?, ?)}");
 		){
 			cs.setInt(1, vocab.getId());
 			cs.setString(2, vocab.getWord());
-			cs.setString(3, vocab.getImage());
-			cs.setString(4, vocab.getPronunciation());
+			if(vocab.getImage() != null) {
+				cs.setString(3, vocab.getImage());				
+			} else {
+				cs.setNull(3, Types.NVARCHAR);
+			}
+			if(vocab.getPronunciation() != null) {
+				cs.setString(4, vocab.getPronunciation());				
+			} else {
+				cs.setNull(4, Types.NVARCHAR);
+			}
 			
 			if(vocab.getCategoryId() != null) {
 				cs.setInt(5, vocab.getCategoryId());
@@ -146,7 +157,7 @@ public class VocabularyDAOImpl implements VocabularyDAO {
 			}
 			result = cs.executeUpdate();
 		} catch(Exception e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.out.println("Update vocab failed");
 		}
 		return result;
@@ -166,7 +177,7 @@ public class VocabularyDAOImpl implements VocabularyDAO {
 			cs.setInt(1, vocab.getId());
 			result = cs.executeUpdate();
 		} catch(Exception e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Delete a vocabulary failed");
 		}
 		return result;
@@ -265,6 +276,52 @@ public class VocabularyDAOImpl implements VocabularyDAO {
 		}
 		
 		return count;
+	}
+
+	@Override
+	/**
+	 * @return -1 if failed
+	 */
+	public Integer insertGetId(Vocabulary vocab) {
+		String sql = "INSERT INTO VOCABUlARY VALUES (?, ?, ?, ?, ?)";
+		int result = -1;
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			PreparedStatement  ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		){
+			ps.setString(1, vocab.getWord());
+			ps.setString(2, vocab.getImage());
+			ps.setString(3, vocab.getPronunciation());
+			if(vocab.getCategoryId() != null) {
+				ps.setInt(4, vocab.getCategoryId());
+			} else {
+				ps.setNull(4, Types.INTEGER);
+			}
+			if(vocab.getWordTypeId() != null) {
+				ps.setInt(5, vocab.getWordTypeId());
+			} else {
+				ps.setNull(5, Types.INTEGER);
+			}
+			
+			int affectedRows = ps.executeUpdate();
+
+	        if (affectedRows == 0) {
+	            throw new SQLException("Creating user failed, no rows affected.");
+	        }
+
+	        try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+	            if (generatedKeys.next()) {
+	            	result =  generatedKeys.getInt(1);
+	            }
+	            else {
+	                throw new SQLException("Insert get id vocab failed, no ID obtained.");
+	            }
+	        }
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Insert get id vocab failed");
+		}
+		return result;
 	}
 	
 	

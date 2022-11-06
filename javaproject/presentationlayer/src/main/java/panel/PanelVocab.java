@@ -18,7 +18,7 @@ import javax.swing.SwingConstants;
 
 import dao.impl.VocabularyDAOImpl;
 import entity.Vocabulary;
-import insert.FrameVocab;
+import insert.FrameInsertVocab;
 import item.ItemVocab;
 
 import java.awt.Dimension;
@@ -45,7 +45,7 @@ public class PanelVocab extends JPanel {
 	public PanelVocab() {
 		dao = new VocabularyDAOImpl();
 		pageNumber = 1;
-		rowsOfPage = 10;
+		rowsOfPage = dao.countNumberOfVocab() > 10 ? 10 : dao.countNumberOfVocab();
 		
 		setLayout(null);
 		setBounds(0, 0, 1085, 699);
@@ -199,7 +199,7 @@ public class PanelVocab extends JPanel {
 		panelHeader.add(panel_1);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblNewLabel = new JLabel("STT");
+		JLabel lblNewLabel = new JLabel("ID");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 14));
@@ -249,10 +249,6 @@ public class PanelVocab extends JPanel {
 		lblImage.setForeground(Color.WHITE);
 		lblImage.setFont(new Font("Arial", Font.BOLD, 14));
 		panel_2.add(lblImage);
-		
-		
-		
-		
 		
 		JPanel panel_1_2_1 = new JPanel();
 		panel_1_2_1.setBackground(new Color(37, 57, 111));
@@ -315,12 +311,11 @@ public class PanelVocab extends JPanel {
 			panel.add(noData);
 		}
 		return totalPage;
-			
 	}
 	
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
-		FrameVocab frame = new FrameVocab();
-		frame.setLocation(200, 200);
+		FrameInsertVocab frame = new FrameInsertVocab();
+		frame.setLocation(150, 150);
 		frame.setVisible(true);
 	}
 	

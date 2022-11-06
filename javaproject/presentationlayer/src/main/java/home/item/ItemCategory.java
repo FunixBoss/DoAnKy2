@@ -36,7 +36,7 @@ public class ItemCategory extends JPanel {
 		});
 		setBackground(new Color(242, 247, 255));
 		setLayout(null);
-		setBounds(0, 0, 260, 83);
+		setBounds(1, 1, 260, 83);
 		
 		lblCategory = new JLabel();
 		lblCategory.setFont(new Font("Arial", Font.BOLD, 14));

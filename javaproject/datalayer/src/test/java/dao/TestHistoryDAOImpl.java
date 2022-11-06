@@ -18,8 +18,8 @@ public class TestHistoryDAOImpl implements HistoryDAO{
 //		System.out.println(test.update(bm2));
 //		System.out.println(test.delete(test.select(3)));
 //		test.selectAll().forEach(System.out::println);
-		test.selectAllVocabByUserId(1).forEach(System.out::println);
-
+//		test.selectAllVocabByUserId(1).forEach(System.out::println);
+		System.out.println(test.delByUserId(3));
 	}
 
 	@Override
@@ -50,5 +50,16 @@ public class TestHistoryDAOImpl implements HistoryDAO{
 	@Override
 	public List<Vocabulary> selectAllVocabByUserId(Integer userId) {
 		return new HistoryDAOImpl().selectAllVocabByUserId(userId);
+	}
+
+	@Override
+	public Integer delByUserId(Integer userId) {
+		return new HistoryDAOImpl().delByUserId(userId);
+	}
+
+	@Override
+	public List<History> selHistoryByVocabId(Integer vocabId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

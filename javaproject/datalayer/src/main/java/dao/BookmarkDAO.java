@@ -7,4 +7,6 @@ import entity.Vocabulary;
 
 public interface BookmarkDAO extends DAO<Bookmark>{
 	List<Vocabulary> selectAllVocabByUserId(Integer userId);
+	Integer delByUserId(Integer userId);
+	List<Bookmark> selBookmarkByVocabId(Integer vocabId);
 }

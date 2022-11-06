@@ -21,6 +21,8 @@ public class TestBookmarkDAOImpl implements BookmarkDAO {
 		
 //		System.out.println(test.selectByUserId(2));
 //		test.selectAllVocabByUserId(1).forEach(System.out::println);;
+//		System.out.println(test.delByUserId(2));
+		test.selBookmarkByVocabId(3).forEach(System.out::println);
 	}
 
 	@Override
@@ -52,6 +54,16 @@ public class TestBookmarkDAOImpl implements BookmarkDAO {
 	@Override
 	public List<Vocabulary> selectAllVocabByUserId(Integer userId) {
 		return new BookmarkDAOImpl().selectAllVocabByUserId(userId);
+	}
+
+	@Override
+	public Integer delByUserId(Integer userId) {
+		return new BookmarkDAOImpl().delByUserId(userId);
+	}
+
+	@Override
+	public List<Bookmark> selBookmarkByVocabId(Integer vocabId) {
+		return new BookmarkDAOImpl().selBookmarkByVocabId(vocabId);
 	}
 
 	

@@ -10,6 +10,7 @@ import entity.Vocabulary;
 public interface UserDAO extends DAO<User> {
 	Integer updatePrivateInfoUser(User user);
 	Integer updatePassword(User user);
+	boolean checkExistEmail(String email);
 	
 	History selectHistoryByUserId(Integer userId);
 	Bookmark selectBookmarkByUserId(Integer userId);

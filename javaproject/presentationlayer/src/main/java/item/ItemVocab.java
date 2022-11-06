@@ -4,24 +4,26 @@ import java.awt.Color;
 
 import javax.swing.JPanel;
 
+import entity.Category;
 import entity.Meaning;
 import entity.Vocabulary;
+import service.UserService;
+import service.VocabularyService;
+import update.FrameUpdateVocab;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 import dao.impl.CategoryDAOImpl;
@@ -29,12 +31,12 @@ import dao.impl.VocabularyDAOImpl;
 import dao.impl.WordTypeDAOImpl;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ItemVocab extends JPanel {
-
-	/**
-	 * Create the panel.
-	 */
+	private VocabularyService vocabService;
+	
 	public ItemVocab(Vocabulary vocab, int y) {
 		setLayout(null);
 		setBounds(0, y, 980, 80);
@@ -132,8 +134,9 @@ public class ItemVocab extends JPanel {
 		lblCategory.setForeground(new Color(0, 0, 0));
 		lblCategory.setFont(new Font("Arial", Font.PLAIN, 14));
 		panel_1_2_1.add(lblCategory);
-		String cate = new CategoryDAOImpl().select(vocab.getCategoryId()).getName().toUpperCase();
-		lblCategory.setText(cate);
+		Category cate = new CategoryDAOImpl().select(vocab.getCategoryId());
+		String cateName = (cate != null) ? cate.getName().toUpperCase() : "";
+		lblCategory.setText(cateName);
 
 		JPanel panel_1_1_1 = new JPanel();
 		panel_1_1_1.setBackground(new Color(255, 255, 255));
@@ -141,6 +144,12 @@ public class ItemVocab extends JPanel {
 		panel_1_1_1.setLayout(null);
 
 		JButton btnEdit = new JButton("Sửa");
+		btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FrameUpdateVocab fr = new FrameUpdateVocab(vocab);
+				fr.setVisible(true);
+			}
+		});
 		btnEdit.setBounds(32, 25, 58, 30);
 		btnEdit.setForeground(Color.WHITE);
 		btnEdit.setFont(new Font("Arial", Font.BOLD, 14));
@@ -154,6 +163,11 @@ public class ItemVocab extends JPanel {
 		panelHeader_1.add(panel_1_1);
 
 		JButton btnDelete = new JButton("Xóa");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnDeleteActionPerformed(e, vocab);
+			}
+		});
 		btnDelete.setForeground(Color.WHITE);
 		btnDelete.setFont(new Font("Arial", Font.BOLD, 14));
 		btnDelete.setBorder(null);
@@ -182,5 +196,14 @@ public class ItemVocab extends JPanel {
 
 	private String toCapitalize(String str) {
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
+	}
+	protected void btnDeleteActionPerformed(ActionEvent e, Vocabulary vocab) {
+		int option = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn xóa từ vựng này?", "Xóa từ vựng", JOptionPane.YES_NO_OPTION);
+		if(option == JOptionPane.YES_OPTION) {
+			vocabService = new VocabularyService();
+			if(vocabService.delete(vocab)) {
+				JOptionPane.showMessageDialog(this, "Xoá từ vựng thành công!");
+			}
+		}
 	}
 }

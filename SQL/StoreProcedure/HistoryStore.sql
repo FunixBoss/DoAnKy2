@@ -132,3 +132,25 @@ EXEC checkVocabularyExistInHistory 10, 4
 
 
 
+DROP PROC IF  EXISTS delHistoryByUserId 
+GO
+CREATE PROC delHistoryByUserId
+@user_id INT
+AS
+BEGIN
+	DELETE FROM HISTORY
+	WHERE [USER_ID] = @user_id
+END
+GO
+
+
+DROP PROC IF EXISTS selHistoryByVocabId 
+GO
+CREATE PROC selHistoryByVocabId
+@vocab_id INT
+AS
+BEGIN
+	SELECT * FROM HISTORY
+	WHERE VOCABULARY_ID = @vocab_id
+END
+GO
