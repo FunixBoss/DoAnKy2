@@ -123,7 +123,7 @@ public class PanelDashboard extends JPanel {
 		panel.add(panelHeader);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(new Color(37, 57, 111));
+		panel_1.setBackground(new Color(0,154,206));
 		panelHeader.add(panel_1);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
@@ -134,7 +134,7 @@ public class PanelDashboard extends JPanel {
 		panel_1.add(lblNewLabel);
 		
 		JPanel panel_1_2 = new JPanel();
-		panel_1_2.setBackground(new Color(37, 57, 111));
+		panel_1_2.setBackground(new Color(0,154,206));
 		panelHeader.add(panel_1_2);
 		panel_1_2.setLayout(new BorderLayout(0, 0));
 		
@@ -146,7 +146,7 @@ public class PanelDashboard extends JPanel {
 		panel_1_2.add(lblWord);
 		
 		JPanel panel_2_1 = new JPanel();
-		panel_2_1.setBackground(new Color(37, 57, 111));
+		panel_2_1.setBackground(new Color(0,154,206));
 		panelHeader.add(panel_2_1);
 		panel_2_1.setLayout(new BorderLayout(0, 0));
 		
@@ -157,7 +157,7 @@ public class PanelDashboard extends JPanel {
 		panel_2_1.add(lblMeaning);
 		
 		JPanel panel_1_2_2 = new JPanel();
-		panel_1_2_2.setBackground(new Color(37, 57, 111));
+		panel_1_2_2.setBackground(new Color(0,154,206));
 		panelHeader.add(panel_1_2_2);
 		panel_1_2_2.setLayout(new BorderLayout(0, 0));
 		
@@ -168,7 +168,7 @@ public class PanelDashboard extends JPanel {
 		panel_1_2_2.add(lblWordType);
 		
 		JPanel panel_2 = new JPanel();
-		panel_2.setBackground(new Color(37, 57, 111));
+		panel_2.setBackground(new Color(0,154,206));
 		panelHeader.add(panel_2);
 		panel_2.setLayout(new BorderLayout(0, 0));
 		
@@ -179,7 +179,7 @@ public class PanelDashboard extends JPanel {
 		panel_2.add(lblImage);
 		
 		JPanel panel_1_2_1 = new JPanel();
-		panel_1_2_1.setBackground(new Color(37, 57, 111));
+		panel_1_2_1.setBackground(new Color(0,154,206));
 		panelHeader.add(panel_1_2_1);
 		panel_1_2_1.setLayout(new BorderLayout(0, 0));
 		
