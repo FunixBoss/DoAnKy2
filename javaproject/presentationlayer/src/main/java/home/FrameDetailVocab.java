@@ -93,13 +93,17 @@ public class FrameDetailVocab extends JFrame {
 		lblWordType.setText(wordType.getType());
 		
 		int y = 90;
-		for ( Meaning meaning : new VocabularyDAOImpl().selectAllMeaningByVocabId(vocab.getId())) {
-			for(Example ex : new MeaningDAOImpl().selectAllExampleByMeaningId(meaning.getId())) {
-				ItemContent contentItem = new ItemContent(meaning, ex, y);
-				contentPane.add(contentItem);
-				y = y + 106;
+		List<Meaning> meanings =  new VocabularyDAOImpl().selectAllMeaningByVocabId(vocab.getId());
+		if(meanings != null) {
+			for ( Meaning meaning : meanings) {
+				for(Example ex : new MeaningDAOImpl().selectAllExampleByMeaningId(meaning.getId())) {
+					ItemContent contentItem = new ItemContent(meaning, ex, y);
+					contentPane.add(contentItem);
+					y = y + 106;
+				}
 			}
 		}
+			
 
 		lblImage = new JLabel();
 		lblImage.setIcon(new ImageIcon());

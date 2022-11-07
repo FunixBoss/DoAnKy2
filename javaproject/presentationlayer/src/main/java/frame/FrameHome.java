@@ -288,7 +288,7 @@ public class FrameHome extends JFrame {
 			jpVocab.initConstructor();
 		} else if (panel.getClass().getName().equals("home.PanelBookmark")) {
 			flag = "PanelBookmark";
-			jpBookmark.initConstructor();
+//			jpBookmark.initConstructor();
 		}
 		jpHistory.setVisible(false);
 		jpVocab.setVisible(false);

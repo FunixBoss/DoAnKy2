@@ -108,7 +108,7 @@ BEGIN
 END
 GO
 
-EXEC checkVocabularyExistInBookmark 10, 30
+--EXEC checkVocabularyExistInBookmark 10, 30
 
 
 DROP PROC IF  EXISTS delBookmarkByUserId 

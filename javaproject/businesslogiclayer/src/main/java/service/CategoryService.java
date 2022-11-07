@@ -1,5 +1,6 @@
 package service;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,12 +26,14 @@ public class CategoryService {
 		ErrorMessage.ERROR_MESSAGES = null;
 		String name = data.get("category"); 
 		String image = data.get("image");
-		System.out.println(name + "\n" + image);
+//		System.out.println(name + "\n" + image);
+//		
+//		System.out.println(image);
 	
-		if(name.equals("")) {
+		if(formatName(name).equals("")) {
 			ErrorMessage.ERROR_MESSAGES = "Không được để trống tên chủ đề";
 			return false;
-		} else if(!Validation.checkLength(name, 1, 50)) {
+		} else if(!Validation.checkLength(formatName(name), 1, 50)) {
 			ErrorMessage.ERROR_MESSAGES = "Độ dài chủ đề tối đa 50 ký tự";
 			return false;
 		} else if(!image.equals("")) {
@@ -50,27 +53,83 @@ public class CategoryService {
 		ErrorMessage.ERROR_MESSAGES = null;
 		Integer cateId = Integer.parseInt(data.get("id"));
 		String name = data.get("category");
-		String image = data.get("image") == null ? "" : data.get("image");
+		
+//		get url from loaded file: C:\Users\ADMIN\OneDrive\Documents\admin.png
+//		null if didnot choose
+		String image = data.get("image");
+		
 		
 		Category originalCate = dao.select(cateId);
-		
-		if(name.trim().equals("")) {
+//		validate
+		if(formatName(name).equals("")) {
 			ErrorMessage.ERROR_MESSAGES = "Không được để trống tên chủ đề";
 			return false;
-		} else if(!Validation.checkLength(name, 1, 50)) {
+		} else if(!Validation.checkLength(formatName(name), 1, 50)) {
 			ErrorMessage.ERROR_MESSAGES = "Độ dài chủ đề tối đa 50 ký tự";
 			return false;
-		} else if(!image.trim().equals("")) {
+		} else if(
+			formatName(name).equals(originalCate.getName()) &&
+			image == null
+		) {
+			ErrorMessage.ERROR_MESSAGES = "Bạn phải thay đổi thông tin mới có thể cập nhật";
+			return false;
+		}
+		
+		
+//		Logic Update
+//		neu thay doi ca hình và tên -- done -- use it
+		if(
+			 !formatName(name).equals(originalCate.getName()) &&
+			 image != null
+		) {
+//			 xoa file cu
 			try {
-				Path newDir = Paths.get(System.getProperty("user.dir") + "\\src\\main\\resources\\category\\" + name.replaceAll("\\s+", "_").toLowerCase() + ".png");
+				Path fileToDeletePath = Paths.get(System.getProperty("user.dir") + "\\src\\main\\resources\\category\\" + originalCate.getName() + ".png");
+				Files.delete(fileToDeletePath);
+			} catch (Exception e) {
+
+			}
+			
+//			them file moi
+			try {
+				Path newDir = Paths.get(System.getProperty("user.dir") + "\\src\\main\\resources\\category\\" + formatName(name) + ".png");
 				Files.copy(Paths.get(image), newDir, StandardCopyOption.REPLACE_EXISTING);
+			} catch (Exception e2) {
+//				e2.printStackTrace();
+			}
+			
+			dao.update(new Category(cateId, formatName(name), formatName(name) + ".png"));
+			return true;
+		 }
+		
+//		neu thay doi ten  -- done
+		if(!formatName(name).equals(originalCate.getName()) ) {
+			if(originalCate.getImageIcon() != null) {
+				File oldImageFile = new File(System.getProperty("user.dir") + "\\src\\main\\resources\\category\\" + originalCate.getName() + ".png");
+				File newImageFile = new File(System.getProperty("user.dir") + "\\src\\main\\resources\\category\\" + formatName(name) + ".png");
+				oldImageFile.renameTo(newImageFile);
+				dao.update(new Category(cateId, formatName(name), formatName(name) + ".png"));
+				return true;
+			} else {
+				dao.update(new Category(cateId, formatName(name), null));
+				return true;
+			}
+		}
+		
+//		neu thay doi hinh -- have not been done (bug)
+		if(image != null) {
+			try {
+				Path newDir = Paths.get(System.getProperty("user.dir") + "\\src\\main\\resources\\category\\" + formatName(name) + ".png");
+				Files.copy(Paths.get(image), newDir, StandardCopyOption.REPLACE_EXISTING);
+				
+				dao.update(new Category(cateId, formatName(name), formatName(name) + ".png"));
+				return true;
 			} catch (Exception e2) {
 //				e2.printStackTrace();
 				return false;
 			}
-		} 
+		}
 		
-		dao.update(new Category(cateId, name.replaceAll("\\s+", "_").toLowerCase(), name.replaceAll("\\s+", "_").toLowerCase() + ".png"));
 		return true;
 	}
 	
@@ -91,5 +150,9 @@ public class CategoryService {
 		}
 		return true;
 		
+	}
+	
+	private String formatName(String name) {
+		return name.trim().replaceAll("\\s+", "_").toLowerCase();
 	}
 }

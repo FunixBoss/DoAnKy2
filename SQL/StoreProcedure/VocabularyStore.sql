@@ -131,4 +131,4 @@ BEGIN
 END
 GO
 
-EXEC searchAll 'a'
+--EXEC searchAll 'a'

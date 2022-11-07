@@ -30,6 +30,7 @@ import dao.impl.CategoryDAOImpl;
 import dao.impl.MeaningDAOImpl;
 import dao.impl.VocabularyDAOImpl;
 import dao.impl.WordTypeDAOImpl;
+import entity.Category;
 import entity.Example;
 import entity.Meaning;
 import entity.Relatives;
@@ -93,7 +94,7 @@ public class FrameUpdateVocab extends JFrame {
 	private static MP3Player mp3 = null;
 	private VocabularyService vocabService;
 	private VocabularyDAOImpl vocabDao;
-	Map<String, String> data;
+	private static Map<String, String> data;
 
 	private static FrameUpdateVocab myInstance;
 	private JTextField textRelatives;
@@ -108,20 +109,22 @@ public class FrameUpdateVocab extends JFrame {
 	private JButton btnStopSound;
 
 	public static void main(String[] args) {
-		FrameUpdateVocab frame = new FrameUpdateVocab(new VocabularyDAOImpl().select(86));
+		FrameUpdateVocab frame = new FrameUpdateVocab(new VocabularyDAOImpl().select(1));
 		frame.setVisible(true);
 		
 	}
 
 	public FrameUpdateVocab(Vocabulary vocab) {
 		initComponent();
+		data = new HashMap<>();
+		data.put("id", Integer.toString(vocab.getId()));
 		vocabService = new VocabularyService();
 		vocabDao = new VocabularyDAOImpl();
-		data = new HashMap<>();
 		textWord.setText(vocab.getWord());
 		comboWordType.setSelectedIndex(vocab.getWordTypeId() - 1);
-		if(vocab.getCategoryId() != null) {
-			comboCategory.setSelectedItem(toCapitalize(new CategoryDAOImpl().select(vocab.getCategoryId()).getName().toString()));
+		Category cate = new CategoryDAOImpl().select(vocab.getCategoryId());
+		if( cate != null) {
+			comboCategory.setSelectedItem(toCapitalize(cate.getName().toString()));
 		}
 		List<Relatives> relatives = vocabDao.selectAllRelativesByVocabId(vocab.getId());
 		if(relatives != null) {
@@ -140,7 +143,9 @@ public class FrameUpdateVocab extends JFrame {
 				if(examples!= null) {
 					StringBuffer str = new StringBuffer();
 					for(Example ex : examples) {
-						str.append(ex.getContent() + ";" + ex.getMeaning() + "\n");
+						if(!ex.getContent().equals("")) {
+							str.append(ex.getContent() + ";" + ex.getMeaning() + "\n");
+						}
 					}				
 					textExample3.setText(str.toString());
 				}
@@ -151,8 +156,9 @@ public class FrameUpdateVocab extends JFrame {
 				if(examples1!= null) {
 					StringBuffer str = new StringBuffer();
 					for(Example ex : examples1) {
-						str.append(ex.getContent() + ";" + ex.getMeaning() + "\n");
-					}				
+						if(!ex.getContent().equals("")) {
+							str.append(ex.getContent() + ";" + ex.getMeaning() + "\n");
+						}					}				
 					textExample2.setText(str.toString());
 				}
 			
@@ -162,15 +168,22 @@ public class FrameUpdateVocab extends JFrame {
 				if(examples11!= null) {
 					StringBuffer str = new StringBuffer();
 					for(Example ex : examples11) {
-						str.append(ex.getContent() + ";" + ex.getMeaning() + "\n");
-					}				
+						if(!ex.getContent().equals("")) {
+							str.append(ex.getContent() + ";" + ex.getMeaning() + "\n");
+						}					}				
 					textExample1.setText(str.toString());
 				}
 			}
 		}
-		if(vocab.getImage()!= null) {
+		
+		if(vocab.getImage() != null) {
 			lblShowImage.setIcon(getImageByURL(vocab.getImage()));
 		}
+		
+		if(vocab.getPronunciation() != null) {
+			pronunciationURL = System.getProperty("user.dir") + "/src/main/resources/pronunciation/" + vocab.getPronunciation();
+		}
+		
 		
 	}
 
@@ -472,6 +485,7 @@ public class FrameUpdateVocab extends JFrame {
 		if (result == chooser.APPROVE_OPTION) {
 			f = chooser.getSelectedFile();
 			this.pronunciationURL = f.getAbsolutePath();
+			System.out.println(pronunciationURL);
 			data.put("pronunciation", f.getAbsolutePath());
 		}
 	}
@@ -493,7 +507,8 @@ public class FrameUpdateVocab extends JFrame {
 	}
 	
 	private ImageIcon getImageByURL(String imageName) {
-		var imageUrl = ItemVocab.class.getResource("/vocabulary/" + imageName);
+		var imageUrl = getClass().getResource("/vocabulary/" + imageName);
+//		System.out.println(imageUrl);
 		if (imageUrl != null) {
 			try {
 				final int ROW_HEIGHT = 171;
@@ -504,6 +519,7 @@ public class FrameUpdateVocab extends JFrame {
 				return new ImageIcon(
 						new ImageIcon(imageUrl).getImage().getScaledInstance(rowWidth, ROW_HEIGHT, Image.SCALE_SMOOTH));
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 
 		}
@@ -530,11 +546,10 @@ public class FrameUpdateVocab extends JFrame {
 		data.put("example1", textExample1.getText());
 		data.put("example2", textExample2.getText());
 		data.put("example3", textExample3.getText());
-		if (vocabService.add(data)) {
-			JOptionPane.showMessageDialog(this, "Thêm từ vựng thành công");
+		if (vocabService.update(data)) {
+			JOptionPane.showMessageDialog(this, "Cập nhật từ vựng thành công");
 		} else {
-			System.out.println(ErrorMessage.ERROR_MESSAGES);
-
+			JOptionPane.showMessageDialog(this, ErrorMessage.ERROR_MESSAGES);
 		}
 
 	}

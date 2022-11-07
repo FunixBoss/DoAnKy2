@@ -29,7 +29,6 @@ import item.ItemCategory;
 public class PanelCategory extends JPanel {
 	private JLabel lblStatusPage;
 	private JLabel lblRowCount;
-	private JTextField txtSearch;
 	private JScrollPane scrollPane;
 	private JPanel panel;
 	private CategoryDAOImpl dao; // data
@@ -93,15 +92,6 @@ public class PanelCategory extends JPanel {
 		btnAdd.setBackground(new Color(67, 98, 190));
 		btnAdd.setBounds(891, 61, 147, 36);
 		add(btnAdd);
-		
-		txtSearch = new JTextField();
-		txtSearch.setMargin(new Insets(2, 6, 2, 2));
-		txtSearch.setHorizontalAlignment(SwingConstants.LEFT);
-		txtSearch.setFont(new Font("Arial", Font.PLAIN, 14));
-		txtSearch.setColumns(10);
-		txtSearch.setBorder(null);
-		txtSearch.setBounds(43, 61, 273, 36);
-		add(txtSearch);
 	}
 
 	private void printControllComponent() {

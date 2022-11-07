@@ -201,9 +201,11 @@ public class PanelDashboard extends JPanel {
 			scrollPane.setViewportView(panelData);
 			int y = 40;
 			for(int i = totalVocabs - 4; i <= totalVocabs && i >= 0; i++) {
-				ItemVocabDashboard vocabItem = new ItemVocabDashboard(dao.select(i), y);			
-				panelData.add(vocabItem);
-				y = y + 67;
+				if(dao.select(i) != null) {
+					ItemVocabDashboard vocabItem = new ItemVocabDashboard(dao.select(i), y);			
+					panelData.add(vocabItem);
+					y = y + 67;
+				}
 			}
 
 		} else {

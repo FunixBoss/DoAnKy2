@@ -166,7 +166,7 @@ BEGIN
 	SELECT COUNT(ID) total FROM (SELECT * FROM [USER] WHERE LEVEL = 2) AS MEMBER
 END
 GO
- EXEC countUser
+ --EXEC countUser
 
 -- phan trang lay bao nhieu dong tiep theo
 
@@ -195,7 +195,7 @@ BEGIN
 	SELECT COUNT(ID) total FROM (SELECT * FROM [USER] WHERE LEVEL = 1) AS [ADMIN]
 END
 GO
- EXEC countAdmin
+-- EXEC countAdmin
 
 -- phan trang lay bao nhieu dong tiep theo
 

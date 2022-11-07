@@ -71,7 +71,7 @@ public class UserService {
 			return false;
 		}
 
-		User user = new User(email, password, level, dob, phone, dobFormatted);
+		User user = new User(email, password, level, fullname, phone, dobFormatted);
 		dao.insert(user);
 		return true;
 	}

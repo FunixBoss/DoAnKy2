@@ -28,7 +28,6 @@ import item.ItemVocab;
 public class PanelMember extends JPanel {
 	private JLabel lblStatusPage;
 	private JLabel lblRowCount;	
-	private JTextField textField;
 	private JPanel panel;
 	private JScrollPane scrollPane;
 	private UserDAOImpl dao; // data
@@ -89,15 +88,6 @@ public class PanelMember extends JPanel {
 		btnAdd.setBackground(new Color(67, 98, 190));
 		btnAdd.setBounds(891, 61, 147, 36);
 		add(btnAdd);
-		
-		textField = new JTextField();
-		textField.setMargin(new Insets(2, 6, 2, 2));
-		textField.setHorizontalAlignment(SwingConstants.LEFT);
-		textField.setFont(new Font("Arial", Font.PLAIN, 14));
-		textField.setColumns(10);
-		textField.setBorder(null);
-		textField.setBounds(45, 61, 273, 36);
-		add(textField);
 	}
 	
 	private void printTitleComponent(JPanel panel) {

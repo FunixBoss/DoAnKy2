@@ -16,12 +16,9 @@ GO
 DROP PROC IF EXISTS selAllHistory
 GO
 CREATE PROC selAllHistory
-@vocabId int,
-@userId int
 AS
 BEGIN
 	SELECT * FROM HISTORY 
-	WHERE 
 END
 GO
 --EXEC selAllHistory
@@ -99,7 +96,6 @@ GO
 
 
 
-cai nay
 
 
 DROP PROC IF EXISTS selAllVocabularyInHistoryByUserId
@@ -126,7 +122,7 @@ BEGIN
 END
 GO
 
-EXEC checkVocabularyExistInHistory 10, 4
+--EXEC checkVocabularyExistInHistory 10, 4
 
 
 
