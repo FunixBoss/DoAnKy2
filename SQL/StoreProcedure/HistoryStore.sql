@@ -16,12 +16,9 @@ GO
 DROP PROC IF EXISTS selAllHistory
 GO
 CREATE PROC selAllHistory
-@vocabId int,
-@userId int
 AS
 BEGIN
 	SELECT * FROM HISTORY 
-	WHERE 
 END
 GO
 --EXEC selAllHistory

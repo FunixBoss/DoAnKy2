@@ -151,7 +151,9 @@ public class HistoryDAOImpl implements HistoryDAO {
 		}
 		return list.isEmpty() ? null : list;
 	}
-
+public static void main(String[] args) {
+	System.out.println(new HistoryDAOImpl().selectAllVocabByUserId(1));
+}
 	public History checkExistHistory(Integer userId, Integer vocabId) {
 		History hs = null;
 		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
@@ -211,7 +213,7 @@ public class HistoryDAOImpl implements HistoryDAO {
 			}
 		} catch (Exception e) {
 			// e.printStackTrace();
-			System.err.println("search all History failed!");
+			System.err.println("search all vocab failed!");
 		}
 		return list;
 	}

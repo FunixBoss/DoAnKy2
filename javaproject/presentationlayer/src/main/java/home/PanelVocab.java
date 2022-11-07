@@ -80,9 +80,11 @@ public class PanelVocab extends JPanel {
 			UserDAOImpl user= new UserDAOImpl();
 			int id = user.getIdFromDbByAccount(Authorization.email);
 			try {
-				for (Vocabulary vocab : new VocabularyDAOImpl().searchAll(str)) {
-					ItemDictionary item = new ItemDictionary(vocab);
-					panelMain.add(item);
+				if(new VocabularyDAOImpl().searchAll(str)!= null) {
+					for (Vocabulary vocab : new VocabularyDAOImpl().searchAll(str)) {
+						ItemDictionary item = new ItemDictionary(vocab);
+						panelMain.add(item);
+					}
 				}
 			} catch (Exception e) {
 				// TODO: handle exception

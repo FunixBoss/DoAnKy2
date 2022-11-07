@@ -42,14 +42,18 @@ public class PanelHistory extends JPanel {
 			
 			
 			panelMain.removeAll();
-			
-			
-			UserDAOImpl user= new UserDAOImpl();
-			int id = user.getIdFromDbByAccount(Authorization.email);
-			for (Vocabulary vocab : new HistoryDAOImpl().selectAllVocabByUserId(id)) { 
-				ItemDictionary item = new ItemDictionary(vocab);
-				panelMain.add(item);
+			try {
+				UserDAOImpl user= new UserDAOImpl();
+				int id = user.getIdFromDbByAccount(Authorization.email);
+				for (Vocabulary vocab : new HistoryDAOImpl().selectAllVocabByUserId(id)) { 
+					ItemDictionary item = new ItemDictionary(vocab);
+					panelMain.add(item);
+				}
+				
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
+			
 		}
 		else {
 			panel.removeAll();
@@ -85,8 +89,6 @@ public class PanelHistory extends JPanel {
 		panelMain.setLayout(new GridLayout(5, 2, 2, 2));
 
 		initConstructor();
-		
-		
 	}
 
 }

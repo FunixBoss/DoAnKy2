@@ -36,16 +36,17 @@ import java.awt.event.KeyEvent;
 public class FrameSignIn extends JFrame {
 	private FrameSignIn jfSignIn;
 	private JPanel contentPane;
-	
-	private JLabel lblSignIn;
-	private JLabel lblEmail;
-	private JLabel lblPassword;
-	
 	private JTextField textFieldEmail;
 	private JPasswordField textFieldPassword;
 	private JDesktopPane desktop;
 
-	
+	/**
+	 * Launch the application.
+	 */
+
+	/**
+	 * Create the frame.
+	 */
 	public FrameSignIn() {
 		setResizable(false);
 		setForeground(new Color(62, 115, 255));
@@ -58,18 +59,18 @@ public class FrameSignIn extends JFrame {
 
 		setContentPane(contentPane);
 
-		lblSignIn = new JLabel("Đăng nhập");
+		JLabel lblSignIn = new JLabel("Đăng nhập");
 		lblSignIn.setBackground(new Color(255, 255, 255));
 		lblSignIn.setBounds(230, 0, 172, 84);
 		lblSignIn.setForeground(new Color(37, 57, 111));
 		lblSignIn.setFont(new Font("Arial", Font.BOLD, 30));
 
-		lblEmail = new JLabel("Email");
+		JLabel lblEmail = new JLabel("Email");
 		lblEmail.setBounds(117, 125, 102, 21);
 		lblEmail.setForeground(new Color(0, 0, 0));
 		lblEmail.setFont(new Font("Arial", Font.PLAIN, 14));
 
-		lblPassword = new JLabel("Mật khẩu");
+		JLabel lblPassword = new JLabel("Mật khẩu");
 		lblPassword.setLabelFor(lblPassword);
 		lblPassword.setBounds(117, 194, 102, 26);
 		lblPassword.setForeground(new Color(0, 0, 0));
