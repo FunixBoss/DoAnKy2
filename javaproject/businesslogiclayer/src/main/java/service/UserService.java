@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Map;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import dao.impl.BookmarkDAOImpl;
 import dao.impl.HistoryDAOImpl;
 import dao.impl.UserDAOImpl;
@@ -92,6 +94,11 @@ public class UserService {
 //		System.out.println(originalUser);
 
 		LocalDate dobFormatted = null;
+		try {
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		if (!dob.equals("")) {
 			try {
 				dobFormatted = LocalDate.parse(dob, DateTimeFormatter.ofPattern("[yyyy-MM-dd]"));
@@ -100,10 +107,10 @@ public class UserService {
 				return false;
 			}
 		} else if (
-				fullname.equals(originalUser.getFullname()) &&
+				fullname.equals(originalUser.getFullname()) && 
 				phone.equals(originalUser.getPhoneNumber()) &&
-				dobFormatted.equals(originalUser.getDateOfBirth()) 
-				&& password.equals("")) {
+				dobFormatted.equals( (originalUser.getDateOfBirth() == null) ? "" :  originalUser.getDateOfBirth()) &&
+				password.equals("")) {
 			ErrorMessage.ERROR_MESSAGES = "Bạn phải thay đổi thông tin mới có thể cập nhật";
 			return false;
 		} else if (!fullname.equals("") && !Validation.checkLength(fullname, 1, 200)) {

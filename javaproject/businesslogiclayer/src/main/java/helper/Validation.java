@@ -14,7 +14,7 @@ public class Validation {
 			final Pattern matcher = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 			return patt.matcher(message.getText()).matches();
 		} catch (Exception e) {
-			sb.append("Vui Lòng Nhập Chính Xác Tên").append("\n");
+			sb.append("Vui Lòng Nhập Chính Xác Dữ Liệu").append("\n");
 			e.printStackTrace();
 			ok = false;
 		}

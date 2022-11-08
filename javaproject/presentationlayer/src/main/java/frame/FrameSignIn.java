@@ -104,7 +104,7 @@ public class FrameSignIn extends JFrame {
 						if (UserDAOImpl.loginDb(user)) {
 							Authorization authInfoUser = new Authorization(account, password, user.getLevel());
 							dispose();
-							FrameHome frame = new FrameHome();
+							FrameDashboard frame = new FrameDashboard();
 							frame.setVisible(true);
 						}
 					} else {

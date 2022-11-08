@@ -167,7 +167,7 @@ public class FrameUpdateAdmin extends JFrame {
 		
 		txtLevel = new JTextField();
 		txtLevel.setEditable(false);
-		txtLevel.setText("Thành Viên");
+		txtLevel.setText("Quản trị viên");
 		txtLevel.setMargin(new Insets(2, 6, 2, 2));
 		txtLevel.setHorizontalAlignment(SwingConstants.LEFT);
 		txtLevel.setFont(new Font("Arial", Font.PLAIN, 14));

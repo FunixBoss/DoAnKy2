@@ -4,11 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -24,15 +26,34 @@ import dao.impl.CategoryDAOImpl;
 import dao.impl.UserDAOImpl;
 import dao.impl.VocabularyDAOImpl;
 import entity.Category;
+import entity.User;
 import entity.Vocabulary;
+import frame.FrameSignIn;
 import item.Card;
 import item.ItemVocab;
 import item.ItemVocabDashboard;
+import service.Authorization;
+import update.FrameUpdateMember;
 
 import java.awt.GridLayout;
 import javax.swing.JScrollBar;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class PanelDashboard extends JPanel {
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					PanelDashboard frame = new PanelDashboard();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 	private JLabel lblDashboard;
 	private JLabel lblBreadcrumb;
 	private Card cardVocab;
@@ -62,12 +83,27 @@ public class PanelDashboard extends JPanel {
 		lblDashboard = new JLabel("Dashboard");
 		lblDashboard.setForeground(new Color(37, 57, 111));
 		lblDashboard.setFont(new Font("Arial", Font.BOLD, 20));
-		lblDashboard.setBounds(43, 11, 134, 39);
+		lblDashboard.setBounds(43, 11, 178, 50);
 		add(lblDashboard);
-		
-		lblBreadcrumb = new JLabel("Trang chủ / Dashboard");
+		if(Authorization.email!=null) {
+			lblBreadcrumb = new JLabel(Authorization.email.toUpperCase());
+		}else {
+			lblBreadcrumb = new JLabel("Đăng Nhập".toUpperCase());
+			
+		}
+
+		lblBreadcrumb.setFont(new Font("Arial", Font.BOLD, 18));
+		lblBreadcrumb.setForeground(new Color(37, 57, 111));
 		lblBreadcrumb.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblBreadcrumb.setBounds(904, 21, 134, 14);
+		lblBreadcrumb.setBounds(756, 20, 292, 39);
+		lblBreadcrumb.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblBreadcrumbMouseClicked(e);
+			}
+
+		});
+		lblBreadcrumb.setHorizontalAlignment(SwingConstants.RIGHT);
 		add(lblBreadcrumb);
 		
 		panel = new JPanel();
@@ -104,6 +140,12 @@ public class PanelDashboard extends JPanel {
 		add(scrollPane);
 		
 		lblTop5 = new JLabel("5 Từ Vựng Mới Nhất");
+		lblTop5.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lblTop5MouseClicked(e);
+			}
+		});
 		lblTop5.setForeground(new Color(37, 57, 111));
 		lblTop5.setFont(new Font("Arial", Font.BOLD, 20));
 		lblTop5.setBounds(43, 268, 498, 39);
@@ -213,5 +255,19 @@ public class PanelDashboard extends JPanel {
 			noData.setBounds(0, 0, 50, 50);
 			panelData.add(noData);
 		}
+	}
+	protected void lblTop5MouseClicked(MouseEvent e) {
+	}
+	protected void lblBreadcrumbMouseClicked(MouseEvent e) {
+		if(Authorization.email != null) {
+			UserDAOImpl userDao = new UserDAOImpl();
+			int id = UserDAOImpl.getIdFromDbByAccount(Authorization.email);
+			FrameUpdateMember updateMem = new FrameUpdateMember(userDao.select(id));
+			updateMem.setVisible(true);
+		}else {
+			FrameSignIn login = new FrameSignIn();
+			login.setVisible(true);
+		}
+			
 	}
 }

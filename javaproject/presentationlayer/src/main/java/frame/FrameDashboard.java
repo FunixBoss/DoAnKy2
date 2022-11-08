@@ -17,6 +17,8 @@ import panel.PanelCategory;
 import panel.PanelDashboard;
 import panel.PanelMember;
 import panel.PanelVocab;
+import service.Authorization;
+
 import javax.swing.border.LineBorder;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
@@ -127,8 +129,8 @@ public class FrameDashboard extends JFrame {
 		});
 		panelMember.setBackground(new Color(255, 255, 255));
 		panelMember.setBounds(0, 358, 217, 70);
-		panel.add(panelMember);
 		panelMember.setLayout(null);
+		
 		
 		lblMember = new JLabel("Thành viên");
 		lblMember.setBounds(75, 25, 87, 19);
@@ -150,7 +152,6 @@ public class FrameDashboard extends JFrame {
 		});
 		panelAdmin.setBackground(new Color(255, 255, 255));
 		panelAdmin.setBounds(0, 427, 217, 70);
-		panel.add(panelAdmin);
 		panelAdmin.setLayout(null);
 		
 		lblAdmin = new JLabel("Quản trị viên");
@@ -159,12 +160,27 @@ public class FrameDashboard extends JFrame {
 		lblAdmin.setBounds(78, 25, 128, 19);
 		panelAdmin.add(lblAdmin);
 		
+		
+		
+//		check admin or user
+
+		if(Authorization.loggedrole ==1) {
+			panel.add(panelMember);
+			panel.add(panelAdmin);
+		}
+		
 		JLabel lblIconAdmin = new JLabel("");
 		lblIconAdmin.setBounds(30, 16, 46, 24);
 		panelAdmin.add(lblIconAdmin);
 		lblIconAdmin.setIcon(new ImageIcon(adminImg));
 		
 		JPanel panelLogo = new JPanel();
+		panelLogo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				panelLogoMouseClicked(e);
+			}
+		});
 		panelLogo.setBackground(new Color(255, 255, 255));
 		panelLogo.setLayout(null);
 		panelLogo.setBounds(0, 0, 217, 78);
@@ -322,13 +338,17 @@ public class FrameDashboard extends JFrame {
 		menuChanged(panelDashboard,lblDashboard);
 	}
 	protected void do_panelHome_mouseClicked(MouseEvent e) {
-		FrameDashboard fr = new FrameDashboard();
-		fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		dispose();
 		FrameHome frame = new FrameHome();
 		frame.setVisible(true);
 	}
 	protected void do_panelCategory_mouseClicked(MouseEvent e) {
 		menuClicked(jpCategory);
 		menuChanged(panelCategory,lblCategory);
+	}
+	protected void panelLogoMouseClicked(MouseEvent e) {
+		dispose();
+		FrameDashboard dh = new FrameDashboard();
+		dh.setVisible(true);
 	}
 }
