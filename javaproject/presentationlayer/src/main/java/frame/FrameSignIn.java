@@ -28,6 +28,8 @@ import service.Authorization;
 import service.Login;
 
 import java.awt.ComponentOrientation;
+import java.awt.Dimension;
+
 import javax.swing.JPasswordField;
 import java.awt.Component;
 import java.awt.event.KeyAdapter;
@@ -49,6 +51,7 @@ public class FrameSignIn extends JFrame {
 	 */
 	public FrameSignIn() {
 		setResizable(false);
+		
 		setForeground(new Color(62, 115, 255));
 		setTitle("Đăng nhập");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -104,8 +107,14 @@ public class FrameSignIn extends JFrame {
 						if (UserDAOImpl.loginDb(user)) {
 							Authorization authInfoUser = new Authorization(account, password, user.getLevel());
 							dispose();
-							FrameDashboard frame = new FrameDashboard();
-							frame.setVisible(true);
+							if(Authorization.loggedrole==1) {
+								FrameDashboard frame = new FrameDashboard();
+								frame.setVisible(true);
+								
+							}else {
+								FrameHome frame = new FrameHome();
+								frame.setVisible(true);
+							}
 						}
 					} else {
 						JOptionPane.showMessageDialog(null,
@@ -173,13 +182,19 @@ public class FrameSignIn extends JFrame {
 		textmess2.setAlignmentX(0.5f);
 		textmess2.setBounds(494, 189, 57, 38);
 		contentPane.add(textmess2);
+		
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+//		setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+		setLocation(0, 0);
+
 	}
 
 	protected void do_btnSignUp_actionPerformed(ActionEvent e) {
-		desktop = new JDesktopPane();
+//		desktop = new JDesktopPane();
+		dispose();
 		FrameSignUp signUp = new FrameSignUp();
 		signUp.setVisible(true);
-		desktop.add(signUp);
+//		desktop.add(signUp);
 	}
 	protected void textFieldEmailKeyReleased(KeyEvent e) {
 		StringBuilder s = new StringBuilder();

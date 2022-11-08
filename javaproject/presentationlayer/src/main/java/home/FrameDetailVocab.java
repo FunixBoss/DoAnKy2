@@ -14,11 +14,15 @@ import item.ItemVocab;
 import service.Authorization;
 
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
+
 import javax.swing.SwingConstants;
 
 import java.awt.event.ActionEvent;
@@ -52,6 +56,7 @@ public class FrameDetailVocab extends JFrame {
 	 * Create the frame.
 	 */
 	public FrameDetailVocab(Vocabulary vocab) {
+		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 892, 609);
 		contentPane = new JPanel();
@@ -164,6 +169,8 @@ public class FrameDetailVocab extends JFrame {
 			}
 		});
 		contentPane.add(tglbtnNewToggleButton);
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 	}
 
 	private ImageIcon getImageByURL(String imageName) {

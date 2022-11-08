@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Toolkit;
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -70,6 +72,8 @@ public class FrameDashboard extends JFrame {
 	 * Create the frame.
 	 */
 	public FrameDashboard() {
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		setResizable(false);
 		setTitle("Dashboard");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(FrameDashboard.class.getResource("/image/dictionary-icon.png")));
@@ -164,11 +168,8 @@ public class FrameDashboard extends JFrame {
 		
 //		check admin or user
 
-		if(Authorization.loggedrole ==1) {
-			panel.add(panelMember);
-			panel.add(panelAdmin);
-		}
-		
+		panel.add(panelMember);
+		panel.add(panelAdmin);
 		JLabel lblIconAdmin = new JLabel("");
 		lblIconAdmin.setBounds(30, 16, 46, 24);
 		panelAdmin.add(lblIconAdmin);

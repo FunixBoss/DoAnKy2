@@ -1,6 +1,7 @@
 package frame;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
@@ -18,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import dao.impl.UserDAOImpl;
 import entity.History;
 import home.PanelBookmark;
 import home.PanelCategory;
@@ -25,6 +27,7 @@ import home.PanelHistory;
 import home.PanelHome;
 import home.PanelVocab;
 import service.Authorization;
+import update.FrameUpdateMember;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -57,6 +60,8 @@ public class FrameHome extends JFrame {
 	private JLabel lblBookmark;
 	private JLabel lblHistory;
 	private JLabel lblCategory;
+	private JPanel btnLogout;
+	private JLabel lblLogout;
 
 	/**
 	 * Launch the application.
@@ -78,6 +83,8 @@ public class FrameHome extends JFrame {
 	 * Create the frame.
 	 */
 	public FrameHome() {
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		setResizable(false);
 		setTitle("EV Dictionary");
 		setIconImage(
@@ -107,7 +114,7 @@ public class FrameHome extends JFrame {
 				do_btnNewButton_actionPerformed(e);
 			}
 		});
-		btnNewButton.setBounds(489, 19, 35, 35);
+		btnNewButton.setBounds(450, 19, 35, 35);
 		panel_1.add(btnNewButton);
 
 		txtFieldSearch = new JTextField();
@@ -121,7 +128,7 @@ public class FrameHome extends JFrame {
 		txtFieldSearch.setHorizontalAlignment(SwingConstants.LEFT);
 		txtFieldSearch.setFont(new Font("Arial", Font.PLAIN, 14));
 		txtFieldSearch.setBorder(null);
-		txtFieldSearch.setBounds(71, 18, 408, 36);
+		txtFieldSearch.setBounds(32, 18, 408, 36);
 		panel_1.add(txtFieldSearch);
 		txtFieldSearch.setColumns(10);
 
@@ -133,7 +140,7 @@ public class FrameHome extends JFrame {
 			}
 		});
 		panelVocab.setBackground(new Color(255, 255, 255));
-		panelVocab.setBounds(610, 32, 93, 45);
+		panelVocab.setBounds(527, 32, 93, 45);
 		panel_1.add(panelVocab);
 		panelVocab.setLayout(null);
 
@@ -152,7 +159,7 @@ public class FrameHome extends JFrame {
 		});
 		panelCategory.setLayout(null);
 		panelCategory.setBackground(Color.WHITE);
-		panelCategory.setBounds(703, 32, 93, 45);
+		panelCategory.setBounds(618, 32, 93, 45);
 		panel_1.add(panelCategory);
 
 		lblCategory = new JLabel("Chủ đề");
@@ -170,7 +177,7 @@ public class FrameHome extends JFrame {
 		});
 		panelBookmark.setLayout(null);
 		panelBookmark.setBackground(Color.WHITE);
-		panelBookmark.setBounds(796, 32, 93, 45);
+		panelBookmark.setBounds(802, 32, 93, 45);
 		panel_1.add(panelBookmark);
 
 		lblBookmark = new JLabel("Ưu thích");
@@ -179,50 +186,70 @@ public class FrameHome extends JFrame {
 		lblBookmark.setBounds(10, 11, 73, 23);
 		panelBookmark.add(lblBookmark);
 
-		panelHistory = new JPanel();
-		panelHistory.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				do_panelHistory_mouseClicked(e);
-			}
-		});
-		panelHistory.setLayout(null);
-		panelHistory.setBackground(Color.WHITE);
-		panelHistory.setBounds(889, 32, 93, 45);
-		panel_1.add(panelHistory);
-
-		lblHistory = new JLabel("Lịch sử");
-		lblHistory.setHorizontalAlignment(SwingConstants.CENTER);
-		lblHistory.setFont(new Font("Arial", Font.BOLD, 14));
-		lblHistory.setBounds(10, 11, 73, 23);
-		panelHistory.add(lblHistory);
-
-		fieldAuthor = new JPanel();
-		fieldAuthor.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (Authorization.email == null) {
-					do_panelLogIn_mouseClicked(e);
-				} else {
-					do_panelLogOut_mouseClicked(e);
-				}
-			}
-		});
-		fieldAuthor.setLayout(null);
-		fieldAuthor.setBackground(Color.WHITE);
-		fieldAuthor.setBounds(982, 32, 93, 45);
-		panel_1.add(fieldAuthor);
-
 		if (Authorization.email == null) {
 			lblSignIn = new JLabel("Đăng nhập");
 
 		} else {
-			lblSignIn = new JLabel("Đăng Xuất");
+			lblSignIn = new JLabel("Thông Tin");
 		}
 		lblSignIn.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSignIn.setFont(new Font("Arial", Font.BOLD, 14));
 		lblSignIn.setBounds(6, 11, 83, 23);
-		fieldAuthor.add(lblSignIn);
+		
+				panelHistory = new JPanel();
+				panelHistory.setBounds(710, 32, 93, 45);
+				panel_1.add(panelHistory);
+				panelHistory.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						do_panelHistory_mouseClicked(e);
+					}
+				});
+				panelHistory.setLayout(null);
+				panelHistory.setBackground(Color.WHITE);
+				
+						lblHistory = new JLabel("Lịch sử");
+						lblHistory.setHorizontalAlignment(SwingConstants.CENTER);
+						lblHistory.setFont(new Font("Arial", Font.BOLD, 14));
+						lblHistory.setBounds(10, 11, 73, 23);
+						panelHistory.add(lblHistory);
+						
+								fieldAuthor = new JPanel();
+								fieldAuthor.setBounds(893, 32, 93, 45);
+								panel_1.add(fieldAuthor);
+								fieldAuthor.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										if (Authorization.email == null) {
+											do_panelLogIn_mouseClicked(e);
+										} else {
+											do_panelLogOut_mouseClicked(e);
+										}
+									}
+								});
+								fieldAuthor.setLayout(null);
+								fieldAuthor.setBackground(Color.WHITE);
+								fieldAuthor.add(lblSignIn);
+								
+								btnLogout = new JPanel();
+								btnLogout.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseClicked(MouseEvent e) {
+										btnLogoutMouseClicked(e);
+									}
+								});
+								btnLogout.setBounds(982, 32, 93, 45);
+								if(Authorization.email!=null) {
+									panel_1.add(btnLogout);
+								}
+								btnLogout.setLayout(null);
+								btnLogout.setBackground(Color.WHITE);
+								
+								lblLogout = new JLabel("Đăng Xuất");
+								lblLogout.setHorizontalAlignment(SwingConstants.CENTER);
+								lblLogout.setFont(new Font("Arial", Font.BOLD, 14));
+								lblLogout.setBounds(10, 11, 73, 23);
+								btnLogout.add(lblLogout);
 
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(37, 57, 111));
@@ -318,9 +345,15 @@ public class FrameHome extends JFrame {
 	}
 
 	protected void do_panelLogo_mouseClicked(MouseEvent e) {
-		dispose();
-		FrameDashboard dh = new FrameDashboard();
-		dh.setVisible(true);
+		if(Authorization.loggedrole == 2) {
+			dispose();
+			FrameHome dh = new FrameHome();
+			dh.setVisible(true);
+		}else {
+			dispose();
+			FrameDashboard dh = new FrameDashboard();
+			dh.setVisible(true);
+		}
 	}
 
 	protected void do_panelVocab_mouseClicked(MouseEvent e) {
@@ -344,19 +377,22 @@ public class FrameHome extends JFrame {
 	}
 
 	protected void do_panelLogIn_mouseClicked(MouseEvent e) {
+		dispose();
 		frIn = new FrameSignIn();
 		frIn.setVisible(true);
 		frIn.setLocation(400, 300);
-		dispose();
 	}
 
 	protected void do_panelLogOut_mouseClicked(MouseEvent e) {
-		dispose();
-		dispose();
-		Authorization.setNull();
-		frOut = new FrameSignIn();
-		frOut.setLocation(400, 300);
-		frOut.setVisible(true);
+		if(Authorization.email != null) {
+			UserDAOImpl userDao = new UserDAOImpl();
+			int id = UserDAOImpl.getIdFromDbByAccount(Authorization.email);
+			FrameUpdateMember updateMem = new FrameUpdateMember(userDao.select(id));
+			updateMem.setVisible(true);
+		}else {
+			FrameSignIn login = new FrameSignIn();
+			login.setVisible(true);
+		}
 	}
 
 	protected void txtFieldSearchKeyReleased(KeyEvent e) {
@@ -364,5 +400,13 @@ public class FrameHome extends JFrame {
 			jpVocab.initConstructor(txtFieldSearch.getText());
 		}
 
+	}
+	protected void btnLogoutMouseClicked(MouseEvent e) {
+		dispose();
+		dispose();
+		Authorization.setNull();
+		frOut = new FrameSignIn();
+		frOut.setLocation(400, 300);
+		frOut.setVisible(true);
 	}
 }

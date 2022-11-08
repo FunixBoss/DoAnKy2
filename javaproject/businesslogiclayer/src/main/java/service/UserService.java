@@ -94,11 +94,7 @@ public class UserService {
 //		System.out.println(originalUser);
 
 		LocalDate dobFormatted = null;
-		try {
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		
 		if (!dob.equals("")) {
 			try {
 				dobFormatted = LocalDate.parse(dob, DateTimeFormatter.ofPattern("[yyyy-MM-dd]"));

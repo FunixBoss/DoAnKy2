@@ -1,6 +1,7 @@
 package frame;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Insets;
@@ -154,13 +155,15 @@ public class FrameSignUp extends JFrame {
 		});
 		textFieldPasswordConfirm.setBounds(194, 260, 239, 38);
 		contentPane.add(textFieldPasswordConfirm);
+		
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 	}
 
 	protected void do_btnSignIn_actionPerformed(ActionEvent e) {
-		desktop = new JDesktopPane();
-		FrameSignUp signUp = new FrameSignUp();
-		signUp.setVisible(true);
-		desktop.add(signUp);
+		dispose();
+		FrameSignIn siginIn = new FrameSignIn();
+		siginIn.setVisible(true);
 	}
 
 	private void acction_SignUp(ActionEvent e) {
