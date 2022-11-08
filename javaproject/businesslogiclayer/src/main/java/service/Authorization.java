@@ -32,7 +32,5 @@ public class  Authorization {
 		return "Authorization [email=" + email + ", fullName=" + fullName + ", loggedrole=" + loggedrole + ", birthDay="
 				+ birthDay + ", phoneNumber=" + phoneNumber + "]";
 	}
-	public static void main(String[] args) {
-	}
 	
 }

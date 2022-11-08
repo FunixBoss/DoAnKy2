@@ -352,9 +352,4 @@ public class VocabularyDAOImpl implements VocabularyDAO {
 	}
 	
 	
-	public static void main(String[] args) {
-		System.out.println(new VocabularyDAOImpl().searchAll("a"));
-	}
-
-	
 }

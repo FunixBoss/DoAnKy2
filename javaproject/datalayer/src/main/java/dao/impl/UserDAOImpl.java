@@ -555,9 +555,6 @@ public class UserDAOImpl implements UserDAO {
 		return id;
 	}
 
-	public static void main(String[] args) {
-//		System.out.println(new UserDAOImpl().selectIdByUserEmail("hung23n@gmail.com"));
-	}
 
 	
 }

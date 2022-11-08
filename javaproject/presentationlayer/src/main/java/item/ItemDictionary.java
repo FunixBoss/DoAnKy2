@@ -23,13 +23,6 @@ public class ItemDictionary extends JPanel {
 	private JLabel lblWordType;
 
 	
-	public static void main(String[] args) {
-//		List<Vocabulary> vocabs = new HistoryDAOImpl().selectAllVocabByUserId(1);
-//		vocabs.forEach(System.out::println);
-	}
-	/**
-	 * Create the panel.
-	 */
 	public ItemDictionary(Vocabulary vocab) {
 		addMouseListener(new MouseAdapter() {
 			@Override

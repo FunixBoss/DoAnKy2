@@ -210,9 +210,6 @@ public class BookmarkDAOImpl implements BookmarkDAO {
 		return bm;
 	}
 
-	public static void main(String[] args) {
-	}
-
 	@Override
 	public Integer delByUserId(Integer userId) {
 		Integer result = 0;

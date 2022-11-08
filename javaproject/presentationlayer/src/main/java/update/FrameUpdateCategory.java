@@ -64,11 +64,6 @@ public class FrameUpdateCategory extends JFrame {
 		return myInstance;
 	}
 	
-	public static void main(String[] args) {
-		FrameUpdateCategory f = new FrameUpdateCategory(new CategoryDAOImpl().select(1));
-		f.setVisible(true);
-	}
-	
 	public FrameUpdateCategory(Category category) {
 		initComponent();
 		data = new HashMap<>();

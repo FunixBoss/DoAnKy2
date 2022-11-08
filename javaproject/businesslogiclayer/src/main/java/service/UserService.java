@@ -99,8 +99,11 @@ public class UserService {
 				ErrorMessage.ERROR_MESSAGES = "Định dạng ngày sinh không đúng! [yyyy-MM-dd]";
 				return false;
 			}
-		} else if (fullname.equals(originalUser.getFullname()) && phone.equals(originalUser.getPhoneNumber())
-				&& dobFormatted.equals(originalUser.getDateOfBirth()) && password.equals("")) {
+		} else if (
+				fullname.equals(originalUser.getFullname()) &&
+				phone.equals(originalUser.getPhoneNumber()) &&
+				dobFormatted.equals(originalUser.getDateOfBirth()) 
+				&& password.equals("")) {
 			ErrorMessage.ERROR_MESSAGES = "Bạn phải thay đổi thông tin mới có thể cập nhật";
 			return false;
 		} else if (!fullname.equals("") && !Validation.checkLength(fullname, 1, 200)) {

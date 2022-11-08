@@ -21,8 +21,4 @@ public class ValidateLogin {
 		}
 		return ok;
 	}
-	public static void main(String[] args) {
-		StringBuilder s = new StringBuilder();
-
-	}
 }

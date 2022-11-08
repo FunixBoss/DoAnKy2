@@ -129,6 +129,4 @@ public class PanelVocab extends JPanel {
 		initConstructor();
 		
 	}
-	public static void main(String[] args) {
-	}
 }

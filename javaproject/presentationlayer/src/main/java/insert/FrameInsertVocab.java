@@ -97,11 +97,6 @@ public class FrameInsertVocab extends JFrame {
 	private JPanel panel_1;
 	private JButton btnStopSound;
 
-	public static void main(String[] args) {
-		FrameInsertVocab frame = new FrameInsertVocab();
-		frame.setVisible(true);
-	}
-
 	public FrameInsertVocab() {
 		initComponent();
 		vocabService = new VocabularyService();

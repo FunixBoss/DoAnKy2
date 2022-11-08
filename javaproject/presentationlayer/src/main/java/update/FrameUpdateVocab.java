@@ -20,6 +20,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
@@ -57,6 +58,7 @@ import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
 import javax.swing.DebugGraphics;
 import java.awt.GridLayout;
+import javax.swing.ScrollPaneConstants;
 
 public class FrameUpdateVocab extends JFrame {
 
@@ -108,11 +110,6 @@ public class FrameUpdateVocab extends JFrame {
 	private JPanel panel_1;
 	private JButton btnStopSound;
 
-	public static void main(String[] args) {
-		FrameUpdateVocab frame = new FrameUpdateVocab(new VocabularyDAOImpl().select(1));
-		frame.setVisible(true);
-		
-	}
 
 	public FrameUpdateVocab(Vocabulary vocab) {
 		initComponent();
@@ -326,41 +323,47 @@ public class FrameUpdateVocab extends JFrame {
 		panelMeaning3.add(textMeaning3);
 
 		Panel panelExample1 = new Panel();
-		panelExample1.setLayout(null);
 		panelExample1.setBackground(Color.BLACK);
-		panelExample1.setBounds(624, 338, 462, 102);
+		panelExample1.setBounds(624, 338, 462, 119);
 		contentPane.add(panelExample1);
+		panelExample1.setLayout(new BorderLayout(0, 0));
 
 		textExample1 = new JTextArea();
 		textExample1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textExample1.setBackground(Color.WHITE);
-		textExample1.setBounds(1, 1, 460, 100);
 		panelExample1.add(textExample1);
 
+		JScrollPane jspEx1 = new JScrollPane(textExample1, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		panelExample1.add(jspEx1, BorderLayout.CENTER);
+		
 		panelExample2 = new Panel();
-		panelExample2.setLayout(null);
 		panelExample2.setBackground(Color.BLACK);
-		panelExample2.setBounds(624, 463, 462, 102);
+		panelExample2.setBounds(624, 463, 462, 119);
 		contentPane.add(panelExample2);
+		panelExample2.setLayout(new BorderLayout(0, 0));
 
 		textExample2 = new JTextArea();
 		textExample2.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textExample2.setBackground(Color.WHITE);
-		textExample2.setBounds(1, 1, 460, 100);
 		panelExample2.add(textExample2);
 
+		JScrollPane jspEx2 = new JScrollPane(textExample2, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		panelExample2.add(jspEx2);
+		
 		panelExample3 = new Panel();
-		panelExample3.setLayout(null);
 		panelExample3.setBackground(Color.BLACK);
-		panelExample3.setBounds(624, 588, 462, 102);
+		panelExample3.setBounds(624, 588, 462, 119);
 		contentPane.add(panelExample3);
+		panelExample3.setLayout(new BorderLayout(0, 0));
 
 		textExample3 = new JTextArea();
 		textExample3.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textExample3.setBackground(Color.WHITE);
-		textExample3.setBounds(1, 1, 460, 100);
 		panelExample3.add(textExample3);
 
+		JScrollPane jspEx3 = new JScrollPane(textExample3, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		panelExample3.add(jspEx3);
+		
 		lblMeaning1 = new JLabel("Ý nghĩa 1:");
 		lblMeaning1.setForeground(Color.BLACK);
 		lblMeaning1.setFont(new Font("Arial", Font.PLAIN, 14));
