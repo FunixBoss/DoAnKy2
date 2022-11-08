@@ -3,8 +3,8 @@ package entity;
 import java.time.LocalDate;
 
 public class User extends Entity {
-	private static  int adminLevel = 0;
-	private static  int userLevel= 1;
+	private static  int adminLevel = 1;
+	private static  int userLevel= 2;
 	//   Account information
 	private String email;
 	private String password;

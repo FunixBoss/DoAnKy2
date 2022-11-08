@@ -5,13 +5,15 @@ import entity.User;
 public class  Authorization {
 	public static String email;
 	public static String fullName;
+	//1->admin
+	//2 user
 	public static int loggedrole;
 	public static String birthDay;
 	public static String phoneNumber;
 	public static void setNull() {
 		Authorization.email = null;
 		Authorization.fullName = null;
-//		Authorization.loggedrole = null;
+		Authorization.loggedrole = 2;
 		Authorization.birthDay = null;
 		Authorization.phoneNumber = null;
 	}

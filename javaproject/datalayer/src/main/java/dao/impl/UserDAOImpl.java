@@ -287,7 +287,6 @@ public class UserDAOImpl implements UserDAO {
 		try {
 			if (BCrypt.checkpw(u.getPassword(), getPassFromDbByAccount(u.getEmail()))) {
 				u.setLevel(getLevelFromUser(u));
-				JOptionPane.showMessageDialog(null, "Đăng Nhập Thành Công !");
 				return true;
 			} else {
 				JOptionPane.showMessageDialog(null, "Tài Khoản Hoặc Mật Khẩu Không Chính Xác !");
@@ -351,10 +350,11 @@ public class UserDAOImpl implements UserDAO {
 	 */
 	public Integer updatePassword(User user) {
 		Integer result = 0;
+		String hashed = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
 		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
 				var cs = con.prepareCall("{call updatePasswordInfoUser(?, ?)}");) {
 			cs.setInt(1, user.getId());
-			cs.setString(2, user.getPassword());
+			cs.setString(2, hashed);
 			result = cs.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -362,7 +362,13 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return result;
 	}
-
+	public static void main(String[] args) {
+		User user = (new User("hung23@gmail.com","Aa@123456",2));
+		user.setId(1012);
+		new UserDAOImpl().updatePassword(user);
+		System.out.println(BCrypt.checkpw("Aa@123456", getPassFromDbByAccount("hung23@gmail.com")));
+		System.out.println(getPassFromDbByAccount("hung23@gmail.com"));
+	}
 	@Override
 	/**
 	 * @return 1 if success
@@ -555,9 +561,9 @@ public class UserDAOImpl implements UserDAO {
 		return id;
 	}
 
-	public static void main(String[] args) {
-//		System.out.println(new UserDAOImpl().selectIdByUserEmail("hung23n@gmail.com"));
-	}
+//	public static void main(String[] args) {
+////		System.out.println(new UserDAOImpl().selectIdByUserEmail("hung23n@gmail.com"));
+//	}
 
 	
 }

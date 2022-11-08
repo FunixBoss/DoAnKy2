@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import dao.impl.BookmarkDAOImpl;
 import dao.impl.HistoryDAOImpl;
 import dao.impl.UserDAOImpl;
 import dao.impl.VocabularyDAOImpl;
@@ -42,17 +43,24 @@ public class PanelHistory extends JPanel {
 			
 			
 			panelMain.removeAll();
-			try {
-				UserDAOImpl user= new UserDAOImpl();
-				int id = user.getIdFromDbByAccount(Authorization.email);
+			UserDAOImpl user= new UserDAOImpl();
+			int id = UserDAOImpl.getIdFromDbByAccount(Authorization.email);
+			
+			if( new HistoryDAOImpl().selectAllVocabByUserId(id) !=null ) {
 				for (Vocabulary vocab : new HistoryDAOImpl().selectAllVocabByUserId(id)) { 
 					ItemDictionary item = new ItemDictionary(vocab);
 					panelMain.add(item);
 				}
-				
-			} catch (Exception e) {
-				// TODO: handle exception
+			}else {
+				panel.removeAll();
+				lblNewLabel = new JLabel("Bạn Chưa Lưu Mục Nào!");
+				lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
+				lblNewLabel.setBounds(354, 202, 544, 154);
+				panel.add(lblNewLabel);
 			}
+			
+			
+			
 			
 		}
 		else {

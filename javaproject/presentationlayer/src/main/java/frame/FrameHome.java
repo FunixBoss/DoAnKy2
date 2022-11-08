@@ -32,7 +32,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class FrameHome extends JFrame {
-	public FrameHome frOut;
+	public FrameSignIn frOut;
 	public FrameSignIn frIn;
 	public static String flag = "PanelVocab";
 	private JPanel contentPane;
@@ -318,7 +318,9 @@ public class FrameHome extends JFrame {
 	}
 
 	protected void do_panelLogo_mouseClicked(MouseEvent e) {
-		menuClicked(jpHome);
+		dispose();
+		FrameDashboard dh = new FrameDashboard();
+		dh.setVisible(true);
 	}
 
 	protected void do_panelVocab_mouseClicked(MouseEvent e) {
@@ -349,9 +351,10 @@ public class FrameHome extends JFrame {
 	}
 
 	protected void do_panelLogOut_mouseClicked(MouseEvent e) {
-		Authorization.setNull();
 		dispose();
-		frOut = new FrameHome();
+		dispose();
+		Authorization.setNull();
+		frOut = new FrameSignIn();
 		frOut.setLocation(400, 300);
 		frOut.setVisible(true);
 	}

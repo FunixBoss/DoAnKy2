@@ -3,6 +3,7 @@ package app;
 import java.awt.EventQueue;
 
 import frame.FrameHome;
+import frame.FrameSignIn;
 
 public class Program {
 
@@ -11,7 +12,7 @@ public class Program {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FrameHome frame = new FrameHome();
+					FrameSignIn frame = new FrameSignIn();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

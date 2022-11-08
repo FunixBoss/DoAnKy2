@@ -37,7 +37,6 @@ public class FrameDetailVocab extends JFrame {
 			30, Image.SCALE_SMOOTH);
 	private Image starAltImg = new ImageIcon(getClass().getResource("/image/star-alt.png")).getImage()
 			.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-	private JLabel lblStar;
 	private JLabel lblMeaning;
 	private JLabel lblExample;
 	private JLabel lblContent;
@@ -68,18 +67,6 @@ public class FrameDetailVocab extends JFrame {
 		lblWord.setBounds(35, 25, 236, 36);
 		contentPane.add(lblWord);
 		lblWord.setText(vocab.getWord());
-
-		lblStar = new JLabel("");
-		lblStar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				do_lblStar_mouseClicked(e);
-			}
-		});
-		lblStar.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblStar.setBounds(786, 25, 46, 27);
-		contentPane.add(lblStar);
-		lblStar.setIcon(new ImageIcon(starImg));
 
 		JLabel lblWordType = new JLabel();
 		lblWordType.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -177,10 +164,6 @@ public class FrameDetailVocab extends JFrame {
 			}
 		});
 		contentPane.add(tglbtnNewToggleButton);
-	}
-
-	protected void do_lblStar_mouseClicked(MouseEvent e) {
-		lblStar.setIcon(new ImageIcon(starAltImg));
 	}
 
 	private ImageIcon getImageByURL(String imageName) {
