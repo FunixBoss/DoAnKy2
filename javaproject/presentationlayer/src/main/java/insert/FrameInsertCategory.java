@@ -54,10 +54,6 @@ public class FrameInsertCategory extends JFrame {
 	private JPanel panelImageShow;
 	private Map<String, String> data;
 	
-	public static void main(String[] args) {
-		FrameInsertCategory a = new FrameInsertCategory();
-		a.setVisible(true);
-	}
 	
 	public static FrameInsertCategory getMyInstance() {
 		if (myInstance == null) {

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.DefaultComboBoxModel;
@@ -287,7 +288,10 @@ public class PanelAdmin extends JPanel {
 	}
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
 		FrameInsertAdmin frame = new FrameInsertAdmin();
-		frame.setLocation(300, 300);
+		
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+		
 		frame.setVisible(true);
 	}
 	

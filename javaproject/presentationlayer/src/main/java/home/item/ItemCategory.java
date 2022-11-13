@@ -1,6 +1,7 @@
 package home.item;
 
 import java.awt.Color;
+import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
@@ -13,6 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -29,9 +31,17 @@ public class ItemCategory extends JPanel {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				FrameListCategory fr = new FrameListCategory(cate.getId());
-				fr.setVisible(true);
-				fr.setLocation(100,100);
+				try {
+					FrameListCategory fr = new FrameListCategory(cate.getId());
+					
+					Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+					fr.setLocation(dim.width/2-fr.getSize().width/2, dim.height/2-fr.getSize().height/2);
+
+					fr.setVisible(true);
+				} catch (Exception e2) {
+					// TODO: handle exception
+				}
+				
 			}
 		});
 		setBackground(new Color(242, 247, 255));
@@ -42,7 +52,7 @@ public class ItemCategory extends JPanel {
 		lblCategory.setFont(new Font("Arial", Font.BOLD, 14));
 		lblCategory.setBounds(97, 11, 153, 47);
 		add(lblCategory);
-		lblCategory.setText(cate.getName());
+		lblCategory.setText(toCapitalize(cate.getName()));
 		
 		lblImage = new JLabel();
 		lblImage.setBounds(22, 11, 50, 50);
@@ -65,6 +75,11 @@ public class ItemCategory extends JPanel {
 			}
 		}
 		return null;
+	}
+	
+	private String toCapitalize(String str) {
+		if(str.length() <= 0) return str;
+		return str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
 }
 

@@ -5,6 +5,7 @@ public class Vocabulary extends Entity {
 	private String image;
 	private String pronunciation;
 
+	
 	private Integer categoryId;
 	private Integer wordTypeId;
 

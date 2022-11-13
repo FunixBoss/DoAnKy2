@@ -39,22 +39,6 @@ public class FrameVocab extends JFrame {
 	private JTextArea textMeaning2;
 	private JTextField textWord;
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					Vocabulary vocab = new Vocabulary();
-//					FrameVocab frame = new FrameVocab(vocab);
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
 	/**
 	 * Create the frame.

@@ -1,7 +1,9 @@
 package item;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
@@ -147,8 +149,9 @@ public class ItemUser extends JPanel {
 
 	protected void do_btnEdit_actionPerformed(ActionEvent e, User user) {
 		FrameUpdateMember fr = new FrameUpdateMember(user);
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		fr.setLocation(dim.width/2-fr.getSize().width/2, dim.height/2-fr.getSize().height/2);
 		fr.setVisible(true);
-		fr.setLocation(300, 300);
 	}
 
 	protected void do_btnDelete_actionPerformed(ActionEvent e, User user) {

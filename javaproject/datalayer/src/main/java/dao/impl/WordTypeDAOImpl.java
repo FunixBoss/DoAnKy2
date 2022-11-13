@@ -62,6 +62,44 @@ public class WordTypeDAOImpl implements WordTypeDAO{
 		}
 		return wt;
 	}
+	
+	public String get(Integer typeId) {
+		String result = null;
+		switch (typeId) {
+		case 1: {
+			result = "NOUN";
+		}
+		case 2: {
+			result = "PRONOUN";
+		}
+		case 3: {
+			result = "ADJECTIVE";
+		}
+		case 4: {
+			result = "VERB";
+		}
+		case 5: {
+			result = "ADVERB";
+		}
+		case 6: {
+			result = "DETERMINER";
+		}
+		case 7: {
+			result = "PREPOSITION";
+		}
+		case 8: {
+			result = "CONJUNTION";
+		}
+		case 9: {
+			result = "INTERJECTION";
+		}
+		default: {
+			result = "NOUN";
+		}
+		}
+		return result;
+		
+	}
 
 	@Override
 	public Integer insert(WordType t) {

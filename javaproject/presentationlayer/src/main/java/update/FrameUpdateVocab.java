@@ -551,6 +551,7 @@ public class FrameUpdateVocab extends JFrame {
 		data.put("example3", textExample3.getText());
 		if (vocabService.update(data)) {
 			JOptionPane.showMessageDialog(this, "Cập nhật từ vựng thành công");
+			dispose();
 		} else {
 			JOptionPane.showMessageDialog(this, ErrorMessage.ERROR_MESSAGES);
 		}

@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -41,19 +42,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class PanelDashboard extends JPanel {
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					PanelDashboard frame = new PanelDashboard();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 	private JLabel lblDashboard;
 	private JLabel lblBreadcrumb;
 	private Card cardVocab;
@@ -74,6 +62,7 @@ public class PanelDashboard extends JPanel {
 		cardCate.setData("category.png", "Category", new CategoryDAOImpl().countNumberOfCate().toString());
 		cardMember.setData("user.png", "User", new UserDAOImpl().countNumberOfUser().toString());
 		cardAdmin.setData("admin.png", "Admin", new UserDAOImpl().countNumberOfAdmin().toString());
+		loadData();
 	}
 
 	private void initComponent() {
@@ -154,8 +143,6 @@ public class PanelDashboard extends JPanel {
         panelData = new JPanel();
         panelData.setLayout(null);
         panelData.setBackground(Color.WHITE);
-        
-        loadData();
 	}
 	
 	private void printTitleComponent(JPanel panel) {
@@ -169,7 +156,7 @@ public class PanelDashboard extends JPanel {
 		panelHeader.add(panel_1);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblNewLabel = new JLabel("STT");
+		JLabel lblNewLabel = new JLabel("ID");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 14));
@@ -232,7 +219,7 @@ public class PanelDashboard extends JPanel {
 		panel_1_2_1.add(lblCategory);
 	}
 	
-	private void loadData() {
+	public void loadData() {
 		if(dao.getList() != null) {
 			dao.getList().clear();
 			panelData.removeAll();
@@ -242,7 +229,7 @@ public class PanelDashboard extends JPanel {
 			panelData.setPreferredSize(new Dimension(975, 5 * 70));
 			scrollPane.setViewportView(panelData);
 			int y = 40;
-			for(int i = totalVocabs - 4; i <= totalVocabs && i >= 0; i++) {
+			for(int i = totalVocabs - 5; i <= totalVocabs && i >= 0; i++) {
 				if(dao.select(i) != null) {
 					ItemVocabDashboard vocabItem = new ItemVocabDashboard(dao.select(i), y);			
 					panelData.add(vocabItem);
@@ -263,9 +250,13 @@ public class PanelDashboard extends JPanel {
 			UserDAOImpl userDao = new UserDAOImpl();
 			int id = UserDAOImpl.getIdFromDbByAccount(Authorization.email);
 			FrameUpdateMember updateMem = new FrameUpdateMember(userDao.select(id));
+			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+			updateMem.setLocation(dim.width/2-updateMem.getSize().width/2, dim.height/2-updateMem.getSize().height/2);
 			updateMem.setVisible(true);
 		}else {
 			FrameSignIn login = new FrameSignIn();
+			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+			login.setLocation(dim.width/2-login.getSize().width/2, dim.height/2-login.getSize().height/2);
 			login.setVisible(true);
 		}
 			

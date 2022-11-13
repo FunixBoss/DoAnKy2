@@ -1,6 +1,7 @@
 package item;
 
 import java.awt.Color;
+import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
@@ -16,6 +17,7 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -147,6 +149,8 @@ public class ItemVocab extends JPanel {
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FrameUpdateVocab fr = new FrameUpdateVocab(vocab);
+				Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+				fr.setLocation(dim.width/2-fr.getSize().width/2, dim.height/2-fr.getSize().height/2);
 				fr.setVisible(true);
 			}
 		});
@@ -195,6 +199,7 @@ public class ItemVocab extends JPanel {
 	}
 
 	private String toCapitalize(String str) {
+		if(str.length() <= 0) return str;
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
 	protected void btnDeleteActionPerformed(ActionEvent e, Vocabulary vocab) {

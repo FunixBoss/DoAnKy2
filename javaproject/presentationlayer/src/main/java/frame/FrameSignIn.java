@@ -109,10 +109,14 @@ public class FrameSignIn extends JFrame {
 							dispose();
 							if(Authorization.loggedrole==1) {
 								FrameDashboard frame = new FrameDashboard();
+								Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+								frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
 								frame.setVisible(true);
 								
 							}else {
 								FrameHome frame = new FrameHome();
+								Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+								frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
 								frame.setVisible(true);
 							}
 						}
@@ -183,9 +187,6 @@ public class FrameSignIn extends JFrame {
 		textmess2.setBounds(494, 189, 57, 38);
 		contentPane.add(textmess2);
 		
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-//		setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-		setLocation(0, 0);
 
 	}
 

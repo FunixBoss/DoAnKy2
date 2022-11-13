@@ -163,6 +163,9 @@ public class FrameSignUp extends JFrame {
 	protected void do_btnSignIn_actionPerformed(ActionEvent e) {
 		dispose();
 		FrameSignIn siginIn = new FrameSignIn();
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		siginIn.setLocation(dim.width/2-siginIn.getSize().width/2, dim.height/2-siginIn.getSize().height/2);
+		
 		siginIn.setVisible(true);
 	}
 

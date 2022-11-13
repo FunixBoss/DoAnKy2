@@ -16,7 +16,6 @@ import entity.User;
 import service.Register;
 
 public class ValidateRegister {
-
 	public static boolean checkAll(JTextField textFieldEmail,JTextField textFieldPassword,JTextField textFieldPasswordConfirm,StringBuilder s) {
 		boolean ok = true;
 		boolean checkEmail=  Register.checkRegexRegister(RegexPattern.EMAIL, textFieldEmail,s, "email");

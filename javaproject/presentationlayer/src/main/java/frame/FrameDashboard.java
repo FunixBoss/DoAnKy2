@@ -52,21 +52,6 @@ public class FrameDashboard extends JFrame {
 	private PanelCategory jpCategory;
 	private JLabel lblCategory;
 	private JPanel panelCategory;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FrameDashboard frame = new FrameDashboard();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -90,6 +75,7 @@ public class FrameDashboard extends JFrame {
 		jpVocab = new PanelVocab();
 		jpAdmin = new PanelAdmin();
 		jpDashboard = new PanelDashboard();
+		jpDashboard.loadData();
 		jpDashboard.setBounds(0, 0, 1085, 729);
 		jpCategory = new PanelCategory();
 		
@@ -336,11 +322,15 @@ public class FrameDashboard extends JFrame {
 	}
 	protected void do_panelDashboard_mouseClicked(MouseEvent e) {
 		menuClicked(jpDashboard);	
+		jpDashboard.loadData();
 		menuChanged(panelDashboard,lblDashboard);
 	}
 	protected void do_panelHome_mouseClicked(MouseEvent e) {
+		
 		dispose();
 		FrameHome frame = new FrameHome();
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
 		frame.setVisible(true);
 	}
 	protected void do_panelCategory_mouseClicked(MouseEvent e) {

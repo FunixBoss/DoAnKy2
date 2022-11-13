@@ -7,6 +7,8 @@ import helper.ErrorMessage;
 import service.UserService;
 
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -14,6 +16,8 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.Insets;
+import java.awt.Toolkit;
+
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
@@ -200,6 +204,9 @@ public class FrameInsertAdmin extends JFrame {
 		textFullname.setBackground(Color.WHITE);
 		textFullname.setBounds(589, 94, 239, 38);
 		contentPane.add(textFullname);
+		
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 	}
 	protected void doBtnResetActionPerformed(ActionEvent e) {
 		textEmail.setText("");

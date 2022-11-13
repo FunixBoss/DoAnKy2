@@ -7,10 +7,20 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import dao.impl.BookmarkDAOImpl;
+import dao.impl.CategoryDAOImpl;
+import dao.impl.MeaningDAOImpl;
 import dao.impl.UserDAOImpl;
+import dao.impl.VocabularyDAOImpl;
+import dao.impl.WordTypeDAOImpl;
 import entity.Bookmark;
+import entity.Category;
+import entity.Example;
+import entity.Meaning;
+import entity.Relatives;
 import entity.Vocabulary;
+import insert.FrameInsertMember;
 import item.ItemVocab;
+import jaco.mp3.player.MP3Player;
 import service.Authorization;
 
 import java.awt.Color;
@@ -21,6 +31,8 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.ScrollPane;
+import java.awt.TextArea;
 import java.awt.Toolkit;
 
 import javax.swing.SwingConstants;
@@ -30,9 +42,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JToggleButton;
+import javax.swing.JScrollPane;
+import java.awt.GridLayout;
+import javax.swing.JTextArea;
+import java.awt.BorderLayout;
 
 public class FrameDetailVocab extends JFrame {
 
@@ -41,94 +60,84 @@ public class FrameDetailVocab extends JFrame {
 			30, Image.SCALE_SMOOTH);
 	private Image starAltImg = new ImageIcon(getClass().getResource("/image/star-alt.png")).getImage()
 			.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-	private JLabel lblMeaning;
-	private JLabel lblExample;
-	private JLabel lblContent;
+	private JLabel lblRelatives;
 	private JLabel lblImage;
 	private JLabel lblPronunciation;
 	private JToggleButton tglbtnNewToggleButton;
+	private JLabel lblWord;
+	private JLabel lblWordType;
+	private JTextArea textArea;
+	private JLabel lblCategory;
 
-	/**
-	 * Launch the application.
-	 */
+	private static FrameDetailVocab myInstance;
+	
+	public static FrameDetailVocab getMyInstance(Vocabulary vocab) {
+		if (myInstance == null) {
+			myInstance = new FrameDetailVocab(vocab);
+		} else {
+			myInstance.dispose();
+			myInstance = new FrameDetailVocab(vocab);
+		}
+		return myInstance;
+	}
+	
+	private FrameDetailVocab(Vocabulary vocab) {
 
-	/**
-	 * Create the frame.
-	 */
-	public FrameDetailVocab(Vocabulary vocab) {
+		initComponent(vocab);
+		lblWord.setText(toCapitalize(vocab.getWord()));
+		lblWordType.setText(new WordTypeDAOImpl().get(vocab.getWordTypeId()));
+		Category cate = new CategoryDAOImpl().select(vocab.getCategoryId());
+		if(cate!=null) {
+			lblCategory.setText("Thể loại: " + cate.getName());
+		}
 		
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 892, 609);
-		contentPane = new JPanel();
-		contentPane.setBackground(new Color(255, 255, 255));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		bookmarkFeature(vocab);
+		
+		
+		List<Meaning> meanings = new VocabularyDAOImpl().selectAllMeaningByVocabId(vocab.getId());
+		StringBuffer txt = new StringBuffer();
+		if(meanings!=null) {
+			for(Meaning mn : meanings) {
+				txt.append(mn.getContent() + "\n    ");
+				if(!mn.getContent().isEmpty()) {
+					List<Example> examples = new MeaningDAOImpl().selectAllExampleByMeaningId(mn.getId());
+					if(examples!=null) {
+						for(Example ex : examples){
+							if(!ex.getContent().isEmpty()) {
+								txt.append(ex.getContent() + "\n    ");
+								txt.append("=>" + ex.getMeaning());
+							}
+						}
+					}
+					txt.append("\n");
+				}
+			}
+		}
+		
+		String relativesStr = "";
+		List<Relatives> relatives = new VocabularyDAOImpl().selectAllRelativesByVocabId(vocab.getId());
+		if(relatives!=null) {
+			relativesStr = relatives.stream()
+							.map(rel -> rel.getWord().toString())
+							.collect(Collectors.joining("\n    "));
+			if(!relativesStr.equals("")) {
+				txt.append("\nCác từ liên quan\n    ");
+				txt.append(relativesStr);
+				txt.append("\n\n\n");
+			}
+		}
+		textArea.setText(txt.toString());
+		
+	
+		
+		
+		
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+	}
 
-		JLabel lblWord = new JLabel();
-		lblWord.setFont(new Font("Arial", Font.BOLD, 25));
-		lblWord.setBackground(new Color(255, 255, 255));
-		lblWord.setBounds(35, 25, 236, 36);
-		contentPane.add(lblWord);
-		lblWord.setText(vocab.getWord());
-
-		JLabel lblWordType = new JLabel();
-		lblWordType.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblWordType.setBounds(35, 64, 87, 27);
-		contentPane.add(lblWordType);
-		lblWordType.setText(vocab.getWordTypeId().toString());
-
-		lblMeaning = new JLabel("New label");
-		lblMeaning.setForeground(new Color(37, 57, 111));
-		lblMeaning.setBackground(new Color(0, 0, 0));
-		lblMeaning.setFont(new Font("Arial", Font.BOLD, 14));
-		lblMeaning.setBounds(45, 97, 344, 27);
-		contentPane.add(lblMeaning);
-
-		lblExample = new JLabel("New label");
-		lblExample.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblExample.setBounds(45, 126, 344, 27);
-		contentPane.add(lblExample);
-
-		lblContent = new JLabel("New label");
-		lblContent.setFont(new Font("Arial", Font.ITALIC, 14));
-		lblContent.setBounds(45, 154, 344, 27);
-		contentPane.add(lblContent);
-
-		// int y = 90;
-		// List<Meaning> meanings = new
-		// VocabularyDAOImpl().selectAllMeaningByVocabId(vocab.getId());
-		// if(meanings != null) {
-		// for ( Meaning meaning : meanings) {
-		// for(Example ex : new
-		// MeaningDAOImpl().selectAllExampleByMeaningId(meaning.getId())) {
-		// ItemContent contentItem = new ItemContent(meaning, ex, y);
-		// contentPane.add(contentItem);
-		// y = y + 106;
-		// }
-		// }
-		// }
-
-		lblImage = new JLabel();
-		lblImage.setIcon(new ImageIcon());
-		lblImage.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblImage.setBounds(516, 60, 271, 279);
-		contentPane.add(lblImage);
-		lblImage.setIcon(getImageByURL(vocab.getImage()));
-
-		lblPronunciation = new JLabel("");
-		lblPronunciation.setIcon(new ImageIcon(
-				FrameDetailVocab.class.getResource("/jaco/mp3/player/plaf/resources/mp3PlayerSoundOn.png")));
-		lblPronunciation.setBounds(161, 59, 31, 27);
-		contentPane.add(lblPronunciation);
-
-		tglbtnNewToggleButton = new JToggleButton("");
-		tglbtnNewToggleButton.setContentAreaFilled(false);
-		tglbtnNewToggleButton.setBorder(null);
-		tglbtnNewToggleButton.setBorderPainted(false);
-		tglbtnNewToggleButton.setBounds(693, 0, 65, 61);
-
+	private void bookmarkFeature(Vocabulary vocab) {
 		// set Icon
 		try {
 			if (new BookmarkDAOImpl().checkExistBookmarkInDb(new UserDAOImpl().selectIdByUserEmail(Authorization.email),
@@ -168,16 +177,95 @@ public class FrameDetailVocab extends JFrame {
 
 			}
 		});
+	}
+
+	private void initComponent(Vocabulary vocab) {
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 892, 609);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 255, 255));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		lblWord = new JLabel();
+		lblWord.setFont(new Font("Arial", Font.BOLD, 25));
+		lblWord.setBackground(new Color(255, 255, 255));
+		lblWord.setBounds(35, 25, 236, 66);
+		contentPane.add(lblWord);
+
+		lblWordType = new JLabel();
+		lblWordType.setFont(new Font("Arial", Font.PLAIN, 16));
+		lblWordType.setBounds(35, 97, 87, 27);
+		contentPane.add(lblWordType);
+
+		lblRelatives = new JLabel("");
+		lblRelatives.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblRelatives.setBounds(35, 135, 344, 27);
+		contentPane.add(lblRelatives);
+
+		lblImage = new JLabel();
+		lblImage.setIcon(new ImageIcon());
+		lblImage.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblImage.setBounds(526, 25, 273, 180);
+		contentPane.add(lblImage);
+		lblImage.setIcon(getImageByURL(vocab.getImage()));
+
+		lblPronunciation = new JLabel("");
+		lblPronunciation.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(vocab.getPronunciation() != null) {
+					try {
+						String url = System.getProperty("user.dir") + "/src/main/resources/pronunciation/" + vocab.getPronunciation();
+						MP3Player mp3 = new MP3Player(new File(url));
+						mp3.play();
+					} catch (Exception e2) {
+						JOptionPane.showMessageDialog(null, "Không tìm thấy file phát âm");
+					}
+				}
+			}
+		});
+		lblPronunciation.setIcon(new ImageIcon(
+				FrameDetailVocab.class.getResource("/jaco/mp3/player/plaf/resources/mp3PlayerSoundOn.png")));
+		lblPronunciation.setBounds(202, 97, 31, 27);
+		contentPane.add(lblPronunciation);
+
+		tglbtnNewToggleButton = new JToggleButton("");
+		tglbtnNewToggleButton.setBorderPainted(false);
+		tglbtnNewToggleButton.setContentAreaFilled(false);
+		tglbtnNewToggleButton.setBorder(null);
+		tglbtnNewToggleButton.setBounds(797, 11, 65, 61);
 		contentPane.add(tglbtnNewToggleButton);
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+
+		
+		lblCategory = new JLabel();
+		lblCategory.setText((String) null);
+		lblCategory.setFont(new Font("Arial", Font.PLAIN, 16));
+		lblCategory.setBounds(35, 146, 333, 27);
+		contentPane.add(lblCategory);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(35, 203, 805, 356);
+		contentPane.add(panel);
+		panel.setLayout(new BorderLayout(0, 0));
+		
+		 textArea = new JTextArea();
+		 textArea.setDisabledTextColor(new Color(0, 0, 0));
+		 textArea.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		textArea.setEditable(false);
+		panel.add(textArea);
+		
+		JScrollPane scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		panel.add(scroll);
 	}
 
 	private ImageIcon getImageByURL(String imageName) {
 		var imageUrl = ItemVocab.class.getResource("/vocabulary/" + imageName);
 		if (imageUrl != null) {
 			try {
-				final int ROW_HEIGHT = 200;
+				final int ROW_HEIGHT = 180;
 				BufferedImage bimg = ImageIO.read(imageUrl);
 				int imgWidth = bimg.getWidth();
 				int imgHeight = bimg.getHeight();
@@ -189,4 +277,11 @@ public class FrameDetailVocab extends JFrame {
 		}
 		return null;
 	}
+
+	private String toCapitalize(String str) {
+		if (str.length() <= 0)
+			return str;
+		return str.substring(0, 1).toUpperCase() + str.substring(1);
+	}
+
 }

@@ -95,27 +95,35 @@ public class UserService {
 
 		LocalDate dobFormatted = null;
 		
-		if (!dob.equals("")) {
-			try {
-				dobFormatted = LocalDate.parse(dob, DateTimeFormatter.ofPattern("[yyyy-MM-dd]"));
-			} catch (Exception e) {
-				ErrorMessage.ERROR_MESSAGES = "Định dạng ngày sinh không đúng! [yyyy-MM-dd]";
+		try {
+			if (!dob.equals("")) {
+				try {
+					dobFormatted = LocalDate.parse(dob, DateTimeFormatter.ofPattern("[yyyy-MM-dd]"));
+				} catch (Exception e) {
+					ErrorMessage.ERROR_MESSAGES = "Định dạng ngày sinh không đúng! [yyyy-MM-dd]";
+					return false;
+				}
+			} else if (
+					fullname.equals(originalUser.getFullname()) && 
+					phone.equals(originalUser.getPhoneNumber()) &&
+					(
+					dobFormatted == originalUser.getDateOfBirth() ||
+					dobFormatted.equals( (originalUser.getDateOfBirth() == null) ? null :  originalUser.getDateOfBirth())
+					) &&
+					password.equals("")) {
+				ErrorMessage.ERROR_MESSAGES = "Bạn phải thay đổi thông tin mới có thể cập nhật";
+				return false;
+			} else if (!fullname.equals("") && !Validation.checkLength(fullname, 1, 200)) {
+				ErrorMessage.ERROR_MESSAGES = "Độ dài Họ và tên tối đa 200 ký tự";
+				return false;
+			} else if (!phone.equals("") && !Validation.checkLength(phone, 1, 11)) {
+				ErrorMessage.ERROR_MESSAGES = "Độ dài số điện thoại tối đa 11 ký tự";
 				return false;
 			}
-		} else if (
-				fullname.equals(originalUser.getFullname()) && 
-				phone.equals(originalUser.getPhoneNumber()) &&
-				dobFormatted.equals( (originalUser.getDateOfBirth() == null) ? "" :  originalUser.getDateOfBirth()) &&
-				password.equals("")) {
-			ErrorMessage.ERROR_MESSAGES = "Bạn phải thay đổi thông tin mới có thể cập nhật";
-			return false;
-		} else if (!fullname.equals("") && !Validation.checkLength(fullname, 1, 200)) {
-			ErrorMessage.ERROR_MESSAGES = "Độ dài Họ và tên tối đa 200 ký tự";
-			return false;
-		} else if (!phone.equals("") && !Validation.checkLength(phone, 1, 11)) {
-			ErrorMessage.ERROR_MESSAGES = "Độ dài số điện thoại tối đa 11 ký tự";
-			return false;
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
+		
 
 		User newUser = new User(email, null, level, fullname, phone, dobFormatted);
 		newUser.setId(userId);

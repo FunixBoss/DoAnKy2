@@ -1,6 +1,7 @@
 package item;
 
 import java.awt.Color;
+import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
@@ -15,6 +16,7 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -95,8 +97,9 @@ public class ItemCategory extends JPanel {
 		btnDetail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FrameListCategory detail = new FrameListCategory(cate.getId());
+				Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+				detail.setLocation(dim.width/2-detail.getSize().width/2, dim.height/2-detail.getSize().height/2);
 				detail.setVisible(true);
-				detail.setLocation(100,150);
 			}
 		});
 		btnDetail.setForeground(Color.WHITE);
@@ -115,8 +118,9 @@ public class ItemCategory extends JPanel {
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FrameUpdateCategory fr = new FrameUpdateCategory(cate);
+				Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+				fr.setLocation(dim.width/2-fr.getSize().width/2, dim.height/2-fr.getSize().height/2);
 				fr.setVisible(true);
-				fr.setLocation(500, 250);
 			}
 		});
 		btnEdit.setBounds(44, 25, 73, 30);

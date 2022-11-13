@@ -81,7 +81,7 @@ DROP PROC IF EXISTS updatePasswordInfoUser
 GO
 CREATE PROC updatePasswordInfoUser
 @id INT ,
-@password NVARCHAR(50)
+@password NVARCHAR(200)
 AS 
 BEGIN 
 	UPDATE [USER] 
