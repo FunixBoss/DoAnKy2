@@ -9,9 +9,11 @@
 		<maven.compiler.target>1.17</maven.compiler.target>
 	</properties>
 	<modules>
-		<module>presentationlayer</module>
-		<module>businesslogiclayer</module>
-		<module>datalayer</module>
+		<module>views</module>
+		<module>service</module>
+		<module>dao</module>
+		<module>persistence-data</module>
+		<module>utils</module>
 	</modules>
 	<dependencies>
 		<dependency>
