@@ -11,7 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
-import admin.update.FrameUpdateMember;
 import entity.User;
 import service.UserService;
 
@@ -54,43 +53,6 @@ public class ItemUser extends JPanel {
 		panel_1.add(lblID);
 		lblID.setText(user.getId().toString());
 
-		JPanel panel_1_1 = new JPanel();
-		panel_1_1.setLayout(null);
-		panel_1_1.setBackground(new Color(255, 255, 255));
-		panel_1_1.setBounds(898, 0, 95, 50);
-		panelHeader.add(panel_1_1);
-
-		JButton btnDelete = new JButton("Xóa");
-		btnDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				do_btnDelete_actionPerformed(e, user);
-			}
-		});
-		btnDelete.setBorder(null);
-		btnDelete.setForeground(Color.WHITE);
-		btnDelete.setFont(new Font("Arial", Font.BOLD, 14));
-		btnDelete.setBackground(new Color(205, 16, 64));
-		btnDelete.setBounds(0, 10, 60, 30);
-		panel_1_1.add(btnDelete);
-
-		JPanel panel_1_1_1 = new JPanel();
-		panel_1_1_1.setLayout(null);
-		panel_1_1_1.setBackground(new Color(255, 255, 255));
-		panel_1_1_1.setBounds(798, 0, 100, 50);
-		panelHeader.add(panel_1_1_1);
-
-		JButton btnEdit = new JButton("Sửa ");
-		btnEdit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				do_btnEdit_actionPerformed(e, user);
-			}
-		});
-		btnEdit.setBorder(null);
-		btnEdit.setForeground(new Color(255, 255, 255));
-		btnEdit.setBackground(new Color(67, 98, 190));
-		btnEdit.setFont(new Font("Arial", Font.BOLD, 14));
-		btnEdit.setBounds(15, 10, 60, 30);
-		panel_1_1_1.add(btnEdit);
 
 		JPanel panel_1_2 = new JPanel();
 		panel_1_2.setLayout(null);
@@ -105,29 +67,7 @@ public class ItemUser extends JPanel {
 		panel_1_2.add(lblEmail);
 		lblEmail.setText(user.getEmail());
 
-		JPanel panel_1_2_1 = new JPanel();
-		panel_1_2_1.setLayout(null);
-		panel_1_2_1.setBackground(new Color(255, 255, 255));
-		panel_1_2_1.setBounds(325, 0, 195, 50);
-		panelHeader.add(panel_1_2_1);
-
 	}
 
-	protected void do_btnEdit_actionPerformed(ActionEvent e, User user) {
-		FrameUpdateMember fr = new FrameUpdateMember(user);
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		fr.setLocation(dim.width/2-fr.getSize().width/2, dim.height/2-fr.getSize().height/2);
-		fr.setVisible(true);
-	}
 
-	protected void do_btnDelete_actionPerformed(ActionEvent e, User user) {
-		int option = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn xóa user này?", "Xóa user",
-				JOptionPane.YES_NO_OPTION);
-		if (option == JOptionPane.YES_OPTION) {
-			userService = new UserService();
-			if (userService.delete(user)) {
-				JOptionPane.showMessageDialog(this, "Xoá User thành công!");
-			}
-		}
-	}
 }

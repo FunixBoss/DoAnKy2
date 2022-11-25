@@ -15,7 +15,7 @@ import entity.Bookmark;
 import entity.Category;
 import entity.Example;
 import entity.Meaning;
-import entity.Relatives;
+import entity.RelativeWord;
 import entity.Vocabulary;
 import img.IconImage;
 import jaco.mp3.player.MP3Player;
@@ -62,33 +62,28 @@ public class PanelDetailVocab extends JPanel {
 		if(cate!=null) {
 			lblCategory.setText("Thể loại: " + cate.getName());
 		}
-		
 
 		bookmarkFeature(vocab);
 		
 		
 		List<Meaning> meanings = new VocabularyDAOImpl().selectAllMeaningByVocabId(vocab.getId());
 		StringBuffer txt = new StringBuffer();
-		if(meanings!=null) {
-			for(Meaning mn : meanings) {
-				txt.append(mn.getContent() + "\n    ");
-				if(!mn.getContent().isEmpty()) {
-					List<Example> examples = new MeaningDAOImpl().selectAllExampleByMeaningId(mn.getId());
-					if(examples!=null) {
-						for(Example ex : examples){
-							if(!ex.getContent().isEmpty()) {
-								txt.append(ex.getContent() + "\n    ");
-								txt.append("=>" + ex.getMeaning());
-							}
-						}
+		for(Meaning mn : meanings) {
+			txt.append(mn.getContent() + "\n    ");
+			if(!mn.getContent().isEmpty()) {
+				List<Example> examples = new MeaningDAOImpl().selectAllExampleByMeaningId(mn.getId());
+				for(Example ex : examples){
+					if(!ex.getContent().isEmpty()) {
+						txt.append(ex.getContent() + "\n    ");
+						txt.append("=>" + ex.getMeaning());
 					}
-					txt.append("\n");
 				}
+				txt.append("\n");
 			}
 		}
 		
 		String relativesStr = "";
-		List<Relatives> relatives = new VocabularyDAOImpl().selectAllRelativesByVocabId(vocab.getId());
+		List<RelativeWord> relatives = new VocabularyDAOImpl().selectAllRelativesByVocabId(vocab.getId());
 		if(relatives!=null) {
 			relativesStr = relatives.stream()
 							.map(rel -> rel.getWord().toString())
@@ -100,13 +95,6 @@ public class PanelDetailVocab extends JPanel {
 			}
 		}
 		textArea.setText(txt.toString());
-		
-	
-		
-		
-		
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
 	}
 
 	private void bookmarkFeature(Vocabulary vocab) {
@@ -228,6 +216,8 @@ public class PanelDetailVocab extends JPanel {
 		
 		JScrollPane scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panel.add(scroll);
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
 	}
 
 	private ImageIcon getImageByURL(String imageName) {

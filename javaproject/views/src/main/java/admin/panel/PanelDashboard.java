@@ -12,7 +12,6 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import admin.item.ItemCard;
 import admin.item.ItemVocabDashboard;
-import admin.update.FrameUpdateMember;
 import dao.impl.CategoryDAOImpl;
 import dao.impl.UserDAOImpl;
 import dao.impl.VocabularyDAOImpl;
@@ -230,10 +229,6 @@ public class PanelDashboard extends JPanel {
 		if(Authorization.email != null) {
 			UserDAOImpl userDao = new UserDAOImpl();
 			int id = UserDAOImpl.getIdFromDbByAccount(Authorization.email);
-			FrameUpdateMember updateMem = new FrameUpdateMember(userDao.select(id));
-			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-			updateMem.setLocation(dim.width/2-updateMem.getSize().width/2, dim.height/2-updateMem.getSize().height/2);
-			updateMem.setVisible(true);
 		}else {
 			FrameSignIn login = new FrameSignIn();
 			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

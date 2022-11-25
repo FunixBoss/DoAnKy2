@@ -53,9 +53,6 @@ public class FrameUpdateMember extends JFrame {
 		this.user = user;
 		userService = new UserService();
 		textEmail.setText(user.getEmail());
-		textFullname.setText(user.getFullname());
-		textPhone.setText(user.getPhoneNumber());
-		textDob.setText(user.getDateOfBirth() == null ? "" : user.getDateOfBirth().toString());
 		
 	}
 	
