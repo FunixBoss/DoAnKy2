@@ -272,8 +272,8 @@ public class PanelVocab extends JPanel {
 	}
 
 	private int loadData() {
-		if(dao.getList() != null) {
-			dao.getList().clear();
+		if(dao.selectAll() != null) {
+			dao.selectAll().clear();
 			panel.removeAll();
 			totalOfRows = dao.countNumberOfVocab();
 			totalPage = (int) Math.ceil((double)totalOfRows / rowsOfPage);

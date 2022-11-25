@@ -194,20 +194,6 @@ public class FrameInsertMember extends JFrame {
 		passwordResetPassword.setBounds(186, 220, 239, 38);
 		contentPane.add(passwordResetPassword);
 		
-		lblFullname = new JLabel("Họ và Tên");
-		lblFullname.setForeground(Color.BLACK);
-		lblFullname.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblFullname.setBounds(466, 103, 102, 21);
-		contentPane.add(lblFullname);
-		
-		textFullname = new JTextField();
-		textFullname.setMargin(new Insets(2, 6, 2, 2));
-		textFullname.setHorizontalAlignment(SwingConstants.LEFT);
-		textFullname.setFont(new Font("Arial", Font.PLAIN, 14));
-		textFullname.setColumns(10);
-		textFullname.setBackground(Color.WHITE);
-		textFullname.setBounds(589, 94, 239, 38);
-		contentPane.add(textFullname);
 	}
 	protected void doBtnResetActionPerformed(ActionEvent e) {
 		textEmail.setText("");
@@ -221,9 +207,6 @@ public class FrameInsertMember extends JFrame {
 		data.put("email", textEmail.getText());
 		data.put("password", new String(passwordFieldPassword.getPassword()));
 		data.put("confirmPassword", new String(passwordResetPassword.getPassword()));
-		data.put("fullname", textFullname.getText());
-		data.put("phone", textPhone.getText());
-		data.put("dob", textDob.getText());
 		data.put("level", "2");
 		
 		if(userService.add(data)) {

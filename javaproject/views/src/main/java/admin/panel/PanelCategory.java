@@ -252,8 +252,8 @@ public class PanelCategory extends JPanel {
 	}
 
 	private void loadData() {
-		if(dao.getList() != null) {
-			dao.getList().clear();
+		if(dao.selectAll() != null) {
+			dao.selectAll().clear();
 			panel.removeAll();
 			totalOfRows = dao.countNumberOfCate();
 			totalPage = (int) Math.ceil((double)totalOfRows / rowsOfPage);

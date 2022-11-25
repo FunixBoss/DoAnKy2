@@ -93,7 +93,7 @@ public class FrameSignIn extends JFrame {
 					if (ValidateLogin.checkAll(textFieldEmail, textFieldPassword, s)) {
 						User user = new User(account, password, 1);
 						if (UserDAOImpl.loginDb(user)) {
-							Authorization authInfoUser = new Authorization(account, password, user.getLevel());
+							Authorization authInfoUser = new Authorization(account, password, user.getRoleId());
 							dispose();
 							if(Authorization.loggedrole==1) {
 								FrameDashboard frame = new FrameDashboard();

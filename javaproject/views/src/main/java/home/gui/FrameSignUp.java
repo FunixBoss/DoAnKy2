@@ -215,7 +215,7 @@ public class FrameSignUp extends JFrame {
 		StringBuilder s = new StringBuilder();
 		try {
 			if (ValidateRegister.checkAll(textFieldEmail, textFieldPassword, textFieldPasswordConfirm, s)) {
-				User user = new User(email, password, User.getUserLevel());
+				User user = new User(email, password, User.USER_ROLE);
 				if (new UserDAOImpl().insert(user) == 1) {
 					JOptionPane.showMessageDialog(null, "Bạn Đã Đăng Kí Thành Công");
 				}
