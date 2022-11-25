@@ -350,7 +350,7 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 	}
 
 	@Override
-	public List<User> selectByPages(int pageNumber, int rowOfPages) {
+	public List<User> selectUserByPages(int pageNumber, int rowOfPages) {
 		List<User> list = new ArrayList<>();
 		User user;
 		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
@@ -417,7 +417,7 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Select User By Pages Failed");
+			System.out.println("Select Admin By Pages Failed");
 		}
 		return list;
 	}

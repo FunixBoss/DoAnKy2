@@ -27,9 +27,15 @@ public class PanelLesson extends JPanel {
 	private JComboBox cbbNumberOfRows;
 	private JTextField txtPage;
 
-	/**
-	 * Create the panel.
-	 */
+	private static PanelLesson myInstance;
+	
+	public static PanelLesson getMyInstance() {
+		if (myInstance == null) {
+			myInstance = new PanelLesson();
+		}
+		return myInstance;
+	}
+	
 	public PanelLesson() {
 		initComponent();
 		printTopPageComponent();

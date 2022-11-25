@@ -19,6 +19,7 @@ import admin.insert.FrameInsertMember;
 import admin.item.ItemUser;
 import dao.impl.UserDAOImpl;
 import entity.User;
+import helper.FrameUtils;
 
 public class PanelMember extends JPanel {
 	private JLabel lblStatusPage;
@@ -35,13 +36,21 @@ public class PanelMember extends JPanel {
 	private JTextField txtPage;
 	private JComboBox cbbNumberOfRows;
 
+	private static PanelMember myInstance;
+	
+	public static PanelMember getMyInstance() {
+		if (myInstance == null) {
+			myInstance = new PanelMember();
+		}
+		return myInstance;
+	}
+	
 	public PanelMember() {
 		initComponent();
 		dao = new UserDAOImpl();
 		pageNumber = 1;
 		rowsOfPage = dao.countNumberOfUser() > 10 ? 10 : dao.countNumberOfUser();
-		printTopPageComponent();
-		printControllComponent();
+		
 		loadData();
 	}
 	private void initComponent() {
@@ -62,6 +71,8 @@ public class PanelMember extends JPanel {
 		panel = new JPanel();
 		panel.setLayout(null);
 		panel.setBackground(Color.WHITE);
+		printTopPageComponent();
+		printControllComponent();
 	}
 	private void printTopPageComponent() {
 		JLabel lblBreadcrumb = new JLabel("Trang chủ / Thành viên");
@@ -259,35 +270,31 @@ public class PanelMember extends JPanel {
 	
 	
 	private void loadData() {
-		if(dao.getList(2) != null) {
-			dao.getList(2).clear();
-			panel.removeAll();
-			totalOfRows = dao.countNumberOfUser();
-			totalPage = (int) Math.ceil((double) totalOfRows / rowsOfPage);
-			lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
-			lblRowCount.setText("Số dòng: " + totalOfRows);
-			panel.setPreferredSize(new Dimension(975, rowsOfPage * 63));
+		totalOfRows = dao.countNumberOfUser();
+		totalPage = (int) Math.ceil((double) totalOfRows / rowsOfPage);
+		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
+		lblRowCount.setText("Số dòng: " + totalOfRows);
+		
+		final int ITEM_HEIGHT = 63;
+		Integer tableHeigth = Math.min(ITEM_HEIGHT * rowsOfPage, ITEM_HEIGHT * totalOfRows);
+		Dimension dim = new Dimension(975, tableHeigth);
+		panel.setPreferredSize(dim);
+		scrollPane.setViewportView(panel);
+		
+		panel.removeAll();
+		printTitleComponent(panel);
 
-			int y = 40;
-			printTitleComponent(panel);
-			scrollPane.setViewportView(panel);
-			for(User user : dao.selectByPages(pageNumber, rowsOfPage)){
-				ItemUser userItem = new ItemUser(user, y);			
-				panel.add(userItem);
-				y = y + 60;
-			}	
-		} else {
-			JLabel noData = new JLabel("No Data");
-			noData.setBounds(0, 0, 50, 50);
-			panel.add(noData);
-		}
-			
+		int y = 40;		
+		for(User user : dao.selectUserByPages(pageNumber, rowsOfPage)){
+			ItemUser userItem = new ItemUser(user, y);			
+			panel.add(userItem);
+			y = y + 60;
+		}	
 	}
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
 		FrameInsertMember frame = FrameInsertMember.getMyInstance();
 		if(!frame.isVisible()) {
-			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-			frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+			FrameUtils.alignFrameScreenCenter(frame);
 			frame.setVisible(true);
 		}
 	}
@@ -300,7 +307,7 @@ public class PanelMember extends JPanel {
 					pageNumber = page;
 					loadData();
 				} else {
-					JOptionPane.showMessageDialog(null, "page must be 1 to " + (int) Math.ceil(totalPage));
+					JOptionPane.showMessageDialog(null, "Số trang chỉ được nhập từ 1 đến " + (int) Math.ceil(totalPage));
 					txtPage.setText(pageNumber.toString());
 				}
 				

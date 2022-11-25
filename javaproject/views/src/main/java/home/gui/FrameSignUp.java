@@ -18,9 +18,10 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import dao.impl.UserDAOImpl;
 import entity.User;
-import helper.ValidateRegister;
 import img.IconImage;
 import service.Register;
+import service.ValidateRegister;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;

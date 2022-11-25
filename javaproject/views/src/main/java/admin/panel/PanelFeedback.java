@@ -24,9 +24,16 @@ public class PanelFeedback extends JPanel {
 	private JLabel lblRowCount;
 	private JComboBox cbbNumberOfRows;
 	private JTextField txtPage;
-	/**
-	 * Create the panel.
-	 */
+	
+	private static PanelFeedback myInstance;
+	
+	public static PanelFeedback getMyInstance() {
+		if (myInstance == null) {
+			myInstance = new PanelFeedback();
+		}
+		return myInstance;
+	}
+	
 	private ItemFeedback item;
 	private JPanel panelMain;
 	public PanelFeedback() {

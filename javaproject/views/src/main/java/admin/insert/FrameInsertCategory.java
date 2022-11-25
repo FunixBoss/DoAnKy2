@@ -24,6 +24,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import helper.ErrorMessage;
+import helper.FrameUtils;
+import helper.ImageUtils;
 import service.CategoryService;
 import java.awt.BorderLayout;
 import javax.swing.SwingConstants;
@@ -36,10 +38,10 @@ public class FrameInsertCategory extends JFrame {
 	private JTextField textCategory;
 	private CategoryService cateService;
 	private JLabel lblImageShow;
-	private static FrameInsertCategory myInstance;
 	private JPanel panelImageShow;
 	private Map<String, String> data;
 	
+	private static FrameInsertCategory myInstance;
 	
 	public static FrameInsertCategory getMyInstance() {
 		if (myInstance == null) {
@@ -50,8 +52,9 @@ public class FrameInsertCategory extends JFrame {
 	
 	public FrameInsertCategory() {
 		initComponent();
+		FrameUtils.alignFrameScreenCenter(this);
 		data = new HashMap<>();
-		cateService = new CategoryService();
+
 	}
 
 	private void initComponent() {
@@ -134,6 +137,7 @@ public class FrameInsertCategory extends JFrame {
 		lblImageShow.setForeground(new Color(0, 0, 0));
 		lblImageShow.setBackground(new Color(192, 192, 192));
 	}
+	
 	protected void do_btnImage_actionPerformed(ActionEvent e) throws URISyntaxException, IOException {
 		JFileChooser chooser = new JFileChooser("desktop://");
 		chooser.setDialogTitle("Hình ảnh");
@@ -143,32 +147,20 @@ public class FrameInsertCategory extends JFrame {
 		chooser.setAcceptAllFileFilterUsed(false);
 		int result = chooser.showOpenDialog( null);
 		File rawFile = null;
+		
 		if(result == chooser.APPROVE_OPTION) {
 			rawFile = chooser.getSelectedFile();
-			lblImageShow.setIcon(getImageByURL(rawFile.getAbsoluteFile()));
+			final int ROW_HEIGHT = 171;
+			
+			lblImageShow.setIcon(ImageUtils.getImageByFile(rawFile.getAbsoluteFile(), ROW_HEIGHT));
 			data.put("image", rawFile.toPath().toString());
 		}
 	}
 	
-	private ImageIcon getImageByURL(File f) {
-		if (f != null) {
-			try {
-				final int ROW_HEIGHT = 171;
-				BufferedImage bimg = ImageIO.read(f);
-				int imgWidth = bimg.getWidth();
-				int imgHeight = bimg.getHeight();
-				int rowWidth = (ROW_HEIGHT * imgWidth) / imgHeight;
-				return new ImageIcon(
-						new ImageIcon(f.getAbsolutePath()).getImage().getScaledInstance(rowWidth, ROW_HEIGHT, Image.SCALE_SMOOTH));
-			} catch (Exception e) {
-			}
-		}
-		return null;
-	}
-	
-	
 	protected void btnAddActionPerformed(ActionEvent e) {
+		cateService = new CategoryService();
 		data.put("category", textCategory.getText());
+		
 		if(cateService.add(data)) {
 			JOptionPane.showMessageDialog(this, "Thêm chủ đề thành công");
 			dispose();

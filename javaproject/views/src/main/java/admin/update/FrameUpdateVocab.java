@@ -38,6 +38,8 @@ import entity.Meaning;
 import entity.RelativeWord;
 import entity.Vocabulary;
 import helper.ErrorMessage;
+import helper.FrameUtils;
+import helper.ImageUtils;
 import jaco.mp3.player.MP3Player;
 import service.CategoryService;
 import service.UserService;
@@ -61,60 +63,32 @@ import java.awt.GridLayout;
 import javax.swing.ScrollPaneConstants;
 
 public class FrameUpdateVocab extends JFrame {
-
-	private JPanel contentPane;
-	private JTextField textWord;
-	private JTextArea textExample3;
-	private JTextArea textExample1;
-	private JTextArea textExample2;
-	private JLabel lblNewLabel;
-	private JLabel lblWord;
-	private JButton btnAdd;
-	private JLabel lblWordType;
-	private JComboBox<String> comboWordType;
-	private JPanel panel;
-	private JLabel lblPronunciation;
-	private JLabel lblImage;
-	private JButton btnImage;
-	private JButton btnPronunciation;
-	private Panel panelMeaning1;
-	private Panel panelMeaning2;
-	private Panel panelMeaning3;
-	private Panel panelExample1;
-	private Panel panelExample2;
-	private Panel panelExample3;
-	private JLabel lblMeaning1;
-	private JLabel lblMeaning2;
-	private JLabel lblMeaning3;
-	private JLabel lblExample1;
-	private JLabel lblIExample2;
-	private JLabel lblExample3;
-	private JPanel panelShowImage;
-	private JLabel lblShowImage;
-	
 	private static String pronunciationURL = null;
 	private static MP3Player mp3 = null;
+	
 	private VocabularyService vocabService;
 	private VocabularyDAOImpl vocabDao;
-	private static Map<String, String> data;
-
+	private Map<String, String> data;
 	private static FrameUpdateVocab myInstance;
-	private JTextField textRelatives;
-	private JLabel lblRelatives;
-	private JLabel lblCategory;
-	private JComboBox<String> comboCategory;
-	private JTextField textMeaning1;
-	private JTextField textMeaning2;
-	private JTextField textMeaning3;
-	private JButton btnPlaySound;
-	private JPanel panel_1;
-	private JButton btnStopSound;
-
+	
+	public static FrameUpdateVocab getMyInstance(Vocabulary vocab) {
+		if (myInstance == null) {
+			myInstance = new FrameUpdateVocab(vocab);
+		}
+		return myInstance;
+	}
 
 	public FrameUpdateVocab(Vocabulary vocab) {
 		initComponent();
+		FrameUtils.alignFrameScreenCenter(this);
+
 		data = new HashMap<>();
 		data.put("id", Integer.toString(vocab.getId()));
+		
+		loadData(vocab);
+	}
+
+	private void loadData(Vocabulary vocab) {
 		vocabService = new VocabularyService();
 		vocabDao = new VocabularyDAOImpl();
 		textWord.setText(vocab.getWord());
@@ -174,22 +148,16 @@ public class FrameUpdateVocab extends JFrame {
 		}
 		
 		if(vocab.getImage() != null) {
-			lblShowImage.setIcon(getImageByURL(vocab.getImage()));
+			final int ROW_HEIGHT = 170;
+			lblShowImage.setIcon(ImageUtils.getImageByURL("vocabulary", vocab.getImage(), ROW_HEIGHT));
 		}
 		
 		if(vocab.getPronunciation() != null) {
 			pronunciationURL = System.getProperty("user.dir") + "/src/main/resources/pronunciation/" + vocab.getPronunciation();
 		}
-		
-		
 	}
 
-	public static FrameUpdateVocab getMyInstance(Vocabulary vocab) {
-		if (myInstance == null) {
-			myInstance = new FrameUpdateVocab(vocab);
-		}
-		return myInstance;
-	}
+	
 
 	private void initComponent() {
 		setResizable(false);
@@ -435,7 +403,8 @@ public class FrameUpdateVocab extends JFrame {
 		CategoryDAOImpl cateDao = new CategoryDAOImpl();
 		comboCategory.addItem(null);
 		cateDao.selectAll().forEach(
-				pro -> comboCategory.addItem(pro.getName().substring(0, 1).toUpperCase() + pro.getName().substring(1)));
+				pro -> comboCategory.addItem(
+						pro.getName().substring(0, 1).toUpperCase() + pro.getName().substring(1)));
 		comboCategory.setFont(new Font("Arial", Font.PLAIN, 16));
 		comboCategory.setBackground(Color.WHITE);
 		comboCategory.setBounds(140, 214, 479, 38);
@@ -473,7 +442,8 @@ public class FrameUpdateVocab extends JFrame {
 		File f = null;
 		if (result == chooser.APPROVE_OPTION) {
 			f = chooser.getSelectedFile();
-			lblShowImage.setIcon(getImageByURL(f));
+			final int ROW_HEIGHT = 171;
+			lblShowImage.setIcon(ImageUtils.getImageByFile(f, ROW_HEIGHT));
 			data.put("image", f.toPath().toString());
 		}
 	}
@@ -493,41 +463,7 @@ public class FrameUpdateVocab extends JFrame {
 		}
 	}
 	
-	private ImageIcon getImageByURL(File f) {
-		if (f != null) {
-			try {
-				final int ROW_HEIGHT = 170;
-				BufferedImage bimg = ImageIO.read(f);
-				int imgWidth = bimg.getWidth();
-				int imgHeight = bimg.getHeight();
-				int rowWidth = (ROW_HEIGHT * imgWidth) / imgHeight;
-				return new ImageIcon(new ImageIcon(f.getAbsolutePath()).getImage().getScaledInstance(rowWidth,
-						ROW_HEIGHT, Image.SCALE_SMOOTH));
-			} catch (Exception e) {
-			}
-		}
-		return null;
-	}
 	
-	private ImageIcon getImageByURL(String imageName) {
-		var imageUrl = getClass().getResource("/vocabulary/" + imageName);
-//		System.out.println(imageUrl);
-		if (imageUrl != null) {
-			try {
-				final int ROW_HEIGHT = 171;
-				BufferedImage bimg = ImageIO.read(imageUrl);
-				int imgWidth = bimg.getWidth();
-				int imgHeight = bimg.getHeight();
-				int rowWidth = (ROW_HEIGHT * imgWidth) / imgHeight;
-				return new ImageIcon(
-						new ImageIcon(imageUrl).getImage().getScaledInstance(rowWidth, ROW_HEIGHT, Image.SCALE_SMOOTH));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-		}
-		return null;
-	}
 	
 	protected void btnPlaySoundActionPerformed(ActionEvent e) {
 		if(pronunciationURL == null) {
@@ -569,4 +505,44 @@ public class FrameUpdateVocab extends JFrame {
 	private static String toCapitalize(String str) {
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
+	
+	private JPanel contentPane;
+	private JTextField textWord;
+	private JTextArea textExample3;
+	private JTextArea textExample1;
+	private JTextArea textExample2;
+	private JLabel lblNewLabel;
+	private JLabel lblWord;
+	private JButton btnAdd;
+	private JLabel lblWordType;
+	private JComboBox<String> comboWordType;
+	private JPanel panel;
+	private JLabel lblPronunciation;
+	private JLabel lblImage;
+	private JButton btnImage;
+	private JButton btnPronunciation;
+	private Panel panelMeaning1;
+	private Panel panelMeaning2;
+	private Panel panelMeaning3;
+	private Panel panelExample1;
+	private Panel panelExample2;
+	private Panel panelExample3;
+	private JLabel lblMeaning1;
+	private JLabel lblMeaning2;
+	private JLabel lblMeaning3;
+	private JLabel lblExample1;
+	private JLabel lblIExample2;
+	private JLabel lblExample3;
+	private JPanel panelShowImage;
+	private JLabel lblShowImage;
+	private JTextField textRelatives;
+	private JLabel lblRelatives;
+	private JLabel lblCategory;
+	private JComboBox<String> comboCategory;
+	private JTextField textMeaning1;
+	private JTextField textMeaning2;
+	private JTextField textMeaning3;
+	private JButton btnPlaySound;
+	private JPanel panel_1;
+	private JButton btnStopSound;
 }

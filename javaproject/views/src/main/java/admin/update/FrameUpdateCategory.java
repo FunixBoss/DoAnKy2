@@ -35,6 +35,8 @@ import admin.item.ItemVocab;
 import dao.impl.CategoryDAOImpl;
 import entity.Category;
 import helper.ErrorMessage;
+import helper.FrameUtils;
+import helper.ImageUtils;
 import service.CategoryService;
 import java.awt.BorderLayout;
 import javax.swing.SwingConstants;
@@ -45,17 +47,18 @@ public class FrameUpdateCategory extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textCategory;
+	private JLabel lblImageShow;
+	private JPanel panelImageShow;
 	private JLabel lblTopic;
 	private JLabel lblCategory;
-	private JButton btnAdd;
-	private JButton btnReset;
-	private JPanel panel ;
+	private JButton btnUpdate;
+	private JPanel panel;
+	private JLabel lblImage;
 	private JButton btnImage;
-	private CategoryService cateService;
-	private JLabel lblImageShow;
-	private static FrameUpdateCategory myInstance;
-	private JPanel panelImageShow;
+	
 	private Map<String, String> data;
+	private CategoryService cateService;
+	private static FrameUpdateCategory myInstance;
 	
 	public static FrameUpdateCategory getMyInstance(Category category) {
 		if (myInstance == null) {
@@ -66,11 +69,15 @@ public class FrameUpdateCategory extends JFrame {
 	
 	public FrameUpdateCategory(Category category) {
 		initComponent();
+		FrameUtils.alignFrameScreenCenter(this);
+		
 		data = new HashMap<>();
-		data.put("id", Integer.toString(category.getId()));
 		cateService = new CategoryService();
+		data.put("id", Integer.toString(category.getId()));
+		
+		final int ROW_HEIGHT = 171;
 		textCategory.setText(category.getName());
-		lblImageShow.setIcon(getImageByURL(category.getImageIcon()));
+		lblImageShow.setIcon(ImageUtils.getImageByURL("category", category.getImageIcon(), ROW_HEIGHT));
 	}
 
 	private void initComponent() {
@@ -84,19 +91,19 @@ public class FrameUpdateCategory extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblTopic = new JLabel("Thêm chủ đề");
+		lblTopic = new JLabel("Thêm chủ đề");
 		lblTopic.setBounds(20, 11, 219, 34);
 		lblTopic.setForeground(new Color(37, 57, 111));
 		lblTopic.setFont(new Font("Arial", Font.BOLD, 20));
 		contentPane.add(lblTopic);
 		
-		JLabel lblCategory = new JLabel("Chủ đề");
+		lblCategory = new JLabel("Chủ đề");
 		lblCategory.setBounds(44, 97, 84, 21);
 		lblCategory.setForeground(Color.BLACK);
 		lblCategory.setFont(new Font("Arial", Font.PLAIN, 14));
 		contentPane.add(lblCategory);
 		
-		JButton btnUpdate = new JButton("Cập Nhật");
+		btnUpdate = new JButton("Cập Nhật");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnUpdateActionPerformed(e);
@@ -126,7 +133,6 @@ public class FrameUpdateCategory extends JFrame {
 				try {
 					do_btnImage_actionPerformed(e);
 				} catch (URISyntaxException | IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -153,6 +159,7 @@ public class FrameUpdateCategory extends JFrame {
 		lblImageShow.setForeground(new Color(0, 0, 0));
 		lblImageShow.setBackground(new Color(192, 192, 192));
 	}
+	
 	protected void do_btnImage_actionPerformed(ActionEvent e) throws URISyntaxException, IOException {
 		JFileChooser chooser = new JFileChooser("desktop://");
 		chooser.setDialogTitle("Hình ảnh");
@@ -164,45 +171,11 @@ public class FrameUpdateCategory extends JFrame {
 		File rawFile = null;
 		if(result == chooser.APPROVE_OPTION) {
 			rawFile = chooser.getSelectedFile();
-			lblImageShow.setIcon(getImageByFile(rawFile.getAbsoluteFile()));
+			final int ROW_HEIGHT = 171;
+			lblImageShow.setIcon(ImageUtils.getImageByFile(rawFile.getAbsoluteFile(), ROW_HEIGHT));
 			data.put("image", rawFile.toPath().toString());
 		}
 	}
-	
-	private ImageIcon getImageByFile(File f) {
-		if (f != null) {
-			try {
-				final int ROW_HEIGHT = 171;
-				BufferedImage bimg = ImageIO.read(f);
-				int imgWidth = bimg.getWidth();
-				int imgHeight = bimg.getHeight();
-				int rowWidth = (ROW_HEIGHT * imgWidth) / imgHeight;
-				return new ImageIcon(
-						new ImageIcon(f.getAbsolutePath()).getImage().getScaledInstance(rowWidth, ROW_HEIGHT, Image.SCALE_SMOOTH));
-			} catch (Exception e) {
-			}
-		}
-		return null;
-	}
-	
-	private ImageIcon getImageByURL(String imageName) {
-		var imageUrl = ItemCategory.class.getResource("/category/" + imageName);
-		if (imageUrl != null) {
-			try {
-				final int ROW_HEIGHT = 171;
-				BufferedImage bimg = ImageIO.read(imageUrl);
-				int imgWidth = bimg.getWidth();
-				int imgHeight = bimg.getHeight();
-				int rowWidth = (ROW_HEIGHT * imgWidth) / imgHeight;
-				return new ImageIcon(
-						new ImageIcon(imageUrl).getImage().getScaledInstance(rowWidth, ROW_HEIGHT, Image.SCALE_SMOOTH));
-			} catch (Exception e) {
-			}
-
-		}
-		return null;
-	}
-	
 	
 	protected void btnUpdateActionPerformed(ActionEvent e) {
 		data.put("category", textCategory.getText());

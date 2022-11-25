@@ -19,10 +19,13 @@ public class TestUserDAOImpl{
 //		System.out.println(selectAUser(3)); // done
 		
 //		System.out.println(insertAUser(user)); // done
-		System.out.println(updatePasswordUser(user2)); 
+//		System.out.println(updatePasswordUser(user2)); 
 //		System.out.println(deleteUser(selectAUser(9)));
 //		System.out.println(test.countNumberOfUser());
-//		test.selectByPages(3, 10).forEach(System.out::println);
+//		test.selectUserByPages(1, 10).forEach(System.out::println);
+//		test.selectAdminByPages(1, 10).forEach(System.out::println);
+		System.out.println(test.countNumberOfUser());
+
 	}
 	
 	public static void showListUser() {
@@ -51,10 +54,14 @@ public class TestUserDAOImpl{
 		return new UserDAOImpl().delete(user);
 	}
 
-	public List<User> selectByPages(int pageNumber, int rowOfPages) {
-		return new UserDAOImpl().selectByPages(pageNumber, rowOfPages);
+	public List<User> selectUserByPages(int pageNumber, int rowOfPages) {
+		return new UserDAOImpl().selectUserByPages(pageNumber, rowOfPages);
 	}
 
+	public List<User> selectAdminByPages(int pageNumber, int rowOfPages) {
+		return new UserDAOImpl().selectAdminByPages(pageNumber, rowOfPages);
+	}
+	
 	public Integer countNumberOfUser() {
 		return  new UserDAOImpl().countNumberOfUser();
 	}

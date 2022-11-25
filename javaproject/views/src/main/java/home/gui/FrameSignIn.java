@@ -19,11 +19,12 @@ import javax.swing.UIManager;
 import admin.gui.FrameDashboard;
 import dao.impl.UserDAOImpl;
 import entity.User;
-import helper.ValidateLogin;
 import img.IconImage;
 import helper.RegexPattern;
 import service.Authorization;
 import service.Login;
+import service.ValidateLogin;
+
 import java.awt.Dimension;
 import java.awt.EventQueue;
 

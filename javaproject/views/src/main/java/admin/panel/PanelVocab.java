@@ -14,10 +14,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import admin.insert.FrameInsertMember;
 import admin.insert.FrameInsertVocab;
 import admin.item.ItemVocab;
 import dao.impl.VocabularyDAOImpl;
 import entity.Vocabulary;
+import helper.FrameUtils;
+
 import java.awt.Dimension;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -37,14 +41,22 @@ public class PanelVocab extends JPanel {
 	private Integer totalPage;
 	private JTextField txtPage;
 	private JComboBox cbbNumberOfRows;
-
+	
+	private static PanelVocab myInstance;
+	
+	public static PanelVocab getMyInstance() {
+		if (myInstance == null) {
+			myInstance = new PanelVocab();
+		}
+		return myInstance;
+	}
+	
 	public PanelVocab() {
 		initComponent();
 		dao = new VocabularyDAOImpl();
 		pageNumber = 1;
 		rowsOfPage = dao.countNumberOfVocab() > 10 ? 10 : dao.countNumberOfVocab();
-		printTopPageComponent();
-		printControllComponent();
+		
 		loadData();
 	}
 
@@ -67,6 +79,8 @@ public class PanelVocab extends JPanel {
 		panel = new JPanel();
 		panel.setLayout(null);
 		panel.setBackground(Color.WHITE);
+		printTopPageComponent();
+		printControllComponent();
 	}
 
 
@@ -271,39 +285,36 @@ public class PanelVocab extends JPanel {
 		panel_1_1.add(lblXa);
 	}
 
-	private int loadData() {
-		if(dao.selectAll() != null) {
-			dao.selectAll().clear();
-			panel.removeAll();
-			totalOfRows = dao.countNumberOfVocab();
-			totalPage = (int) Math.ceil((double)totalOfRows / rowsOfPage);
-			lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
-			lblRowCount.setText("Số dòng: " + totalOfRows);
-			
-			
-			printTitleComponent(panel);
-			panel.setPreferredSize(new Dimension(975, rowsOfPage * 88));
-
-			int y = 40;
-			scrollPane.setViewportView(panel);
-			for(Vocabulary vocab : dao.selectByPages(pageNumber, rowsOfPage)){
-				ItemVocab vocabItem = new ItemVocab(vocab, y);			
-				panel.add(vocabItem);
-				y = y + 84;
-			}	
-		} else {
-			JLabel noData = new JLabel("No Data");
-			noData.setBounds(0, 0, 50, 50);
-			panel.add(noData);
-		}
-		return totalPage;
+	private void loadData() {
+		totalOfRows = dao.countNumberOfVocab();
+		totalPage = (int) Math.ceil((double)totalOfRows / rowsOfPage);
+		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
+		lblRowCount.setText("Số dòng: " + totalOfRows);
+		
+		
+		final int ITEM_HEIGHT = 88;
+		Integer tableHeigth = Math.min(ITEM_HEIGHT * rowsOfPage, ITEM_HEIGHT * totalOfRows);
+		Dimension dim = new Dimension(975, tableHeigth);
+		panel.setPreferredSize(dim);
+		scrollPane.setViewportView(panel);
+		
+		panel.removeAll();
+		printTitleComponent(panel);
+		int y = 40;
+		scrollPane.setViewportView(panel);
+		for(Vocabulary vocab : dao.selectByPages(pageNumber, rowsOfPage)){
+			ItemVocab vocabItem = new ItemVocab(vocab, y);			
+			panel.add(vocabItem);
+			y = y + 84;
+		}	
 	}
 	
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
-		FrameInsertVocab frame = new FrameInsertVocab();
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-		frame.setVisible(true);
+		FrameInsertVocab frame = FrameInsertVocab.getMyInstance();
+		if(!frame.isVisible()) {
+			FrameUtils.alignFrameScreenCenter(frame);
+			frame.setVisible(true);
+		}
 	}
 	
 	protected void txtPageActionPerformed(ActionEvent e) {
@@ -314,7 +325,7 @@ public class PanelVocab extends JPanel {
 					pageNumber = page;
 					loadData();
 				} else {
-					JOptionPane.showMessageDialog(null, "page must be 1 to " + (int) Math.ceil(totalPage));
+					JOptionPane.showMessageDialog(null, "Số trang chỉ được nhập từ 1 đến " + (int) Math.ceil(totalPage));
 					txtPage.setText(pageNumber.toString());
 				}
 				

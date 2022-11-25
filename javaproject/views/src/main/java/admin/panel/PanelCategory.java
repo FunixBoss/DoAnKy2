@@ -19,9 +19,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import admin.insert.FrameInsertCategory;
+import admin.insert.FrameInsertMember;
 import admin.item.ItemCategory;
 import dao.impl.CategoryDAOImpl;
 import entity.Category;
+import helper.FrameUtils;
 
 
 public class PanelCategory extends JPanel {
@@ -38,14 +40,22 @@ public class PanelCategory extends JPanel {
 	private Integer totalPage;
 	private JTextField txtPage;
 	private JComboBox cbbNumberOfRows;
-
+	
+	private static PanelCategory myInstance;
+	
+	public static PanelCategory getMyInstance() {
+		if (myInstance == null) {
+			myInstance = new PanelCategory();
+		}
+		return myInstance;
+	}	
+	
 	public PanelCategory() {
 		initComponent();
 		dao = new CategoryDAOImpl();
 		pageNumber = 1;
 		rowsOfPage =  dao.countNumberOfCate() > 10 ? 10 : dao.countNumberOfCate();
-		printTopPageComponent();
-		printControllComponent();		
+			
 		loadData();
 	}
 
@@ -69,6 +79,8 @@ public class PanelCategory extends JPanel {
 		panel = new JPanel();
 		panel.setLayout(null);
 		panel.setBackground(Color.WHITE);
+		printTopPageComponent();
+		printControllComponent();	
 	}
 
 
@@ -252,35 +264,34 @@ public class PanelCategory extends JPanel {
 	}
 
 	private void loadData() {
-		if(dao.selectAll() != null) {
-			dao.selectAll().clear();
-			panel.removeAll();
-			totalOfRows = dao.countNumberOfCate();
-			totalPage = (int) Math.ceil((double)totalOfRows / rowsOfPage);
-			lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
-			lblRowCount.setText("Số dòng: " + totalOfRows);
-			panel.setPreferredSize(new Dimension(975, rowsOfPage * 89));
-
-			int y = 40;
-			printTitleComponent(panel);
-			scrollPane.setViewportView(panel);
-			for(Category cate : dao.selectByPages(pageNumber, rowsOfPage)){
-				ItemCategory cateItem = new ItemCategory(cate, y);			
-				panel.add(cateItem);
-				y = y + 84;
-			}	
-		} else {
-			JLabel noData = new JLabel("No Data");
-			noData.setBounds(0, 0, 50, 50);
-			panel.add(noData);
-		}
+		totalOfRows = dao.countNumberOfCate();
+		totalPage = (int) Math.ceil((double)totalOfRows / rowsOfPage);
+		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
+		lblRowCount.setText("Số dòng: " + totalOfRows);
+		
+		final int ITEM_HEIGHT = 88;
+		Integer tableHeigth = Math.min(ITEM_HEIGHT * rowsOfPage, ITEM_HEIGHT * totalOfRows);
+		Dimension dim = new Dimension(975, tableHeigth);
+		
+		
+		panel.removeAll();
+		panel.setPreferredSize(dim);
+		scrollPane.setViewportView(panel);
+		printTitleComponent(panel);
+		int y = 40;
+		for(Category cate : dao.selectByPages(pageNumber, rowsOfPage)){
+			ItemCategory cateItem = new ItemCategory(cate, y);			
+			panel.add(cateItem);
+			y = y + 84;
+		}	
 	}
 	
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
-		FrameInsertCategory frame = new FrameInsertCategory();
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-		frame.setVisible(true);
+		FrameInsertCategory frame = FrameInsertCategory.getMyInstance();
+		if(!frame.isVisible()) {
+			FrameUtils.alignFrameScreenCenter(frame);
+			frame.setVisible(true);
+		}
 	}
 	
 	protected void txtPageActionPerformed(ActionEvent e) {
@@ -291,7 +302,7 @@ public class PanelCategory extends JPanel {
 					pageNumber = page;
 					loadData();
 				} else {
-					JOptionPane.showMessageDialog(null, "page must be 1 to " + (int) Math.ceil(totalPage));
+					JOptionPane.showMessageDialog(null, "Số trang chỉ được nhập từ 1 đến " + (int) Math.ceil(totalPage));
 					txtPage.setText(pageNumber.toString());
 				}
 				

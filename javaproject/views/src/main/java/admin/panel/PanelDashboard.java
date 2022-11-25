@@ -15,6 +15,7 @@ import admin.item.ItemVocabDashboard;
 import dao.impl.CategoryDAOImpl;
 import dao.impl.UserDAOImpl;
 import dao.impl.VocabularyDAOImpl;
+import helper.FrameUtils;
 import home.gui.FrameSignIn;
 import service.Authorization;
 import java.awt.GridLayout;
@@ -35,6 +36,14 @@ public class PanelDashboard extends JPanel {
 	private VocabularyDAOImpl dao; // data
 	private JLabel lblTop5;
 
+	private static PanelDashboard myInstance;
+	
+	public static PanelDashboard getMyInstance() {
+		if (myInstance == null) {
+			myInstance = new PanelDashboard();
+		}
+		return myInstance;
+	}	
 	public PanelDashboard() {
 		dao = new VocabularyDAOImpl();
 		initComponent();
@@ -58,7 +67,6 @@ public class PanelDashboard extends JPanel {
 			lblBreadcrumb = new JLabel(Authorization.email.toUpperCase());
 		}else {
 			lblBreadcrumb = new JLabel("Đăng Nhập".toUpperCase());
-			
 		}
 
 		lblBreadcrumb.setFont(new Font("Arial", Font.BOLD, 18));
@@ -200,27 +208,19 @@ public class PanelDashboard extends JPanel {
 	}
 	
 	public void loadData() {
-		if(dao.selectAll() != null) {
-			dao.selectAll().clear();
-			panelData.removeAll();
-			int totalVocabs = dao.countNumberOfVocab();
-			
-			printTitleComponent(panelData);
-			panelData.setPreferredSize(new Dimension(975, 5 * 70));
-			scrollPane.setViewportView(panelData);
-			int y = 40;
-			for(int i = totalVocabs - 5; i <= totalVocabs && i >= 0; i++) {
-				if(dao.select(i) != null) {
-					ItemVocabDashboard vocabItem = new ItemVocabDashboard(dao.select(i), y);			
-					panelData.add(vocabItem);
-					y = y + 67;
-				}
+		panelData.removeAll();
+		int totalVocabs = dao.countNumberOfVocab();
+		
+		printTitleComponent(panelData);
+		panelData.setPreferredSize(new Dimension(975, 5 * 70));
+		scrollPane.setViewportView(panelData);
+		int y = 40;
+		for(int i = totalVocabs - 5; i <= totalVocabs && i >= 0; i++) {
+			if(dao.select(i) != null) {
+				ItemVocabDashboard vocabItem = new ItemVocabDashboard(dao.select(i), y);			
+				panelData.add(vocabItem);
+				y = y + 67;
 			}
-
-		} else {
-			JLabel noData = new JLabel("No Data");
-			noData.setBounds(0, 0, 50, 50);
-			panelData.add(noData);
 		}
 	}
 	protected void lblTop5MouseClicked(MouseEvent e) {
@@ -231,8 +231,7 @@ public class PanelDashboard extends JPanel {
 			int id = UserDAOImpl.getIdFromDbByAccount(Authorization.email);
 		}else {
 			FrameSignIn login = new FrameSignIn();
-			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-			login.setLocation(dim.width/2-login.getSize().width/2, dim.height/2-login.getSize().height/2);
+			FrameUtils.alignFrameScreenCenter(login);
 			login.setVisible(true);
 		}
 			

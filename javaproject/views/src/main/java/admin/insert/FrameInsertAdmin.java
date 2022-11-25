@@ -3,6 +3,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import helper.ErrorMessage;
+import helper.FrameUtils;
 import service.UserService;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -30,23 +31,27 @@ public class FrameInsertAdmin extends JFrame {
 	private JLabel lblEmail;
 	private JLabel lblPassword ;
 	private JLabel lblResetPassword;
-	private JLabel lblPhone;
-	private JLabel lblDob;
 	private JLabel lblLevel;
 	private JTextField textEmail;
-	private JTextField textPhone;
-	private JTextField textDob;
 	private JTextField txtLevel;
 	private JButton btnAdd;
 	private JButton btnReset;
 	
 	private UserService userService;
-	private JLabel lblFullname;
-	private JTextField textFullname;
+	private Map<String, String> data;
+	private static FrameInsertAdmin myInstance;
+	
+	public static FrameInsertAdmin getMyInstance() {
+		if (myInstance == null) {
+			myInstance = new FrameInsertAdmin();
+		}
+		return myInstance;
+	}
 	
 	public FrameInsertAdmin() {
 		initComponent();
-		userService = new UserService();
+		FrameUtils.alignFrameScreenCenter(this);
+		data = new HashMap<>();		
 	}
 	
 	private void initComponent() {
@@ -100,38 +105,6 @@ public class FrameInsertAdmin extends JFrame {
 		lblResetPassword.setBounds(32, 229, 130, 21);
 		contentPane.add(lblResetPassword);
 		
-//		PHONE
-		lblPhone = new JLabel("Số điện thoại");
-		lblPhone.setForeground(Color.BLACK);
-		lblPhone.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblPhone.setBounds(466, 165, 102, 21);
-		contentPane.add(lblPhone);
-		
-		textPhone = new JTextField();
-		textPhone.setMargin(new Insets(2, 6, 2, 2));
-		textPhone.setHorizontalAlignment(SwingConstants.LEFT);
-		textPhone.setFont(new Font("Arial", Font.PLAIN, 14));
-		textPhone.setColumns(10);
-		textPhone.setBackground(Color.WHITE);
-		textPhone.setBounds(589, 157, 239, 38);
-		contentPane.add(textPhone);
-		
-//		DOB
-		lblDob = new JLabel("Ngày sinh");
-		lblDob.setForeground(Color.BLACK);
-		lblDob.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblDob.setBounds(466, 229, 102, 21);
-		contentPane.add(lblDob);
-		
-		textDob = new JTextField();
-		textDob.setMargin(new Insets(2, 6, 2, 2));
-		textDob.setHorizontalAlignment(SwingConstants.LEFT);
-		textDob.setFont(new Font("Arial", Font.PLAIN, 14));
-		textDob.setColumns(10);
-		textDob.setBackground(Color.WHITE);
-		textDob.setBounds(589, 221, 239, 38);
-		contentPane.add(textDob);
-		
 //		LEVEL
 		lblLevel = new JLabel("Chức vụ");
 		lblLevel.setForeground(Color.BLACK);
@@ -184,40 +157,22 @@ public class FrameInsertAdmin extends JFrame {
 		passwordResetPassword.setBounds(186, 220, 239, 38);
 		contentPane.add(passwordResetPassword);
 		
-		lblFullname = new JLabel("Họ và Tên");
-		lblFullname.setForeground(Color.BLACK);
-		lblFullname.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblFullname.setBounds(466, 103, 102, 21);
-		contentPane.add(lblFullname);
-		
-		textFullname = new JTextField();
-		textFullname.setMargin(new Insets(2, 6, 2, 2));
-		textFullname.setHorizontalAlignment(SwingConstants.LEFT);
-		textFullname.setFont(new Font("Arial", Font.PLAIN, 14));
-		textFullname.setColumns(10);
-		textFullname.setBackground(Color.WHITE);
-		textFullname.setBounds(589, 94, 239, 38);
-		contentPane.add(textFullname);
-		
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 	}
+	
+	
 	protected void doBtnResetActionPerformed(ActionEvent e) {
-		textEmail.setText("");
-		textPhone.setText("");
-		textDob.setText("");
 		passwordFieldPassword.setText(""); 
 		passwordResetPassword.setText("");
 	}
+	
+	
 	protected void btnAddActionPerformed(ActionEvent e) {
-		Map<String, String> data = new HashMap<>();
 		data.put("email", textEmail.getText());
 		data.put("password", new String(passwordFieldPassword.getPassword()));
 		data.put("confirmPassword", new String(passwordResetPassword.getPassword()));
-		data.put("fullname", textFullname.getText());
-		data.put("phone", textPhone.getText());
-		data.put("dob", textDob.getText());
-		data.put("level", "1");
+		data.put("level", "2");
+		
+		userService = new UserService();
 		boolean insert = userService.add(data);
 		if(insert) {
 			JOptionPane.showMessageDialog(this, "Thêm quản trị viên thành công");

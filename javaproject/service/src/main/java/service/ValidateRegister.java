@@ -1,4 +1,4 @@
-package helper;
+package service;
 
 import java.awt.Color;
 import java.util.Iterator;
@@ -13,7 +13,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import dao.impl.UserDAOImpl;
 import entity.User;
-import service.Register;
+import helper.RegexPattern;
 
 public class ValidateRegister {
 	public static boolean checkAll(JTextField textFieldEmail,JTextField textFieldPassword,JTextField textFieldPasswordConfirm,StringBuilder s) {

@@ -1,4 +1,4 @@
-package helper;
+package service;
 
 import java.awt.Color;
 import java.util.regex.Matcher;
@@ -6,8 +6,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.JTextField;
 
-import service.Login;
-import service.Register;
+import helper.RegexPattern;
 
 public class ValidateLogin {
 	public static boolean  checkEmail;

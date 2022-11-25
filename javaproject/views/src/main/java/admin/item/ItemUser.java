@@ -16,15 +16,8 @@ import service.UserService;
 
 public class ItemUser extends JPanel {
 
-	private JLabel lblPhone;
-	private JLabel lblDob;
-	private JLabel lblFullname;
 	private JLabel lblEmail;
-	private UserService userService;
 
-	/**
-	 * Create the panel.
-	 */
 	public ItemUser(User user, int y) {
 		setLayout(null);
 		setBounds(0, y, 995, 53);

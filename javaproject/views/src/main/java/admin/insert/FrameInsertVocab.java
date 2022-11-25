@@ -25,6 +25,8 @@ import admin.item.ItemMeaning;
 import dao.impl.CategoryDAOImpl;
 import dao.impl.WordTypeDAOImpl;
 import helper.ErrorMessage;
+import helper.FrameUtils;
+import helper.ImageUtils;
 import jaco.mp3.player.MP3Player;
 import service.VocabularyService;
 import javax.swing.ScrollPaneConstants;
@@ -40,7 +42,9 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
 public class FrameInsertVocab extends JFrame {
-
+	private static String pronunciationURL = null;
+	private static MP3Player mp3 = null;
+	
 	private JPanel contentPane;
 	private JTextField textWord;
 	private JTextArea textExample;
@@ -59,11 +63,7 @@ public class FrameInsertVocab extends JFrame {
 	private JLabel lblExample1;
 	private JPanel panelShowImage;
 	private JLabel lblShowImage;
-	private static String pronunciationURL = null;
-	private static MP3Player mp3 = null;
 	private VocabularyService vocabService;
-	Map<String, String> data;
-	private static FrameInsertMember myInstance;
 	private JTextField textRelatives;
 	private JLabel lblRelatives;
 	private JLabel lblCategory;
@@ -73,21 +73,28 @@ public class FrameInsertVocab extends JFrame {
 	private JPanel panel_1;
 	private JButton btnStopSound;
 	private JButton btnPlus;
+	
+	private Map<String, String> data;
+	
 	private int i = 150;
 	private int y = 450;
 	private int h = 517;
-	public FrameInsertVocab() {
-		initComponent();
-		vocabService = new VocabularyService();
-		data = new HashMap<>();
-	}
-
-	public static FrameInsertMember getMyInstance() {
+	
+	private static FrameInsertVocab myInstance;
+	public static FrameInsertVocab getMyInstance() {
 		if (myInstance == null) {
-			myInstance = new FrameInsertMember();
+			myInstance = new FrameInsertVocab();
 		}
 		return myInstance;
 	}
+	
+	public FrameInsertVocab() {
+		initComponent();
+		FrameUtils.alignFrameScreenCenter(this);
+		
+		data = new HashMap<>();
+	}
+
 
 	private void initComponent() {
 		setResizable(false);
@@ -308,7 +315,9 @@ public class FrameInsertVocab extends JFrame {
 		File f = null;
 		if (result == chooser.APPROVE_OPTION) {
 			f = chooser.getSelectedFile();
-			lblShowImage.setIcon(getImageByURL(f));
+			final int ROW_HEIGHT = 170;
+			
+			lblShowImage.setIcon(ImageUtils.getImageByFile(f, ROW_HEIGHT));
 			data.put("image", f.toPath().toString());
 		}
 	}
@@ -323,24 +332,9 @@ public class FrameInsertVocab extends JFrame {
 		if (result == chooser.APPROVE_OPTION) {
 			f = chooser.getSelectedFile();
 			this.pronunciationURL = f.getAbsolutePath();
+			
 			data.put("pronunciation", f.getAbsolutePath());
 		}
-	}
-	
-	private ImageIcon getImageByURL(File f) {
-		if (f != null) {
-			try {
-				final int ROW_HEIGHT = 170;
-				BufferedImage bimg = ImageIO.read(f);
-				int imgWidth = bimg.getWidth();
-				int imgHeight = bimg.getHeight();
-				int rowWidth = (ROW_HEIGHT * imgWidth) / imgHeight;
-				return new ImageIcon(new ImageIcon(f.getAbsolutePath()).getImage().getScaledInstance(rowWidth,
-						ROW_HEIGHT, Image.SCALE_SMOOTH));
-			} catch (Exception e) {
-			}
-		}
-		return null;
 	}
 	
 	protected void btnPlaySoundActionPerformed(ActionEvent e) {
@@ -359,6 +353,8 @@ public class FrameInsertVocab extends JFrame {
 		data.put("relatives", textRelatives.getText());
 		data.put("meaning", textMeaning.getText());
 		data.put("example", textExample.getText());
+		
+		vocabService = new VocabularyService();
 		if (vocabService.add(data)) {
 			JOptionPane.showMessageDialog(this, "Thêm từ vựng thành công");
 			dispose();
@@ -376,6 +372,7 @@ public class FrameInsertVocab extends JFrame {
 			mp3.stop();
 		}
 	}
+	
 	protected void do_btnPlus_actionPerformed(ActionEvent e) {
 		ItemMeaning item = new ItemMeaning(y);
 		contentPane.add(item);

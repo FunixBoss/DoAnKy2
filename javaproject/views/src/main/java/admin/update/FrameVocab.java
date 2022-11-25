@@ -37,10 +37,6 @@ public class FrameVocab extends JFrame {
 	private JTextArea textMeaning2;
 	private JTextField textWord;
 
-
-	/**
-	 * Create the frame.
-	 */
 	public FrameVocab( Vocabulary vocab) {
 		setResizable(false);
 		setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);

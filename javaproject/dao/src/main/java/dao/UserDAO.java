@@ -15,7 +15,7 @@ public interface UserDAO extends DAO<User> {
 	History selectHistoryByUserId(Integer userId);
 	Bookmark selectBookmarkByUserId(Integer userId);
 	
-	List<User> selectByPages(int pageNumber, int rowOfPages);
+	List<User> selectUserByPages(int pageNumber, int rowOfPages);
 	Integer countNumberOfUser();
 	
 	List<User> selectAdminByPages(int pageNumber, int rowOfPages);
