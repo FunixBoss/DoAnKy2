@@ -82,7 +82,7 @@ public class PanelNavBar extends JPanel {
 		panel_1.setBorder(null);
 		panel_1.setLayout(null);
 		panel_1.setBackground(new Color(37, 57, 111));
-		panel_1.setBounds(0, 0, 1085, 77);
+		panel_1.setBounds(0, 0, 1051, 77);
 		add(panel_1);
 		
 		// Vocab Panel
@@ -128,7 +128,7 @@ public class PanelNavBar extends JPanel {
 		JPanel fieldAuthor = new JPanel();
 		fieldAuthor.setLayout(null);
 		fieldAuthor.setBackground(Color.WHITE);
-		fieldAuthor.setBounds(893, 32, 93, 45);
+		fieldAuthor.setBounds(936, 27, 115, 50);
 		panel_1.add(fieldAuthor);
 		
 		// Lesson Panel

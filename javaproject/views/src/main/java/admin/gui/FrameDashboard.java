@@ -12,6 +12,8 @@ import javax.swing.border.LineBorder;
 import admin.panel.PanelAdmin;
 import admin.panel.PanelCategory;
 import admin.panel.PanelDashboard;
+import admin.panel.PanelFeedback;
+import admin.panel.PanelLesson;
 import admin.panel.PanelMainContent;
 import admin.panel.PanelMember;
 import admin.panel.PanelSideBar;
@@ -25,6 +27,8 @@ public class FrameDashboard extends JFrame {
 	private PanelAdmin panelAdmin;
 	private PanelDashboard panelDashboard;
 	private PanelCategory panelCategory;
+	private PanelLesson panelLesson;
+	private PanelFeedback panelFeedback;
 	
 	class SideBarMenu extends PanelSideBar {
 		protected void do_panelDashboard_mouseClicked(MouseEvent e) {
@@ -46,6 +50,14 @@ public class FrameDashboard extends JFrame {
 		protected void do_panelAdmin_mouseClicked(MouseEvent e) {
 			menuClicked(panelAdmin);	
 			menuChanged(getPanelAdmin(),getLblAdmin());
+		}
+		protected void do_panelLesson_mouseClicked(MouseEvent e) {
+			menuClicked(panelLesson);	
+			menuChanged(getPanelLesson(),getLblLesson());
+		}
+		protected void do_panelFeedback_mouseClicked(MouseEvent e) {
+			menuClicked(panelFeedback);	
+			menuChanged(getPanelFeedback(),getLblFeedback());
 		}
 	}
 
@@ -103,6 +115,8 @@ public class FrameDashboard extends JFrame {
 		panelAdmin = new PanelAdmin();
 		panelCategory = new PanelCategory();
 		panelDashboard = new PanelDashboard();
+		panelLesson = new PanelLesson();
+		panelFeedback = new PanelFeedback();
 		panelDashboard.loadData();
 		panelDashboard.setBounds(0, 0, 1085, 729);
 	
@@ -111,6 +125,8 @@ public class FrameDashboard extends JFrame {
 		mainContent.add(panelAdmin);
 		mainContent.add(panelMember);
 		mainContent.add(panelCategory);
+		mainContent.add(panelLesson);
+		mainContent.add(panelFeedback);
 		menuClicked(panelDashboard);
 		
 		// Top Bar
@@ -127,6 +143,8 @@ public class FrameDashboard extends JFrame {
 		panelAdmin.setVisible(false);
 		panelCategory.setVisible(false);
 		panelDashboard.setVisible(false);
+		panelLesson.setVisible(false);
+		panelFeedback.setVisible(false);
 		panel.setVisible(true);
 	}
 }

@@ -18,6 +18,7 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.SwingConstants;
 
 public class ItemCategory extends JPanel {
 	private JLabel lblCategory;
@@ -44,18 +45,23 @@ public class ItemCategory extends JPanel {
 				
 			}
 		});
+		initComponent(cate);
+	}
+
+	private void initComponent(Category cate) {
 		setBackground(new Color(242, 247, 255));
 		setLayout(null);
-		setBounds(1, 1, 260, 83);
+		setBounds(1, 1, 277, 102);
 		
 		lblCategory = new JLabel();
+		lblCategory.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCategory.setFont(new Font("Arial", Font.BOLD, 14));
-		lblCategory.setBounds(97, 11, 153, 47);
+		lblCategory.setBounds(76, 0, 201, 102);
 		add(lblCategory);
 		lblCategory.setText(toCapitalize(cate.getName()));
 		
 		lblImage = new JLabel();
-		lblImage.setBounds(22, 11, 50, 50);
+		lblImage.setBounds(40, 24, 72, 62);
 		add(lblImage);
 		lblImage.setIcon(getImageByURL(cate.getImageIcon()));
 	}
@@ -64,7 +70,7 @@ public class ItemCategory extends JPanel {
 		var imageUrl = ItemVocab.class.getResource("/category/" + imageName);
 		if (imageUrl != null) {
 			try {
-				final int ROW_HEIGHT = 40;
+				final int ROW_HEIGHT = 50;
 				BufferedImage bimg = ImageIO.read(imageUrl);
 				int imgWidth = bimg.getWidth();
 				int imgHeight = bimg.getHeight();

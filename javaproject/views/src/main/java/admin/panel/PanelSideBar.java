@@ -10,6 +10,7 @@ import img.IconImage;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.SwingConstants;
 
 public class PanelSideBar extends JPanel {
 	private JPanel panelVocab;
@@ -22,6 +23,10 @@ public class PanelSideBar extends JPanel {
 	private JPanel panelDashboard;
 	private JLabel lblDashboard;
 	private JPanel panelCategory;
+	private JLabel lblLesson;
+	private JPanel panelLesson;
+	private JPanel panelFeedback;
+	private JLabel lblFeedback;
 
 	public JPanel getPanelVocab() {
 		return panelVocab;
@@ -83,6 +88,30 @@ public class PanelSideBar extends JPanel {
 	public void setPanelCategory(JPanel panelCategory) {
 		this.panelCategory = panelCategory;
 	}
+	public JLabel getLblLesson() {
+		return lblLesson;
+	}
+	public void setLblLesson(JLabel lblLesson) {
+		this.lblLesson = lblLesson;
+	}
+	public JPanel getPanelLesson() {
+		return panelLesson;
+	}
+	public void setPanelLesson(JPanel panelLesson) {
+		this.panelLesson = panelLesson;
+	}
+	public JPanel getPanelFeedback() {
+		return panelFeedback;
+	}
+	public void setPanelFeedback(JPanel panelFeedback) {
+		this.panelFeedback = panelFeedback;
+	}
+	public JLabel getLblFeedback() {
+		return lblFeedback;
+	}
+	public void setLblFeedback(JLabel lblFeedback) {
+		this.lblFeedback = lblFeedback;
+	}
 	/**
 	 * Create the panel.
 	 */
@@ -127,7 +156,7 @@ public class PanelSideBar extends JPanel {
 		lblHome.setBounds(78, 25, 129, 20);
 		panelHome.add(lblHome);
 		JLabel lblIconHome = new JLabel("");
-		lblIconHome.setBounds(30, 18, 46, 29);
+		lblIconHome.setBounds(30, 20, 46, 29);
 		panelHome.add(lblIconHome);
 		lblIconHome.setIcon(new ImageIcon(icon.getHomeImg()));
 		
@@ -169,7 +198,7 @@ public class PanelSideBar extends JPanel {
 		JLabel lblIconVocab = new JLabel("");
 		lblIconVocab.setBackground(new Color(255, 255, 255));
 		lblIconVocab.setForeground(new Color(255, 255, 255));
-		lblIconVocab.setBounds(30, 16, 29, 31);
+		lblIconVocab.setBounds(30, 20, 29, 31);
 		panelVocab.add(lblIconVocab);
 		lblIconVocab.setIcon(new ImageIcon(icon.getVocabImg()));
 		lblVocab = new JLabel("Từ vựng");
@@ -193,7 +222,7 @@ public class PanelSideBar extends JPanel {
 		JLabel lblIconCategory = new JLabel("");
 		lblIconCategory.setForeground(Color.WHITE);
 		lblIconCategory.setBackground(Color.WHITE);
-		lblIconCategory.setBounds(30, 16, 29, 31);
+		lblIconCategory.setBounds(30, 20, 29, 31);
 		panelCategory.add(lblIconCategory);
 		lblIconCategory.setIcon(new ImageIcon(icon.getTopicImg()));
 		lblCategory = new JLabel("Chủ đề");
@@ -221,7 +250,7 @@ public class PanelSideBar extends JPanel {
 		lblMember.setForeground(new Color(37, 57, 111));
 		lblMember.setFont(new Font("Arial", Font.BOLD, 16));
 		JLabel lblIconMember = new JLabel("");
-		lblIconMember.setBounds(30, 16, 35, 28);
+		lblIconMember.setBounds(30, 20, 35, 28);
 		panelMember.add(lblIconMember);
 		lblIconMember.setIcon(new ImageIcon(icon.getMemberImg()));
 		
@@ -244,9 +273,72 @@ public class PanelSideBar extends JPanel {
 		lblAdmin.setBounds(78, 25, 128, 19);
 		panelAdmin.add(lblAdmin);
 		JLabel lblIconAdmin = new JLabel("");
-		lblIconAdmin.setBounds(30, 16, 46, 24);
+		lblIconAdmin.setBounds(30, 20, 46, 24);
 		panelAdmin.add(lblIconAdmin);
 		lblIconAdmin.setIcon(new ImageIcon(icon.getAdminImg()));
+		
+		// Panel Lesson
+		panelLesson = new JPanel();
+		panelLesson.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				do_panelLesson_mouseClicked(e);
+			}
+		});
+		panelLesson.setLayout(null);
+		panelLesson.setBackground(Color.WHITE);
+		panelLesson.setBounds(0, 497, 217, 70);
+		add(panelLesson);
+		
+		lblLesson = new JLabel("Bài học");
+		lblLesson.setForeground(new Color(37, 57, 143));
+		lblLesson.setFont(new Font("Arial", Font.BOLD, 16));
+		lblLesson.setBounds(78, 25, 128, 19);
+		panelLesson.add(lblLesson);
+		
+		JLabel lblIconLesson = new JLabel("");
+		lblIconLesson.setBounds(30, 20, 46, 24);
+		panelLesson.add(lblIconLesson);
+		lblIconLesson.setIcon(new ImageIcon(icon.getLessonImg()));
+		
+		// Panel Feedback
+		panelFeedback = new JPanel();
+		panelFeedback.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				do_panelFeedback_mouseClicked(e);
+			}
+		});
+		panelFeedback.setLayout(null);
+		panelFeedback.setBackground(Color.WHITE);
+		panelFeedback.setBounds(0, 567, 217, 70);
+		add(panelFeedback);
+		
+		lblFeedback = new JLabel("Phản hồi");
+		lblFeedback.setForeground(new Color(37, 57, 143));
+		lblFeedback.setFont(new Font("Arial", Font.BOLD, 16));
+		lblFeedback.setBounds(78, 25, 128, 19);
+		panelFeedback.add(lblFeedback);
+		
+		JLabel lblIconFeedback = new JLabel("");
+		lblIconFeedback.setBounds(30, 20, 46, 24);
+		panelFeedback.add(lblIconFeedback);
+		lblIconFeedback.setIcon(new ImageIcon(icon.getFeedbackImg()));
+				
+		// Panel LogOut
+		JPanel panelLogOut = new JPanel();
+		panelLogOut.setLayout(null);
+		panelLogOut.setBackground(new Color(124, 141, 181));
+		panelLogOut.setBounds(0, 707, 217, 70);
+		add(panelLogOut);
+		
+		JLabel lblLogOut = new JLabel("Đăng xuất");
+		lblLogOut.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLogOut.setForeground(new Color(255, 255, 255));
+		lblLogOut.setFont(new Font("Arial", Font.BOLD, 18));
+		lblLogOut.setBounds(0, 0, 217, 70);
+		panelLogOut.add(lblLogOut);
+		
 	}
 	public void menuChanged(JPanel panel, JLabel label) {
 		lblVocab.setForeground(new Color(37, 57, 111));
@@ -259,6 +351,10 @@ public class PanelSideBar extends JPanel {
 		panelDashboard.setBackground(new Color(255, 255, 255));
 		lblCategory.setForeground(new Color(37, 57, 111));
 		panelCategory.setBackground(new Color(255, 255, 255));
+		lblLesson.setForeground(new Color(37, 57, 111));
+		panelLesson.setBackground(new Color(255, 255, 255));
+		lblFeedback.setForeground(new Color(37, 57, 111));
+		panelFeedback.setBackground(new Color(255, 255, 255));
 		label.setForeground(new Color(255, 255, 255));
 		panel.setBackground(new Color(37, 57, 111));
 	}
@@ -271,5 +367,9 @@ public class PanelSideBar extends JPanel {
 	protected void do_panelMember_mouseClicked(MouseEvent e) {
 	}
 	protected void do_panelAdmin_mouseClicked(MouseEvent e) {
+	}
+	protected void do_panelLesson_mouseClicked(MouseEvent e) {
+	}
+	protected void do_panelFeedback_mouseClicked(MouseEvent e) {
 	}
 }

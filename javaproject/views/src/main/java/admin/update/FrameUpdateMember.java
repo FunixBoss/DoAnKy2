@@ -53,6 +53,9 @@ public class FrameUpdateMember extends JFrame {
 		this.user = user;
 		userService = new UserService();
 		textEmail.setText(user.getEmail());
+		textFullname.setText(user.getFullname());
+		textPhone.setText(user.getPhoneNumber());
+		textDob.setText(user.getDateOfBirth() == null ? "" : user.getDateOfBirth().toString());
 		
 	}
 	
@@ -196,6 +199,9 @@ public class FrameUpdateMember extends JFrame {
 		Map<String, String> data = new HashMap<>();
 		data.put("id", Integer.toString(userId));
 		data.put("password", new String(passwordFieldPassword.getPassword()));
+		data.put("fullname", textFullname.getText());
+		data.put("phone", textPhone.getText());
+		data.put("dob", textDob.getText());
 		data.put("level", "2");
 		
 		if(userService.update(data)) {

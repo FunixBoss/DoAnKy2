@@ -26,7 +26,7 @@ public class PanelHistory extends JPanel {
 			
 			JScrollPane scrollPane = new JScrollPane();
 			scrollPane.setBorder(null);
-			scrollPane.setBounds(10, 11, 1262, 669);
+			scrollPane.setBounds(10, 11, 1042, 691);
 			panel.add(scrollPane);
 			
 			JPanel panelMain = new JPanel();
@@ -39,7 +39,7 @@ public class PanelHistory extends JPanel {
 			
 			if( new HistoryDAOImpl().selectAllVocabByUserId(id) !=null ) {
 				for (Vocabulary vocab : new HistoryDAOImpl().selectAllVocabByUserId(id)) { 
-					ItemVocab item = new ItemVocab(vocab);
+					ItemVocab item = new ItemVocab(vocab,21);
 					panelMain.add(item);
 				}
 			}else {
@@ -66,19 +66,24 @@ public class PanelHistory extends JPanel {
 	}
 	private void initComponent() {
 		setBorder(null);
-		setBackground(new Color(37, 57, 111));
+		setBackground(new Color(255, 255, 255));
 		setBounds(0, 0, 1302, 702);
 		setLayout(null);
 		
 		panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));
-		panel.setBounds(10, 0, 1282, 691);
+		panel.setBounds(0, 0, 1282, 702);
 		add(panel);
 		panel.setLayout(null);
 		
+		JLabel lblHeader = new JLabel("LỊCH SỬ TỪ VỰNG");
+		lblHeader.setFont(new Font("Arial", Font.BOLD, 24));
+		lblHeader.setBounds(50, 30, 339, 50);
+		panel.add(lblHeader);
+		
 		scrollPane = new JScrollPane();
 		scrollPane.setBorder(null);
-		scrollPane.setBounds(10, 11, 1262, 669);
+		scrollPane.setBounds(10, 107, 1262, 585);
 		panel.add(scrollPane);
 		
 		panelMain = new JPanel();

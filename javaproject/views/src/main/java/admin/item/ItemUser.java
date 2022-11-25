@@ -110,6 +110,39 @@ public class ItemUser extends JPanel {
 		panel_1_2_1.setBackground(new Color(255, 255, 255));
 		panel_1_2_1.setBounds(325, 0, 195, 50);
 		panelHeader.add(panel_1_2_1);
+
+		lblFullname = new JLabel("Họ và tên");
+		lblFullname.setForeground(new Color(37, 57, 111));
+		lblFullname.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblFullname.setBounds(22, 18, 187, 18);
+		panel_1_2_1.add(lblFullname);
+		lblFullname.setText(user.getFullname());
+
+		JPanel panel_2 = new JPanel();
+		panel_2.setLayout(null);
+		panel_2.setBackground(new Color(255, 255, 255));
+		panel_2.setBounds(520, 0, 150, 50);
+		panelHeader.add(panel_2);
+
+		lblPhone = new JLabel("Số điện thoại");
+		lblPhone.setForeground(new Color(37, 57, 111));
+		lblPhone.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblPhone.setBounds(10, 18, 109, 18);
+		panel_2.add(lblPhone);
+		lblPhone.setText(user.getPhoneNumber());
+
+		JPanel panel_2_1 = new JPanel();
+		panel_2_1.setLayout(null);
+		panel_2_1.setBackground(new Color(255, 255, 255));
+		panel_2_1.setBounds(669, 0, 130, 50);
+		panelHeader.add(panel_2_1);
+
+		lblDob = new JLabel("Ngày sinh");
+		lblDob.setForeground(new Color(37, 57, 111));
+		lblDob.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblDob.setBounds(10, 18, 125, 18);
+		panel_2_1.add(lblDob);
+		lblDob.setText(user.getDateOfBirth() == null ? "" : user.getDateOfBirth().toString());
 	}
 
 	protected void do_btnEdit_actionPerformed(ActionEvent e, User user) {

@@ -30,7 +30,7 @@ public class FrameCategory extends JFrame {
 		contentPane.setLayout(new GridLayout(2, 5, 2, 2));
 
 		for (Vocabulary vocab : new CategoryDAOImpl().selectAllVocabByCategoryId(id)) {
-			ItemVocab item = new ItemVocab(vocab);
+			ItemVocab item = new ItemVocab(vocab,21);
 			contentPane.add(item);
 		}
 	}

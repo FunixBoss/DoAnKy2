@@ -35,7 +35,7 @@ import dao.impl.WordTypeDAOImpl;
 import entity.Category;
 import entity.Example;
 import entity.Meaning;
-import entity.RelativeWord;
+import entity.Relatives;
 import entity.Vocabulary;
 import helper.ErrorMessage;
 import jaco.mp3.player.MP3Player;
@@ -123,7 +123,7 @@ public class FrameUpdateVocab extends JFrame {
 		if( cate != null) {
 			comboCategory.setSelectedItem(toCapitalize(cate.getName().toString()));
 		}
-		List<RelativeWord> relatives = vocabDao.selectAllRelativesByVocabId(vocab.getId());
+		List<Relatives> relatives = vocabDao.selectAllRelativesByVocabId(vocab.getId());
 		if(relatives != null) {
 			String relativesStr = relatives.stream()
 					.map(rel -> rel.getWord().toString())

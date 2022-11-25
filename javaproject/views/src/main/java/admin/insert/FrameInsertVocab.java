@@ -1,19 +1,13 @@
 package admin.insert;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.Insets;
-
 import javax.imageio.ImageIO;
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -27,36 +21,29 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import admin.item.ItemMeaning;
 import dao.impl.CategoryDAOImpl;
 import dao.impl.WordTypeDAOImpl;
 import helper.ErrorMessage;
 import jaco.mp3.player.MP3Player;
-import service.CategoryService;
-import service.UserService;
 import service.VocabularyService;
-
-import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTextArea;
 import java.awt.Panel;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
-import javax.swing.DebugGraphics;
 import java.awt.GridLayout;
 
 public class FrameInsertVocab extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textWord;
-	private JTextArea textExample3;
-	private JTextArea textExample1;
-	private JTextArea textExample2;
+	private JTextArea textExample;
 	private JLabel lblNewLabel;
 	private JLabel lblWord;
 	private JButton btnAdd;
@@ -67,38 +54,28 @@ public class FrameInsertVocab extends JFrame {
 	private JLabel lblImage;
 	private JButton btnImage;
 	private JButton btnPronunciation;
-	private Panel panelMeaning1;
-	private Panel panelMeaning2;
-	private Panel panelMeaning3;
-	private Panel panelExample1;
-	private Panel panelExample2;
-	private Panel panelExample3;
-	private JLabel lblMeaning1;
-	private JLabel lblMeaning2;
-	private JLabel lblMeaning3;
+	private Panel panelMeaning;
+	private JLabel lblMeaning;
 	private JLabel lblExample1;
-	private JLabel lblIExample2;
-	private JLabel lblExample3;
 	private JPanel panelShowImage;
 	private JLabel lblShowImage;
-	
 	private static String pronunciationURL = null;
 	private static MP3Player mp3 = null;
 	private VocabularyService vocabService;
 	Map<String, String> data;
-
 	private static FrameInsertMember myInstance;
 	private JTextField textRelatives;
 	private JLabel lblRelatives;
 	private JLabel lblCategory;
 	private JComboBox<String> comboCategory;
-	private JTextField textMeaning1;
-	private JTextField textMeaning2;
-	private JTextField textMeaning3;
+	private JTextField textMeaning;
 	private JButton btnPlaySound;
 	private JPanel panel_1;
 	private JButton btnStopSound;
-
+	private JButton btnPlus;
+	private int i = 150;
+	private int y = 450;
+	private int h = 517;
 	public FrameInsertVocab() {
 		initComponent();
 		vocabService = new VocabularyService();
@@ -115,7 +92,7 @@ public class FrameInsertVocab extends JFrame {
 	private void initComponent() {
 		setResizable(false);
 		setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 1129, 822);
+		setBounds(100, 100, 1303, 517);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -141,7 +118,7 @@ public class FrameInsertVocab extends JFrame {
 				btnAddActionPerformed(e);
 			}
 		});
-		btnAdd.setBounds(485, 725, 150, 44);
+		btnAdd.setBounds(1118, 86, 150, 44);
 		btnAdd.setBackground(new Color(67, 98, 190));
 		btnAdd.setForeground(new Color(255, 255, 255));
 		btnAdd.setFont(new Font("Arial", Font.BOLD, 16));
@@ -167,7 +144,7 @@ public class FrameInsertVocab extends JFrame {
 		textWord.setColumns(10);
 
 		panel = new JPanel();
-		panel.setBounds(0, 0, 1120, 62);
+		panel.setBounds(0, 0, 1289, 62);
 		panel.setBackground(new Color(242, 247, 255));
 		contentPane.add(panel);
 
@@ -207,119 +184,44 @@ public class FrameInsertVocab extends JFrame {
 		btnPronunciation.setBackground(new Color(242, 247, 255));
 		contentPane.add(btnPronunciation);
 
-		panelMeaning1 = new Panel();
-		panelMeaning1.setLayout(null);
-		panelMeaning1.setBackground(Color.BLACK);
-		panelMeaning1.setBounds(138, 338, 362, 42);
-		contentPane.add(panelMeaning1);
+		panelMeaning = new Panel();
+		panelMeaning.setLayout(null);
+		panelMeaning.setBackground(Color.BLACK);
+		panelMeaning.setBounds(138, 338, 362, 42);
+		contentPane.add(panelMeaning);
 
-		textMeaning1 = new JTextField();
-		textMeaning1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		textMeaning1.setColumns(10);
-		textMeaning1.setBounds(0, 0, 362, 42);
-		panelMeaning1.add(textMeaning1);
+		textMeaning = new JTextField();
+		textMeaning.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		textMeaning.setColumns(10);
+		textMeaning.setBounds(0, 0, 362, 42);
+		panelMeaning.add(textMeaning);
 
-		panelMeaning2 = new Panel();
-		panelMeaning2.setLayout(null);
-		panelMeaning2.setBackground(Color.BLACK);
-		panelMeaning2.setBounds(138, 463, 362, 42);
-		contentPane.add(panelMeaning2);
+		Panel panelExample = new Panel();
+		panelExample.setBackground(Color.BLACK);
+		panelExample.setBounds(624, 338, 462, 102);
+		contentPane.add(panelExample);
+		panelExample.setLayout(new BorderLayout(0, 0));
 
-		textMeaning2 = new JTextField();
-		textMeaning2.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		textMeaning2.setColumns(10);
-		textMeaning2.setBounds(0, 0, 362, 42);
-		panelMeaning2.add(textMeaning2);
-
-		Panel panelMeaning3 = new Panel();
-		panelMeaning3.setLayout(null);
-		panelMeaning3.setBackground(Color.BLACK);
-		panelMeaning3.setBounds(138, 588, 362, 42);
-		contentPane.add(panelMeaning3);
-
-		textMeaning3 = new JTextField();
-		textMeaning3.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		textMeaning3.setColumns(10);
-		textMeaning3.setBounds(0, 0, 362, 42);
-		panelMeaning3.add(textMeaning3);
-
-		Panel panelExample1 = new Panel();
-		panelExample1.setBackground(Color.BLACK);
-		panelExample1.setBounds(624, 338, 462, 102);
-		contentPane.add(panelExample1);
-		panelExample1.setLayout(new BorderLayout(0, 0));
-
-		textExample1 = new JTextArea();
-		textExample1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		textExample1.setBackground(Color.WHITE);
-		panelExample1.add(textExample1);
+		textExample = new JTextArea();
+		textExample.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		textExample.setBackground(Color.WHITE);
+		panelExample.add(textExample);
 		
-		JScrollPane jspEx1 = new JScrollPane(textExample1, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		panelExample1.add(jspEx1);
+		JScrollPane jspEx1 = new JScrollPane(textExample, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		panelExample.add(jspEx1);
 
-		panelExample2 = new Panel();
-		panelExample2.setBackground(Color.BLACK);
-		panelExample2.setBounds(624, 463, 462, 102);
-		contentPane.add(panelExample2);
-		panelExample2.setLayout(new BorderLayout(0, 0));
+		lblMeaning = new JLabel("Ý nghĩa:");
+		lblMeaning.setForeground(Color.BLACK);
+		lblMeaning.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblMeaning.setBounds(32, 348, 74, 21);
+		contentPane.add(lblMeaning);
 
-		textExample2 = new JTextArea();
-		textExample2.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		textExample2.setBackground(Color.WHITE);
-		panelExample2.add(textExample2);
 
-		JScrollPane jspEx2 = new JScrollPane(textExample2, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		panelExample2.add(jspEx2);
-		
-		panelExample3 = new Panel();
-		panelExample3.setBackground(Color.BLACK);
-		panelExample3.setBounds(624, 588, 462, 102);
-		contentPane.add(panelExample3);
-		panelExample3.setLayout(new BorderLayout(0, 0));
-
-		textExample3 = new JTextArea();
-		textExample3.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		textExample3.setBackground(Color.WHITE);
-		panelExample3.add(textExample3);
-
-		JScrollPane jspEx3 = new JScrollPane(textExample3, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		panelExample3.add(jspEx3);
-		
-		lblMeaning1 = new JLabel("Ý nghĩa 1:");
-		lblMeaning1.setForeground(Color.BLACK);
-		lblMeaning1.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblMeaning1.setBounds(32, 348, 74, 21);
-		contentPane.add(lblMeaning1);
-
-		lblMeaning2 = new JLabel("Ý nghĩa 2:");
-		lblMeaning2.setForeground(Color.BLACK);
-		lblMeaning2.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblMeaning2.setBounds(32, 473, 74, 21);
-		contentPane.add(lblMeaning2);
-
-		lblMeaning3 = new JLabel("Ý nghĩa 3:");
-		lblMeaning3.setForeground(Color.BLACK);
-		lblMeaning3.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblMeaning3.setBounds(32, 598, 74, 21);
-		contentPane.add(lblMeaning3);
-
-		lblExample1 = new JLabel("Ví dụ 1");
+		lblExample1 = new JLabel("Ví dụ ");
 		lblExample1.setForeground(Color.BLACK);
 		lblExample1.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblExample1.setBounds(538, 338, 96, 21);
 		contentPane.add(lblExample1);
-
-		lblIExample2 = new JLabel("Ví dụ 2");
-		lblIExample2.setForeground(Color.BLACK);
-		lblIExample2.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblIExample2.setBounds(538, 463, 96, 21);
-		contentPane.add(lblIExample2);
-
-		lblExample3 = new JLabel("Ví dụ 3");
-		lblExample3.setForeground(Color.BLACK);
-		lblExample3.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblExample3.setBounds(538, 588, 96, 21);
-		contentPane.add(lblExample3);
 
 		panelShowImage = new JPanel();
 		panelShowImage.setBackground(new Color(255, 255, 255));
@@ -382,6 +284,18 @@ public class FrameInsertVocab extends JFrame {
 			}
 		});
 		panel_1.add(btnStopSound);
+		
+		btnPlus = new JButton("+");
+		btnPlus.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				do_btnPlus_actionPerformed(e);
+			}
+		});
+		btnPlus.setForeground(Color.WHITE);
+		btnPlus.setFont(new Font("Arial", Font.BOLD, 16));
+		btnPlus.setBackground(new Color(67, 98, 190));
+		btnPlus.setBounds(1118, 336, 44, 44);
+		contentPane.add(btnPlus);
 	}
 
 	protected void do_btnImage_actionPerformed(ActionEvent e) {
@@ -443,12 +357,8 @@ public class FrameInsertVocab extends JFrame {
 		data.put("type", Integer.toString(comboWordType.getSelectedIndex() + 1));
 		data.put("category", comboCategory.getSelectedItem() == null ? "" : comboCategory.getSelectedItem().toString());
 		data.put("relatives", textRelatives.getText());
-		data.put("meaning1", textMeaning1.getText());
-		data.put("meaning2", textMeaning2.getText());
-		data.put("meaning3", textMeaning3.getText());
-		data.put("example1", textExample1.getText());
-		data.put("example2", textExample2.getText());
-		data.put("example3", textExample3.getText());
+		data.put("meaning", textMeaning.getText());
+		data.put("example", textExample.getText());
 		if (vocabService.add(data)) {
 			JOptionPane.showMessageDialog(this, "Thêm từ vựng thành công");
 			dispose();
@@ -465,5 +375,12 @@ public class FrameInsertVocab extends JFrame {
 		} else {
 			mp3.stop();
 		}
+	}
+	protected void do_btnPlus_actionPerformed(ActionEvent e) {
+		ItemMeaning item = new ItemMeaning(y);
+		contentPane.add(item);
+		h = h + i;
+		setBounds(100, 100, 1303, h);
+		y = y + i;
 	}
 }

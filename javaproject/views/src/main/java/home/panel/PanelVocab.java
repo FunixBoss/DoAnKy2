@@ -2,8 +2,6 @@ package home.panel;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.MouseEvent;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -20,6 +18,7 @@ public class PanelVocab extends JPanel {
 	private JTextField textSearch;
 	private JPanel panelDetailVocab;
 	private ItemVocab item;
+	private PanelDetailVocab detail;
 	/**
 	 * Create the panel.
 	 */
@@ -32,7 +31,6 @@ public class PanelVocab extends JPanel {
 			item = new ItemVocab(vocab, y);
 			panelMain.add(item);
 			y = y + 29;
-			
 		}
 		
 	}

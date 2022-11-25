@@ -22,44 +22,19 @@ public class PanelBookmark extends JPanel {
 	 * Create the panel.
 	 */
 	public  void initConstructor() {
-		if(Authorization.email!=null) {
-			panel.removeAll();
-			JScrollPane scrollPane = new JScrollPane();
-			scrollPane.setBorder(null);
-			scrollPane.setBounds(10, 11, 1262, 669);
-			panel.add(scrollPane);
-			
-			JPanel panelMain = new JPanel();
-			panelMain.setBackground(new Color(255, 255, 255));
-			scrollPane.setViewportView(panelMain);
-			panelMain.setLayout(new GridLayout(10, 2, 2, 2));
-			
-			
-			panelMain.removeAll();
-			
-			
-			UserDAOImpl user= new UserDAOImpl();
-			int id = user.getIdFromDbByAccount(Authorization.email);
-			if( new BookmarkDAOImpl().selectAllVocabByUserId(id) !=null ) {
-				for (Vocabulary vocab : new BookmarkDAOImpl().selectAllVocabByUserId(id)) { 
-					ItemVocab item = new ItemVocab(vocab);
-					panelMain.add(item);
-				}
-			}else {
-				panel.removeAll();
-				lblNewLabel = new JLabel("Bạn Chưa Lưu Mục Nào!");
-				lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
-				lblNewLabel.setBounds(354, 202, 544, 154);
-				panel.add(lblNewLabel);
+		UserDAOImpl user= new UserDAOImpl();
+		int id = user.getIdFromDbByAccount(Authorization.email);
+		if( new BookmarkDAOImpl().selectAllVocabByUserId(id) !=null ) {
+			for (Vocabulary vocab : new BookmarkDAOImpl().selectAllVocabByUserId(id)) { 
+				ItemVocab item = new ItemVocab(vocab,21);
+				panelMain.add(item);
 			}
-		}
-		else {
+		}else {
 			panel.removeAll();
-			lblNewLabel = new JLabel("Vui Lòng Đăng Nhập Để Sử Dụng!!");
+			lblNewLabel = new JLabel("Bạn Chưa Lưu Mục Nào!");
 			lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
 			lblNewLabel.setBounds(354, 202, 544, 154);
 			panel.add(lblNewLabel);
-			
 		}
 		
 	}
@@ -71,19 +46,24 @@ public class PanelBookmark extends JPanel {
 
 	private void initComponent() {
 		setBorder(null);
-		setBackground(new Color(37, 57, 111));
+		setBackground(new Color(255, 255, 255));
 		setBounds(0, 0, 1302, 702);
 		setLayout(null);
 		
 		panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));
-		panel.setBounds(10, 0, 1282, 691);
+		panel.setBounds(0, 0, 1282, 691);
 		add(panel);
 		panel.setLayout(null);
 		
+		JLabel lblHeader = new JLabel("TỪ VỰNG YÊU THÍCH");
+		lblHeader.setFont(new Font("Arial", Font.BOLD, 24));
+		lblHeader.setBounds(50, 30, 339, 50);
+		panel.add(lblHeader);
+		
 		scrollPane = new JScrollPane();
 		scrollPane.setBorder(null);
-		scrollPane.setBounds(10, 11, 1262, 669);
+		scrollPane.setBounds(10, 107, 1262, 574);
 		panel.add(scrollPane);
 		
 		panelMain = new JPanel();

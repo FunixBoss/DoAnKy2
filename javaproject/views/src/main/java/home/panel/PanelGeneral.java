@@ -1,23 +1,21 @@
 package home.panel;
 
 import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import home.item.ItemLesson;
-
-
-public class PanelLesson extends JPanel {
+public class PanelGeneral extends JPanel {
 
 	private JPanel panel;
-	private ItemLesson item;
 
 	/**
 	 * Create the panel.
 	 */
-	public PanelLesson() {
+	public PanelGeneral() {
 		initComponent();
-		item = new ItemLesson();
-		panel.add(item);
+		
+		
 	}
 
 	private void initComponent() {
@@ -28,11 +26,14 @@ public class PanelLesson extends JPanel {
 		
 		panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));
-		panel.setBounds(10, 0, 1282, 691);
+		panel.setBounds(0, 0, 1282, 691);
 		add(panel);
 		panel.setLayout(null);
 		
-		
+		JLabel lblHeader = new JLabel("THÔNG TIN CHUNG");
+		lblHeader.setFont(new Font("Arial", Font.BOLD, 24));
+		lblHeader.setBounds(50, 30, 339, 50);
+		panel.add(lblHeader);
 	}
 
 }

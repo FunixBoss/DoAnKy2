@@ -201,8 +201,8 @@ public class PanelDashboard extends JPanel {
 	}
 	
 	public void loadData() {
-		if(dao.selectAll() != null) {
-			dao.selectAll().clear();
+		if(dao.getList() != null) {
+			dao.getList().clear();
 			panelData.removeAll();
 			int totalVocabs = dao.countNumberOfVocab();
 			

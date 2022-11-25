@@ -53,6 +53,9 @@ public class FrameUpdateAdmin extends JFrame {
 		this.user = user;
 		userService = new UserService();
 		textEmail.setText(user.getEmail());
+		textFullname.setText(user.getFullname());
+		textPhone.setText(user.getPhoneNumber());
+		textDob.setText(user.getDateOfBirth() == null ? "" : user.getDateOfBirth().toString());
 		
 	}
 	
@@ -108,7 +111,38 @@ public class FrameUpdateAdmin extends JFrame {
 		lblPassword.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblPassword.setBounds(32, 165, 102, 21);
 		contentPane.add(lblPassword);
-
+		
+//		PHONE
+		lblPhone = new JLabel("Số điện thoại");
+		lblPhone.setForeground(Color.BLACK);
+		lblPhone.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblPhone.setBounds(466, 165, 102, 21);
+		contentPane.add(lblPhone);
+		
+		textPhone = new JTextField();
+		textPhone.setMargin(new Insets(2, 6, 2, 2));
+		textPhone.setHorizontalAlignment(SwingConstants.LEFT);
+		textPhone.setFont(new Font("Arial", Font.PLAIN, 14));
+		textPhone.setColumns(10);
+		textPhone.setBackground(Color.WHITE);
+		textPhone.setBounds(589, 157, 239, 38);
+		contentPane.add(textPhone);
+		
+//		DOB
+		lblDob = new JLabel("Ngày sinh");
+		lblDob.setForeground(Color.BLACK);
+		lblDob.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblDob.setBounds(466, 229, 102, 21);
+		contentPane.add(lblDob);
+		
+		textDob = new JTextField();
+		textDob.setMargin(new Insets(2, 6, 2, 2));
+		textDob.setHorizontalAlignment(SwingConstants.LEFT);
+		textDob.setFont(new Font("Arial", Font.PLAIN, 14));
+		textDob.setColumns(10);
+		textDob.setBackground(Color.WHITE);
+		textDob.setBounds(589, 221, 239, 38);
+		contentPane.add(textDob);
 		
 //		LEVEL
 		lblLevel = new JLabel("Chức vụ");
@@ -165,7 +199,10 @@ public class FrameUpdateAdmin extends JFrame {
 		Map<String, String> data = new HashMap<>();
 		data.put("id", Integer.toString(userId));
 		data.put("password", new String(passwordFieldPassword.getPassword()));
-		data.put("role", "1");
+		data.put("fullname", textFullname.getText());
+		data.put("phone", textPhone.getText());
+		data.put("dob", textDob.getText());
+		data.put("level", "1");
 		
 		if(userService.update(data)) {
 			JOptionPane.showMessageDialog(this, "Cập nhật quản trị viên thành công");

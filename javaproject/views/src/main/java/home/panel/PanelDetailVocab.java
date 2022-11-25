@@ -15,7 +15,7 @@ import entity.Bookmark;
 import entity.Category;
 import entity.Example;
 import entity.Meaning;
-import entity.RelativeWord;
+import entity.Relatives;
 import entity.Vocabulary;
 import img.IconImage;
 import jaco.mp3.player.MP3Player;
@@ -88,7 +88,7 @@ public class PanelDetailVocab extends JPanel {
 		}
 		
 		String relativesStr = "";
-		List<RelativeWord> relatives = new VocabularyDAOImpl().selectAllRelativesByVocabId(vocab.getId());
+		List<Relatives> relatives = new VocabularyDAOImpl().selectAllRelativesByVocabId(vocab.getId());
 		if(relatives!=null) {
 			relativesStr = relatives.stream()
 							.map(rel -> rel.getWord().toString())
