@@ -9,9 +9,6 @@ public class PanelGeneral extends JPanel {
 
 	private JPanel panel;
 
-	/**
-	 * Create the panel.
-	 */
 	public PanelGeneral() {
 		initComponent();
 		

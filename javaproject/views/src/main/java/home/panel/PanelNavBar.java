@@ -70,9 +70,7 @@ public class PanelNavBar extends JPanel {
 	public void setLblLesson(JLabel lblLesson) {
 		this.lblLesson = lblLesson;
 	}
-	/**
-	 * Create the panel.
-	 */
+	
 	public PanelNavBar() {
 		setBounds(0, 0, 1052, 77);
 		setBackground(new Color(37, 57, 111));

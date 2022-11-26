@@ -3,6 +3,7 @@ package home.item;
 import javax.swing.JPanel;
 import dao.impl.WordTypeDAOImpl;
 import entity.Vocabulary;
+import helper.StringUtils;
 import home.panel.PanelDetailVocab;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -16,13 +17,13 @@ public class ItemVocab extends JPanel {
 	private WordTypeDAOImpl typeDao;
 
 	public ItemVocab(Vocabulary vocab, int y) {
+		initComponent(vocab,y);
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				do_this_mouseClicked(e);
 			}
 		});
-		initComponent(vocab,y);
 	}
 
 	private void initComponent(Vocabulary vocab,int y) {		
@@ -34,15 +35,11 @@ public class ItemVocab extends JPanel {
 		lblWord.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblWord.setBounds(7, 5, 228, 18);
 		add(lblWord);
-		lblWord.setText(toCapitalize(vocab.getWord()) + " (" + typeDao.get(vocab.getWordTypeId()).toLowerCase() + ") ");
+		lblWord.setText(StringUtils.toCapitalize(vocab.getWord()) + " (" + typeDao.get(vocab.getWordTypeId()).toLowerCase() + ") ");
 	}
 	
 	
 
-	private String toCapitalize(String str) {
-		if(str.length() <= 0) return str;
-		return str.substring(0, 1).toUpperCase() + str.substring(1);
-	}
 	protected void do_this_mouseClicked(MouseEvent e) {
 		
 	}

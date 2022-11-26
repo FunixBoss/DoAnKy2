@@ -19,7 +19,8 @@ import javax.swing.UIManager;
 import admin.gui.FrameDashboard;
 import dao.impl.UserDAOImpl;
 import entity.User;
-import img.IconImage;
+import helper.FrameUtils;
+import helper.IconImage;
 import helper.RegexPattern;
 import service.Authorization;
 import service.Login;
@@ -54,20 +55,16 @@ public class FrameSignIn extends JFrame {
 	 */
 
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FrameSignIn frame = new FrameSignIn();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		EventQueue.invokeLater(() -> {
+			try {
+				FrameSignIn frame = new FrameSignIn();
+				frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 	}
-	/**
-	 * Create the frame.
-	 */
+	
 	public FrameSignIn() {
 		initComponent();
 		textFieldEmail.addKeyListener(new KeyAdapter() {
@@ -98,8 +95,6 @@ public class FrameSignIn extends JFrame {
 							dispose();
 							if(Authorization.loggedrole==1) {
 								FrameDashboard frame = new FrameDashboard();
-								Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-								frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
 								frame.setVisible(true);
 								
 							}else {
@@ -241,6 +236,8 @@ public class FrameSignIn extends JFrame {
 		textmess2.setBounds(50, 320, 57, 38);
 		panelMain.add(textmess2);
 		textmess2.setAlignmentX(0.5f);
+		
+		FrameUtils.alignFrameScreenCenter(this);
 	}
 
 	protected void do_btnSignUp_actionPerformed(ActionEvent e) {

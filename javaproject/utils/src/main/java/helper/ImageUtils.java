@@ -3,11 +3,18 @@ package helper;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class ImageUtils {
+	private static Path pathToResource= Paths.get(".").normalize().toAbsolutePath().getParent().getParent().resolve("resources");
+
+//	use when upload img frame
 	public static ImageIcon getImageByFile(File f, final int ROW_HEIGHT) {
 		if (f != null) {
 			try {
@@ -22,10 +29,14 @@ public class ImageUtils {
 		}
 		return null;
 	}
-
+	
 	public static ImageIcon getImageByURL(String folderName, String imageName, final int ROW_HEIGHT) {
-		var imageUrl = ImageUtils.class.getResource("/" + folderName + "/" + imageName);
-//		System.out.println(imageUrl);
+		URL imageUrl = null;
+		try {
+			imageUrl = new URL("file:/" + pathToResource.toString() + "/" + folderName + "/" + imageName);
+		} catch (MalformedURLException e1) {
+//			e1.printStackTrace();
+		}
 		if (imageUrl != null) {
 			try {
 				BufferedImage bimg = ImageIO.read(imageUrl);
@@ -35,9 +46,8 @@ public class ImageUtils {
 				return new ImageIcon(
 						new ImageIcon(imageUrl).getImage().getScaledInstance(rowWidth, ROW_HEIGHT, Image.SCALE_SMOOTH));
 			} catch (Exception e) {
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
-
 		}
 		return null;
 	}

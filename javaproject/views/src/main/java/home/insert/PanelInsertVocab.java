@@ -21,9 +21,9 @@ public class PanelInsertVocab extends JPanel {
 	private Container panelMain;
 	private int i = 66;
 	private int y = 178;
+	
 	public PanelInsertVocab() {
 		initComponent();
-		
 	}
 
 	private void initComponent() {

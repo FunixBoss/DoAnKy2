@@ -5,6 +5,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import admin.item.ItemVocab;
+import dao.BookmarkDAO;
+import dao.UserDAO;
 import dao.impl.BookmarkDAOImpl;
 import dao.impl.CategoryDAOImpl;
 import dao.impl.MeaningDAOImpl;
@@ -17,7 +19,10 @@ import entity.Example;
 import entity.Meaning;
 import entity.RelativeWord;
 import entity.Vocabulary;
-import img.IconImage;
+import helper.FrameUtils;
+import helper.IconImage;
+import helper.ImageUtils;
+import helper.StringUtils;
 import jaco.mp3.player.MP3Player;
 import service.Authorization;
 import java.awt.Color;
@@ -43,7 +48,7 @@ import java.awt.BorderLayout;
 public class PanelDetailVocab extends JPanel {
 
 	private JPanel contentPane;
-	
+
 	private JLabel lblRelatives;
 	private JLabel lblImage;
 	private JLabel lblPronunciation;
@@ -52,28 +57,33 @@ public class PanelDetailVocab extends JPanel {
 	private JLabel lblWordType;
 	private JTextArea textArea;
 	private JLabel lblCategory;
-	
-	public PanelDetailVocab(Vocabulary vocab) {
+	private BookmarkDAO bmDAO;
+	private UserDAO userDAO;
 
+	public PanelDetailVocab(Vocabulary vocab) {
+		bmDAO = new BookmarkDAOImpl();
+		userDAO = new UserDAOImpl();
 		initComponent(vocab);
-		lblWord.setText(toCapitalize(vocab.getWord()));
+		lblWord.setText(StringUtils.toCapitalize(vocab.getWord()));
 		lblWordType.setText(new WordTypeDAOImpl().get(vocab.getWordTypeId()));
 		Category cate = new CategoryDAOImpl().select(vocab.getCategoryId());
-		if(cate!=null) {
+		if (cate != null) {
 			lblCategory.setText("Thể loại: " + cate.getName());
 		}
 
 		bookmarkFeature(vocab);
-		
-		
+		loadData(vocab);
+	}
+
+	private void loadData(Vocabulary vocab) {
 		List<Meaning> meanings = new VocabularyDAOImpl().selectAllMeaningByVocabId(vocab.getId());
 		StringBuffer txt = new StringBuffer();
-		for(Meaning mn : meanings) {
+		for (Meaning mn : meanings) {
 			txt.append(mn.getContent() + "\n    ");
-			if(!mn.getContent().isEmpty()) {
+			if (!mn.getContent().isEmpty()) {
 				List<Example> examples = new MeaningDAOImpl().selectAllExampleByMeaningId(mn.getId());
-				for(Example ex : examples){
-					if(!ex.getContent().isEmpty()) {
+				for (Example ex : examples) {
+					if (!ex.getContent().isEmpty()) {
 						txt.append(ex.getContent() + "\n    ");
 						txt.append("=>" + ex.getMeaning());
 					}
@@ -81,18 +91,14 @@ public class PanelDetailVocab extends JPanel {
 				txt.append("\n");
 			}
 		}
-		
+
 		String relativesStr = "";
 		List<RelativeWord> relatives = new VocabularyDAOImpl().selectAllRelativesByVocabId(vocab.getId());
-		if(relatives!=null) {
-			relativesStr = relatives.stream()
-							.map(rel -> rel.getWord().toString())
-							.collect(Collectors.joining("\n    "));
-			if(!relativesStr.equals("")) {
-				txt.append("\nCác từ liên quan\n    ");
-				txt.append(relativesStr);
-				txt.append("\n\n\n");
-			}
+		relativesStr = relatives.stream().map(rel -> rel.getWord().toString()).collect(Collectors.joining("\n    "));
+		if (!relativesStr.equals("")) {
+			txt.append("\nCác từ liên quan\n    ");
+			txt.append(relativesStr);
+			txt.append("\n\n\n");
 		}
 		textArea.setText(txt.toString());
 	}
@@ -101,7 +107,7 @@ public class PanelDetailVocab extends JPanel {
 		IconImage icon = new IconImage();
 		// set Icon
 		try {
-			if (new BookmarkDAOImpl().checkExistBookmarkInDb(new UserDAOImpl().selectIdByUserEmail(Authorization.email),
+			if (new BookmarkDAOImpl().checkExistBookmarkInDb(userDAO.selectIdByUserEmail(Authorization.email),
 					vocab.getId()) == null) {
 				tglbtnNewToggleButton.setIcon((new ImageIcon(icon.getStarAltImg())));
 			} else {
@@ -109,7 +115,6 @@ public class PanelDetailVocab extends JPanel {
 			}
 
 		} catch (Exception e2) {
-			// TODO: handle exception
 		}
 
 		tglbtnNewToggleButton.addActionListener(new ActionListener() {
@@ -117,19 +122,18 @@ public class PanelDetailVocab extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (((JToggleButton) e.getSource()).isSelected() == true) {
 					if (Authorization.email != null) {
-						if (new BookmarkDAOImpl().checkExistBookmark(
-								new UserDAOImpl().selectIdByUserEmail(Authorization.email), vocab.getId()) == null) {
-							new BookmarkDAOImpl().insert(new Bookmark(vocab.getId(),
-									new UserDAOImpl().selectIdByUserEmail(Authorization.email)));
+						if (bmDAO.checkExistBookmark(
+								userDAO.selectIdByUserEmail(Authorization.email), vocab.getId()) == null) {
+							bmDAO.insert(new Bookmark(vocab.getId(),userDAO.selectIdByUserEmail(Authorization.email)));
 						}
 						tglbtnNewToggleButton.setIcon(new ImageIcon(icon.getStarImg()));
 					}
 				} else if (((JToggleButton) e.getSource()).isSelected() == false) {
 					if (Authorization.email != null) {
-						List<Bookmark> x = new BookmarkDAOImpl().checkExistBookmark(
-								new UserDAOImpl().selectIdByUserEmail(Authorization.email), vocab.getId());
+						List<Bookmark> x = bmDAO.checkExistBookmark(
+								userDAO.selectIdByUserEmail(Authorization.email), vocab.getId());
 						if (x != null) {
-							x.forEach(y -> new BookmarkDAOImpl().delete(y));
+							x.forEach(y -> bmDAO.delete(y));
 						}
 						tglbtnNewToggleButton.setIcon((new ImageIcon(icon.getStarAltImg())));
 
@@ -167,15 +171,17 @@ public class PanelDetailVocab extends JPanel {
 		lblImage.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblImage.setBounds(526, 25, 273, 180);
 		contentPane.add(lblImage);
-		lblImage.setIcon(getImageByURL(vocab.getImage()));
+		final int ROW_HEIGHT = 180;
+		lblImage.setIcon(ImageUtils.getImageByURL("vocabulary", vocab.getImage(), ROW_HEIGHT));
 
 		lblPronunciation = new JLabel("");
 		lblPronunciation.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(vocab.getPronunciation() != null) {
+				if (vocab.getPronunciation() != null) {
 					try {
-						String url = System.getProperty("user.dir") + "/src/main/resources/pronunciation/" + vocab.getPronunciation();
+						String url = System.getProperty("user.dir") + "/src/main/resources/pronunciation/"
+								+ vocab.getPronunciation();
 						MP3Player mp3 = new MP3Player(new File(url));
 						mp3.play();
 					} catch (Exception e2) {
@@ -196,51 +202,25 @@ public class PanelDetailVocab extends JPanel {
 		tglbtnNewToggleButton.setBounds(797, 11, 65, 61);
 		contentPane.add(tglbtnNewToggleButton);
 
-		
 		lblCategory = new JLabel();
 		lblCategory.setText((String) null);
 		lblCategory.setFont(new Font("Arial", Font.PLAIN, 16));
 		lblCategory.setBounds(35, 146, 333, 27);
 		contentPane.add(lblCategory);
-		
+
 		JPanel panel = new JPanel();
 		panel.setBounds(35, 203, 805, 356);
 		contentPane.add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
-		
-		 textArea = new JTextArea();
-		 textArea.setDisabledTextColor(new Color(0, 0, 0));
-		 textArea.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
+		textArea = new JTextArea();
+		textArea.setDisabledTextColor(new Color(0, 0, 0));
+		textArea.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textArea.setEditable(false);
 		panel.add(textArea);
-		
-		JScrollPane scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		JScrollPane scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panel.add(scroll);
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
 	}
-
-	private ImageIcon getImageByURL(String imageName) {
-		var imageUrl = ItemVocab.class.getResource("/vocabulary/" + imageName);
-		if (imageUrl != null) {
-			try {
-				final int ROW_HEIGHT = 180;
-				BufferedImage bimg = ImageIO.read(imageUrl);
-				int imgWidth = bimg.getWidth();
-				int imgHeight = bimg.getHeight();
-				int rowWidth = (ROW_HEIGHT * imgWidth) / imgHeight;
-				return new ImageIcon(
-						new ImageIcon(imageUrl).getImage().getScaledInstance(rowWidth, ROW_HEIGHT, Image.SCALE_SMOOTH));
-			} catch (Exception e) {
-			}
-		}
-		return null;
-	}
-
-	private String toCapitalize(String str) {
-		if (str.length() <= 0)
-			return str;
-		return str.substring(0, 1).toUpperCase() + str.substring(1);
-	}
-
 }

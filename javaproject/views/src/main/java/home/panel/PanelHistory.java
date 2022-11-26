@@ -17,9 +17,11 @@ public class PanelHistory extends JPanel {
 	public JScrollPane scrollPane;
 	public JPanel panel;
 	public JLabel lblNewLabel;
-	/**
-	 * Create the panel.
-	 */
+	
+	public PanelHistory() {
+		initComponent();
+		initConstructor();
+	}
 	public  void initConstructor() {
 		if(Authorization.email!=null) {
 			panel.removeAll();
@@ -56,14 +58,10 @@ public class PanelHistory extends JPanel {
 			lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
 			lblNewLabel.setBounds(354, 202, 544, 154);
 			panel.add(lblNewLabel);
-			
 		}
 		
 	}
-	public PanelHistory() {
-		initComponent();
-		initConstructor();
-	}
+	
 	private void initComponent() {
 		setBorder(null);
 		setBackground(new Color(255, 255, 255));

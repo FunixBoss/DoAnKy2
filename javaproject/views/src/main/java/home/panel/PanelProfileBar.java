@@ -5,7 +5,9 @@ import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import img.IconImage;
+
+import helper.IconImage;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 

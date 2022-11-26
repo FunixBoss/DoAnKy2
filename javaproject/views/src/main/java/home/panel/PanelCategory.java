@@ -14,9 +14,6 @@ public class PanelCategory extends JPanel {
 	public JScrollPane scrollPane;
 	public JPanel panel;
 	public JLabel lblNewLabel;
-	/**
-	 * Create the panel.
-	 */
 	
 	public PanelCategory() {
 		initComponent();

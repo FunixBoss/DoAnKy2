@@ -19,12 +19,12 @@ public class TestUserDAOImpl{
 //		System.out.println(selectAUser(3)); // done
 		
 //		System.out.println(insertAUser(user)); // done
-//		System.out.println(updatePasswordUser(user2)); 
+		System.out.println(updatePasswordUser(user2)); 
 //		System.out.println(deleteUser(selectAUser(9)));
 //		System.out.println(test.countNumberOfUser());
 //		test.selectUserByPages(1, 10).forEach(System.out::println);
 //		test.selectAdminByPages(1, 10).forEach(System.out::println);
-		System.out.println(test.countNumberOfUser());
+//		System.out.println(test.countNumberOfUser());
 
 	}
 	

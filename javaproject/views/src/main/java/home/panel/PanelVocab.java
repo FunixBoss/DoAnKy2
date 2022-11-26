@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
+import dao.VocabularyDAO;
 import dao.impl.VocabularyDAOImpl;
 import entity.Vocabulary;
 import home.item.ItemVocab;
@@ -19,15 +21,13 @@ public class PanelVocab extends JPanel {
 	private JPanel panelDetailVocab;
 	private ItemVocab item;
 	private PanelDetailVocab detail;
-	/**
-	 * Create the panel.
-	 */
-
+	private VocabularyDAO vocabDAO;
+	
 	public PanelVocab() {
 		initComponent();
-		VocabularyDAOImpl dao = new VocabularyDAOImpl();
+		vocabDAO = new VocabularyDAOImpl();
 		int y = 0;
-		for (Vocabulary vocab : dao.selectAll()) {
+		for (Vocabulary vocab : vocabDAO.selectAll()) {
 			item = new ItemVocab(vocab, y);
 			panelMain.add(item);
 			y = y + 29;

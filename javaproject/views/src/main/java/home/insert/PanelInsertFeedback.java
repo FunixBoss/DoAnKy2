@@ -4,9 +4,6 @@ import java.awt.Color;
 import javax.swing.JPanel;
 public class PanelInsertFeedback extends JPanel{
 
-	/**
-	 * Create the frame.
-	 */
 	public PanelInsertFeedback() {
 		initComponent();
 
@@ -19,6 +16,5 @@ public class PanelInsertFeedback extends JPanel{
 		JPanel panel = new JPanel();
 		add(panel);
 		panel.setLayout(null);
-		
 	}
 }

@@ -18,6 +18,8 @@ import admin.panel.PanelMainContent;
 import admin.panel.PanelMember;
 import admin.panel.PanelSideBar;
 import admin.panel.PanelVocab;
+import helper.FrameUtils;
+import helper.ImageUtils;
 
 public class FrameDashboard extends JFrame {
 
@@ -135,6 +137,7 @@ public class FrameDashboard extends JFrame {
 		contentPane.add(panel_1);
 		panel_1.setBackground(new Color(242, 247, 255));
 		panel_1.setLayout(null);
+		FrameUtils.alignFrameScreenCenter(this);
 		
 	}
 	public void menuClicked(JPanel panel) {

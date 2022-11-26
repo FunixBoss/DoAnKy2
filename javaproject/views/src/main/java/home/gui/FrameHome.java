@@ -13,6 +13,8 @@ import javax.swing.border.LineBorder;
 import admin.gui.FrameDashboard;
 import admin.update.FrameUpdateMember;
 import dao.impl.UserDAOImpl;
+import helper.FrameUtils;
+import helper.IconImage;
 import home.panel.PanelCategory;
 import home.panel.PanelHome;
 import home.panel.PanelLesson;
@@ -20,7 +22,6 @@ import home.panel.PanelMainContent;
 import home.panel.PanelNavBar;
 import home.panel.PanelProfile;
 import home.panel.PanelVocab;
-import img.IconImage;
 import service.Authorization;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -42,14 +43,12 @@ public class FrameHome extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FrameHome frame = new FrameHome();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		EventQueue.invokeLater(() -> {
+			try {
+				FrameHome frame = new FrameHome();
+				frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 	}
@@ -77,10 +76,8 @@ public class FrameHome extends JFrame {
 	 */
 	public FrameHome() {
 		initComponent();
-		
 		if (Authorization.email == null) {
 			lblSignIn = new JLabel("Đăng nhập");
-
 		} else {
 			lblSignIn = new JLabel("Thông Tin");
 		}
@@ -112,8 +109,6 @@ public class FrameHome extends JFrame {
 	}
 
 	private void initComponent() {
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		setResizable(false);
 		setTitle("EV Dictionary");
 		setIconImage(
@@ -184,6 +179,7 @@ public class FrameHome extends JFrame {
 		panelMain.add(panelProfile);
 		panelMain.add(panelLesson);
 		menuClicked(panelHome);
+		FrameUtils.alignFrameScreenCenter(this);
 	}
 
 	public void menuClicked(JPanel panel) {

@@ -11,9 +11,6 @@ public class PanelLesson extends JPanel {
 	private JPanel panel;
 	private ItemLesson item;
 
-	/**
-	 * Create the panel.
-	 */
 	public PanelLesson() {
 		initComponent();
 		item = new ItemLesson();

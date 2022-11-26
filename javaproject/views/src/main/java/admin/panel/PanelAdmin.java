@@ -3,7 +3,6 @@ package admin.panel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.DefaultComboBoxModel;
@@ -16,8 +15,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import admin.insert.FrameInsertAdmin;
-import admin.insert.FrameInsertMember;
 import admin.item.ItemUser;
+import dao.UserDAO;
 import dao.impl.UserDAOImpl;
 import entity.User;
 import helper.FrameUtils;
@@ -27,7 +26,7 @@ public class PanelAdmin extends JPanel {
 	private JLabel lblRowCount;	
 	private JPanel panel;
 	private JScrollPane scrollPane;
-	private UserDAOImpl dao; // data
+	private UserDAO dao; // data
 	
 //	Controll data
 	private Integer pageNumber;

@@ -30,25 +30,32 @@ public class UserService {
 		String confirmPassword = data.get("confirmPassword");
 		Integer role = Integer.parseInt(data.get("role"));
 
-//		Validate (empty, format, password - confirmPassword, email existed, ...)
+		if(!validateUserInfo(email, password, confirmPassword)) return false;
+		
+		dao.insert(new User(email, password, role));
+		return true;
+	}
+
+	private boolean validateUserInfo(String email, String password, String confirmPassword) {
+		//	Validate (empty, format, password - confirmPassword, email existed, ...)
 		if (email.equals("") || password.equals("") || confirmPassword.equals("")) {
 			ErrorMessage.ERROR_MESSAGES = "Ô Email, Mật khẩu và Nhập lại mật khẩu không được để trống!";
 			return false;
-		} else {
-			if (new UserDAOImpl().checkExistEmail(email)) {
-				ErrorMessage.ERROR_MESSAGES = "Email đã tồn tại";
-				return false;
-			} else if (!Validation.checkRegex(RegexPattern.EMAIL, email)) {
-				ErrorMessage.ERROR_MESSAGES = "Định dạng Email không đúng!";
-				return false;
-			} else if (!password.equals(confirmPassword)) {
-				ErrorMessage.ERROR_MESSAGES = "Nhập lại mật khẩu không khớp!";
-				return false;
-			}
-
+		} 
+		
+		if (new UserDAOImpl().checkExistEmail(email)) {
+			ErrorMessage.ERROR_MESSAGES = "Email đã tồn tại";
+			return false;
+		} else if (!Validation.checkRegex(RegexPattern.EMAIL, email)) {
+			ErrorMessage.ERROR_MESSAGES = "Định dạng Email không đúng!";
+			return false;
+		} else if (!Validation.checkLength(password, 5, 50)) {
+			ErrorMessage.ERROR_MESSAGES = "Độ dài password ít nhất 5 ký tự và tối đa 50 ký tự";
+			return false;
+		} else if (!password.equals(confirmPassword)) {
+			ErrorMessage.ERROR_MESSAGES = "Nhập lại mật khẩu không khớp!";
+			return false;
 		}
-
-		dao.insert(new User(email, password, role));
 		return true;
 	}
 
@@ -60,17 +67,11 @@ public class UserService {
 		Integer role = Integer.parseInt(data.get("role"));
 
 		User originalUser = dao.select(userId);
-
 		System.out.println(data);
-//		System.out.println(originalUser);
-
-		LocalDate dobFormatted = null;
 		
-		
-		
-
 		User newUser = new User(email, null, role);
 		newUser.setId(userId);
+		
 		if (password.equals("")) {
 			return true;
 		} else if (!Validation.checkLength(password, 5, 50)) {
@@ -78,7 +79,6 @@ public class UserService {
 			return false;
 
 		}
-
 		newUser.setPassword(password);
 		dao.updatePassword(newUser);
 		return true;

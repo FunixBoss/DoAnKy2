@@ -10,9 +10,6 @@ import java.awt.Font;
 public class ItemMeaning extends JPanel {
 	private JTextField textMeaning;
 
-	/**
-	 * Create the panel.
-	 */
 	public ItemMeaning(int y) {
 		setBackground(new Color(255, 255, 255));
 		setBounds(0, y, 631, 65);

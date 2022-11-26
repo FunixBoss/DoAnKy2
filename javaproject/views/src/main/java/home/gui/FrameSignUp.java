@@ -18,7 +18,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import dao.impl.UserDAOImpl;
 import entity.User;
-import img.IconImage;
+import helper.FrameUtils;
+import helper.IconImage;
 import service.Register;
 import service.ValidateRegister;
 
@@ -42,20 +43,16 @@ public class FrameSignUp extends JFrame {
 	private IconImage icon;
 	
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FrameSignUp frame = new FrameSignUp();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		EventQueue.invokeLater(() -> {
+			try {
+				FrameSignUp frame = new FrameSignUp();
+				frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 	}
-	/**
-	 * Create the frame.
-	 */
+	
 	public FrameSignUp() {
 		initComponent();
 		btnSignUp.addActionListener(new ActionListener() {
@@ -77,8 +74,8 @@ public class FrameSignUp extends JFrame {
 			}
 		});
 		
-		
 	}
+	
 	private void initComponent() {
 		setResizable(false);
 		setTitle("Đăng ký");
@@ -89,8 +86,6 @@ public class FrameSignUp extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		icon = new IconImage();
 		
 		// Panel 
@@ -198,14 +193,12 @@ public class FrameSignUp extends JFrame {
 		btnSignIn.setBorder(null);
 		btnSignIn.setBackground(Color.WHITE);
 		
-		
+		FrameUtils.alignFrameScreenCenter(this);
 	}
 
 	protected void do_btnSignIn_actionPerformed(ActionEvent e) {
 		dispose();
 		FrameSignIn siginIn = new FrameSignIn();
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		siginIn.setLocation(dim.width/2-siginIn.getSize().width/2, dim.height/2-siginIn.getSize().height/2);
 		
 		siginIn.setVisible(true);
 	}
@@ -220,7 +213,6 @@ public class FrameSignUp extends JFrame {
 				if (new UserDAOImpl().insert(user) == 1) {
 					JOptionPane.showMessageDialog(null, "Bạn Đã Đăng Kí Thành Công");
 				}
-
 			} else {
 				JOptionPane.showMessageDialog(null,
 						s.length() <= 0 ? "vui lòng nhập chính xác dữ liệu!!" + s.toString() : s.toString());

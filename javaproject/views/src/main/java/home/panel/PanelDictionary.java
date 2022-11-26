@@ -18,9 +18,7 @@ public class PanelDictionary extends JPanel {
 	private Image starImg = new ImageIcon(getClass().getResource("/image/star.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 	private Image starAltImg = new ImageIcon(getClass().getResource("/image/star-alt.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 	private JLabel lblStar;
-	/**
-	 * Create the panel.
-	 */
+	
 	public PanelDictionary(String word, String wordType) {
 		setBorder(null);
 		setBackground(new Color(242, 247, 255));
@@ -55,9 +53,6 @@ public class PanelDictionary extends JPanel {
 		lblStar.setBounds(955, 11, 60, 39);
 		lblStar.setIcon(new ImageIcon(starAltImg));
 		panel.add(lblStar);
-		
-		
-		
 	}
 	protected void do_lblStar_mouseClicked(MouseEvent e) {
 		lblStar.setIcon(new ImageIcon(starImg));

@@ -170,7 +170,7 @@ public class FrameInsertAdmin extends JFrame {
 		data.put("email", textEmail.getText());
 		data.put("password", new String(passwordFieldPassword.getPassword()));
 		data.put("confirmPassword", new String(passwordResetPassword.getPassword()));
-		data.put("level", "2");
+		data.put("role", "2");
 		
 		userService = new UserService();
 		boolean insert = userService.add(data);
