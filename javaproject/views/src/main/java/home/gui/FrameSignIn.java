@@ -6,6 +6,8 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,7 +21,6 @@ import javax.swing.UIManager;
 import admin.gui.FrameDashboard;
 import dao.impl.UserDAOImpl;
 import entity.User;
-import helper.FrameUtils;
 import helper.IconImage;
 import helper.RegexPattern;
 import service.Authorization;
@@ -55,16 +56,20 @@ public class FrameSignIn extends JFrame {
 	 */
 
 	public static void main(String[] args) {
-		EventQueue.invokeLater(() -> {
-			try {
-				FrameSignIn frame = new FrameSignIn();
-				frame.setVisible(true);
-			} catch (Exception e) {
-				e.printStackTrace();
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					FrameSignIn frame = new FrameSignIn();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}
-	
+	/**
+	 * Create the frame.
+	 */
 	public FrameSignIn() {
 		initComponent();
 		textFieldEmail.addKeyListener(new KeyAdapter() {
@@ -95,6 +100,8 @@ public class FrameSignIn extends JFrame {
 							dispose();
 							if(Authorization.loggedrole==1) {
 								FrameDashboard frame = new FrameDashboard();
+								Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+								frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
 								frame.setVisible(true);
 								
 							}else {
@@ -161,6 +168,25 @@ public class FrameSignIn extends JFrame {
 		panelEmail.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelEmail.setBackground(new Color(242, 247, 255));
 		panelEmail.setBounds(50, 182, 314, 45);
+		panelEmail.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				// TODO Auto-generated method stub	
+				if (textFieldEmail.getText().equals("Email")) {
+					textFieldEmail.setText("");
+		        }
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				// TODO Auto-generated method stub
+				if (textFieldEmail.getText().isEmpty()) {
+					textFieldEmail.setText("");
+		        }
+				
+			}
+		});
 		panelMain.add(panelEmail);
 		panelEmail.setLayout(null);
 		
@@ -236,8 +262,6 @@ public class FrameSignIn extends JFrame {
 		textmess2.setBounds(50, 320, 57, 38);
 		panelMain.add(textmess2);
 		textmess2.setAlignmentX(0.5f);
-		
-		FrameUtils.alignFrameScreenCenter(this);
 	}
 
 	protected void do_btnSignUp_actionPerformed(ActionEvent e) {
