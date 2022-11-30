@@ -6,6 +6,7 @@ import java.util.List;
 import dao.impl.VocabularyDAOImpl;
 import dao.impl.WordTypeDAOImpl;
 import entity.Meaning;
+import entity.Phonetic;
 import entity.RelativeWord;
 import entity.Vocabulary;
 import entity.WordType;
@@ -85,5 +86,19 @@ public class TestVocabDAOImpl implements VocabularyDAO {
 	@Override
 	public List<Vocabulary> searchAll(String str) {
 		return new VocabularyDAOImpl().searchAll(str);
+	}
+
+
+	@Override
+	public List<Phonetic> selAllPhoneticByVocabId(Integer vocabId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<Vocabulary> sel5LastVocab() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

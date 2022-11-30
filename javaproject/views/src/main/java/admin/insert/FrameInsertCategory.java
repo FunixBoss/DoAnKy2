@@ -50,6 +50,11 @@ public class FrameInsertCategory extends JFrame {
 		return myInstance;
 	}
 	
+	public static void main(String[] args) {
+		FrameInsertCategory a = new FrameInsertCategory();
+		a.setVisible(true);
+	}
+	
 	public FrameInsertCategory() {
 		initComponent();
 		FrameUtils.alignFrameScreenCenter(this);

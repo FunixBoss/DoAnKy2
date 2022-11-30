@@ -5,14 +5,16 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class ImageUtils {
-	private static Path pathToResource= Paths.get(".").normalize().toAbsolutePath().getParent().getParent().resolve("resources");
+	public static Path pathToResource= Paths.get(".").normalize().toAbsolutePath().getParent().getParent().resolve("resources");
 
 //	use when upload img frame
 	public static ImageIcon getImageByFile(File f, final int ROW_HEIGHT) {
@@ -28,6 +30,17 @@ public class ImageUtils {
 			}
 		}
 		return null;
+	}
+	
+	public static boolean saveFile(String oldDir, String folder, String fileName, String fileExtension) {
+		Path newDir = Paths.get(pathToResource + "\\" + folder + "\\" + StringUtils.fileNameFormat(fileName) + "." + fileExtension);
+		try {
+			Files.copy(Paths.get(oldDir), newDir, StandardCopyOption.REPLACE_EXISTING);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 	public static ImageIcon getImageByURL(String folderName, String imageName, final int ROW_HEIGHT) {

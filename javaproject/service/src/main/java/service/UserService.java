@@ -62,25 +62,20 @@ public class UserService {
 	public boolean update(Map<String, String> data) {
 		ErrorMessage.ERROR_MESSAGES = null;
 		Integer userId = Integer.parseInt(data.get("id"));
-		String email = data.get("email");
-		String password = data.get("password");
 		Integer role = Integer.parseInt(data.get("role"));
 
 		User originalUser = dao.select(userId);
-		System.out.println(data);
 		
-		User newUser = new User(email, null, role);
-		newUser.setId(userId);
-		
-		if (password.equals("")) {
-			return true;
-		} else if (!Validation.checkLength(password, 5, 50)) {
-			ErrorMessage.ERROR_MESSAGES = "Độ dài password ít nhất 5 ký tự và tối đa 50 ký tự";
+		if(originalUser.getRoleId() == role) {
+			ErrorMessage.ERROR_MESSAGES = "Bạn cần phải thay đổi thông tin để cập nhật !";
 			return false;
-
 		}
-		newUser.setPassword(password);
-		dao.updatePassword(newUser);
+		
+		User newUser = new User();
+		newUser.setId(userId);
+		newUser.setRoleId(role);
+		dao.updateRole(newUser);
+		
 		return true;
 
 	}

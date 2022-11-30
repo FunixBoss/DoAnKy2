@@ -15,6 +15,7 @@ import admin.item.ItemVocabDashboard;
 import dao.impl.CategoryDAOImpl;
 import dao.impl.UserDAOImpl;
 import dao.impl.VocabularyDAOImpl;
+import entity.Vocabulary;
 import helper.FrameUtils;
 import home.gui.FrameSignIn;
 import service.Authorization;
@@ -215,12 +216,10 @@ public class PanelDashboard extends JPanel {
 		panelData.setPreferredSize(new Dimension(975, 5 * 70));
 		scrollPane.setViewportView(panelData);
 		int y = 40;
-		for(int i = totalVocabs - 5; i <= totalVocabs && i >= 0; i++) {
-			if(dao.select(i) != null) {
-				ItemVocabDashboard vocabItem = new ItemVocabDashboard(dao.select(i), y);			
-				panelData.add(vocabItem);
-				y = y + 67;
-			}
+		for(Vocabulary vocab : dao.sel5LastVocab()) {
+			ItemVocabDashboard vocabItem = new ItemVocabDashboard(vocab, y);			
+			panelData.add(vocabItem);
+			y = y + 67;
 		}
 	}
 	protected void lblTop5MouseClicked(MouseEvent e) {

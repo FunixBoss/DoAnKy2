@@ -263,9 +263,7 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 	}
 
 	@Override
-	/*
-	 * do not need
-	 */
+	@Deprecated
 	public Integer update(User user) {
 		return 0;
 	}
@@ -455,6 +453,21 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 			System.err.println("Select id By User email failed");
 		}
 		return id;
+	}
+
+	@Override
+	public Integer updateRole(User user) {
+		Integer result = 0;
+		try (var con = ConnectDBFromProperties.getConnectionFromClassPath();
+				var cs = con.prepareCall("{call updateRoleUser(?, ?)}");) {
+			cs.setInt(1, user.getId());
+			cs.setInt(2, user.getRoleId());
+			result = cs.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Update User Role Failed");
+		}
+		return result;
 	}
 
 

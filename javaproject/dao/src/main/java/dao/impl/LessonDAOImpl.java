@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.LessonDAO;
+import database.CallableStatementUtils;
 import database.ConnectDBFromProperties;
 import entity.Bookmark;
+import entity.Category;
 import entity.Lesson;
 
 public class LessonDAOImpl extends AbstractDAO<Lesson> implements LessonDAO {
@@ -112,6 +114,47 @@ public class LessonDAOImpl extends AbstractDAO<Lesson> implements LessonDAO {
 			System.err.println("Delete a Lesson failed");
 		}
 		return result;
+	}
+
+	@Override
+	public Integer countNumberOfLesson() {
+		int count = 0;
+		
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call countLesson}");
+			var rs = cs.executeQuery();
+		){
+			if(rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return count;
+	}
+
+	@Override
+	public List<Lesson> selectByPages(int pageNumber, int rowOfPages) {
+		List<Lesson> list = new ArrayList<>();
+		
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = CallableStatementUtils.createCS(con, "{call selLessonByPages(?, ?)}", pageNumber, rowOfPages);
+			var rs = cs.executeQuery();
+		){
+			while(rs.next()) {
+				Integer id = rs.getInt(1);
+				String title = rs.getString(2);
+				String imageIcon = rs.getString(3);
+				list.add(new Lesson(id, imageIcon, title));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Select Lesson By Pages Failed");
+		}
+		return list;
 	}
 
 }

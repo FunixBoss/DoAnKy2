@@ -1,8 +1,10 @@
 package admin.panel;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.DefaultComboBoxModel;
@@ -95,93 +97,64 @@ public class PanelAdmin extends JPanel {
 	
 	private void printTitleComponent(JPanel panel) {
 		JPanel panelHeader = new JPanel();
-		panelHeader.setLayout(null);
-		panelHeader.setBounds(0, 0, 990, 40);
+		panelHeader.setBounds(0, 0, 995, 40);
 		panel.add(panelHeader);
+		panelHeader.setLayout(new GridLayout(0, 5, 0, 0));
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setLayout(null);
 		panel_1.setBackground(new Color(37, 57, 111));
-		panel_1.setBounds(0, 0, 55, 50);
 		panelHeader.add(panel_1);
+		panel_1.setLayout(new BorderLayout(0, 0));
 		
 		JLabel lblNewLabel = new JLabel("ID");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 14));
-		lblNewLabel.setBounds(12, 12, 35, 13);
 		panel_1.add(lblNewLabel);
 		
+		JPanel panel_1_2 = new JPanel();
+		panel_1_2.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_1_2);
+		panel_1_2.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblEmail = new JLabel("Email");
+		lblEmail.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEmail.setForeground(Color.WHITE);
+		lblEmail.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_1_2.add(lblEmail);
+		
+		JPanel panel_1_3 = new JPanel();
+		panel_1_3.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_1_3);
+		panel_1_3.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblNewLabel_1 = new JLabel("Ngày tạo");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setForeground(Color.WHITE);
+		lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_1_3.add(lblNewLabel_1);
+		
 		JPanel panel_1_1 = new JPanel();
-		panel_1_1.setLayout(null);
 		panel_1_1.setBackground(new Color(37, 57, 111));
-		panel_1_1.setBounds(907, 0, 88, 40);
 		panelHeader.add(panel_1_1);
+		panel_1_1.setLayout(new BorderLayout(0, 0));
 		
 		JLabel lblXa = new JLabel("Xóa");
+		lblXa.setHorizontalAlignment(SwingConstants.CENTER);
 		lblXa.setForeground(Color.WHITE);
 		lblXa.setFont(new Font("Arial", Font.BOLD, 14));
-		lblXa.setBounds(10, 8, 47, 20);
 		panel_1_1.add(lblXa);
 		
 		JPanel panel_1_1_1 = new JPanel();
-		panel_1_1_1.setLayout(null);
 		panel_1_1_1.setBackground(new Color(37, 57, 111));
-		panel_1_1_1.setBounds(827, 0, 88, 40);
 		panelHeader.add(panel_1_1_1);
+		panel_1_1_1.setLayout(new BorderLayout(0, 0));
 		
 		JLabel lblSa = new JLabel("Sửa");
+		lblSa.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSa.setForeground(Color.WHITE);
 		lblSa.setFont(new Font("Arial", Font.BOLD, 14));
-		lblSa.setBounds(0, 8, 47, 20);
 		panel_1_1_1.add(lblSa);
-		
-		JPanel panel_1_2 = new JPanel();
-		panel_1_2.setLayout(null);
-		panel_1_2.setBackground(new Color(37, 57, 111));
-		panel_1_2.setBounds(55, 0, 270, 40);
-		panelHeader.add(panel_1_2);
-		
-		JLabel lblEmail = new JLabel("Email");
-		lblEmail.setForeground(Color.WHITE);
-		lblEmail.setFont(new Font("Arial", Font.BOLD, 14));
-		lblEmail.setBounds(36, 12, 59, 13);
-		panel_1_2.add(lblEmail);
-		
-		JPanel panel_1_2_1 = new JPanel();
-		panel_1_2_1.setLayout(null);
-		panel_1_2_1.setBackground(new Color(37, 57, 111));
-		panel_1_2_1.setBounds(325, 0, 197, 40);
-		panelHeader.add(panel_1_2_1);
-		
-		JLabel lblHVTn = new JLabel("Họ và tên");
-		lblHVTn.setForeground(Color.WHITE);
-		lblHVTn.setFont(new Font("Arial", Font.BOLD, 14));
-		lblHVTn.setBounds(22, 12, 96, 13);
-		panel_1_2_1.add(lblHVTn);
-		
-		JPanel panel_2 = new JPanel();
-		panel_2.setLayout(null);
-		panel_2.setBackground(new Color(37, 57, 111));
-		panel_2.setBounds(520, 0, 150, 40);
-		panelHeader.add(panel_2);
-		
-		JLabel lblPhone = new JLabel("Số điện thoại");
-		lblPhone.setForeground(Color.WHITE);
-		lblPhone.setFont(new Font("Arial", Font.BOLD, 14));
-		lblPhone.setBounds(8, 12, 109, 13);
-		panel_2.add(lblPhone);
-		
-		JPanel panel_2_1 = new JPanel();
-		panel_2_1.setLayout(null);
-		panel_2_1.setBackground(new Color(37, 57, 111));
-		panel_2_1.setBounds(670, 0, 165, 40);
-		panelHeader.add(panel_2_1);
-		
-		JLabel lblNgySinh = new JLabel("Ngày sinh");
-		lblNgySinh.setForeground(Color.WHITE);
-		lblNgySinh.setFont(new Font("Arial", Font.BOLD, 14));
-		lblNgySinh.setBounds(10, 12, 109, 13);
-		panel_2_1.add(lblNgySinh);
 	}
 	
 	private void printControllComponent() {

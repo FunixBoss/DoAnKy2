@@ -1,8 +1,8 @@
 package entity;
 
 public class Lesson extends Entity {
-	private String image;
 	private String title;
+	private String image;
 
 	public Lesson() {
 		super();

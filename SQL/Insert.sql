@@ -82,7 +82,7 @@ INSERT INTO CATEGORY VALUES (N'country', N'country.png') -- 13
 GO 
 
 /*
-INSERT INTO VOCABULARY VALUES (N'', N'.png', N'.mp3', 1, 1)
+INSERT INTrO VOCABULARY VALUES (N'', N'.png', N'.mp3', 1, 1)
 	INSERT INTO RELATIVE_WORD VALUES (N'', (SELECT IDENT_CURRENT('VOCABULARY')))
 	INSERT INTO RELATIVE_WORD VALUES (N'', (SELECT IDENT_CURRENT('VOCABULARY'))) 
 	INSERT INTO MEANING VALUES (N'',  (SELECT IDENT_CURRENT('VOCABULARY'))) 
@@ -96,6 +96,8 @@ INSERT INTO VOCABULARY VALUES (N'', N'.png', N'.mp3', 1, 1)
 INSERT INTO VOCABULARY VALUES (N'football', N'football.png', N'football.mp3', 1, 1) -- sport
 	INSERT INTO RELATIVE_WORD VALUES (N'soccer', (SELECT IDENT_CURRENT('VOCABULARY')))
 	INSERT INTO RELATIVE_WORD VALUES (N'the pigskin sport', (SELECT IDENT_CURRENT('VOCABULARY')))
+	INSERT INTO PHONETIC VALUES (N'[ˈfʊtˌbɑɫ]', (SELECT IDENT_CURRENT('VOCABULARY')))
+	INSERT INTO PHONETIC VALUES (N'[ˈfʊtˌbɑɫ]', (SELECT IDENT_CURRENT('VOCABULARY')))
 	INSERT INTO MEANING VALUES (N'môn bóng đá', (SELECT IDENT_CURRENT('VOCABULARY')))
 		INSERT INTO EXAMPLE VALUES (N'I think he is a good football player.', N'Tôi nghĩ anh ấy là một cầu thủ bóng đá giỏi', (SELECT IDENT_CURRENT('MEANING')))
 		INSERT INTO EXAMPLE VALUES (N'The coach looked at the football players with the fans who were very happy.', N'Huấn luyện viên nhìn các cầu thủ đá với các cổ động viên rất vui.', (SELECT IDENT_CURRENT('MEANING')))

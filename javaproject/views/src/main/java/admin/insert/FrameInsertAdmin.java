@@ -56,7 +56,7 @@ public class FrameInsertAdmin extends JFrame {
 	
 	private void initComponent() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 885, 442);
+		setBounds(100, 100, 470, 442);
 		setResizable(false);
 		
 		contentPane = new JPanel();
@@ -123,7 +123,7 @@ public class FrameInsertAdmin extends JFrame {
 		btnAdd.setBackground(new Color(67, 98, 190));
 		btnAdd.setForeground(new Color(255, 255, 255));
 		btnAdd.setFont(new Font("Arial", Font.BOLD, 16));
-		btnAdd.setBounds(274, 348, 150, 44);
+		btnAdd.setBounds(50, 348, 150, 44);
 		contentPane.add(btnAdd);
 		
 		btnReset = new JButton("Xóa");
@@ -135,7 +135,7 @@ public class FrameInsertAdmin extends JFrame {
 		btnReset.setBackground(new Color(67, 98, 190));
 		btnReset.setForeground(new Color(255, 255, 255));
 		btnReset.setFont(new Font("Arial", Font.BOLD, 16));
-		btnReset.setBounds(466, 348, 150, 44);
+		btnReset.setBounds(242, 348, 150, 44);
 		contentPane.add(btnReset);
 		
 		txtLevel = new JTextField();
