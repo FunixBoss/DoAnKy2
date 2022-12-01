@@ -6,6 +6,8 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -67,6 +69,38 @@ public class FrameSignIn extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	private void login() {
+		String account = textFieldEmail.getText();
+		String password = textFieldPassword.getText();
+		StringBuilder s = new StringBuilder();
+		try {
+			if (ValidateLogin.checkAll(textFieldEmail, textFieldPassword, s)) {
+				User user = new User(account, password, 1);
+				if (UserDAOImpl.loginDb(user)) {
+					Authorization authInfoUser = new Authorization(account, password, user.getRoleId());
+					dispose();
+					if(Authorization.loggedrole==1) {
+						FrameDashboard frame = new FrameDashboard();
+						Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+						frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+						frame.setVisible(true);
+						
+					}else {
+						FrameHome frame = new FrameHome();
+						Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+						frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+						frame.setVisible(true);
+					}
+				}
+			} else {
+				JOptionPane.showMessageDialog(null,
+						s.length() <= 0 ? "Vui Lòng Kiểm Tra Lại Dữ Liệu" : s.toString());
+			}
+		} catch (Exception e2) {
+			e2.printStackTrace();
+
+		}
+	}
 	public FrameSignIn() {
 		initComponent();
 		textFieldEmail.addKeyListener(new KeyAdapter() {
@@ -78,44 +112,19 @@ public class FrameSignIn extends JFrame {
 		textFieldPassword.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
+				
 				StringBuilder s = new StringBuilder();
 				Login.checkColorText(RegexPattern.PASSWORD, textFieldPassword, s, "password");
+				  if (e.getKeyCode()==KeyEvent.VK_ENTER){
+					  login();
+				    }
 			}
 		});
 		
 		
 		btnSignIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String account = textFieldEmail.getText();
-				String password = textFieldPassword.getText();
-				StringBuilder s = new StringBuilder();
-				try {
-					if (ValidateLogin.checkAll(textFieldEmail, textFieldPassword, s)) {
-						User user = new User(account, password, 1);
-						if (UserDAOImpl.loginDb(user)) {
-							Authorization authInfoUser = new Authorization(account, password, user.getRoleId());
-							dispose();
-							if(Authorization.loggedrole==1) {
-								FrameDashboard frame = new FrameDashboard();
-								Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-								frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-								frame.setVisible(true);
-								
-							}else {
-								FrameHome frame = new FrameHome();
-								Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-								frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-								frame.setVisible(true);
-							}
-						}
-					} else {
-						JOptionPane.showMessageDialog(null,
-								s.length() <= 0 ? "Vui Lòng Kiểm Tra Lại Dữ Liệu" : s.toString());
-					}
-				} catch (Exception e2) {
-					e2.printStackTrace();
-
-				}
+				 login();
 			}
 		});
 		
@@ -165,6 +174,25 @@ public class FrameSignIn extends JFrame {
 		panelEmail.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelEmail.setBackground(new Color(242, 247, 255));
 		panelEmail.setBounds(50, 182, 314, 45);
+		panelEmail.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				// TODO Auto-generated method stub	
+				if (textFieldEmail.getText().equals("Email")) {
+					textFieldEmail.setText("");
+		        }
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				// TODO Auto-generated method stub
+				if (textFieldEmail.getText().isEmpty()) {
+					textFieldEmail.setText("");
+		        }
+				
+			}
+		});
 		panelMain.add(panelEmail);
 		panelEmail.setLayout(null);
 		
@@ -247,11 +275,13 @@ public class FrameSignIn extends JFrame {
 		dispose();
 		FrameSignUp signUp = new FrameSignUp();
 		signUp.setVisible(true);
-//		desktop.add(signUp);
 	}
 	protected void textFieldEmailKeyReleased(KeyEvent e) {
 		StringBuilder s = new StringBuilder();
 		Login.checkColorText(RegexPattern.EMAIL, textFieldEmail, s, "email");
+		 if (e.getKeyCode()==KeyEvent.VK_ENTER){
+			  login();
+		}
 	}
 
 	

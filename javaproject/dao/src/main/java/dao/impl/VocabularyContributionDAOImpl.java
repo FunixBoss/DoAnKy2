@@ -83,6 +83,10 @@ public class VocabularyContributionDAOImpl extends AbstractDAO<VocabularyContrib
 		}
 		return result;
 	}
+	public static void main(String[] args) {
+		VocabularyContribution x = new VocabularyContribution("xx", "yy", 4);
+		new VocabularyContributionDAOImpl().insert(x);
+	}
 
 	@Override
 	public Integer update(VocabularyContribution vc) {

@@ -44,6 +44,6 @@ public class ItemVocab extends JPanel {
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
 	}
 	protected void do_this_mouseClicked(MouseEvent e) {
-		
+		System.out.println("s");
 	}
 }
