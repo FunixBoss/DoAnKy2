@@ -70,6 +70,10 @@ public class FrameHome extends JFrame {
 			menuClicked(panelLesson);
 			menuChanged(getPanelLesson(),getLblLesson());
 		}
+		protected void do_panelHome_mouseClicked(MouseEvent e) {
+			menuClicked(panelHome);
+			menuChanged(getPanelHome(),getLblHome());
+		}
 	}
 	/**
 	 * Create the frame.

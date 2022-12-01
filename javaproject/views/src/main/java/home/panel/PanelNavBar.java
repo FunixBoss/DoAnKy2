@@ -22,6 +22,8 @@ public class PanelNavBar extends JPanel {
 	private JLabel lblProfile;
 	private JPanel panelLesson;
 	private JLabel lblLesson;
+	private JLabel lblHome;
+	private JPanel panelHome;
 	public JPanel getPanelVocab() {
 		return panelVocab;
 	}
@@ -70,7 +72,18 @@ public class PanelNavBar extends JPanel {
 	public void setLblLesson(JLabel lblLesson) {
 		this.lblLesson = lblLesson;
 	}
-	
+	public JLabel getLblHome() {
+		return lblHome;
+	}
+	public void setLblHome(JLabel lblHome) {
+		this.lblHome = lblHome;
+	}
+	public JPanel getPanelHome() {
+		return panelHome;
+	}
+	public void setPanelHome(JPanel panelHome) {
+		this.panelHome = panelHome;
+	}
 	public PanelNavBar() {
 		setBounds(0, 0, 1052, 77);
 		setBackground(new Color(37, 57, 111));
@@ -94,7 +107,7 @@ public class PanelNavBar extends JPanel {
 		});
 		panelVocab.setLayout(null);
 		panelVocab.setBackground(Color.WHITE);
-		panelVocab.setBounds(0, 27, 115, 50);
+		panelVocab.setBounds(115, 27, 115, 50);
 		panel_1.add(panelVocab);
 		
 		lblVocab = new JLabel("Từ vựng");
@@ -114,7 +127,7 @@ public class PanelNavBar extends JPanel {
 		});
 		panelCategory.setLayout(null);
 		panelCategory.setBackground(Color.WHITE);
-		panelCategory.setBounds(115, 27, 115, 50);
+		panelCategory.setBounds(230, 27, 115, 50);
 		panel_1.add(panelCategory);
 		
 		lblCategory = new JLabel("Chủ đề");
@@ -140,7 +153,7 @@ public class PanelNavBar extends JPanel {
 		panelLesson.setLayout(null);
 		panelLesson.setBorder(null);
 		panelLesson.setBackground(Color.WHITE);
-		panelLesson.setBounds(230, 27, 115, 50);
+		panelLesson.setBounds(345, 27, 115, 50);
 		panel_1.add(panelLesson);
 		
 		lblLesson = new JLabel("Bài học");
@@ -168,6 +181,26 @@ public class PanelNavBar extends JPanel {
 		lblProfile.setFont(new Font("Arial", Font.BOLD, 14));
 		lblProfile.setBounds(0, 0, 115, 50);
 		panelProfile.add(lblProfile);
+		
+		panelHome = new JPanel();
+		panelHome.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				do_panelHome_mouseClicked(e);
+			}
+		});
+		panelHome.setLayout(null);
+		panelHome.setBorder(null);
+		panelHome.setBackground(new Color(37, 57, 111));
+		panelHome.setBounds(0, 27, 115, 50);
+		panel_1.add(panelHome);
+		
+		lblHome = new JLabel("Trang chủ");
+		lblHome.setForeground(new Color(255, 255, 255));
+		lblHome.setHorizontalAlignment(SwingConstants.CENTER);
+		lblHome.setFont(new Font("Arial", Font.BOLD, 14));
+		lblHome.setBounds(0, 0, 115, 50);
+		panelHome.add(lblHome);
 	}
 
 	public void menuChanged(JPanel panel, JLabel label) {
@@ -179,6 +212,8 @@ public class PanelNavBar extends JPanel {
 		panelProfile.setBackground(new Color(255, 255, 255));
 		lblLesson.setForeground(new Color(37, 57, 111));
 		panelLesson.setBackground(new Color(255, 255, 255));
+		lblHome.setForeground(new Color(37, 57, 111));
+		panelHome.setBackground(new Color(255, 255, 255));
 		label.setForeground(new Color(255, 255, 255));
 		panel.setBackground(new Color(37, 57, 111));
 	}
@@ -190,5 +225,7 @@ public class PanelNavBar extends JPanel {
 	protected void do_panelProfile_mouseClicked(MouseEvent e) {
 	}
 	protected void do_panelLesson_mouseClicked(MouseEvent e) {
+	}
+	protected void do_panelHome_mouseClicked(MouseEvent e) {
 	}
 }

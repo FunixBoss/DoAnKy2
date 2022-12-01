@@ -17,6 +17,11 @@ public class ItemLesson extends JPanel {
 	private JLabel lblImage;
 	
 	public ItemLesson() {
+		initComponent();
+		
+	}
+
+	private void initComponent() {
 		setLayout(null);
 		setBackground(new Color(255, 255, 255));
 		setBounds(20, 20, 264, 292);
@@ -59,6 +64,5 @@ public class ItemLesson extends JPanel {
 		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
 		lblImage.setBounds(73, 23, 119, 88);
 		panel_2.add(lblImage);
-		
 	}
 }

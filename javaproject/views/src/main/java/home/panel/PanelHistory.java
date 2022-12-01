@@ -23,38 +23,16 @@ public class PanelHistory extends JPanel {
 		initConstructor();
 	}
 	public  void initConstructor() {
-		if(Authorization.email!=null) {
-			panel.removeAll();
-			
-			JScrollPane scrollPane = new JScrollPane();
-			scrollPane.setBorder(null);
-			scrollPane.setBounds(10, 11, 1042, 691);
-			panel.add(scrollPane);
-			
-			JPanel panelMain = new JPanel();
-			panelMain.setBackground(new Color(255, 255, 255));
-			scrollPane.setViewportView(panelMain);
-			panelMain.setLayout(new GridLayout(10, 2, 2, 2));						
-			panelMain.removeAll();
-			UserDAOImpl user= new UserDAOImpl();
-			int id = UserDAOImpl.getIdFromDbByAccount(Authorization.email);
-			
-			if( new HistoryDAOImpl().selectAllVocabByUserId(id) !=null ) {
-				for (Vocabulary vocab : new HistoryDAOImpl().selectAllVocabByUserId(id)) { 
-					ItemVocab item = new ItemVocab(vocab,21);
-					panelMain.add(item);
-				}
-			}else {
-				panel.removeAll();
-				lblNewLabel = new JLabel("Bạn Chưa Lưu Mục Nào!");
-				lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
-				lblNewLabel.setBounds(354, 202, 544, 154);
-				panel.add(lblNewLabel);
+		int id = UserDAOImpl.getIdFromDbByAccount(Authorization.email);
+		
+		if( new HistoryDAOImpl().selectAllVocabByUserId(id) !=null ) {
+			for (Vocabulary vocab : new HistoryDAOImpl().selectAllVocabByUserId(id)) { 
+				ItemVocab item = new ItemVocab(vocab,21);
+				panelMain.add(item);
 			}
-		}
-		else {
+		}else {
 			panel.removeAll();
-			lblNewLabel = new JLabel("Vui Lòng Đăng Nhập Để Sử Dụng!!");
+			lblNewLabel = new JLabel("Bạn Chưa Lưu Mục Nào!");
 			lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
 			lblNewLabel.setBounds(354, 202, 544, 154);
 			panel.add(lblNewLabel);
