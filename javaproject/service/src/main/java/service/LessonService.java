@@ -143,6 +143,8 @@ public class LessonService {
 					e.printStackTrace();
 				}
 				imageName = StringUtils.fileNameFormat(title) + ".png";
+			} else {
+				imageName = originLesson.getImage();
 			}
 		}
 		

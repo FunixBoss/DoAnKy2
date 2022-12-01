@@ -166,7 +166,7 @@ public class VocabularyService {
 		}
 
 		for (HashMap<String, String> mnEx : meaningAndExamples) {
-			if (!mnEx.get("meaning").equals("") && !Validation.checkLength(phonetic, 1, 50)) {
+			if (!mnEx.get("meaning").equals("") && !Validation.checkLength(mnEx.get("meaning"), 1, 50)) {
 				ErrorMessage.ERROR_MESSAGES = "Độ dài của các ô ý nghĩa tối đa 50 ký tự";
 				return false;
 			}

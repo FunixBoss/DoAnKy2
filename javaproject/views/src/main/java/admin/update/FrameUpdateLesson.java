@@ -89,7 +89,7 @@ public class FrameUpdateLesson extends JFrame{
 	}
 	
 	public static void main(String[] args) {
-		Lesson ls = new LessonDAOImpl().select(47);
+		Lesson ls = new LessonDAOImpl().select(51);
 		FrameUpdateLesson a = new FrameUpdateLesson(ls);
 		a.setVisible(true);
 	}
@@ -116,24 +116,32 @@ public class FrameUpdateLesson extends JFrame{
 		
 		List<Question> questions = qsDAO.selAllQuestionByLessonId(ls.getId());
 		List<Theory> theories = thDAO.selAllTheoriesByLessonId(ls.getId());
-		
-		int i = 0;
-		for(Theory th : theories) {
+		System.out.println(theories.size());
+		System.out.println(questions.size());
+		int k = 0;
+		for(int i = 0; i < theories.size(); i++) {
+			System.out.println(i);
 			addItemQs();
+			Theory th = theories.get(i);
 			ItemQuestion qsItem = qsItems.get(i);
 			qsItem.setComboVocabByVocabId(th.getVocabId());
-			qsItem.setTextQuestion1(questions.get(0).getContent());
-			qsItem.setTextQuestion2(questions.get(1).getContent());
 			
-			List<Answer> answers = anDAO.selAllAnswerByQuestionId(questions.get(0).getId());
-			qsItem.setTextAnswer1(joinAnswers(answers));
-			
-			answers = anDAO.selAllAnswerByQuestionId(questions.get(1).getId());
-			qsItem.setTextAnswer2(joinAnswers(answers));
-			
-			answers = anDAO.selAllAnswerByQuestionId(questions.get(2).getId());
-			qsItem.setTextAnswer3(joinAnswers(answers));
-			i++;
+			for(int j = 0; j < 3; j++, k ++) {
+				Question qs = questions.get(k);
+				List<Answer> answers;
+				if(j % 3 == 0) {
+					qsItem.setTextQuestion1(qs.getContent());
+					answers = anDAO.selAllAnswerByQuestionId(qs.getId());
+					qsItem.setTextAnswer1(joinAnswers(answers));
+				} else if(j % 3 == 1) {
+					qsItem.setTextQuestion2(qs.getContent());
+					answers = anDAO.selAllAnswerByQuestionId(qs.getId());
+					qsItem.setTextAnswer2(joinAnswers(answers));
+				} else if(j % 3 == 2) {
+					answers = anDAO.selAllAnswerByQuestionId(qs.getId());
+					qsItem.setTextAnswer3(joinAnswers(answers));
+				}
+			}
 		}
 		
 		if(theories.size() < 5) {
