@@ -21,6 +21,7 @@ import javax.swing.UIManager;
 import admin.gui.FrameDashboard;
 import dao.impl.UserDAOImpl;
 import entity.User;
+import helper.FrameUtils;
 import helper.IconImage;
 import helper.RegexPattern;
 import service.Authorization;
@@ -262,6 +263,8 @@ public class FrameSignIn extends JFrame {
 		textmess2.setBounds(50, 320, 57, 38);
 		panelMain.add(textmess2);
 		textmess2.setAlignmentX(0.5f);
+		
+		FrameUtils.alignFrameScreenCenter(this);
 	}
 
 	protected void do_btnSignUp_actionPerformed(ActionEvent e) {

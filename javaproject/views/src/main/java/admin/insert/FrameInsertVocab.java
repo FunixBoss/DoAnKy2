@@ -1,6 +1,7 @@
 package admin.insert;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import javax.imageio.ImageIO;
@@ -27,15 +28,17 @@ import dao.impl.WordTypeDAOImpl;
 import helper.ErrorMessage;
 import helper.FrameUtils;
 import helper.ImageUtils;
+import helper.StringUtils;
 import jaco.mp3.player.MP3Player;
 import service.VocabularyService;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTextArea;
-import java.awt.Panel;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
@@ -44,69 +47,91 @@ import java.awt.GridLayout;
 public class FrameInsertVocab extends JFrame {
 	private static String pronunciationURL = null;
 	private static MP3Player mp3 = null;
-	
+
 	private JPanel contentPane;
 	private JTextField textWord;
-	private JTextArea textExample;
 	private JLabel lblNewLabel;
 	private JLabel lblWord;
 	private JButton btnAdd;
 	private JLabel lblWordType;
-	private JComboBox<String> comboWordType;
 	private JPanel panel;
 	private JLabel lblPronunciation;
 	private JLabel lblImage;
 	private JButton btnImage;
 	private JButton btnPronunciation;
-	private Panel panelMeaning;
-	private JLabel lblMeaning;
-	private JLabel lblExample1;
 	private JPanel panelShowImage;
 	private JLabel lblShowImage;
 	private VocabularyService vocabService;
 	private JTextField textRelatives;
 	private JLabel lblRelatives;
 	private JLabel lblCategory;
+	private JComboBox<String> comboWordType;
 	private JComboBox<String> comboCategory;
-	private JTextField textMeaning;
 	private JButton btnPlaySound;
 	private JPanel panel_1;
 	private JButton btnStopSound;
 	private JButton btnPlus;
-	
-	private Map<String, String> data;
-	
-	private int i = 150;
-	private int y = 450;
-	private int h = 517;
-	
+	private JPanel panelParent;
+	private JPanel panelChild;
+	private JTextField textPhonetic;
+
+	private Map<String, Object> data;
+	private List<ItemMeaning> meaningItems;
+	private ArrayList<HashMap<String, String>> meaningAndExamples;
+
+	private final int PANEL_ITEM_MEANING_HEIGHT = 127;
+	private int CURRENT_PANELS_MN_EX_HEIGHT = 345;
+	private int HEIGHT_ADDED = 0;
+
 	private static FrameInsertVocab myInstance;
+
 	public static FrameInsertVocab getMyInstance() {
 		if (myInstance == null) {
 			myInstance = new FrameInsertVocab();
 		}
 		return myInstance;
 	}
-	
+
 	public FrameInsertVocab() {
 		initComponent();
-		FrameUtils.alignFrameScreenCenter(this);
-		
+		meaningAndExamples = new ArrayList<>();
 		data = new HashMap<>();
+		
+		WordTypeDAOImpl daoTypeWord = new WordTypeDAOImpl();
+		CategoryDAOImpl cateDao = new CategoryDAOImpl();
+		
+		daoTypeWord.selectAll().forEach(pro -> comboWordType.addItem(pro.getType()));
+		comboCategory.addItem(null);
+		cateDao.selectAll().forEach(
+				pro -> comboCategory.addItem(StringUtils.toCapitalize(pro.getName())));
+		
 	}
-
 
 	private void initComponent() {
 		setResizable(false);
 		setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 1303, 517);
+		setBounds(100, 100, 1129, 827);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		setContentPane(contentPane);
 
+		
+		panelParent = new JPanel();
+		panelParent.setBounds(0, 56, 1113, 637);
+		panelParent.setLayout(new BorderLayout(0, 0));
+		getContentPane().add(panelParent);
+		
+		panelChild = new JPanel();
+		panelChild.setBackground(new Color(255, 255, 255));
+		panelChild.setBounds(0, 56, 1113, 746);
+		panelChild.setLayout(null);
+		panelParent.add(panelChild);
+		
+		JScrollPane jspEx1 = new JScrollPane(panelChild, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		panelParent.add(jspEx1, BorderLayout.CENTER);
+		
 		lblNewLabel = new JLabel("Thêm từ vựng");
 		lblNewLabel.setBounds(20, 11, 219, 34);
 		lblNewLabel.setForeground(new Color(37, 57, 111));
@@ -114,10 +139,10 @@ public class FrameInsertVocab extends JFrame {
 		contentPane.add(lblNewLabel);
 
 		lblWord = new JLabel("Từ vựng");
-		lblWord.setBounds(32, 99, 84, 21);
+		lblWord.setBounds(31, 30, 84, 21);
 		lblWord.setForeground(Color.BLACK);
 		lblWord.setFont(new Font("Arial", Font.PLAIN, 14));
-		contentPane.add(lblWord);
+		panelChild.add(lblWord);
 
 		btnAdd = new JButton("Thêm");
 		btnAdd.addActionListener(new ActionListener() {
@@ -125,29 +150,28 @@ public class FrameInsertVocab extends JFrame {
 				btnAddActionPerformed(e);
 			}
 		});
-		btnAdd.setBounds(1118, 86, 150, 44);
+		btnAdd.setBounds(519, 724, 150, 44);
 		btnAdd.setBackground(new Color(67, 98, 190));
 		btnAdd.setForeground(new Color(255, 255, 255));
 		btnAdd.setFont(new Font("Arial", Font.BOLD, 16));
 		contentPane.add(btnAdd);
 
 		lblWordType = new JLabel("Loại từ");
-		lblWordType.setBounds(351, 90, 96, 21);
+		lblWordType.setBounds(350, 21, 96, 21);
 		lblWordType.setForeground(Color.BLACK);
 		lblWordType.setFont(new Font("Arial", Font.PLAIN, 14));
-		contentPane.add(lblWordType);
+		panelChild.add(lblWordType);
 
 		comboWordType = new JComboBox<>();
-		comboWordType.setBounds(446, 90, 173, 38);
+		comboWordType.setBounds(445, 21, 173, 38);
 		comboWordType.setBackground(new Color(255, 255, 255));
 		comboWordType.setFont(new Font("Arial", Font.PLAIN, 14));
-		contentPane.add(comboWordType);
-		WordTypeDAOImpl daoTypeWord = new WordTypeDAOImpl();
-		daoTypeWord.selectAll().forEach(pro -> comboWordType.addItem(pro.getType()));
+		panelChild.add(comboWordType);
+		
 		textWord = new JTextField();
 		textWord.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		textWord.setBounds(138, 90, 175, 37);
-		contentPane.add(textWord);
+		textWord.setBounds(137, 21, 175, 37);
+		panelChild.add(textWord);
 		textWord.setColumns(10);
 
 		panel = new JPanel();
@@ -156,19 +180,19 @@ public class FrameInsertVocab extends JFrame {
 		contentPane.add(panel);
 
 		lblPronunciation = new JLabel("Phát âm");
-		lblPronunciation.setBounds(32, 152, 96, 21);
+		lblPronunciation.setBounds(31, 83, 96, 21);
 		lblPronunciation.setForeground(Color.BLACK);
 		lblPronunciation.setFont(new Font("Arial", Font.PLAIN, 14));
-		contentPane.add(lblPronunciation);
+		panelChild.add(lblPronunciation);
 
 		lblImage = new JLabel("Hình ảnh");
-		lblImage.setBounds(351, 152, 96, 21);
+		lblImage.setBounds(350, 83, 96, 21);
 		lblImage.setForeground(Color.BLACK);
 		lblImage.setFont(new Font("Arial", Font.PLAIN, 14));
-		contentPane.add(lblImage);
+		panelChild.add(lblImage);
 
 		btnImage = new JButton("Tải ảnh lên");
-		btnImage.setBounds(446, 152, 175, 37);
+		btnImage.setBounds(445, 83, 175, 37);
 		btnImage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				do_btnImage_actionPerformed(e);
@@ -177,10 +201,10 @@ public class FrameInsertVocab extends JFrame {
 		btnImage.setForeground(new Color(0, 0, 0));
 		btnImage.setFont(new Font("Arial", Font.BOLD, 14));
 		btnImage.setBackground(new Color(242, 247, 255));
-		contentPane.add(btnImage);
+		panelChild.add(btnImage);
 
 		btnPronunciation = new JButton(" Tải âm thanh lên");
-		btnPronunciation.setBounds(138, 152, 175, 37);
+		btnPronunciation.setBounds(137, 83, 175, 37);
 		btnPronunciation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				do_btnPronunciation_actionPerformed(e);
@@ -189,92 +213,37 @@ public class FrameInsertVocab extends JFrame {
 		btnPronunciation.setForeground(new Color(0, 0, 0));
 		btnPronunciation.setFont(new Font("Arial", Font.BOLD, 14));
 		btnPronunciation.setBackground(new Color(242, 247, 255));
-		contentPane.add(btnPronunciation);
+		panelChild.add(btnPronunciation);
 
-		panelMeaning = new Panel();
-		panelMeaning.setLayout(null);
-		panelMeaning.setBackground(Color.BLACK);
-		panelMeaning.setBounds(138, 338, 362, 42);
-		contentPane.add(panelMeaning);
-
-		textMeaning = new JTextField();
-		textMeaning.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		textMeaning.setColumns(10);
-		textMeaning.setBounds(0, 0, 362, 42);
-		panelMeaning.add(textMeaning);
-
-		Panel panelExample = new Panel();
-		panelExample.setBackground(Color.BLACK);
-		panelExample.setBounds(624, 338, 462, 102);
-		contentPane.add(panelExample);
-		panelExample.setLayout(new BorderLayout(0, 0));
-
-		textExample = new JTextArea();
-		textExample.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		textExample.setBackground(Color.WHITE);
-		panelExample.add(textExample);
-		
-		JScrollPane jspEx1 = new JScrollPane(textExample, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		panelExample.add(jspEx1);
-
-		lblMeaning = new JLabel("Ý nghĩa:");
-		lblMeaning.setForeground(Color.BLACK);
-		lblMeaning.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblMeaning.setBounds(32, 348, 74, 21);
-		contentPane.add(lblMeaning);
-
-
-		lblExample1 = new JLabel("Ví dụ ");
-		lblExample1.setForeground(Color.BLACK);
-		lblExample1.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblExample1.setBounds(538, 338, 96, 21);
-		contentPane.add(lblExample1);
-
-		panelShowImage = new JPanel();
-		panelShowImage.setBackground(new Color(255, 255, 255));
-		panelShowImage.setBounds(673, 143, 412, 170);
-		contentPane.add(panelShowImage);
-		panelShowImage.setLayout(new BorderLayout(0, 0));
-
-		lblShowImage = new JLabel("");
-		lblShowImage.setHorizontalAlignment(SwingConstants.CENTER);
-		panelShowImage.add(lblShowImage);
-		
-		Border border = BorderFactory.createLineBorder(Color.BLUE, 1);
-		lblShowImage.setBorder(border);
 
 		textRelatives = new JTextField();
 		textRelatives.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textRelatives.setColumns(10);
-		textRelatives.setBounds(138, 276, 481, 37);
-		contentPane.add(textRelatives);
+		textRelatives.setBounds(137, 207, 481, 37);
+		panelChild.add(textRelatives);
 
 		lblRelatives = new JLabel("Từ liên quan");
 		lblRelatives.setForeground(Color.BLACK);
 		lblRelatives.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblRelatives.setBounds(32, 275, 108, 34);
-		contentPane.add(lblRelatives);
+		lblRelatives.setBounds(31, 206, 108, 34);
+		panelChild.add(lblRelatives);
 
 		lblCategory = new JLabel("Thể loại");
 		lblCategory.setForeground(Color.BLACK);
 		lblCategory.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblCategory.setBounds(32, 215, 108, 37);
-		contentPane.add(lblCategory);
+		lblCategory.setBounds(31, 146, 108, 37);
+		panelChild.add(lblCategory);
 
 		comboCategory = new JComboBox<String>();
-		CategoryDAOImpl cateDao = new CategoryDAOImpl();
-		comboCategory.addItem(null);
-		cateDao.selectAll().forEach(
-				pro -> comboCategory.addItem(pro.getName().substring(0, 1).toUpperCase() + pro.getName().substring(1)));
 		comboCategory.setFont(new Font("Arial", Font.PLAIN, 16));
 		comboCategory.setBackground(Color.WHITE);
-		comboCategory.setBounds(140, 214, 479, 38);
-		contentPane.add(comboCategory);
-		
+		comboCategory.setBounds(139, 145, 479, 38);
+		panelChild.add(comboCategory);
+
 		panel_1 = new JPanel();
-		panel_1.setBounds(673, 89, 412, 39);
-		contentPane.add(panel_1);
-		
+		panel_1.setBounds(672, 20, 412, 39);
+		panelChild.add(panel_1);
+
 		btnPlaySound = new JButton("Play Sound");
 		btnPlaySound.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -283,7 +252,7 @@ public class FrameInsertVocab extends JFrame {
 		});
 		panel_1.setLayout(new GridLayout(0, 2, 0, 0));
 		panel_1.add(btnPlaySound);
-		
+
 		btnStopSound = new JButton("Stop Sound");
 		btnStopSound.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -293,6 +262,7 @@ public class FrameInsertVocab extends JFrame {
 		panel_1.add(btnStopSound);
 		
 		btnPlus = new JButton("+");
+		btnPlus.setBounds(37, 724, 44, 44);
 		btnPlus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				do_btnPlus_actionPerformed(e);
@@ -301,8 +271,39 @@ public class FrameInsertVocab extends JFrame {
 		btnPlus.setForeground(Color.WHITE);
 		btnPlus.setFont(new Font("Arial", Font.BOLD, 16));
 		btnPlus.setBackground(new Color(67, 98, 190));
-		btnPlus.setBounds(1118, 336, 44, 44);
 		contentPane.add(btnPlus);
+		meaningItems = new ArrayList<>();
+
+		JLabel lblPhonetic = new JLabel("Phiên âm");
+		lblPhonetic.setForeground(Color.BLACK);
+		lblPhonetic.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblPhonetic.setBounds(31, 280, 108, 34);
+		panelChild.add(lblPhonetic);
+		
+		textPhonetic = new JTextField();
+		textPhonetic.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		textPhonetic.setColumns(10);
+		textPhonetic.setBounds(137, 278, 481, 37);
+		panelChild.add(textPhonetic);
+		
+				
+		
+		panelShowImage = new JPanel();
+		panelShowImage.setBackground(new Color(255, 255, 255));
+		panelShowImage.setBounds(672, 112, 412, 170);
+		panelChild.add(panelShowImage);
+		panelShowImage.setLayout(new BorderLayout(0, 0));
+		
+		lblShowImage = new JLabel("");
+		lblShowImage.setHorizontalAlignment(SwingConstants.CENTER);
+		panelShowImage.add(lblShowImage);
+		Border border = BorderFactory.createLineBorder(Color.BLUE, 1);
+		lblShowImage.setBorder(border);
+		
+		FrameUtils.alignFrameScreenCenter(this);
+		
+		addItemMn();
+		addItemMn();
 	}
 
 	protected void do_btnImage_actionPerformed(ActionEvent e) {
@@ -316,7 +317,6 @@ public class FrameInsertVocab extends JFrame {
 		if (result == chooser.APPROVE_OPTION) {
 			f = chooser.getSelectedFile();
 			final int ROW_HEIGHT = 170;
-			
 			lblShowImage.setIcon(ImageUtils.getImageByFile(f, ROW_HEIGHT));
 			data.put("image", f.toPath().toString());
 		}
@@ -332,13 +332,13 @@ public class FrameInsertVocab extends JFrame {
 		if (result == chooser.APPROVE_OPTION) {
 			f = chooser.getSelectedFile();
 			this.pronunciationURL = f.getAbsolutePath();
-			
+
 			data.put("pronunciation", f.getAbsolutePath());
 		}
 	}
-	
+
 	protected void btnPlaySoundActionPerformed(ActionEvent e) {
-		if(pronunciationURL == null) {
+		if (pronunciationURL == null) {
 			JOptionPane.showMessageDialog(this, "Bạn chưa upload file phát âm");
 		} else {
 			mp3 = new MP3Player(new File(pronunciationURL));
@@ -351,8 +351,18 @@ public class FrameInsertVocab extends JFrame {
 		data.put("type", Integer.toString(comboWordType.getSelectedIndex() + 1));
 		data.put("category", comboCategory.getSelectedItem() == null ? "" : comboCategory.getSelectedItem().toString());
 		data.put("relatives", textRelatives.getText());
-		data.put("meaning", textMeaning.getText());
-		data.put("example", textExample.getText());
+		data.put("phonetic", textPhonetic.getText());
+		
+		
+		HashMap<String, String> mnEx;
+		for(ItemMeaning item : meaningItems) {
+			mnEx = new HashMap<>();
+			mnEx.put("meaning", item.getMeaningText());
+			mnEx.put("example", item.getExampleText());
+			meaningAndExamples.add(mnEx);
+		}
+		
+		data.put("meaningAndEx", meaningAndExamples);
 		
 		vocabService = new VocabularyService();
 		if (vocabService.add(data)) {
@@ -360,24 +370,31 @@ public class FrameInsertVocab extends JFrame {
 			dispose();
 		} else {
 			System.out.println(ErrorMessage.ERROR_MESSAGES);
-
 		}
 
 	}
-	
+
 	protected void btnStopSoundActionPerformed(ActionEvent e) {
-		if(pronunciationURL == null) {
+		if (pronunciationURL == null) {
 			JOptionPane.showMessageDialog(this, "Bạn chưa upload file phát âm");
 		} else {
 			mp3.stop();
 		}
 	}
-	
+
 	protected void do_btnPlus_actionPerformed(ActionEvent e) {
-		ItemMeaning item = new ItemMeaning(y);
-		contentPane.add(item);
-		h = h + i;
-		setBounds(100, 100, 1303, h);
-		y = y + i;
+		addItemMn();
 	}
+	
+	private void addItemMn() {
+		ItemMeaning item = new ItemMeaning(CURRENT_PANELS_MN_EX_HEIGHT);
+		CURRENT_PANELS_MN_EX_HEIGHT += PANEL_ITEM_MEANING_HEIGHT;
+		panelChild.setPreferredSize(new Dimension(panelChild.getWidth(), 600 + HEIGHT_ADDED));
+		HEIGHT_ADDED += PANEL_ITEM_MEANING_HEIGHT;
+		panelChild.add(item);
+		meaningItems.add(item);
+	}
+	
+	
+	
 }

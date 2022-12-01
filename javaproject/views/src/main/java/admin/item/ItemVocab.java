@@ -36,7 +36,8 @@ public class ItemVocab extends JPanel {
 		lblWord.setText(StringUtils.toCapitalize(vocab.getWord()));
 		lblImage.setIcon(ImageUtils.getImageByURL("vocabulary", vocab.getImage(), 78));
 		List<Meaning> means = new VocabularyDAOImpl().selectAllMeaningByVocabId(vocab.getId());
-		String meansStr = means.stream().limit(4).map(mean -> StringUtils.toCapitalize(mean.getContent()))
+		String meansStr = means.stream().limit(4)
+				.map(mean -> StringUtils.toCapitalize(mean.getContent()))
 				.collect(Collectors.joining("<br/>"));
 		if (means.size() > 5) {
 			meansStr += " ...";
@@ -140,7 +141,6 @@ public class ItemVocab extends JPanel {
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FrameUpdateVocab fr = new FrameUpdateVocab(vocab);
-				FrameUtils.alignFrameScreenCenter(fr);
 				fr.setVisible(true);
 			}
 		});

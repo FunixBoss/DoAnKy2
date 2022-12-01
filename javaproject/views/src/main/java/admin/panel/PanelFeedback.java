@@ -1,30 +1,45 @@
 package admin.panel;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import admin.insert.FrameInsertMember;
 import admin.item.ItemFeedback;
+import admin.item.ItemUser;
+import dao.impl.UserDAOImpl;
+import entity.User;
+import helper.FrameUtils;
 
 
 public class PanelFeedback extends JPanel {
-
-	private JScrollPane scrollPane;
-	private JPanel panel;
 	private JLabel lblStatusPage;
-	private JLabel lblRowCount;
-	private JComboBox cbbNumberOfRows;
-	private JTextField txtPage;
+	private JLabel lblRowCount;	
+	private JPanel panel;
+	private JScrollPane scrollPane;
+	private UserDAOImpl dao; // data
 	
+//	Controll data
+	private Integer pageNumber;
+	private Integer rowsOfPage;
+	private Integer totalOfRows;
+	private Integer totalPage;
+	private JTextField txtPage;
+	private JComboBox cbbNumberOfRows;
+
 	private static PanelFeedback myInstance;
 	
 	public static PanelFeedback getMyInstance() {
@@ -34,46 +49,115 @@ public class PanelFeedback extends JPanel {
 		return myInstance;
 	}
 	
-	private ItemFeedback item;
-	private JPanel panelMain;
 	public PanelFeedback() {
 		initComponent();
-		printTopPageComponent();
-		printControllComponent();
-		panelMain.setLayout(null);
-		item = new ItemFeedback();
-		panelMain.add(item);
+		dao = new UserDAOImpl();
+		pageNumber = 1;
+		rowsOfPage = dao.countNumberOfUser() > 10 ? 10 : dao.countNumberOfUser();
+		
+		loadData();
 	}
-
 	private void initComponent() {
 		setLayout(null);
 		setBounds(0, 0, 1085, 699);
 		setBackground(new Color(242, 247, 255));
-		JLabel lblDashboard = new JLabel("Phản hồi");
+		JLabel lblDashboard = new JLabel("Thành viên");
 		lblDashboard.setForeground(new Color(37, 57, 111));
 		lblDashboard.setFont(new Font("Arial", Font.BOLD, 20));
-		lblDashboard.setBounds(43, 11, 134, 39);
+		lblDashboard.setBounds(41, 11, 134, 39);
 		add(lblDashboard);
 		scrollPane = new JScrollPane();
 		scrollPane.setForeground(new Color(0, 0, 0));
 		scrollPane.setBorder(null);
 		scrollPane.setBackground(new Color(255, 255, 255));
-		scrollPane.setBounds(43, 74, 995, 494);
+		scrollPane.setBounds(43, 120, 995, 448);
 		add(scrollPane);
-		
-		panelMain = new JPanel();
-		scrollPane.setViewportView(panelMain);
 		panel = new JPanel();
 		panel.setLayout(null);
 		panel.setBackground(Color.WHITE);
+		printTopPageComponent();
+		printControllComponent();
 	}
-
 	private void printTopPageComponent() {
-		JLabel lblBreadcrumb = new JLabel("Trang chủ / Phản hồi");
+		JLabel lblBreadcrumb = new JLabel("Trang chủ / Thành viên");
 		lblBreadcrumb.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblBreadcrumb.setBounds(904, 21, 134, 14);
 		add(lblBreadcrumb);
 		
+		JButton btnAdd = new JButton("Thêm thành viên");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				do_btnAdd_actionPerformed(e);
+			}
+		});
+		btnAdd.setForeground(new Color(255, 255, 255));
+		btnAdd.setFont(new Font("Arial", Font.BOLD, 14));
+		btnAdd.setBorder(null);
+		btnAdd.setBackground(new Color(67, 98, 190));
+		btnAdd.setBounds(891, 61, 147, 36);
+		add(btnAdd);
+	}
+	
+	private void printTitleComponent(JPanel panel) {
+		JPanel panelHeader = new JPanel();
+		panelHeader.setBounds(0, 0, 995, 40);
+		panel.add(panelHeader);
+		panelHeader.setLayout(new GridLayout(0, 5, 0, 0));
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_1);
+		panel_1.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblNewLabel = new JLabel("ID");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setForeground(Color.WHITE);
+		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_1.add(lblNewLabel);
+		
+		JPanel panel_1_2 = new JPanel();
+		panel_1_2.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_1_2);
+		panel_1_2.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblEmail = new JLabel("Email");
+		lblEmail.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEmail.setForeground(Color.WHITE);
+		lblEmail.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_1_2.add(lblEmail);
+		
+		JPanel panel_1_3 = new JPanel();
+		panel_1_3.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_1_3);
+		panel_1_3.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblNewLabel_1 = new JLabel("Ngày tạo");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setForeground(Color.WHITE);
+		lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_1_3.add(lblNewLabel_1);
+		
+		JPanel panel_1_1 = new JPanel();
+		panel_1_1.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_1_1);
+		panel_1_1.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblXa = new JLabel("Xóa");
+		lblXa.setHorizontalAlignment(SwingConstants.CENTER);
+		lblXa.setForeground(Color.WHITE);
+		lblXa.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_1_1.add(lblXa);
+		
+		JPanel panel_1_1_1 = new JPanel();
+		panel_1_1_1.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_1_1_1);
+		panel_1_1_1.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblSa = new JLabel("Sửa");
+		lblSa.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSa.setForeground(Color.WHITE);
+		lblSa.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_1_1_1.add(lblSa);
 	}
 	
 	private void printControllComponent() {
@@ -150,7 +234,6 @@ public class PanelFeedback extends JPanel {
 		txtPage = new JTextField();
 		txtPage.setBounds(435, 645, 220, 40);
 		txtPage.setColumns(10);
-		txtPage.setText(new String("1"));
 		txtPage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txtPageActionPerformed(e);
@@ -160,22 +243,87 @@ public class PanelFeedback extends JPanel {
 		
 	}
 	
-	protected void txtPageActionPerformed(ActionEvent e) {
+	
+	private void loadData() {
+		totalOfRows = dao.countNumberOfUser();
+		totalPage = (int) Math.ceil((double) totalOfRows / rowsOfPage);
+		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
+		lblRowCount.setText("Số dòng: " + totalOfRows);
 		
+		final int ITEM_HEIGHT = 63;
+		Integer tableHeigth = Math.min(ITEM_HEIGHT * rowsOfPage, ITEM_HEIGHT * totalOfRows);
+		Dimension dim = new Dimension(975, tableHeigth);
+		panel.setPreferredSize(dim);
+		scrollPane.setViewportView(panel);
+		
+		panel.removeAll();
+		printTitleComponent(panel);
+
+		int y = 40;		
+		for(User user : dao.selectUserByPages(pageNumber, rowsOfPage)){
+			ItemUser userItem = new ItemUser(user, y);			
+			panel.add(userItem);
+			y = y + 60;
+		}	
+	}
+	protected void do_btnAdd_actionPerformed(ActionEvent e) {
+		FrameInsertMember frame = FrameInsertMember.getMyInstance();
+		if(!frame.isVisible()) {
+			FrameUtils.alignFrameScreenCenter(frame);
+			frame.setVisible(true);
+		}
+	}
+	
+	protected void txtPageActionPerformed(ActionEvent e) {
+		if(txtPage.getText() != null) {
+			try {
+				int page = Integer.parseInt(txtPage.getText());
+				if(page >= 1 && page <= totalPage) {
+					pageNumber = page;
+					loadData();
+				} else {
+					JOptionPane.showMessageDialog(null, "Số trang chỉ được nhập từ 1 đến " + (int) Math.ceil(totalPage));
+					txtPage.setText(pageNumber.toString());
+				}
+				
+			} catch (Exception e2) {
+				JOptionPane.showMessageDialog(panel, "Chỉ được phép nhập số!");
+			}
+		} else {
+			pageNumber = 1;
+			loadData();
+		}
 	}
 	protected void btnFirstActionPerformed(ActionEvent e) {
-		
+		pageNumber = 1;
+		txtPage.setText(pageNumber.toString());
+		loadData();
 	}
 	protected void btnPreviousActionPerformed(ActionEvent e) {
-		
+		if(pageNumber > 1) {
+			pageNumber--;
+			txtPage.setText(pageNumber.toString());
+			loadData();
+		}
 	}
 	protected void btnNextActionPerformed(ActionEvent e) {
-		
+		if(pageNumber < totalPage) {
+			pageNumber++;
+			txtPage.setText(pageNumber.toString());
+			loadData();
+		}
 	}
 	protected void btnLastActionPerformed(ActionEvent e) {
-		
+		pageNumber = totalPage.intValue();
+		txtPage.setText(pageNumber.toString());
+		loadData();
 	}
 	protected void cbbNumberOfRowsActionPerformed(ActionEvent e) {
-		
+		if(dao != null) {
+			pageNumber = 1;
+			txtPage.setText(pageNumber.toString());
+			rowsOfPage = Integer.parseInt(cbbNumberOfRows.getSelectedItem().toString());
+			loadData();
+		}
 	}
 }

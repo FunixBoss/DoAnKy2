@@ -29,7 +29,7 @@ public class ItemCategory extends JPanel {
 	public ItemCategory(Category cate) {
 		initComponent(cate);
 		
-		lblCategory.setText(StringUtils.toCapitalize(cate.getName()));
+		lblCategory.setText(StringUtils.toCapitalize(cate.getName() == null ? "" : cate.getName()) );
 		final int ROW_HEIGHT = 50;
 		lblImage.setIcon(ImageUtils.getImageByURL("category", cate.getImageIcon(), ROW_HEIGHT));
 		

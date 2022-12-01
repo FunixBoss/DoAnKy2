@@ -34,7 +34,8 @@ public class FrameDashboard extends JFrame {
 	
 	class SideBarMenu extends PanelSideBar {
 		protected void do_panelDashboard_mouseClicked(MouseEvent e) {
-			menuClicked(panelDashboard);	
+			menuClicked(panelDashboard);
+			panelDashboard.loadData();
 			menuChanged(getPanelDashboard(),getLblDashboard());
 		}
 		protected void do_panelVocab_mouseClicked(MouseEvent e) {
@@ -64,27 +65,19 @@ public class FrameDashboard extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FrameDashboard frame = new FrameDashboard();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		EventQueue.invokeLater(() -> {
+			try {
+				FrameDashboard frame = new FrameDashboard();
+				frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 	}
-	/**
-	 * Create the frame.
-	 */
-	
 	public FrameDashboard() {
 		initComponent();
 	}
 	private void initComponent() {
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		setResizable(false);
 		setTitle("Dashboard");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(FrameDashboard.class.getResource("/image/dictionary-icon.png")));

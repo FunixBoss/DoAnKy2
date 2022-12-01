@@ -65,12 +65,12 @@ public class AnswerDAOImpl extends AbstractDAO<Answer> implements AnswerDAO {
 			var cs = con.prepareCall("{call insertAnswer(?,?,?)}");
 		){
 			cs.setString(1, ans.getContent());
-			cs.setBoolean(1, ans.getIsTrue());
-			cs.setInt(2, ans.getQuestionId());
+			cs.setBoolean(2, ans.getIsTrue());
+			cs.setInt(3, ans.getQuestionId());
 			result = cs.executeUpdate();
 		} catch (Exception e) {
-//			e.printStackTrace();
-			System.out.println("Insert a Answer failed");
+			e.printStackTrace();
+			System.err.println("Insert a Answer failed");
 		}
 		return result;
 	}

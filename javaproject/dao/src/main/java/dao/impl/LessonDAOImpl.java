@@ -1,12 +1,18 @@
 package dao.impl;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
 import dao.LessonDAO;
+import database.CallableStatementUtils;
 import database.ConnectDBFromProperties;
 import entity.Bookmark;
+import entity.Category;
 import entity.Lesson;
 
 public class LessonDAOImpl extends AbstractDAO<Lesson> implements LessonDAO {
@@ -110,6 +116,82 @@ public class LessonDAOImpl extends AbstractDAO<Lesson> implements LessonDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println("Delete a Lesson failed");
+		}
+		return result;
+	}
+
+	@Override
+	public Integer countNumberOfLesson() {
+		int count = 0;
+		
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call countLesson}");
+			var rs = cs.executeQuery();
+		){
+			if(rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return count;
+	}
+
+	@Override
+	public List<Lesson> selectByPages(int pageNumber, int rowOfPages) {
+		List<Lesson> list = new ArrayList<>();
+		
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = CallableStatementUtils.createCS(con, "{call selLessonByPages(?, ?)}", pageNumber, rowOfPages);
+			var rs = cs.executeQuery();
+		){
+			while(rs.next()) {
+				Integer id = rs.getInt(1);
+				String title = rs.getString(2);
+				String image = rs.getString(3);
+				list.add(new Lesson(id, title, image));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Select Lesson By Pages Failed");
+		}
+		return list;
+	}
+
+	@Override
+	public Integer insertGetId(Lesson ls) {
+		String sql = "INSERT INTO LESSON VALUES (?, ?)";
+		Integer result = 0;
+		try (
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			PreparedStatement  ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		) {
+			ps.setString(1, ls.getTitle());
+			if(ls.getImage() != null) {
+				ps.setString(2, ls.getImage());				
+			} else{
+				ps.setNull(2, Types.NVARCHAR);
+			}
+			int affectedRows = ps.executeUpdate();
+
+	        if (affectedRows == 0) {
+	            throw new SQLException("Creating lesson failed, no rows affected.");
+	        }
+
+	        try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+	            if (generatedKeys.next()) {
+	            	result =  generatedKeys.getInt(1);
+	            }
+	            else {
+	                throw new SQLException("Insert get id lesson failed, no ID obtained.");
+	            }
+	        }
+		} catch (Exception e) {
+			// e.printStackTrace();
+			System.err.println("Insert Get Last Id Lesson failed!");
 		}
 		return result;
 	}

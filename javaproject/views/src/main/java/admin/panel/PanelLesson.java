@@ -1,8 +1,11 @@
 package admin.panel;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,23 +13,41 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import admin.insert.FrameInsertCategory;
+import admin.insert.FrameInsertLesson;
 import admin.insert.FrameInsertVocab;
+import admin.item.ItemCategory;
+import admin.item.ItemLesson;
+import admin.item.ItemVocab;
+import dao.impl.CategoryDAOImpl;
+import dao.impl.LessonDAOImpl;
+import dao.impl.VocabularyDAOImpl;
+import entity.Category;
+import entity.Lesson;
+import entity.Vocabulary;
+import helper.FrameUtils;
 
 public class PanelLesson extends JPanel {
-
-	private JScrollPane scrollPane;
-	private JPanel panel;
 	private JLabel lblStatusPage;
 	private JLabel lblRowCount;
-	private JComboBox cbbNumberOfRows;
+	private JScrollPane scrollPane;
+	private JPanel panel;
+	private LessonDAOImpl dao; // data
+	
+//	Controll data
+	private Integer pageNumber;
+	private Integer rowsOfPage;
+	private Integer totalOfRows;
+	private Integer totalPage;
 	private JTextField txtPage;
-
+	private JComboBox cbbNumberOfRows;
+	
 	private static PanelLesson myInstance;
 	
 	public static PanelLesson getMyInstance() {
@@ -38,9 +59,13 @@ public class PanelLesson extends JPanel {
 	
 	public PanelLesson() {
 		initComponent();
-		printTopPageComponent();
-		printControllComponent();
+		dao = new LessonDAOImpl();
+		pageNumber = 1;
+		rowsOfPage = dao.countNumberOfLesson() > 10 ? 10 : dao.countNumberOfLesson();
+		
+		loadData();
 	}
+
 
 	private void initComponent() {
 		setLayout(null);
@@ -49,7 +74,7 @@ public class PanelLesson extends JPanel {
 		JLabel lblDashboard = new JLabel("Bài học");
 		lblDashboard.setForeground(new Color(37, 57, 111));
 		lblDashboard.setFont(new Font("Arial", Font.BOLD, 20));
-		lblDashboard.setBounds(43, 11, 134, 39);
+		lblDashboard.setBounds(41, 11, 134, 39);
 		add(lblDashboard);
 		scrollPane = new JScrollPane();
 		scrollPane.setForeground(new Color(0, 0, 0));
@@ -60,8 +85,10 @@ public class PanelLesson extends JPanel {
 		panel = new JPanel();
 		panel.setLayout(null);
 		panel.setBackground(Color.WHITE);
-		
+		printTopPageComponent();
+		printControllComponent();
 	}
+
 
 	private void printTopPageComponent() {
 		JLabel lblBreadcrumb = new JLabel("Trang chủ / Bài học");
@@ -81,21 +108,8 @@ public class PanelLesson extends JPanel {
 		btnAdd.setBackground(new Color(67, 98, 190));
 		btnAdd.setBounds(891, 61, 147, 36);
 		add(btnAdd);
-		
-		JButton btnVocab = new JButton("Thêm từ vựng");
-		btnVocab.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				do_btnVocab_actionPerformed(e);
-			}
-		});
-		btnVocab.setForeground(Color.WHITE);
-		btnVocab.setFont(new Font("Arial", Font.BOLD, 14));
-		btnVocab.setBorder(null);
-		btnVocab.setBackground(new Color(67, 98, 190));
-		btnVocab.setBounds(726, 61, 147, 36);
-		add(btnVocab);
 	}
-	
+
 	private void printControllComponent() {
 		lblStatusPage = new JLabel("Trang 1 of 0");
 		lblStatusPage.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -180,35 +194,164 @@ public class PanelLesson extends JPanel {
 		
 	}
 
+	private void printTitleComponent(JPanel panel) {
+		JPanel panelHeader = new JPanel();
+		panelHeader.setLayout(new GridLayout(0, 6, 0, 0));
+		panelHeader.setBounds(0, 0, 995, 40);
+		panel.add(panelHeader);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_1);
+		panel_1.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblNewLabel = new JLabel("ID");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setForeground(Color.WHITE);
+		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_1.add(lblNewLabel);
+		
+		JPanel panel_1_2 = new JPanel();
+		panel_1_2.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_1_2);
+		panel_1_2.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblWord = new JLabel("Tiêu đề");
+		lblWord.setAlignmentY(Component.TOP_ALIGNMENT);
+		lblWord.setHorizontalAlignment(SwingConstants.CENTER);
+		lblWord.setForeground(Color.WHITE);
+		lblWord.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_1_2.add(lblWord);
+		
+		JPanel panel_2_1 = new JPanel();
+		panel_2_1.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_2_1);
+		panel_2_1.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblMeaning = new JLabel("Các từ vựng");
+		lblMeaning.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMeaning.setForeground(Color.WHITE);
+		lblMeaning.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_2_1.add(lblMeaning);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_2);
+		panel_2.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblImage = new JLabel("Hình ảnh");
+		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
+		lblImage.setForeground(Color.WHITE);
+		lblImage.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_2.add(lblImage);
+		
+		JPanel panel_1_1_1 = new JPanel();
+		panel_1_1_1.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_1_1_1);
+		panel_1_1_1.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblEdit = new JLabel("Sửa");
+		lblEdit.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEdit.setForeground(Color.WHITE);
+		lblEdit.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_1_1_1.add(lblEdit);
+		
+		
+		JPanel panel_1_1 = new JPanel();
+		panelHeader.add(panel_1_1);
+		panel_1_1.setBackground(new Color(37, 57, 111));
+		panel_1_1.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblXa = new JLabel("Xóa");
+		lblXa.setHorizontalAlignment(SwingConstants.CENTER);
+		lblXa.setForeground(Color.WHITE);
+		lblXa.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_1_1.add(lblXa);
+	}
+
+	private void loadData() {
+		totalOfRows = dao.countNumberOfLesson();
+		totalPage = (int) Math.ceil((double)totalOfRows / rowsOfPage);
+		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
+		lblRowCount.setText("Số dòng: " + totalOfRows);
+		
+		
+		final int ITEM_HEIGHT = 88;
+		Integer tableHeigth = Math.min(ITEM_HEIGHT * rowsOfPage, ITEM_HEIGHT * totalOfRows);
+		Dimension dim = new Dimension(975, tableHeigth + 20);
+		panel.setPreferredSize(dim);
+		scrollPane.setViewportView(panel);
+		
+		panel.removeAll();
+		printTitleComponent(panel);
+		
+		int y = 40;
+		scrollPane.setViewportView(panel);
+		for(Lesson ls : dao.selectByPages(pageNumber, rowsOfPage)){
+			ItemLesson lsItem = new ItemLesson(ls, y);
+			panel.add(lsItem);
+			y = y + 84;
+		}	
+	}
+	
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
-		FrameInsertCategory frame = new FrameInsertCategory();
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-		frame.setVisible(true);
+		FrameInsertLesson frame = FrameInsertLesson.getMyInstance();
+		if(!frame.isVisible()) {
+			frame.setVisible(true);
+		}
 	}
 	
 	protected void txtPageActionPerformed(ActionEvent e) {
+		if(txtPage.getText() != null) {
+			try {
+				int page = Integer.parseInt(txtPage.getText());
+				if(page >= 1 && page <= totalPage) {
+					pageNumber = page;
+					loadData();
+				} else {
+					JOptionPane.showMessageDialog(null, "Số trang chỉ được nhập từ 1 đến " + (int) Math.ceil(totalPage));
+					txtPage.setText(pageNumber.toString());
+				}
+				
+			} catch (Exception e2) {
+				JOptionPane.showMessageDialog(panel, "Chỉ được phép nhập số!");
+			}
+		} else {
+			pageNumber = 1;
+			loadData();
+		}
 		
 	}
 	protected void btnFirstActionPerformed(ActionEvent e) {
-		
+		pageNumber = 1;
+		txtPage.setText(pageNumber.toString());
+		loadData();
 	}
 	protected void btnPreviousActionPerformed(ActionEvent e) {
-		
+		if(pageNumber > 1) {
+			pageNumber--;
+			txtPage.setText(pageNumber.toString());
+			loadData();
+		}
 	}
 	protected void btnNextActionPerformed(ActionEvent e) {
-		
+		if(pageNumber < totalPage.intValue()) {
+			pageNumber++;
+			txtPage.setText(pageNumber.toString());
+			loadData();
+		}
 	}
 	protected void btnLastActionPerformed(ActionEvent e) {
-		
+		pageNumber = totalPage.intValue();
+		txtPage.setText(pageNumber.toString());
+		loadData();
 	}
 	protected void cbbNumberOfRowsActionPerformed(ActionEvent e) {
-		
-	}
-	protected void do_btnVocab_actionPerformed(ActionEvent e) {
-		FrameInsertVocab frame = new FrameInsertVocab();
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-		frame.setVisible(true);
+		if(dao != null) {
+			pageNumber = 1;
+			txtPage.setText(pageNumber.toString());
+			rowsOfPage = Integer.parseInt(cbbNumberOfRows.getSelectedItem().toString());
+			loadData();
+		}
 	}
 }

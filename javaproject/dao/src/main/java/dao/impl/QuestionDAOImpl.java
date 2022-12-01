@@ -1,5 +1,10 @@
 package dao.impl;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,6 +130,37 @@ public class QuestionDAOImpl extends AbstractDAO<Question> implements QuestionDA
 			System.err.println("Select all Questions By Lesson ID failed!");
 		}
 		return list;
+	}
+
+	@Override
+	public Integer insertGetId(Question qs) {
+		String sql = "INSERT INTO QUESTION VALUES (?, ?)";
+		Integer result = 0;
+		try (
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			PreparedStatement  ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		) {
+			ps.setString(1, qs.getContent());
+			ps.setInt(2, qs.getLessonId());
+			int affectedRows = ps.executeUpdate();
+
+	        if (affectedRows == 0) {
+	            throw new SQLException("Creating lesson failed, no rows affected.");
+	        }
+
+	        try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+	            if (generatedKeys.next()) {
+	            	result =  generatedKeys.getInt(1);
+	            }
+	            else {
+	                throw new SQLException("Insert get id lesson failed, no ID obtained.");
+	            }
+	        }
+		} catch (Exception e) {
+			// e.printStackTrace();
+			System.err.println("Insert Get Last Id Lesson failed!");
+		}
+		return result;
 	}
 
 }

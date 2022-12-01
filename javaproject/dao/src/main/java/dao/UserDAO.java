@@ -10,6 +10,8 @@ import entity.Vocabulary;
 public interface UserDAO extends DAO<User> {
 	List<User> getList(int level);
 	Integer updatePassword(User user);
+	Integer updateRole(User user);
+
 	boolean checkExistEmail(String email);
 	
 	History selectHistoryByUserId(Integer userId);

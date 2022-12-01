@@ -70,7 +70,18 @@ END
 GO
 --EXEC updatePasswordInfoUser @id = 1, @password = N'123'
 
-
+DROP PROC IF EXISTS updateRoleUser
+GO
+CREATE PROC updateRoleUser
+@id INT ,
+@role_id INT
+AS 
+BEGIN 
+	UPDATE [USER] 
+	SET [ROLE_ID] = @role_id
+	WHERE ID = @id
+END
+GO
 
 DROP PROC IF EXISTS deleteUser
 GO

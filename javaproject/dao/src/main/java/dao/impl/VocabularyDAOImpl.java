@@ -8,11 +8,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import database.CallableStatementUtils;
 import database.ConnectDBFromProperties;
 import entity.Meaning;
+import entity.Phonetic;
 import entity.RelativeWord;
 import entity.Vocabulary;
 import dao.VocabularyDAO;
@@ -196,7 +198,6 @@ public class VocabularyDAOImpl extends AbstractDAO<Vocabulary> implements Vocabu
 		return list;
 	}
 
-	
 
 	@Override
 	public List<RelativeWord> selectAllRelativesByVocabId(Integer vocabId) {
@@ -221,7 +222,28 @@ public class VocabularyDAOImpl extends AbstractDAO<Vocabulary> implements Vocabu
 	}
 	
 	@Override
+	public List<Phonetic> selAllPhoneticByVocabId(Integer vocabId) {
+		List<Phonetic> list = new ArrayList<>();
+		try (
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call selPhoneticByVocabId(?)}");
+		) {
+			cs.setInt(1, vocabId);
+			var rs = cs.executeQuery();
+			while (rs.next()) {
+				Integer pntId = rs.getInt(1);
+				String content = rs.getString(2);
+				Integer vocabIdRs = rs.getInt(3);
+				list.add(new Phonetic(pntId, content, vocabIdRs));
+			}
+		} catch (Exception e) {
+			// e.printStackTrace();
+			System.err.println("Select all Phonetics by Vocab Id failed!");
+		}
+		return list;
+	}
 	
+	@Override
 	public List<Vocabulary> selectByPages(int pageNumber, int rowOfPages) {
 		List<Vocabulary> list = new ArrayList<>();
 		
@@ -343,6 +365,55 @@ public class VocabularyDAOImpl extends AbstractDAO<Vocabulary> implements Vocabu
 		} catch(Exception e) {
 //			e.printStackTrace();
 			System.err.println("search all vocabulary failed!");
+		}
+		return list;
+	}
+
+	@Override
+	public List<Vocabulary> sel5LastVocab() {
+		List<Vocabulary> list = new ArrayList<>();
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call sel5LastVocab}");
+			var rs = cs.executeQuery();
+		){
+			while(rs.next()) {
+				Integer vocab_id = rs.getInt(1);
+				String word = rs.getString(2);
+				String image = rs.getString(3);
+				String pronunciation = rs.getString(4);
+				Integer categoryId = rs.getInt(5);
+				Integer wordTypeId = rs.getInt(6);
+				
+				list.add(
+					new Vocabulary(vocab_id, word, image, pronunciation, categoryId, wordTypeId));
+			}
+		} catch(Exception e) {
+//			e.printStackTrace();
+			System.err.println("Select top 5 last vocabulary failed!");
+		}
+		return list;
+	}
+
+	@Override
+	public List<Vocabulary> selectIdAndWordAll() {
+		List<Vocabulary> list = new ArrayList<>();
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call selIdAndWordAllVocab}");
+			var rs = cs.executeQuery();
+		){
+			while(rs.next()) {
+				Integer vocab_id = rs.getInt(1);
+				String word = rs.getString(2);
+				Vocabulary vocab = new Vocabulary();
+				vocab.setId(vocab_id);
+				vocab.setWord(word);
+				list.add(vocab);
+			}
+		} catch(Exception e) {
+//			e.printStackTrace();
+			System.err.println("Select Id and Word all vocabulary failed!");
 		}
 		return list;
 	}

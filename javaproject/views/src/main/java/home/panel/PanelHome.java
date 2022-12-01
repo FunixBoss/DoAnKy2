@@ -17,9 +17,7 @@ public class PanelHome extends JPanel {
 	private JPanel panelLesson;
 	private ItemCategory itemCategory;
 	private Category cate;
-	/**
-	 * Create the panel.
-	 */
+	
 	private JPanel panelCategory;
 	public PanelHome() {
 		initComponent();

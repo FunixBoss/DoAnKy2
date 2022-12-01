@@ -191,7 +191,7 @@ public class PanelCategory extends JPanel {
 	private void printTitleComponent(JPanel panel) {
 		JPanel panelHeader = new JPanel();
 		panelHeader.setLayout(new GridLayout(0, 6, 0, 0));
-		panelHeader.setBounds(-5, 0, 990, 40);
+		panelHeader.setBounds(0, 0, 995, 40);
 		panel.add(panelHeader);
 		
 		JPanel panel_1 = new JPanel();

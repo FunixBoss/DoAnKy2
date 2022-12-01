@@ -1,20 +1,20 @@
 package entity;
 
 public class Lesson extends Entity {
-	private String image;
 	private String title;
+	private String image;
 
 	public Lesson() {
 		super();
 	}
 
-	public Lesson(String image, String title) {
+	public Lesson(String title, String image) {
 		super();
 		this.image = image;
 		this.title = title;
 	}
 
-	public Lesson(Integer id, String image, String title) {
+	public Lesson(Integer id, String title, String image) {
 		super(id);
 		this.image = image;
 		this.title = title;

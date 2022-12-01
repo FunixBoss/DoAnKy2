@@ -114,26 +114,6 @@ public class PhoneticDAOImpl extends AbstractDAO<Phonetic> implements PhoneticDA
 		return result;
 	}
 
-	@Override
-	public List<Phonetic> selAllPhoneticByVocabId(Integer vocabId) {
-		List<Phonetic> list = new ArrayList<>();
-		try (
-			var con = ConnectDBFromProperties.getConnectionFromClassPath();
-			var cs = con.prepareCall("{call selPhoneticByVocabId(?)}");
-		) {
-			cs.setInt(1, vocabId);
-			var rs = cs.executeQuery();
-			while (rs.next()) {
-				Integer pntId = rs.getInt(1);
-				String content = rs.getString(2);
-				Integer vocabIdRs = rs.getInt(3);
-				list.add(new Phonetic(pntId, content, vocabIdRs));
-			}
-		} catch (Exception e) {
-			// e.printStackTrace();
-			System.err.println("Select all Phonetics by Vocab Id failed!");
-		}
-		return list;
-	}
+	
 
 }

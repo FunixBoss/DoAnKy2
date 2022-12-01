@@ -1,5 +1,4 @@
 package admin.insert;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -7,12 +6,14 @@ import helper.ErrorMessage;
 import helper.FrameUtils;
 import service.UserService;
 import java.awt.Color;
+import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
@@ -21,7 +22,6 @@ import java.util.Map;
 import java.awt.event.ActionEvent;
 
 public class FrameInsertMember extends JFrame {
-
 	private JPanel contentPane;
 	private final JPanel panel = new JPanel();
 	
@@ -38,11 +38,7 @@ public class FrameInsertMember extends JFrame {
 	private JButton btnReset;
 	
 	private UserService userService;
-	private JLabel lblFullname;
-	private JTextField textFullname;
-	
 	private Map<String, String> data;
-	
 	private static FrameInsertMember myInstance;
 	
 	public static FrameInsertMember getMyInstance() {
@@ -55,13 +51,13 @@ public class FrameInsertMember extends JFrame {
 	public FrameInsertMember() {
 		initComponent();
 		FrameUtils.alignFrameScreenCenter(this);
-		
-		data = new HashMap<>();
+		data = new HashMap<>();		
 	}
 	
 	private void initComponent() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 885, 442);
+		setBounds(100, 100, 470, 442);
+		setResizable(false);
 		
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
@@ -127,7 +123,7 @@ public class FrameInsertMember extends JFrame {
 		btnAdd.setBackground(new Color(67, 98, 190));
 		btnAdd.setForeground(new Color(255, 255, 255));
 		btnAdd.setFont(new Font("Arial", Font.BOLD, 16));
-		btnAdd.setBounds(274, 348, 150, 44);
+		btnAdd.setBounds(50, 348, 150, 44);
 		contentPane.add(btnAdd);
 		
 		btnReset = new JButton("Xóa");
@@ -139,12 +135,12 @@ public class FrameInsertMember extends JFrame {
 		btnReset.setBackground(new Color(67, 98, 190));
 		btnReset.setForeground(new Color(255, 255, 255));
 		btnReset.setFont(new Font("Arial", Font.BOLD, 16));
-		btnReset.setBounds(466, 348, 150, 44);
+		btnReset.setBounds(242, 348, 150, 44);
 		contentPane.add(btnReset);
 		
 		txtLevel = new JTextField();
 		txtLevel.setEditable(false);
-		txtLevel.setText("Thành Viên");
+		txtLevel.setText("Thành viên");
 		txtLevel.setMargin(new Insets(2, 6, 2, 2));
 		txtLevel.setHorizontalAlignment(SwingConstants.LEFT);
 		txtLevel.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -162,20 +158,23 @@ public class FrameInsertMember extends JFrame {
 		contentPane.add(passwordResetPassword);
 		
 	}
+	
+	
 	protected void doBtnResetActionPerformed(ActionEvent e) {
-		textEmail.setText("");
 		passwordFieldPassword.setText(""); 
 		passwordResetPassword.setText("");
 	}
+	
 	
 	protected void btnAddActionPerformed(ActionEvent e) {
 		data.put("email", textEmail.getText());
 		data.put("password", new String(passwordFieldPassword.getPassword()));
 		data.put("confirmPassword", new String(passwordResetPassword.getPassword()));
-		data.put("level", "3");
+		data.put("role", "3");
 		
 		userService = new UserService();
-		if(userService.add(data)) {
+		boolean insert = userService.add(data);
+		if(insert) {
 			JOptionPane.showMessageDialog(this, "Thêm thành viên thành công");
 			dispose();
 		} else {

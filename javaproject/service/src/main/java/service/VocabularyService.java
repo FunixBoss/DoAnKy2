@@ -1,353 +1,386 @@
 package service;
 
-import java.awt.datatransfer.StringSelection;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import dao.PhoneticDAO;
 import dao.impl.BookmarkDAOImpl;
 import dao.impl.CategoryDAOImpl;
 import dao.impl.ExampleDAOImpl;
 import dao.impl.HistoryDAOImpl;
 import dao.impl.MeaningDAOImpl;
+import dao.impl.PhoneticDAOImpl;
 import dao.impl.RelativeWordDAOImpl;
 import dao.impl.VocabularyDAOImpl;
 import entity.Bookmark;
 import entity.Example;
 import entity.History;
 import entity.Meaning;
+import entity.Phonetic;
 import entity.RelativeWord;
 import entity.Vocabulary;
 import helper.ErrorMessage;
+import helper.ImageUtils;
+import helper.StringUtils;
 import helper.Validation;
-
 
 public class VocabularyService {
 	private VocabularyDAOImpl dao;
-	
+
 	public VocabularyService() {
 		dao = new VocabularyDAOImpl();
 	}
-	
-	public boolean add(Map<String, String> data) {
+
+	public boolean add(Map<String, Object> data) {
 		ErrorMessage.ERROR_MESSAGES = null;
-		String word = data.get("word");
-		String type = data.get("type");
-		String category = data.get("category"); // can be null
-		String pronunciation = data.get("pronunciation"); // can be null
-		String image = data.get("image"); // can be null
-		
-		String relatives = data.get("relatives"); // can be null
-		List<String> meanings = Arrays.asList(data.get("meaning1"), data.get("meaning2"), data.get("meaning3"));
-		List<String> examples = Arrays.asList(data.get("example1"), data.get("example2"), data.get("example3"));
-		
-//		validate
-		if(word.equals("")) {
-			ErrorMessage.ERROR_MESSAGES = "Ô từ vựng không được để trống!";
+		String word = (String) data.get("word");
+		String type = (String) data.get("type");
+		String relative = (String) data.get("relatives"); // can be null
+		String phonetic = (String) data.get("phonetic"); // can be null
+		String category = (String) data.get("category"); // can be null
+		String imageDir = (String) data.get("image"); // can be null //C:\Users\ADMIN\OneDrive\Documents\admin.png
+		String pronunciationDir = (String) data.get("pronunciation"); // can be null
+
+		List<HashMap<String, String>> meaningAndExamples = (ArrayList<HashMap<String, String>>) data.get("meaningAndEx");
+
+//		VALIDATE
+		if (!validateVocab(word, relative, phonetic, meaningAndExamples)) {
 			return false;
-		} else if(!relatives.equals("") && !Validation.checkLength(relatives, 1, 300)) {
-			ErrorMessage.ERROR_MESSAGES = "Độ dài các từ liên quan tối đa 200 ký tự";
-			return false;
-		}  else if( 
-				(!meanings.get(0).equals("") && !Validation.checkLength(meanings.get(0), 1, 50)) ||
-				(!meanings.get(1).equals("") && !Validation.checkLength(meanings.get(1), 1, 50)) ||
-				(!meanings.get(2).equals("") && !Validation.checkLength(meanings.get(2), 1, 50))
-		){
-			ErrorMessage.ERROR_MESSAGES = "Độ dài của các ô ý nghĩa tối đa 50 ký tự";
-			return false;
-		} else if (
-				(!examples.get(0).equals("") && !Validation.checkLength(examples.get(0), 1, 200)) ||
-				(!examples.get(1).equals("") && !Validation.checkLength(examples.get(1), 1, 200)) ||
-				(!examples.get(2).equals("") && !Validation.checkLength(examples.get(2), 1, 200))
-		) {
-			if(checkExampleRowDetailMeaningIsNotNull(examples)){
-				ErrorMessage.ERROR_MESSAGES = "Nghĩa của các câu ví dụ không được để trống";
-				return false;
-			}
-			ErrorMessage.ERROR_MESSAGES = "Độ dài mỗi dòng ô ý nghĩa tối đa 200 ký tự";
-			return false;
-		} 
-		
-		
+		}
+
 //		SAVE FILES
-		if(image != null) {
+		if (imageDir != null) {
 			try {
-				Path newDir = Paths.get(System.getProperty("user.dir") + "\\src\\main\\resources\\vocabulary\\" + word.replaceAll("\\s+", "_").toLowerCase() + ".png");
-				Files.copy(Paths.get(image), newDir, StandardCopyOption.REPLACE_EXISTING);
+				ImageUtils.saveFile(imageDir, "vocabulary", StringUtils.fileNameFormat(word), "png");
 			} catch (Exception e2) {
 //				e2.printStackTrace();
 				return false;
 			}
-		} 
-		 
-		 if(pronunciation != null) {
+		}
+
+		if (pronunciationDir != null) {
 			try {
-				Path newDir = Paths.get(System.getProperty("user.dir") + "\\src\\main\\resources\\pronunciation\\" + word.replaceAll("\\s+", "_").toLowerCase() + ".mp3");
-				Files.copy(Paths.get(pronunciation), newDir, StandardCopyOption.REPLACE_EXISTING);
+				ImageUtils.saveFile(pronunciationDir, "pronunciation", StringUtils.fileNameFormat(word), "mp3");
 			} catch (Exception e2) {
 				e2.printStackTrace();
 				return false;
 			}
 		}
-		
 
-		
-//		INSERT		
-		Integer cateId = new CategoryDAOImpl().getIdFromCateName(category.toLowerCase()) == -1 ? null :  new CategoryDAOImpl().getIdFromCateName(category.toLowerCase());
+		insertVocab(word, type, category, imageDir, pronunciationDir, relative, phonetic, meaningAndExamples);
+
+		return true;
+	}
+
+	private void insertVocab(String word, String type, String category, String imageDir, String pronunciationDir,
+			String relative, String phonetic, List<HashMap<String, String>> meaningAndExamples) {
+		// INSERT
+		Integer cateId = new CategoryDAOImpl().getIdFromCateName(category.toLowerCase()) == -1 ? null
+				: new CategoryDAOImpl().getIdFromCateName(category.toLowerCase());
 		String imageName = null;
-		if(image != null) {
-			imageName = (word + ".png").replaceAll("\\s+", "_").toLowerCase();
+		if (imageDir != null) {
+			imageName = StringUtils.fileNameFormat(word + ".png");
 		}
 		String pronunciationName = null;
-		if(pronunciation != null) {
-			pronunciationName = (word + ".mp3").replaceAll("\\s+", "_").toLowerCase();
+		if (pronunciationDir != null) {
+			pronunciationName = StringUtils.fileNameFormat(word + ".mp3");
 		}
+
+		// insert into vocabulary
 		Vocabulary vocab = new Vocabulary(word, imageName, pronunciationName, cateId, Integer.parseInt(type));
-//		insert into vocabulary
 		Integer insertedVocabId = dao.insertGetId(vocab);
-		
-//		insert into relatives
-		if(!relatives.trim().equals("")) {
-			List<String> relativeWords = Arrays.asList(relatives.split(";"));
+
+		// insert into relatives
+		if (!relative.trim().equals("")) {
+			List<String> relativeWords = Arrays.asList(relative.split(";"));
 			RelativeWordDAOImpl relDao = new RelativeWordDAOImpl();
 			relativeWords.forEach(rel -> {
-				if(!rel.trim().equals("")) {
+				if (!rel.trim().equals("")) {
 					relDao.insert(new RelativeWord(null, rel.trim(), insertedVocabId));
 				}
 			});
 		}
-		
-//		insert into meanings and example
+
+		// insert into phonetic
+		if (!phonetic.trim().equals("")) {
+			List<String> phonetics = Arrays.asList(phonetic.split(";"));
+			PhoneticDAO phDAO = new PhoneticDAOImpl();
+			phonetics.forEach(ph -> {
+				if (!ph.trim().equals("")) {
+					phDAO.insert(new Phonetic(ph.trim().toLowerCase(), insertedVocabId));
+				}
+			});
+		}
+
+		// insert into meanings and example
 		int i = 0;
-		for(String mn : meanings) {
-			if(!mn.trim().equals("")) {
-//				insert to meaning
+
+		for (HashMap<String, String> mnEx : meaningAndExamples) {
+			String mn = mnEx.get("meaning");
+			String ex = mnEx.get("example");
+
+			if (!mn.trim().equals("")) {
+				// insert to meaning
 				Integer insertedMeaningId = new MeaningDAOImpl().insertGetId(new Meaning(mn, insertedVocabId));
-				
-//				insert to example
-				if(!examples.get(i).trim().equals("")) {
-					List<String> exampleRow = Arrays.asList(examples.get(i).split("\\r?\\n"));
-					for(String str : exampleRow) {
-						if(!exampleRow.isEmpty()) {
+
+				// insert to example
+				if (!ex.trim().equals("")) {
+					List<String> exampleRow = Arrays.asList(ex.split("\\r?\\n"));
+					for (String str : exampleRow) {
+						if (!exampleRow.isEmpty()) {
 							List<String> exampleRowDetail = Arrays.asList(str.split(";"));
-//								have only example or meaning of example
-//							System.out.println(exampleRowDetail.size());
-							 if (exampleRowDetail.size() >= 2){
-								new ExampleDAOImpl().insert(new Example(exampleRowDetail.get(0), exampleRowDetail.get(1), insertedMeaningId));									
+							// have only example or meaning of example
+							if (exampleRowDetail.size() >= 2) {
+								new ExampleDAOImpl().insert(new Example(exampleRowDetail.get(0),
+										exampleRowDetail.get(1), insertedMeaningId));
 							}
 						}
 					}
 				}
 			}
-			i++;
 		}
-		return true;
-
 	}
-	
-	public boolean update(Map<String, String> data) {
-		ErrorMessage.ERROR_MESSAGES = null;
-		Integer id = Integer.parseInt(data.get("id"));
-		String word = data.get("word");
-		String type = data.get("type");
-		String category = data.get("category"); // can be null
-		String pronunciation = data.get("pronunciation"); // can be null
-		String image = data.get("image"); // can be null
-		String relatives = data.get("relatives"); // can be null
-		List<String> meanings = Arrays.asList(data.get("meaning1"), data.get("meaning2"), data.get("meaning3"));
-		List<String> examples = Arrays.asList(data.get("example1"), data.get("example2"), data.get("example3"));
-		System.out.println("id=" + id);
-		System.out.println("Word=" + word + "\t" + "Type=" +type  + "\t" + "Category=" + category);
-		System.out.println("Image="+ image ); // C:\Users\ADMIN\OneDrive\Documents\admin.png
-		System.out.println("Pronun=" + pronunciation); // C:\Users\ADMIN\OneDrive\Desktop\4000 english words volume 6-audio\4000 english words volume 6\02.mp3
-		System.out.println("Relatives=" + relatives);
-		
-		Integer cateId = new CategoryDAOImpl().getIdFromCateName(category.toLowerCase()) == -1 ? null :  new CategoryDAOImpl().getIdFromCateName(category.toLowerCase());
-		Vocabulary originalVocab = new VocabularyDAOImpl().select(id);
-		
-//		Validation
-		if(word.equals("")) {
+
+	private boolean validateVocab(String word, String relative, String phonetic,
+			List<HashMap<String, String>> meaningAndExamples) {
+		if (word.equals("")) {
 			ErrorMessage.ERROR_MESSAGES = "Ô từ vựng không được để trống!";
 			return false;
-		} else if(!relatives.equals("") && !Validation.checkLength(relatives, 1, 300)) {
+		} else if (!relative.equals("") && !Validation.checkLength(relative, 1, 300)) {
 			ErrorMessage.ERROR_MESSAGES = "Độ dài các từ liên quan tối đa 200 ký tự";
 			return false;
-		}  else if( 
-				(!meanings.get(0).equals("") && !Validation.checkLength(meanings.get(0), 1, 50)) ||
-				(!meanings.get(1).equals("") && !Validation.checkLength(meanings.get(1), 1, 50)) ||
-				(!meanings.get(2).equals("") && !Validation.checkLength(meanings.get(2), 1, 50))
-		){
-			ErrorMessage.ERROR_MESSAGES = "Độ dài của các ô ý nghĩa tối đa 50 ký tự";
+		} else if (!phonetic.equals("") && !Validation.checkLength(phonetic, 1, 300)) {
+			ErrorMessage.ERROR_MESSAGES = "Độ dài các phiên âm tối đa 200 ký tự";
 			return false;
-		} else if (
-				(!examples.get(0).equals("") && !Validation.checkLength(examples.get(0), 1, 200)) ||
-				(!examples.get(1).equals("") && !Validation.checkLength(examples.get(1), 1, 200)) ||
-				(!examples.get(2).equals("") && !Validation.checkLength(examples.get(2), 1, 200))
-		) {
-			if(checkExampleRowDetailMeaningIsNotNull(examples)){
-				ErrorMessage.ERROR_MESSAGES = "Nghĩa của các câu ví dụ không được để trống";
+		}
+
+		for (HashMap<String, String> mnEx : meaningAndExamples) {
+			if (!mnEx.get("meaning").equals("") && !Validation.checkLength(phonetic, 1, 50)) {
+				ErrorMessage.ERROR_MESSAGES = "Độ dài của các ô ý nghĩa tối đa 50 ký tự";
 				return false;
 			}
-			ErrorMessage.ERROR_MESSAGES = "Độ dài mỗi dòng ô ý nghĩa tối đa 200 ký tự";
-			return false;
-		} 
-		
-		
+			if (!mnEx.get("example").equals("") && !Validation.checkLength(mnEx.get("example"), 1, 400)) {
+				ErrorMessage.ERROR_MESSAGES = "Độ dài của các ô ví dụ tối đa 400 ký tự";
+				return false;
+			}
+		}
+		return true;
+	}
 
-		
-		
+	public boolean update(Map<String, Object> data) {
+		ErrorMessage.ERROR_MESSAGES = null;
+		Integer id = Integer.parseInt((String) data.get("id"));
+		String word = (String) data.get("word");
+		String type = (String) data.get("type");
+		String relative = (String) data.get("relatives"); // can be null
+		String phonetic = (String) data.get("phonetic"); // can be null
+		String category = (String) data.get("category"); // can be null
+		String imageDir = (String) data.get("image"); // can be null //C:\Users\ADMIN\OneDrive\Documents\admin.png
+		String pronunciationDir = (String) data.get("pronunciation"); // can be null
+		List<HashMap<String, String>> meaningAndExamples = (ArrayList<HashMap<String, String>>) data
+				.get("meaningAndEx");
+
+		Integer cateId = new CategoryDAOImpl().getIdFromCateName(category.toLowerCase()) == -1 ? null
+				: new CategoryDAOImpl().getIdFromCateName(category.toLowerCase());
+		Vocabulary originalVocab = new VocabularyDAOImpl().select(id);
+
+//		Validation
+		if (!validateVocab(word, relative, phonetic, meaningAndExamples)) {
+			return false;
+		}
+
+		String imageName = null;
+		String pronunciationName = null;
 //		Sửa tên từ vựng
-		if(!formatName(word).equals(originalVocab.getWord())) {
+		if (!formatName(word).equals(originalVocab.getWord())) {
 //			update img 
-			if(image != null) {
+			if (imageDir != null) {
 				try {
-					Path newDir = Paths.get(System.getProperty("user.dir") + "\\src\\main\\resources\\vocabulary\\" + formatName(word) + ".png");
-					Files.copy(Paths.get(image), newDir, StandardCopyOption.REPLACE_EXISTING);
+//					xoa file cu
+					File oldImageFile = new File(ImageUtils.pathToResource + "\\vocabulary\\" + originalVocab.getWord() + ".png");
+					Files.deleteIfExists(oldImageFile.toPath());
+
+//					them file moi
+					Path newDir = Paths.get(ImageUtils.pathToResource + "\\vocabulary\\" + StringUtils.fileNameFormat(word) + ".png");
+					Files.copy(Paths.get(imageDir), newDir, StandardCopyOption.REPLACE_EXISTING);
 				} catch (Exception e2) {
 //					e2.printStackTrace();
 					return false;
 				}
 			} else {
 //				ko update img
-				File oldImageFile = new File(System.getProperty("user.dir") + "\\src\\main\\resources\\vocabulary\\" + originalVocab.getWord() + ".png");
-				File newImageFile = new File(System.getProperty("user.dir") + "\\src\\main\\resources\\vocabulary\\" + formatName(word) + ".png");
-				oldImageFile.renameTo(newImageFile);	
+				File oldImageFile = new File(
+						ImageUtils.pathToResource + "\\vocabulary\\" + originalVocab.getWord() + ".png");
+				File newImageFile = new File(ImageUtils.pathToResource + "\\vocabulary\\" + formatName(word) + ".png");
+				oldImageFile.renameTo(newImageFile);
 			}
-			image = formatName(word) + ".png";
-			
+			imageName = StringUtils.fileNameFormat(word) + ".png";
+
 //			update pronun
-			if(pronunciation != null) {
+			if (pronunciationDir != null) {
 				try {
-					Path newDir = Paths.get(System.getProperty("user.dir") + "\\src\\main\\resources\\pronunciation\\" + formatName(word) + ".mp3");
-					Path a =Files.copy(Paths.get(pronunciation), newDir, StandardCopyOption.REPLACE_EXISTING);
+					Path newDir = Paths.get(ImageUtils.pathToResource + "\\pronunciation\\" + StringUtils.fileNameFormat(word) + ".mp3");
+					Path a = Files.copy(Paths.get(pronunciationDir), newDir, StandardCopyOption.REPLACE_EXISTING);
 				} catch (Exception e2) {
 					e2.printStackTrace();
 					return false;
 				}
 			} else {
 //				ko update pronun
-				File oldImageFile = new File(System.getProperty("user.dir") + "\\src\\main\\resources\\vocabulary\\" + originalVocab.getWord() + ".png");
-				File newImageFile = new File(System.getProperty("user.dir") + "\\src\\main\\resources\\vocabulary\\" + formatName(word) + ".png");
+				File oldImageFile = new File(
+						ImageUtils.pathToResource + "\\pronunciation\\" + originalVocab.getWord() + ".mp3");
+				File newImageFile = new File(
+						ImageUtils.pathToResource + "\\pronunciation\\" + formatName(word) + ".mp3");
 				oldImageFile.renameTo(newImageFile);
 			}
-			pronunciation = formatName(word) + ".mp3";
+			pronunciationName = StringUtils.fileNameFormat(word) + ".mp3";
 
 		} else {
 //			ko sửa tên từ vựng
-			image = originalVocab.getImage();
-			pronunciation = originalVocab.getPronunciation();
+			if(imageDir != null) {
+				Path newDir = Paths.get(ImageUtils.pathToResource + "\\vocabulary\\" + StringUtils.fileNameFormat(word) + ".png");
+				try {
+					Files.copy(Paths.get(imageDir), newDir, StandardCopyOption.REPLACE_EXISTING);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				imageName = word + ".png";
+			}
+			
+			if(pronunciationDir != null) {
+				try {
+					Path newDir = Paths.get(ImageUtils.pathToResource + "\\pronunciation\\" + StringUtils.fileNameFormat(word) + ".mp3");
+					Path a = Files.copy(Paths.get(pronunciationDir), newDir, StandardCopyOption.REPLACE_EXISTING);
+				} catch (Exception e2) {
+					e2.printStackTrace();
+					return false;
+				}
+				pronunciationName = word + ".mp3";
+			}
 		}
-		
-		Vocabulary vocab = new Vocabulary(word, image, pronunciation, cateId , Integer.parseInt(type));
+//		
+		Vocabulary vocab = new Vocabulary(word, imageName, pronunciationName, cateId, Integer.parseInt(type));
 		vocab.setId(id);
 		dao.update(vocab);
-		
-		
-		
+//		
+//		
+//		
 		deleteOnOtherTable(originalVocab);
-//		insert into relatives
-		if(!relatives.trim().equals("")) {
-			List<String> relativeWords = Arrays.asList(relatives.split(";"));
+		insertOtherTables(relative, phonetic, meaningAndExamples, vocab);
+		return true;
+	}
+
+	private void insertOtherTables(String relative, String phonetic, List<HashMap<String, String>> meaningAndExamples,
+			Vocabulary vocab) {
+		// // insert into relatives
+		if (!relative.trim().equals("")) {
+			List<String> relativeWords = Arrays.asList(relative.split(";"));
 			RelativeWordDAOImpl relDao = new RelativeWordDAOImpl();
 			relativeWords.forEach(rel -> {
-				if(!rel.trim().equals("")) {
-					relDao.insert(new RelativeWord(null, rel.trim(), id));
+				if (!rel.trim().equals("")) {
+					relDao.insert(new RelativeWord(null, rel.trim(), vocab.getId()));
 				}
 			});
 		}
-//		insert into meanings and example
-//		    delete old data
-		
+
+		// insert into phonetic
+		if (!phonetic.trim().equals("")) {
+			List<String> phonetics = Arrays.asList(phonetic.split(";"));
+			PhoneticDAO phDAO = new PhoneticDAOImpl();
+			phonetics.forEach(ph -> {
+				if (!ph.trim().equals("")) {
+					phDAO.insert(new Phonetic(ph.trim().toLowerCase(), vocab.getId()));
+				}
+			});
+		}
+
+		// insert into meanings and example
 		int i = 0;
-		for(String mn : meanings) {
-			if(!mn.trim().equals("")) {
-//				insert to meaning
-				Integer insertedMeaningId = new MeaningDAOImpl().insertGetId(new Meaning(mn, id));
-				
-//				insert to example
-				if(!examples.get(i).trim().equals("")) {
-					List<String> exampleRow = Arrays.asList(examples.get(i).split("\\r?\\n"));
-					for(String str : exampleRow) {
-						if(!exampleRow.isEmpty()) {
+
+		for (HashMap<String, String> mnEx : meaningAndExamples) {
+			String mn = mnEx.get("meaning");
+			String ex = mnEx.get("example");
+
+			if (!mn.trim().equals("")) {
+				// insert to meaning
+				Integer insertedMeaningId = new MeaningDAOImpl().insertGetId(new Meaning(mn, vocab.getId()));
+
+				// insert to example
+				if (!ex.trim().equals("")) {
+					List<String> exampleRow = Arrays.asList(ex.split("\\r?\\n"));
+					for (String str : exampleRow) {
+						if (!exampleRow.isEmpty()) {
 							List<String> exampleRowDetail = Arrays.asList(str.split(";"));
-//								have only example or meaning of example
-//							System.out.println(exampleRowDetail.size());
-							 if (exampleRowDetail.size() >= 2){
-								new ExampleDAOImpl().insert(new Example(exampleRowDetail.get(0), exampleRowDetail.get(1), insertedMeaningId));									
+							// have only example or meaning of example
+							if (exampleRowDetail.size() >= 2) {
+								new ExampleDAOImpl().insert(new Example(exampleRowDetail.get(0),
+										exampleRowDetail.get(1), insertedMeaningId));
 							}
 						}
 					}
 				}
 			}
-			i++;
 		}
-		return true;
 	}
-	
+
 	private boolean checkExampleRowDetailMeaningIsNotNull(List<String> exampleRows) {
-		for(String row : exampleRows) {
+		for (String row : exampleRows) {
 			List<String> rowDetail = Arrays.asList(row.split(";"));
-			for(String item : rowDetail) {
-				if(!item.trim().equals("")) {
+			for (String item : rowDetail) {
+				if (!item.trim().equals("")) {
 					return false;
 				}
 			}
 		}
 		return true;
 	}
-	
+
 	public boolean delete(Vocabulary vocab) {
 		VocabularyDAOImpl vocabDao = new VocabularyDAOImpl();
 		MeaningDAOImpl meanDao = new MeaningDAOImpl();
-		
+
 		try {
 			List<Meaning> meanings = vocabDao.selectAllMeaningByVocabId(vocab.getId());
-			if(meanings != null) {
-				//  delete meaning
-				for(Meaning mean : meanings) {
-					List<Example> examples = new MeaningDAOImpl().selectAllExampleByMeaningId(mean.getId());
-					//	delete example
-					if(examples != null) {
-						ExampleDAOImpl exDao = new ExampleDAOImpl();
-						for(Example ex : examples) {
-							exDao.delete(ex);
-						}
-					}
-					meanDao.delete(mean);
-				}
+				// delete meaning
+			for (Meaning mean : meanings) {
+				List<Example> examples = new MeaningDAOImpl().selectAllExampleByMeaningId(mean.getId());
+				// delete example
+				ExampleDAOImpl exDao = new ExampleDAOImpl();
+				examples.stream().forEach(e -> exDao.delete(e));
+				meanDao.delete(mean);
 			}
-			
+
 //			delete relatives
 			RelativeWordDAOImpl relDao = new RelativeWordDAOImpl();
 			List<RelativeWord> relatives = vocabDao.selectAllRelativesByVocabId(vocab.getId());
-			if(relatives != null) {
-				relatives.forEach(rel -> relDao.delete(rel));
-			}
+			relatives.stream().forEach(rel -> relDao.delete(rel));
+			
+//			delete phonetics
+			PhoneticDAOImpl phoneticDao = new PhoneticDAOImpl();
+			List<Phonetic> phonetics = vocabDao.selAllPhoneticByVocabId(vocab.getId());
+			phonetics.stream().forEach(ph -> phoneticDao.delete(ph));
+			
 //			delete bookmark
 			BookmarkDAOImpl bmDao = new BookmarkDAOImpl();
 			List<Bookmark> bookmarks = bmDao.selBookmarkByVocabId(vocab.getId());
-			if(bookmarks != null) {
-				for(Bookmark bm : bookmarks) {
-					bmDao.delete(bm);
-				}
-			}
-			
-			
+			bookmarks.stream().forEach(bm -> bmDao.delete(bm));
+
 //			delete history
 			HistoryDAOImpl hstrDao = new HistoryDAOImpl();
 			List<History> histories = hstrDao.selHistoryByVocabId(vocab.getId());
-			if(histories != null) {
-				for(History hstr : histories) {
-					hstrDao.delete(hstr);
-				}
-			}
+			histories.stream().forEach(h -> hstrDao.delete(h));
 			
 //			delete vocabulary
 			vocabDao.delete(vocab);
@@ -357,27 +390,23 @@ public class VocabularyService {
 			return false;
 		}
 	}
-	
-	
+
 	private String formatName(String name) {
 		return name.trim().replaceAll("\\s+", "_").toLowerCase();
 	}
-	
+
 	private void deleteOnOtherTable(Vocabulary vocab) {
 		List<RelativeWord> originalRelatives = dao.selectAllRelativesByVocabId(vocab.getId());
-		if(originalRelatives != null) {
-			originalRelatives.forEach(rel -> new RelativeWordDAOImpl().delete(rel));
-		}
-		
+		originalRelatives.forEach(rel -> new RelativeWordDAOImpl().delete(rel));
+
+		List<Phonetic> originalPhonetics = dao.selAllPhoneticByVocabId(vocab.getId());
+		originalPhonetics.forEach(ph -> new PhoneticDAOImpl().delete(ph));
+
 		List<Meaning> originalMeanings = dao.selectAllMeaningByVocabId(vocab.getId());
-		if(originalMeanings != null) {
-			for(Meaning mn : originalMeanings) {
-				List<Example> originalExamples = new MeaningDAOImpl().selectAllExampleByMeaningId(mn.getId());
-				if(originalExamples != null) {
-					originalExamples.forEach(ex -> new ExampleDAOImpl().delete(ex));
-				}
-				new MeaningDAOImpl().delete(mn);
-			}
+		for (Meaning mn : originalMeanings) {
+			List<Example> originalExamples = new MeaningDAOImpl().selectAllExampleByMeaningId(mn.getId());
+			originalExamples.forEach(ex -> new ExampleDAOImpl().delete(ex));
+			new MeaningDAOImpl().delete(mn);
 		}
 	}
 }
