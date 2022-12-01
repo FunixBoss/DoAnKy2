@@ -22,6 +22,7 @@ import helper.FrameUtils;
 import helper.IconImage;
 import service.Register;
 import service.ValidateRegister;
+import service.sendHtmlMail;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -71,6 +72,9 @@ public class FrameSignUp extends JFrame {
 			public void keyReleased(KeyEvent e) {
 				StringBuilder s = new StringBuilder();
 				Register.checkPasswordConfirm(textFieldPassword, textFieldPasswordConfirm, s);
+				 if (e.getKeyCode()==KeyEvent.VK_ENTER){
+					  signUp();
+				    }
 			}
 		});
 		
@@ -122,6 +126,15 @@ public class FrameSignUp extends JFrame {
 		lblIconEmail.setIcon(new ImageIcon(icon.getEmailImg()));
 		
 		textFieldEmail = new JTextField();
+		textFieldEmail.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				 if (e.getKeyCode()==KeyEvent.VK_ENTER){
+					  signUp();
+				    }
+			}
+		});
+		textFieldEmail.setName("");
 		textFieldEmail.setHorizontalAlignment(SwingConstants.LEFT);
 		textFieldEmail.setFont(new Font("Arial", Font.PLAIN, 14));
 		textFieldEmail.setColumns(10);
@@ -147,6 +160,14 @@ public class FrameSignUp extends JFrame {
 		lblIconPassword.setIcon(new ImageIcon(icon.getPasswordImg()));
 		
 		textFieldPassword = new JPasswordField();
+		textFieldPassword.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				 if (e.getKeyCode()==KeyEvent.VK_ENTER){
+					  signUp();
+				    }
+			}
+		});
 		textFieldPassword.setBorder(null);
 		textFieldPassword.setBounds(1, 1, 267, 43);
 		panelPassword.add(textFieldPassword);
@@ -203,7 +224,7 @@ public class FrameSignUp extends JFrame {
 		siginIn.setVisible(true);
 	}
 
-	private void acction_SignUp(ActionEvent e) {
+	private void  signUp() {
 		String email = textFieldEmail.getText();
 		String password = textFieldPassword.getText();
 		StringBuilder s = new StringBuilder();
@@ -211,6 +232,7 @@ public class FrameSignUp extends JFrame {
 			if (ValidateRegister.checkAll(textFieldEmail, textFieldPassword, textFieldPasswordConfirm, s)) {
 				User user = new User(email, password, User.USER_ROLE);
 				if (new UserDAOImpl().insert(user) == 1) {
+					sendHtmlMail.sendMail(email, "Bạn Đã Đăng kí Thành Công", "<h1>Welcome to English</h1>");
 					JOptionPane.showMessageDialog(null, "Bạn Đã Đăng Kí Thành Công");
 				}
 			} else {
@@ -221,5 +243,8 @@ public class FrameSignUp extends JFrame {
 			e2.printStackTrace();
 
 		}
+	}
+	private void acction_SignUp(ActionEvent e) {
+		signUp();
 	}
 }

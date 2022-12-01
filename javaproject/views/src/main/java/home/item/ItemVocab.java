@@ -41,6 +41,6 @@ public class ItemVocab extends JPanel {
 	
 
 	protected void do_this_mouseClicked(MouseEvent e) {
-		
+		System.out.println("s");
 	}
 }

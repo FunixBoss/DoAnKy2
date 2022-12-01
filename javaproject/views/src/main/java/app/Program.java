@@ -4,7 +4,6 @@ import java.awt.EventQueue;
 import home.gui.FrameSignIn;
 
 public class Program {
-
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
 			try {

@@ -11,11 +11,15 @@ import home.item.ItemVocab;
 import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import javax.swing.ScrollPaneConstants;
 import java.awt.FlowLayout;
 import javax.swing.JTextArea;
@@ -39,16 +43,16 @@ public class PanelVocab extends JPanel {
 	private List<String> getItemss;
 	private List<Vocabulary> itemss;
 	private DefaultListModel<String> model;
+
 	/**
 	 * Create the panel.
 	 */
 
 	public PanelVocab() {
 		initComponent();
-		
 
 		VocabularyDAOImpl dao = new VocabularyDAOImpl();
-		 itemss = dao.selectAll();
+		itemss = dao.selectAll();
 		getItemss = new ArrayList<>();
 		for (int i = 0; i < itemss.size(); i++) {
 			getItemss.add(i, itemss.get(i).getWord());
@@ -61,17 +65,17 @@ public class PanelVocab extends JPanel {
 			model.add(i, getItemss.get(i));
 			y = y + 29;
 		}
-		
+
 	}
 
 	public void searchVocab() {
 		model.removeAllElements();
 		VocabularyDAOImpl dao = new VocabularyDAOImpl();
-		 itemss = dao.searchAll(textSearch.getText());
+		itemss = dao.searchAll(textSearch.getText());
 		for (int i = 0; i < itemss.size(); i++) {
 			model.add(i, itemss.get(i).getWord());
 		}
-		
+
 	}
 
 	private void initComponent() {
@@ -107,8 +111,8 @@ public class PanelVocab extends JPanel {
 		panelSearch.add(scrollPane);
 		scrollPane.setBorder(null);
 		scrollPane.setPreferredSize(new Dimension(245, 1000));
-		
-		 model = new DefaultListModel<>();
+
+		model = new DefaultListModel<>();
 		listVocab = new JList(model);
 		scrollPane.setViewportView(listVocab);
 
