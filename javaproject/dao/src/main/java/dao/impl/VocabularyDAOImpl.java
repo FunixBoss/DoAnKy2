@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import database.CallableStatementUtils;
@@ -390,6 +391,29 @@ public class VocabularyDAOImpl extends AbstractDAO<Vocabulary> implements Vocabu
 		} catch(Exception e) {
 //			e.printStackTrace();
 			System.err.println("Select top 5 last vocabulary failed!");
+		}
+		return list;
+	}
+
+	@Override
+	public List<Vocabulary> selectIdAndWordAll() {
+		List<Vocabulary> list = new ArrayList<>();
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call selIdAndWordAllVocab}");
+			var rs = cs.executeQuery();
+		){
+			while(rs.next()) {
+				Integer vocab_id = rs.getInt(1);
+				String word = rs.getString(2);
+				Vocabulary vocab = new Vocabulary();
+				vocab.setId(vocab_id);
+				vocab.setWord(word);
+				list.add(vocab);
+			}
+		} catch(Exception e) {
+//			e.printStackTrace();
+			System.err.println("Select Id and Word all vocabulary failed!");
 		}
 		return list;
 	}

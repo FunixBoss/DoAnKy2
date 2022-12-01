@@ -1,11 +1,9 @@
-package admin.insert;
+package admin.update;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -13,10 +11,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -31,20 +29,27 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import admin.item.ItemLesson;
-import admin.item.ItemMeaning;
+import admin.insert.FrameInsertLesson;
 import admin.item.ItemQuestion;
-import dao.impl.CategoryDAOImpl;
-import dao.impl.WordTypeDAOImpl;
+import dao.AnswerDAO;
+import dao.LessonDAO;
+import dao.QuestionDAO;
+import dao.TheoryDAO;
+import dao.impl.AnswerDAOImpl;
+import dao.impl.LessonDAOImpl;
+import dao.impl.QuestionDAOImpl;
+import dao.impl.TheoryDAOImpl;
+import entity.Answer;
+import entity.Lesson;
+import entity.Question;
+import entity.Theory;
 import helper.ErrorMessage;
 import helper.FrameUtils;
 import helper.ImageUtils;
 import helper.StringUtils;
-import jaco.mp3.player.MP3Player;
 import service.LessonService;
-import service.VocabularyService;
 
-public class FrameInsertLesson extends JFrame {
+public class FrameUpdateLesson extends JFrame{
 	private JPanel contentPane;
 	private JTextField textTitle;
 	private JLabel lblNewLabel;
@@ -68,23 +73,80 @@ public class FrameInsertLesson extends JFrame {
 	private int CURRENT_PANELS_MN_EX_HEIGHT = 210;
 	private int HEIGHT_ADDED = 0;
 
-	private static FrameInsertLesson myInstance;
+	private Lesson ls;
+	private LessonDAO lsDAO;
+	private QuestionDAO qsDAO;
+	private TheoryDAO thDAO;
+	private AnswerDAO anDAO;
+	
+	private static FrameUpdateLesson myInstance;
 
-	public static FrameInsertLesson getMyInstance() {
+	public static FrameUpdateLesson getMyInstance(Lesson ls) {
 		if (myInstance == null) {
-			myInstance = new FrameInsertLesson();
+			myInstance = new FrameUpdateLesson(ls);
 		}
 		return myInstance;
 	}
-
+	
 	public static void main(String[] args) {
-		FrameInsertLesson a = new FrameInsertLesson();
+		Lesson ls = new LessonDAOImpl().select(47);
+		FrameUpdateLesson a = new FrameUpdateLesson(ls);
 		a.setVisible(true);
 	}
-	public FrameInsertLesson() {
+	
+	
+	public FrameUpdateLesson(Lesson ls) {
+		this.ls = ls;
 		initComponent();
 		questionAndAnswers = new ArrayList<>();
 		data = new HashMap<>();
+		loadData();
+	}
+	
+	private void loadData() {
+		lsDAO = new LessonDAOImpl();
+		qsDAO = new QuestionDAOImpl();
+		thDAO = new TheoryDAOImpl();
+		anDAO = new AnswerDAOImpl();
+		textTitle.setText(ls.getTitle());
+		if (ls.getImage() != null) {
+			final int ROW_HEIGHT = 170;
+			lblShowImage.setIcon(ImageUtils.getImageByURL("lesson", ls.getImage(), ROW_HEIGHT));
+		}
+		
+		List<Question> questions = qsDAO.selAllQuestionByLessonId(ls.getId());
+		List<Theory> theories = thDAO.selAllTheoriesByLessonId(ls.getId());
+		
+		int i = 0;
+		for(Theory th : theories) {
+			addItemQs();
+			ItemQuestion qsItem = qsItems.get(i);
+			qsItem.setComboVocabByVocabId(th.getVocabId());
+			qsItem.setTextQuestion1(questions.get(0).getContent());
+			qsItem.setTextQuestion2(questions.get(1).getContent());
+			
+			List<Answer> answers = anDAO.selAllAnswerByQuestionId(questions.get(0).getId());
+			qsItem.setTextAnswer1(joinAnswers(answers));
+			
+			answers = anDAO.selAllAnswerByQuestionId(questions.get(1).getId());
+			qsItem.setTextAnswer2(joinAnswers(answers));
+			
+			answers = anDAO.selAllAnswerByQuestionId(questions.get(2).getId());
+			qsItem.setTextAnswer3(joinAnswers(answers));
+			i++;
+		}
+		
+		if(theories.size() < 5) {
+			for(int j = 0; j < 5 - theories.size(); j++) {
+				addItemQs();
+			}
+		}
+	}
+	
+	private String joinAnswers(List<Answer> answers) {
+		String str = answers.stream().map(an -> StringUtils.toCapitalize(an.getContent()))
+				.collect(Collectors.joining("; "));
+		return str;
 	}
 
 	private void initComponent() {
@@ -112,7 +174,7 @@ public class FrameInsertLesson extends JFrame {
 		JScrollPane jspEx1 = new JScrollPane(panelChild, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		panelParent.add(jspEx1, BorderLayout.CENTER);
 		
-		lblNewLabel = new JLabel("Thêm bài học");
+		lblNewLabel = new JLabel("Cập nhật bài học");
 		lblNewLabel.setBounds(20, 11, 219, 34);
 		lblNewLabel.setForeground(new Color(37, 57, 111));
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -124,7 +186,7 @@ public class FrameInsertLesson extends JFrame {
 		lblWord.setFont(new Font("Arial", Font.PLAIN, 14));
 		panelChild.add(lblWord);
 
-		btnAdd = new JButton("Thêm");
+		btnAdd = new JButton("Cập nhật");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnAddActionPerformed(e);
@@ -192,13 +254,15 @@ public class FrameInsertLesson extends JFrame {
 		
 		FrameUtils.alignFrameScreenCenter(this);
 		
-		addItemQs();
-		addItemQs();
-		addItemQs();
-		addItemQs();
-		addItemQs();
+//		addItemQs();
+//		addItemQs();
+//		addItemQs();
+//		addItemQs();
+//		addItemQs();
 	}
 
+	
+	
 	protected void do_btnImage_actionPerformed(ActionEvent e) {
 		JFileChooser chooser = new JFileChooser("desktop://");
 		chooser.setDialogTitle("Hình ảnh");
@@ -216,6 +280,7 @@ public class FrameInsertLesson extends JFrame {
 	}
 
 	protected void btnAddActionPerformed(ActionEvent e) {
+		data.put("id", ls.getId().toString());
 		data.put("title", textTitle.getText());
 		
 		HashMap<String, String> mnEx;
@@ -233,12 +298,13 @@ public class FrameInsertLesson extends JFrame {
 			} else {
 				item.setNormalBorder();
 			}
+			
 		}
 		
 		if(isAllItemsValid) {
 			lsSerivce = new LessonService();
-			if (lsSerivce.add(data)) {
-				JOptionPane.showMessageDialog(this, "Thêm bài học thành công");
+			if (lsSerivce.update(data)) {
+				JOptionPane.showMessageDialog(this, "Cập nhật bài học thành công");
 				dispose();
 			} else {
 				JOptionPane.showMessageDialog(this, ErrorMessage.ERROR_MESSAGES);
@@ -258,5 +324,4 @@ public class FrameInsertLesson extends JFrame {
 		panelChild.add(item);
 		qsItems.add(item);
 	}
-
 }

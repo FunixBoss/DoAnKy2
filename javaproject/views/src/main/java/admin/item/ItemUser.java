@@ -26,11 +26,11 @@ public class ItemUser extends JPanel {
 
 	private User user;
 	private UserService userService;
+
 	public ItemUser(User user, int y) {
 		this.user = user;
 		initComponent(y);
-		
-		
+
 	}
 
 	private void initComponent(int y) {
@@ -59,67 +59,67 @@ public class ItemUser extends JPanel {
 		lblID.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblID.setText(user.getId().toString());
 		panel_1.add(lblID);
-				
-						JPanel panel_1_2 = new JPanel();
-						panel_1_2.setBackground(new Color(255, 255, 255));
-						panelHeader.add(panel_1_2);
-						panel_1_2.setLayout(new BorderLayout(0, 0));
-						
-						lblEmail = new JLabel();
-						lblEmail.setHorizontalAlignment(SwingConstants.CENTER);
-						lblEmail.setForeground(new Color(37, 57, 111));
-						lblEmail.setFont(new Font("Arial", Font.PLAIN, 14));
-						panel_1_2.add(lblEmail);
-						lblEmail.setText(user.getEmail());
-				
-				JPanel panel_1_2_1 = new JPanel();
-				panel_1_2_1.setBackground(Color.WHITE);
-				panelHeader.add(panel_1_2_1);
-				panel_1_2_1.setLayout(new BorderLayout(0, 0));
-				
-				JLabel lblCreatedDate = new JLabel();
-				lblCreatedDate.setHorizontalAlignment(SwingConstants.CENTER);
-				lblCreatedDate.setText((String) null);
-				lblCreatedDate.setForeground(new Color(37, 57, 111));
-				lblCreatedDate.setFont(new Font("Arial", Font.PLAIN, 14));
-				lblCreatedDate.setText(user.getCreatedAt().toString());
-				panel_1_2_1.add(lblCreatedDate);
-				
-						JPanel panel_1_1 = new JPanel();
-						panel_1_1.setLayout(null);
-						panel_1_1.setBackground(new Color(255, 255, 255));
-						panelHeader.add(panel_1_1);
-						
-								JButton btnDelete = new JButton("Xóa");
-								btnDelete.addActionListener(new ActionListener() {
-									public void actionPerformed(ActionEvent e) {
-										do_btnDelete_actionPerformed(e);
-									}
-								});
-								btnDelete.setBorder(null);
-								btnDelete.setForeground(Color.WHITE);
-								btnDelete.setFont(new Font("Arial", Font.BOLD, 14));
-								btnDelete.setBackground(new Color(205, 16, 64));
-								btnDelete.setBounds(73, 11, 60, 30);
-								panel_1_1.add(btnDelete);
-		
-				JPanel panel_1_1_1 = new JPanel();
-				panel_1_1_1.setLayout(null);
-				panel_1_1_1.setBackground(new Color(255, 255, 255));
-				panelHeader.add(panel_1_1_1);
-				
-						JButton btnEdit = new JButton("Sửa ");
-						btnEdit.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								do_btnEdit_actionPerformed(e);
-							}
-						});
-						btnEdit.setBorder(null);
-						btnEdit.setForeground(new Color(255, 255, 255));
-						btnEdit.setBackground(new Color(67, 98, 190));
-						btnEdit.setFont(new Font("Arial", Font.BOLD, 14));
-						btnEdit.setBounds(75, 11, 60, 30);
-						panel_1_1_1.add(btnEdit);
+
+		JPanel panel_1_2 = new JPanel();
+		panel_1_2.setBackground(new Color(255, 255, 255));
+		panelHeader.add(panel_1_2);
+		panel_1_2.setLayout(new BorderLayout(0, 0));
+
+		lblEmail = new JLabel();
+		lblEmail.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEmail.setForeground(new Color(37, 57, 111));
+		lblEmail.setFont(new Font("Arial", Font.PLAIN, 14));
+		panel_1_2.add(lblEmail);
+		lblEmail.setText(user.getEmail());
+
+		JPanel panel_1_2_1 = new JPanel();
+		panel_1_2_1.setBackground(Color.WHITE);
+		panelHeader.add(panel_1_2_1);
+		panel_1_2_1.setLayout(new BorderLayout(0, 0));
+
+		JLabel lblCreatedDate = new JLabel();
+		lblCreatedDate.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCreatedDate.setText((String) null);
+		lblCreatedDate.setForeground(new Color(37, 57, 111));
+		lblCreatedDate.setFont(new Font("Arial", Font.PLAIN, 14));
+		lblCreatedDate.setText(user.getCreatedAt().toString());
+		panel_1_2_1.add(lblCreatedDate);
+
+		JPanel panel_1_1 = new JPanel();
+		panel_1_1.setLayout(null);
+		panel_1_1.setBackground(new Color(255, 255, 255));
+		panelHeader.add(panel_1_1);
+
+		JButton btnDelete = new JButton("Xóa");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				do_btnDelete_actionPerformed(e);
+			}
+		});
+		btnDelete.setBorder(null);
+		btnDelete.setForeground(Color.WHITE);
+		btnDelete.setFont(new Font("Arial", Font.BOLD, 14));
+		btnDelete.setBackground(new Color(205, 16, 64));
+		btnDelete.setBounds(73, 11, 60, 30);
+		panel_1_1.add(btnDelete);
+
+		JPanel panel_1_1_1 = new JPanel();
+		panel_1_1_1.setLayout(null);
+		panel_1_1_1.setBackground(new Color(255, 255, 255));
+		panelHeader.add(panel_1_1_1);
+
+		JButton btnEdit = new JButton("Sửa ");
+		btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				do_btnEdit_actionPerformed(e);
+			}
+		});
+		btnEdit.setBorder(null);
+		btnEdit.setForeground(new Color(255, 255, 255));
+		btnEdit.setBackground(new Color(67, 98, 190));
+		btnEdit.setFont(new Font("Arial", Font.BOLD, 14));
+		btnEdit.setBounds(75, 11, 60, 30);
+		panel_1_1_1.add(btnEdit);
 	}
 
 	protected void do_btnEdit_actionPerformed(ActionEvent e) {
@@ -128,7 +128,8 @@ public class ItemUser extends JPanel {
 	}
 
 	protected void do_btnDelete_actionPerformed(ActionEvent e) {
-		int option = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn xóa user này?", "Xóa user",JOptionPane.YES_NO_OPTION);
+		int option = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn xóa user này?", "Xóa user",
+				JOptionPane.YES_NO_OPTION);
 		if (option == JOptionPane.YES_OPTION) {
 			userService = new UserService();
 			if (userService.delete(user)) {

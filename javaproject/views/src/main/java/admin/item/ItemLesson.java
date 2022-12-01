@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import admin.update.FrameUpdateLesson;
 import admin.update.FrameUpdateVocab;
 import dao.impl.CategoryDAOImpl;
 import dao.impl.TheoryDAOImpl;
@@ -28,10 +29,11 @@ import entity.Vocabulary;
 import helper.FrameUtils;
 import helper.ImageUtils;
 import helper.StringUtils;
+import service.LessonService;
 import service.VocabularyService;
 
 public class ItemLesson extends JPanel {
-	private VocabularyService vocabService;
+	private LessonService lsService;
 	private Lesson ls;
 	
 	public ItemLesson(Lesson ls, int y) {
@@ -46,7 +48,6 @@ public class ItemLesson extends JPanel {
 		StringBuilder vocabsStr = new StringBuilder();
 		Theory th = null;
 		for(int i = 0; i < Math.min(5, ths.size()); i++) {
-			System.out.println(i);
 			th = ths.get(i);
 			if(i != ths.size() - 1) {
 				vocabsStr.append(StringUtils.toCapitalize(vocabDAO.select(th.getVocabId()).getWord()));
@@ -55,7 +56,6 @@ public class ItemLesson extends JPanel {
 				vocabsStr.append(StringUtils.toCapitalize(vocabDAO.select(th.getVocabId()).getWord()));
 			}
 		}
-		System.out.println(vocabsStr.toString());
 		lblVocabs.setText("<html>" + vocabsStr + "</html>");
 		
 	}
@@ -72,7 +72,7 @@ public class ItemLesson extends JPanel {
 		panelHeader_1 = new JPanel();
 		panelHeader_1.setBounds(0, 0, 980, 80);
 		add(panelHeader_1);
-		panelHeader_1.setLayout(new GridLayout(0, 7, 0, 0));
+		panelHeader_1.setLayout(new GridLayout(0, 6, 0, 0));
 
 		panel_1 = new JPanel();
 		panel_1.setBackground(new Color(255, 255, 255));
@@ -118,19 +118,6 @@ public class ItemLesson extends JPanel {
 		lblImage.setForeground(new Color(0, 0, 0));
 		lblImage.setFont(new Font("Arial", Font.PLAIN, 14));
 		panel_2.add(lblImage);
-
-		panel_1_2_1 = new JPanel();
-		panel_1_2_1.setBackground(new Color(255, 255, 255));
-		panelHeader_1.add(panel_1_2_1);
-		panel_1_2_1.setLayout(null);
-		
-		btnChiTieest = new JButton("Chi tiết");
-		btnChiTieest.setForeground(Color.WHITE);
-		btnChiTieest.setFont(new Font("Arial", Font.BOLD, 14));
-		btnChiTieest.setBorder(null);
-		btnChiTieest.setBackground(new Color(67, 98, 190));
-		btnChiTieest.setBounds(26, 24, 100, 30);
-		panel_1_2_1.add(btnChiTieest);
 		
 
 		panel_1_1_1 = new JPanel();
@@ -141,12 +128,11 @@ public class ItemLesson extends JPanel {
 		btnEdit = new JButton("Sửa");
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				FrameUpdateVocab fr = new FrameUpdateVocab(vocab);
-//				FrameUtils.alignFrameScreenCenter(fr);
-//				fr.setVisible(true);
+				FrameUpdateLesson fr = new FrameUpdateLesson(ls);
+				fr.setVisible(true);
 			}
 		});
-		btnEdit.setBounds(50, 25, 58, 30);
+		btnEdit.setBounds(60, 25, 58, 30);
 		btnEdit.setForeground(Color.WHITE);
 		btnEdit.setFont(new Font("Arial", Font.BOLD, 14));
 		btnEdit.setBorder(null);
@@ -168,19 +154,20 @@ public class ItemLesson extends JPanel {
 		btnDelete.setFont(new Font("Arial", Font.BOLD, 14));
 		btnDelete.setBorder(null);
 		btnDelete.setBackground(new Color(205, 16, 64));
-		btnDelete.setBounds(50, 25, 60, 30);
+		btnDelete.setBounds(60, 25, 60, 30);
 		panel_1_1.add(btnDelete);
 	}
 
 	protected void btnDeleteActionPerformed(ActionEvent e) {
-//		int option = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn xóa từ vựng này?", "Xóa từ vựng",
-//				JOptionPane.YES_NO_OPTION);
-//		if (option == JOptionPane.YES_OPTION) {
-//			vocabService = new VocabularyService();
-//			if (vocabService.delete(vocab)) {
-//				JOptionPane.showMessageDialog(this, "Xoá từ vựng thành công!");
-//			}
-//		}
+		int option = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn xóa bài học này?", "Xóa từ vựng",
+				JOptionPane.YES_NO_OPTION);
+		
+		if (option == JOptionPane.YES_OPTION) {
+			lsService = new LessonService();
+			if (lsService.delete(ls)) {
+				JOptionPane.showMessageDialog(this, "Xoá bài học thành công!");
+			}
+		}
 	}
 	
 	private JPanel panel;
@@ -192,11 +179,9 @@ public class ItemLesson extends JPanel {
 	private JPanel panel_2_1;
 	private JPanel panel_2;
 	private JLabel lblImage;
-	private JPanel panel_1_2_1;
 	private JPanel panel_1_1_1;
 	private JButton btnEdit;
 	private JPanel panel_1_1;
 	private JButton btnDelete;
 	private JLabel lblVocabs;
-	private JButton btnChiTieest;
 }

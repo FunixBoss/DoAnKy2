@@ -141,7 +141,6 @@ public class ItemVocab extends JPanel {
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FrameUpdateVocab fr = new FrameUpdateVocab(vocab);
-				FrameUtils.alignFrameScreenCenter(fr);
 				fr.setVisible(true);
 			}
 		});

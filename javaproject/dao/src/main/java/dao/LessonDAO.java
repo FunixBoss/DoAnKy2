@@ -8,5 +8,6 @@ import entity.Vocabulary;
 public interface LessonDAO extends DAO<Lesson>{
 	Integer countNumberOfLesson();
 	List<Lesson> selectByPages(int pageNumber, int rowOfPages);
+	Integer insertGetId(Lesson ls);
 
 }

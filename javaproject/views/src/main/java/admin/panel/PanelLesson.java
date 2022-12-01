@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import admin.insert.FrameInsertCategory;
+import admin.insert.FrameInsertLesson;
 import admin.insert.FrameInsertVocab;
 import admin.item.ItemCategory;
 import admin.item.ItemLesson;
@@ -195,7 +196,7 @@ public class PanelLesson extends JPanel {
 
 	private void printTitleComponent(JPanel panel) {
 		JPanel panelHeader = new JPanel();
-		panelHeader.setLayout(new GridLayout(0, 7, 0, 0));
+		panelHeader.setLayout(new GridLayout(0, 6, 0, 0));
 		panelHeader.setBounds(0, 0, 995, 40);
 		panel.add(panelHeader);
 		
@@ -243,17 +244,6 @@ public class PanelLesson extends JPanel {
 		lblImage.setForeground(Color.WHITE);
 		lblImage.setFont(new Font("Arial", Font.BOLD, 14));
 		panel_2.add(lblImage);
-		
-		JPanel panel_1_2_1 = new JPanel();
-		panel_1_2_1.setBackground(new Color(37, 57, 111));
-		panelHeader.add(panel_1_2_1);
-		panel_1_2_1.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblCategory = new JLabel("Chi tiết");
-		lblCategory.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCategory.setForeground(Color.WHITE);
-		lblCategory.setFont(new Font("Arial", Font.BOLD, 14));
-		panel_1_2_1.add(lblCategory);
 		
 		JPanel panel_1_1_1 = new JPanel();
 		panel_1_1_1.setBackground(new Color(37, 57, 111));
@@ -305,9 +295,8 @@ public class PanelLesson extends JPanel {
 	}
 	
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
-		FrameInsertVocab frame = FrameInsertVocab.getMyInstance();
+		FrameInsertLesson frame = FrameInsertLesson.getMyInstance();
 		if(!frame.isVisible()) {
-			FrameUtils.alignFrameScreenCenter(frame);
 			frame.setVisible(true);
 		}
 	}

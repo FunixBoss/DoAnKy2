@@ -52,8 +52,7 @@ public class VocabularyService {
 		String imageDir = (String) data.get("image"); // can be null //C:\Users\ADMIN\OneDrive\Documents\admin.png
 		String pronunciationDir = (String) data.get("pronunciation"); // can be null
 
-		List<HashMap<String, String>> meaningAndExamples = (ArrayList<HashMap<String, String>>) data
-				.get("meaningAndEx");
+		List<HashMap<String, String>> meaningAndExamples = (ArrayList<HashMap<String, String>>) data.get("meaningAndEx");
 
 //		VALIDATE
 		if (!validateVocab(word, relative, phonetic, meaningAndExamples)) {

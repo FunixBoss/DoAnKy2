@@ -1,5 +1,9 @@
 package dao.impl;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -147,14 +151,49 @@ public class LessonDAOImpl extends AbstractDAO<Lesson> implements LessonDAO {
 			while(rs.next()) {
 				Integer id = rs.getInt(1);
 				String title = rs.getString(2);
-				String imageIcon = rs.getString(3);
-				list.add(new Lesson(id, imageIcon, title));
+				String image = rs.getString(3);
+				list.add(new Lesson(id, title, image));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
 			System.out.println("Select Lesson By Pages Failed");
 		}
 		return list;
+	}
+
+	@Override
+	public Integer insertGetId(Lesson ls) {
+		String sql = "INSERT INTO LESSON VALUES (?, ?)";
+		Integer result = 0;
+		try (
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			PreparedStatement  ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		) {
+			ps.setString(1, ls.getTitle());
+			if(ls.getImage() != null) {
+				ps.setString(2, ls.getImage());				
+			} else{
+				ps.setNull(2, Types.NVARCHAR);
+			}
+			int affectedRows = ps.executeUpdate();
+
+	        if (affectedRows == 0) {
+	            throw new SQLException("Creating lesson failed, no rows affected.");
+	        }
+
+	        try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+	            if (generatedKeys.next()) {
+	            	result =  generatedKeys.getInt(1);
+	            }
+	            else {
+	                throw new SQLException("Insert get id lesson failed, no ID obtained.");
+	            }
+	        }
+		} catch (Exception e) {
+			// e.printStackTrace();
+			System.err.println("Insert Get Last Id Lesson failed!");
+		}
+		return result;
 	}
 
 }

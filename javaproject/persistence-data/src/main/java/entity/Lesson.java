@@ -8,13 +8,13 @@ public class Lesson extends Entity {
 		super();
 	}
 
-	public Lesson(String image, String title) {
+	public Lesson(String title, String image) {
 		super();
 		this.image = image;
 		this.title = title;
 	}
 
-	public Lesson(Integer id, String image, String title) {
+	public Lesson(Integer id, String title, String image) {
 		super(id);
 		this.image = image;
 		this.title = title;

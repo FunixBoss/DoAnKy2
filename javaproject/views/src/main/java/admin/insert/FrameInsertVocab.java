@@ -215,7 +215,6 @@ public class FrameInsertVocab extends JFrame {
 		btnPronunciation.setBackground(new Color(242, 247, 255));
 		panelChild.add(btnPronunciation);
 
-		Border border = BorderFactory.createLineBorder(Color.BLUE, 1);
 
 		textRelatives = new JTextField();
 		textRelatives.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -298,6 +297,7 @@ public class FrameInsertVocab extends JFrame {
 		lblShowImage = new JLabel("");
 		lblShowImage.setHorizontalAlignment(SwingConstants.CENTER);
 		panelShowImage.add(lblShowImage);
+		Border border = BorderFactory.createLineBorder(Color.BLUE, 1);
 		lblShowImage.setBorder(border);
 		
 		FrameUtils.alignFrameScreenCenter(this);
@@ -367,7 +367,7 @@ public class FrameInsertVocab extends JFrame {
 		vocabService = new VocabularyService();
 		if (vocabService.add(data)) {
 			JOptionPane.showMessageDialog(this, "Thêm từ vựng thành công");
-//			dispose();
+			dispose();
 		} else {
 			System.out.println(ErrorMessage.ERROR_MESSAGES);
 		}

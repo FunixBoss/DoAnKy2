@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import entity.Meaning;
@@ -16,4 +17,6 @@ public interface VocabularyDAO extends DAO<Vocabulary> {
 	Integer insertGetId(Vocabulary vocab);
 	List<Vocabulary> searchAll(String str);
 	List<Vocabulary> sel5LastVocab();
+	
+	List<Vocabulary> selectIdAndWordAll();
 }

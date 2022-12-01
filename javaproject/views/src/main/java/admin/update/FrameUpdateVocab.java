@@ -145,6 +145,8 @@ public class FrameUpdateVocab extends JFrame {
 					i++;
 				}
 			}
+			
+			if(meanings.size() == 1) addItemMn();
 		} else {
 			addItemMn();
 			addItemMn();
