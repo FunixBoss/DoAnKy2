@@ -62,3 +62,26 @@ BEGIN
 	WHERE ID = @id
 END
 GO
+
+DROP PROC IF EXISTS countFeedback
+GO
+CREATE PROC countFeedback
+AS
+BEGIN
+	SELECT COUNT(ID) total FROM FEEDBACK
+END
+GO
+
+
+DROP PROC IF EXISTS selFeedbackByPages
+GO
+CREATE PROC selFeedbackByPages
+@PageNumber AS INT, @RowsOfPage AS INT
+AS
+BEGIN
+	SELECT * FROM FEEDBACK
+	ORDER BY ID
+	OFFSET (@pageNumber - 1) * @RowsOfPage ROWS
+	FETCH NEXT @RowsOfPage ROWS ONLY
+END
+GO 

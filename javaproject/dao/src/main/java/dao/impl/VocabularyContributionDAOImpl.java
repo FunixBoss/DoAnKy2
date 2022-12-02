@@ -1,12 +1,16 @@
 package dao.impl;
 
 import java.sql.Types;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import dao.VocabularyContributionDAO;
+import database.CallableStatementUtils;
 import database.ConnectDBFromProperties;
 import entity.Bookmark;
+import entity.User;
 import entity.VocabularyContribution;
 
 public class VocabularyContributionDAOImpl extends AbstractDAO<VocabularyContribution>
@@ -83,10 +87,6 @@ public class VocabularyContributionDAOImpl extends AbstractDAO<VocabularyContrib
 		}
 		return result;
 	}
-	public static void main(String[] args) {
-		VocabularyContribution x = new VocabularyContribution("xx", "yy", 4);
-		new VocabularyContributionDAOImpl().insert(x);
-	}
 
 	@Override
 	public Integer update(VocabularyContribution vc) {
@@ -123,4 +123,45 @@ public class VocabularyContributionDAOImpl extends AbstractDAO<VocabularyContrib
 		return result;
 	}
 
+	@Override
+	public Integer countVocabContri() {
+		int count = 0;
+
+		try (
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call countVocabContribution}");
+			var rs = cs.executeQuery();
+		) {
+			if (rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return count;
+	}
+
+	@Override
+	public List<VocabularyContribution> selectByPages(int pageNumber, int rowOfPages) {
+		List<VocabularyContribution> list = new ArrayList<>();
+		User user;
+		try (
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = CallableStatementUtils.createCS(con, "{call selVocabContriByPages(?, ?)}", pageNumber, rowOfPages);
+			var rs = cs.executeQuery();
+		) {
+			while (rs.next()) {
+				Integer vcId = rs.getInt(1);
+				String word = rs.getString(2);
+				String meaning = rs.getString(3);
+				Integer userId = rs.getInt(4);
+				list.add(new VocabularyContribution(vcId, word, meaning, userId));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Select Vocab Contri By Pages Failed");
+		}
+		return list;
+	}
 }

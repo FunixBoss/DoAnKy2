@@ -2,7 +2,6 @@ package admin.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -19,28 +18,22 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import admin.insert.FrameInsertCategory;
 import admin.insert.FrameInsertMember;
-import admin.item.ItemCategory;
-import admin.item.ItemFeedback;
 import admin.item.ItemUser;
 import admin.item.ItemVocabContribution;
-import dao.FeedbackDAO;
-import dao.impl.CategoryDAOImpl;
-import dao.impl.FeedbackDAOImpl;
+import dao.VocabularyContributionDAO;
 import dao.impl.UserDAOImpl;
-import entity.Category;
-import entity.Feedback;
+import dao.impl.VocabularyContributionDAOImpl;
 import entity.User;
 import entity.VocabularyContribution;
 import helper.FrameUtils;
 
-public class PanelFeedback extends JPanel{
+public class PanelVocabContribution extends JPanel{
 	private JLabel lblStatusPage;
-	private JLabel lblRowCount;
-	private JScrollPane scrollPane;
+	private JLabel lblRowCount;	
 	private JPanel panel;
-	private FeedbackDAO dao; // data
+	private JScrollPane scrollPane;
+	private VocabularyContributionDAO dao; // data
 	
 //	Controll data
 	private Integer pageNumber;
@@ -49,34 +42,32 @@ public class PanelFeedback extends JPanel{
 	private Integer totalPage;
 	private JTextField txtPage;
 	private JComboBox cbbNumberOfRows;
+
+	private static PanelVocabContribution myInstance;
 	
-	private static PanelFeedback myInstance;
-	
-	public static PanelFeedback getMyInstance() {
+	public static PanelVocabContribution getMyInstance() {
 		if (myInstance == null) {
-			myInstance = new PanelFeedback();
+			myInstance = new PanelVocabContribution();
 		}
 		return myInstance;
-	}	
+	}
 	
-	public PanelFeedback() {
+	public PanelVocabContribution() {
 		initComponent();
-		dao = new FeedbackDAOImpl();
+		dao = new VocabularyContributionDAOImpl();
 		pageNumber = 1;
-		rowsOfPage =  dao.countFeedback() > 10 ? 10 : dao.countFeedback();
-			
+		rowsOfPage = dao.countVocabContri() > 10 ? 10 : dao.countVocabContri();
+		
 		loadData();
 	}
-
-
 	private void initComponent() {
 		setLayout(null);
 		setBounds(0, 0, 1085, 668);
 		setBackground(new Color(242, 247, 255));
-		JLabel lblDashboard = new JLabel("Phản hồi");
+		JLabel lblDashboard = new JLabel("Từ vựng đóng góp");
 		lblDashboard.setForeground(new Color(37, 57, 111));
 		lblDashboard.setFont(new Font("Arial", Font.BOLD, 20));
-		lblDashboard.setBounds(43, 11, 134, 39);
+		lblDashboard.setBounds(41, 11, 220, 39);
 		add(lblDashboard);
 		scrollPane = new JScrollPane();
 		scrollPane.setForeground(new Color(0, 0, 0));
@@ -84,22 +75,92 @@ public class PanelFeedback extends JPanel{
 		scrollPane.setBackground(new Color(255, 255, 255));
 		scrollPane.setBounds(41, 61, 995, 448);
 		add(scrollPane);
-		
 		panel = new JPanel();
 		panel.setLayout(null);
 		panel.setBackground(Color.WHITE);
 		printTopPageComponent();
-		printControllComponent();	
+		printControllComponent();
 	}
-
-
 	private void printTopPageComponent() {
-		JLabel lblBreadcrumb = new JLabel("Trang chủ / Phản hồi");
+		JLabel lblBreadcrumb = new JLabel("Trang chủ / Từ vựng đóng góp");
 		lblBreadcrumb.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblBreadcrumb.setBounds(904, 21, 134, 14);
+		lblBreadcrumb.setBounds(849, 21, 189, 14);
 		add(lblBreadcrumb);
 	}
-
+	
+	private void printTitleComponent(JPanel panel) {
+		JPanel panelHeader = new JPanel();
+		panelHeader.setBounds(0, 0, 995, 40);
+		panel.add(panelHeader);
+		panelHeader.setLayout(new GridLayout(0, 6, 0, 0));
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_1);
+		panel_1.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblNewLabel = new JLabel("ID");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setForeground(Color.WHITE);
+		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_1.add(lblNewLabel);
+		
+		JPanel panel_1_2 = new JPanel();
+		panel_1_2.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_1_2);
+		panel_1_2.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblEmail = new JLabel("Email");
+		lblEmail.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEmail.setForeground(Color.WHITE);
+		lblEmail.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_1_2.add(lblEmail);
+		
+		JPanel panel_1_3 = new JPanel();
+		panel_1_3.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_1_3);
+		panel_1_3.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblNewLabel_1 = new JLabel("Từ vựng");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setForeground(Color.WHITE);
+		lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_1_3.add(lblNewLabel_1);
+		
+		JPanel panel_1_1 = new JPanel();
+		panel_1_1.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_1_1);
+		panel_1_1.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblXa = new JLabel("Nghĩa");
+		lblXa.setHorizontalAlignment(SwingConstants.CENTER);
+		lblXa.setForeground(Color.WHITE);
+		lblXa.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_1_1.add(lblXa);
+		
+		JPanel panel_1_1_1 = new JPanel();
+		panel_1_1_1.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_1_1_1);
+		panel_1_1_1.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblSa = new JLabel("Thêm");
+		lblSa.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSa.setForeground(Color.WHITE);
+		lblSa.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_1_1_1.add(lblSa);
+		
+		JPanel panel_1_1_1_1 = new JPanel();
+		panel_1_1_1_1.setBackground(new Color(37, 57, 111));
+		panelHeader.add(panel_1_1_1_1);
+		panel_1_1_1_1.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblXa_1 = new JLabel("Xóa");
+		lblXa_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblXa_1.setForeground(Color.WHITE);
+		lblXa_1.setFont(new Font("Arial", Font.BOLD, 14));
+		panel_1_1_1_1.add(lblXa_1);
+	}
+	
 	private void printControllComponent() {
 		lblStatusPage = new JLabel("Trang 1 of 0");
 		lblStatusPage.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -174,7 +235,6 @@ public class PanelFeedback extends JPanel{
 		txtPage = new JTextField();
 		txtPage.setBounds(430, 603, 220, 40);
 		txtPage.setColumns(10);
-		txtPage.setText(new String("1"));
 		txtPage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txtPageActionPerformed(e);
@@ -183,94 +243,26 @@ public class PanelFeedback extends JPanel{
 		add(txtPage);
 		
 	}
-
-	private void printTitleComponent(JPanel panel) {
-		JPanel panelHeader = new JPanel();
-		panelHeader.setBounds(0, 0, 995, 40);
-		panel.add(panelHeader);
-		panelHeader.setLayout(null);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(0, 0, 60, 40);
-		panel_1.setBackground(new Color(37, 57, 111));
-		panelHeader.add(panel_1);
-		panel_1.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblNewLabel = new JLabel("Id");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setForeground(Color.WHITE);
-		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 14));
-		panel_1.add(lblNewLabel);
-		
-		JPanel panel_1_2 = new JPanel();
-		panel_1_2.setBounds(60, 0, 250, 40);
-		panel_1_2.setBackground(new Color(37, 57, 111));
-		panelHeader.add(panel_1_2);
-		panel_1_2.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblWord = new JLabel("Email");
-		lblWord.setAlignmentY(Component.TOP_ALIGNMENT);
-		lblWord.setHorizontalAlignment(SwingConstants.LEFT);
-		lblWord.setForeground(Color.WHITE);
-		lblWord.setFont(new Font("Arial", Font.BOLD, 14));
-		panel_1_2.add(lblWord);
-		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(310, 0, 460, 40);
-		panel_2.setBackground(new Color(37, 57, 111));
-		panelHeader.add(panel_2);
-		panel_2.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblImage = new JLabel("Nội dung");
-		lblImage.setHorizontalAlignment(SwingConstants.LEFT);
-		lblImage.setForeground(Color.WHITE);
-		lblImage.setFont(new Font("Arial", Font.BOLD, 14));
-		panel_2.add(lblImage);
-		
-		JPanel panel_1_1_defail = new JPanel();
-		panel_1_1_defail.setBounds(770, 0, 120, 40);
-		panelHeader.add(panel_1_1_defail);
-		panel_1_1_defail.setBackground(new Color(37, 57, 111));
-		panel_1_1_defail.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblDefault = new JLabel("Chi tiết");
-		lblDefault.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDefault.setForeground(Color.WHITE);
-		lblDefault.setFont(new Font("Arial", Font.BOLD, 14));
-		panel_1_1_defail.add(lblDefault);
-		
-		
-		JPanel panel_1_1 = new JPanel();
-		panel_1_1.setBounds(890, 0, 99, 40);
-		panelHeader.add(panel_1_1);
-		panel_1_1.setBackground(new Color(37, 57, 111));
-		panel_1_1.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblXa = new JLabel("Xóa");
-		lblXa.setHorizontalAlignment(SwingConstants.CENTER);
-		lblXa.setForeground(Color.WHITE);
-		lblXa.setFont(new Font("Arial", Font.BOLD, 14));
-		panel_1_1.add(lblXa);
-	}
-
+	
+	
 	private void loadData() {
-		totalOfRows = dao.countFeedback();
-		totalPage = (int) Math.ceil((double)totalOfRows / rowsOfPage);
+		totalOfRows = dao.countVocabContri();
+		totalPage = (int) Math.ceil((double) totalOfRows / rowsOfPage);
 		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
 		lblRowCount.setText("Số dòng: " + totalOfRows);
 		
-		final int ITEM_HEIGHT = 88;
+		final int ITEM_HEIGHT = 63;
 		Integer tableHeigth = Math.min(ITEM_HEIGHT * rowsOfPage, ITEM_HEIGHT * totalOfRows);
 		Dimension dim = new Dimension(975, tableHeigth);
-		
-		
-		panel.removeAll();
 		panel.setPreferredSize(dim);
 		scrollPane.setViewportView(panel);
+		
+		panel.removeAll();
 		printTitleComponent(panel);
+
 		int y = 40;		
-		for(Feedback vc : dao.selectByPages(pageNumber, rowsOfPage)){
-			ItemFeedback vcItem = new ItemFeedback(vc, y);			
+		for(VocabularyContribution vc : dao.selectByPages(pageNumber, rowsOfPage)){
+			ItemVocabContribution vcItem = new ItemVocabContribution(vc, y);			
 			panel.add(vcItem);
 			y = y + 60;
 		}	
@@ -295,7 +287,6 @@ public class PanelFeedback extends JPanel{
 			pageNumber = 1;
 			loadData();
 		}
-		
 	}
 	protected void btnFirstActionPerformed(ActionEvent e) {
 		pageNumber = 1;
@@ -310,7 +301,7 @@ public class PanelFeedback extends JPanel{
 		}
 	}
 	protected void btnNextActionPerformed(ActionEvent e) {
-		if(pageNumber < totalPage.intValue()) {
+		if(pageNumber < totalPage) {
 			pageNumber++;
 			txtPage.setText(pageNumber.toString());
 			loadData();

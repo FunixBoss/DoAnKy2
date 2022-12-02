@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import admin.panel.PanelFeedback;
+import admin.panel.PanelResponse;
 import admin.panel.PanelLesson;
 import java.awt.BorderLayout;
 
@@ -35,7 +35,7 @@ public class FrameTest extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
-		PanelFeedback panelFB= new PanelFeedback();
+		PanelResponse panelFB= new PanelResponse();
 		contentPane.add(panelFB);
 	}
 

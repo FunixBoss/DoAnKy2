@@ -25,11 +25,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import admin.item.ItemMeaning;
 import dao.impl.CategoryDAOImpl;
 import dao.impl.WordTypeDAOImpl;
+import entity.VocabularyContribution;
 import helper.ErrorMessage;
 import helper.FrameUtils;
 import helper.ImageUtils;
 import helper.StringUtils;
 import jaco.mp3.player.MP3Player;
+import service.VocabularyContributionService;
 import service.VocabularyService;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTextArea;
@@ -37,6 +39,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,11 +77,13 @@ public class FrameInsertVocab extends JFrame {
 	private JPanel panelParent;
 	private JPanel panelChild;
 	private JTextField textPhonetic;
-
+	private boolean isAdded;
 	private Map<String, Object> data;
 	private List<ItemMeaning> meaningItems;
 	private ArrayList<HashMap<String, String>> meaningAndExamples;
 
+	private VocabularyContribution vc;
+	
 	private final int PANEL_ITEM_MEANING_HEIGHT = 127;
 	private int CURRENT_PANELS_MN_EX_HEIGHT = 345;
 	private int HEIGHT_ADDED = 0;
@@ -91,6 +96,7 @@ public class FrameInsertVocab extends JFrame {
 		}
 		return myInstance;
 	}
+	
 
 	public FrameInsertVocab() {
 		initComponent();
@@ -104,7 +110,34 @@ public class FrameInsertVocab extends JFrame {
 		comboCategory.addItem(null);
 		cateDao.selectAll().forEach(
 				pro -> comboCategory.addItem(StringUtils.toCapitalize(pro.getName())));
+	}
+	
+	public void setTextWordAndMeanings(VocabularyContribution vc) {
+		this.vc = vc;
+		textWord.setText(StringUtils.toCapitalize(vc.getWord()));
+		List<String> meanings = Arrays.asList(vc.getMeaning().split(";"));
 		
+	
+		if(meanings.size() >= 2) {
+			for(int i = 0; i < meanings.size(); i++) {
+				if(i >= 2) {
+					addItemMn();
+				}
+				ItemMeaning mnItem = meaningItems.get(i);
+				mnItem.setMeaningText(meanings.get(i));
+			}
+		} else {
+			for(int i = 0; i < 2 - meanings.size(); i++) {
+				ItemMeaning mnItem = meaningItems.get(i);
+				mnItem.setMeaningText(meanings.get(i));
+			}
+		}
+	}
+	
+	private void deleteVc() {
+		if(isAdded) {
+			new VocabularyContributionService().delete(vc);
+		}
 	}
 
 	private void initComponent() {
@@ -367,6 +400,8 @@ public class FrameInsertVocab extends JFrame {
 		vocabService = new VocabularyService();
 		if (vocabService.add(data)) {
 			JOptionPane.showMessageDialog(this, "Thêm từ vựng thành công");
+			isAdded = true;
+			deleteVc();
 			dispose();
 		} else {
 			System.out.println(ErrorMessage.ERROR_MESSAGES);

@@ -12,7 +12,7 @@ import javax.swing.border.LineBorder;
 import admin.panel.PanelAdmin;
 import admin.panel.PanelCategory;
 import admin.panel.PanelDashboard;
-import admin.panel.PanelFeedback;
+import admin.panel.PanelResponse;
 import admin.panel.PanelLesson;
 import admin.panel.PanelMainContent;
 import admin.panel.PanelMember;
@@ -30,7 +30,7 @@ public class FrameDashboard extends JFrame {
 	private PanelDashboard panelDashboard;
 	private PanelCategory panelCategory;
 	private PanelLesson panelLesson;
-	private PanelFeedback panelFeedback;
+	private PanelResponse panelResponse;
 	
 	class SideBarMenu extends PanelSideBar {
 		protected void do_panelDashboard_mouseClicked(MouseEvent e) {
@@ -59,7 +59,7 @@ public class FrameDashboard extends JFrame {
 			menuChanged(getPanelLesson(),getLblLesson());
 		}
 		protected void do_panelFeedback_mouseClicked(MouseEvent e) {
-			menuClicked(panelFeedback);	
+			menuClicked(panelResponse);	
 			menuChanged(getPanelFeedback(),getLblFeedback());
 		}
 	}
@@ -83,12 +83,13 @@ public class FrameDashboard extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(FrameDashboard.class.getResource("/image/dictionary-icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1318, 816);
+		
 		contentPane = new JPanel();
 		contentPane.setFont(new Font("Arial", Font.PLAIN, 14));
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		setContentPane(contentPane);
 		
 		// Side Bar
 		JPanel sideBar = new JPanel();
@@ -111,7 +112,7 @@ public class FrameDashboard extends JFrame {
 		panelCategory = new PanelCategory();
 		panelDashboard = new PanelDashboard();
 		panelLesson = new PanelLesson();
-		panelFeedback = new PanelFeedback();
+		panelResponse = new PanelResponse();
 		panelDashboard.loadData();
 		panelDashboard.setBounds(0, 0, 1085, 729);
 	
@@ -121,7 +122,7 @@ public class FrameDashboard extends JFrame {
 		mainContent.add(panelMember);
 		mainContent.add(panelCategory);
 		mainContent.add(panelLesson);
-		mainContent.add(panelFeedback);
+		mainContent.add(panelResponse);
 		menuClicked(panelDashboard);
 		
 		// Top Bar
@@ -140,7 +141,7 @@ public class FrameDashboard extends JFrame {
 		panelCategory.setVisible(false);
 		panelDashboard.setVisible(false);
 		panelLesson.setVisible(false);
-		panelFeedback.setVisible(false);
+		panelResponse.setVisible(false);
 		panel.setVisible(true);
 	}
 }

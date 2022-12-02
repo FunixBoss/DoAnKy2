@@ -64,3 +64,26 @@ BEGIN
 	WHERE ID = @id
 END
 GO
+
+DROP PROC IF EXISTS countVocabContribution
+GO
+CREATE PROC countVocabContribution
+AS
+BEGIN
+	SELECT COUNT(ID) total FROM VOCABULARY_CONTRIBUTION
+END
+GO
+
+
+DROP PROC IF EXISTS selVocabContriByPages
+GO
+CREATE PROC selVocabContriByPages
+@PageNumber AS INT, @RowsOfPage AS INT
+AS
+BEGIN
+	SELECT * FROM VOCABULARY_CONTRIBUTION
+	ORDER BY ID
+	OFFSET (@pageNumber - 1) * @RowsOfPage ROWS
+	FETCH NEXT @RowsOfPage ROWS ONLY
+END
+GO 

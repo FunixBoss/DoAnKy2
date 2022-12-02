@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.FeedbackDAO;
+import database.CallableStatementUtils;
 import database.ConnectDBFromProperties;
 import entity.Bookmark;
 import entity.Feedback;
+import entity.User;
+import entity.VocabularyContribution;
 
 public class FeedbackDAOImpl extends AbstractDAO<Feedback> implements FeedbackDAO {
 
@@ -112,6 +115,46 @@ public class FeedbackDAOImpl extends AbstractDAO<Feedback> implements FeedbackDA
 			System.err.println("Delete a Feedback failed");
 		}
 		return result;
+	}
+
+	@Override
+	public Integer countFeedback() {
+		int count = 0;
+
+		try (
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call countFeedback}");
+			var rs = cs.executeQuery();
+		) {
+			if (rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return count;
+	}
+
+	@Override
+	public List<Feedback> selectByPages(int pageNumber, int rowOfPages) {
+		List<Feedback> list = new ArrayList<>();
+		try (
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = CallableStatementUtils.createCS(con, "{call selFeedbackByPages(?, ?)}", pageNumber, rowOfPages);
+			var rs = cs.executeQuery();
+		) {
+			while (rs.next()) {
+				Integer fbId = rs.getInt(1);
+				String content = rs.getString(2);
+				Integer userId = rs.getInt(3);
+				list.add(new Feedback(fbId, content, userId));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Select Feedback By Pages Failed");
+		}
+		return list;
 	}
 
 }
