@@ -8,8 +8,10 @@ import java.util.Map;
 import org.mindrot.jbcrypt.BCrypt;
 
 import dao.impl.BookmarkDAOImpl;
+import dao.impl.FeedbackDAOImpl;
 import dao.impl.HistoryDAOImpl;
 import dao.impl.UserDAOImpl;
+import dao.impl.VocabularyContributionDAOImpl;
 import entity.Bookmark;
 import entity.User;
 import helper.ErrorMessage;
@@ -90,7 +92,9 @@ public class UserService {
 		bm.getId();
 //		delete bookmark
 		new BookmarkDAOImpl().delByUserId(user.getId());
-//		delete user	
+		new FeedbackDAOImpl().delByUserId(user.getId());
+		new VocabularyContributionDAOImpl().delByUserId(user.getId());
+		//		delete user	
 		return dao.delete(user) == 1 ? true : false;
 	}
 }

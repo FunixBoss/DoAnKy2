@@ -3,6 +3,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import admin.item.ItemUser;
 import dao.impl.UserDAOImpl;
 import entity.User;
 import helper.ErrorMessage;
@@ -41,7 +42,7 @@ public class FrameUpdateMember extends JFrame {
 	private static FrameUpdateMember myInstance;
 	private User user;
 	private Map<String, String> data;
-	
+	public ItemUser itemUser;
 	
 	public static FrameUpdateMember getMyInstance(User user) {
 		if (myInstance == null) {
@@ -56,6 +57,7 @@ public class FrameUpdateMember extends JFrame {
 	
 	public FrameUpdateMember(User user) {
 		this.user = user;
+		
 		initComponent();
 		FrameUtils.alignFrameScreenCenter(this);
 		userService = new UserService();
@@ -144,6 +146,11 @@ public class FrameUpdateMember extends JFrame {
 		if(userService.update(data)) {
 			JOptionPane.showMessageDialog(this, "Cập nhật thành viên thành công");
 			dispose();
+			
+			JPanel panel = this.itemUser.panelParent.getPanel();
+			panel.removeAll();
+			panel.repaint();
+			panel.revalidate();
 		} else {
 			JOptionPane.showMessageDialog(this, ErrorMessage.ERROR_MESSAGES);
 		}

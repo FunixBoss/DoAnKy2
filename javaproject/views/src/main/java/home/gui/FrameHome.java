@@ -1,6 +1,5 @@
 package home.gui;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -74,42 +73,22 @@ public class FrameHome extends JFrame {
 			menuClicked(panelHome);
 			menuChanged(getPanelHome(),getLblHome());
 		}
+		protected void do_panelSignUp_mouseClicked(MouseEvent e) {
+			FrameSignUp fr = new FrameSignUp();
+			fr.setVisible(true);
+			menuChanged(getPanelSignUp(),getLblSignUp());
+		}
+		protected void do_panelSignIn_mouseClicked(MouseEvent e) {
+			menuChanged(getPanelSignIn(),getLblSignIn());
+			FrameSignIn fr = new FrameSignIn();
+			fr.setVisible(true);
+		}
 	}
 	/**
 	 * Create the frame.
 	 */
 	public FrameHome() {
 		initComponent();
-		if (Authorization.email == null) {
-			lblSignIn = new JLabel("Đăng nhập");
-		} else {
-			lblSignIn = new JLabel("Thông Tin");
-		}
-		lblSignIn.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSignIn.setFont(new Font("Arial", Font.BOLD, 14));
-		lblSignIn.setBounds(6, 11, 83, 23);
-		
-		btnLogout = new JPanel();
-		btnLogout.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				btnLogoutMouseClicked(e);
-			}
-		});
-		btnLogout.setBounds(982, 32, 93, 45);
-		if(Authorization.email!=null) {
-			navBar.add(btnLogout);
-		}
-		btnLogout.setLayout(null);
-		btnLogout.setBackground(Color.WHITE);
-		
-		lblLogout = new JLabel("Đăng Xuất");
-		lblLogout.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLogout.setFont(new Font("Arial", Font.BOLD, 14));
-		lblLogout.setBounds(10, 11, 73, 23);
-		btnLogout.add(lblLogout);
-
-		
 	}
 
 	private void initComponent() {
@@ -162,7 +141,7 @@ public class FrameHome extends JFrame {
 		
 		// NavBar
 		navBar = new JPanel();
-		navBar.setBounds(250, 0, 1051, 77);
+		navBar.setBounds(250, 0, 1052, 77);
 		contentPane.add(navBar);
 		NavBar navBarMenu = new NavBar();
 		navBar.add(navBarMenu);
@@ -172,7 +151,7 @@ public class FrameHome extends JFrame {
 		PanelMainContent panelMain = new PanelMainContent();
 		contentPane.add(panelMain);
 		panelHome = new PanelHome();
-		panelHome.setBackground(new Color(255, 255, 255));
+		panelHome.setBackground(new Color(37, 57, 111));
 		panelCategory = new PanelCategory();
 		panelVocab = new PanelVocab();
 		panelProfile = new PanelProfile();

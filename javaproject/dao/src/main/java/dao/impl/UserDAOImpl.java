@@ -301,7 +301,7 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 			cs.setInt(1, user.getId());
 			result = cs.executeUpdate();
 		} catch (Exception e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			System.out.println("Delete a user failed!");
 		}
 		return result;

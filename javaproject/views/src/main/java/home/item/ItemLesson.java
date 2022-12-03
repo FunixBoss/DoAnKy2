@@ -5,6 +5,8 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class ItemLesson extends JPanel {
@@ -17,6 +19,12 @@ public class ItemLesson extends JPanel {
 	private JLabel lblImage;
 	
 	public ItemLesson() {
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				do_this_mouseClicked(e);
+			}
+		});
 		initComponent();
 		
 	}
@@ -64,5 +72,7 @@ public class ItemLesson extends JPanel {
 		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
 		lblImage.setBounds(73, 23, 119, 88);
 		panel_2.add(lblImage);
+	}
+	protected void do_this_mouseClicked(MouseEvent e) {
 	}
 }

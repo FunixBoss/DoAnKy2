@@ -1,17 +1,16 @@
 package home.panel;
 
 import java.awt.Color;
-
 import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.SwingConstants;
-import java.awt.Insets;
+
+import service.Authorization;
+
 import javax.swing.JLabel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.border.LineBorder;
+
 
 public class PanelNavBar extends JPanel {
 	private JPanel panelVocab;
@@ -24,6 +23,12 @@ public class PanelNavBar extends JPanel {
 	private JLabel lblLesson;
 	private JLabel lblHome;
 	private JPanel panelHome;
+	private JPanel panelSignUp;
+	private JLabel lblSignUp;
+	private JPanel panelSignIn;
+	private JLabel lblSignIn;
+	private JLabel lblLogOut;
+	private JPanel panelLogOut;
 	public JPanel getPanelVocab() {
 		return panelVocab;
 	}
@@ -84,17 +89,51 @@ public class PanelNavBar extends JPanel {
 	public void setPanelHome(JPanel panelHome) {
 		this.panelHome = panelHome;
 	}
+	public JPanel getPanelSignUp() {
+		return panelSignUp;
+	}
+	public void setPanelSignUp(JPanel panelSignUp) {
+		this.panelSignUp = panelSignUp;
+	}
+	public JLabel getLblSignUp() {
+		return lblSignUp;
+	}
+	public void setLblSignUp(JLabel lblSignUp) {
+		this.lblSignUp = lblSignUp;
+	}
+	public JPanel getPanelSignIn() {
+		return panelSignIn;
+	}
+	public void setPanelSignIn(JPanel panelSignIn) {
+		this.panelSignIn = panelSignIn;
+	}
+	public JLabel getLblSignIn() {
+		return lblSignIn;
+	}
+	public void setLblSignIn(JLabel lblSignIn) {
+		this.lblSignIn = lblSignIn;
+	}
 	public PanelNavBar() {
+		initComponent();
+			if (Authorization.email == null) {
+				panelProfile.setVisible(false);
+				panelLogOut.setVisible(false);
+			} else {
+				panelSignUp.setVisible(false);
+				panelSignIn.setVisible(false);
+			}
+	}
+	private void initComponent() {
 		setBounds(0, 0, 1052, 77);
 		setBackground(new Color(37, 57, 111));
 		setLayout(null);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(null);
-		panel_1.setLayout(null);
-		panel_1.setBackground(new Color(37, 57, 111));
-		panel_1.setBounds(0, 0, 1051, 77);
-		add(panel_1);
+		JPanel panel = new JPanel();
+		panel.setBorder(null);
+		panel.setLayout(null);
+		panel.setBackground(new Color(37, 57, 111));
+		panel.setBounds(0, 0, 1052, 77);
+		add(panel);
 		
 		// Vocab Panel
 		panelVocab = new JPanel();
@@ -105,16 +144,57 @@ public class PanelNavBar extends JPanel {
 				do_panelVocab_mouseClicked(e);
 			}
 		});
+		
 		panelVocab.setLayout(null);
 		panelVocab.setBackground(Color.WHITE);
-		panelVocab.setBounds(115, 27, 115, 50);
-		panel_1.add(panelVocab);
+		panelVocab.setBounds(469, 27, 115, 50);
+		panel.add(panelVocab);
 		
 		lblVocab = new JLabel("Từ vựng");
 		lblVocab.setHorizontalAlignment(SwingConstants.CENTER);
 		lblVocab.setFont(new Font("Arial", Font.BOLD, 14));
 		lblVocab.setBounds(0, 0, 115, 50);
 		panelVocab.add(lblVocab);
+		
+		// SignUp Panel
+		panelSignUp = new JPanel();
+		panelSignUp.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				do_panelSignUp_mouseClicked(e);
+			}
+		});
+		panelSignUp.setLayout(null);
+		panelSignUp.setBorder(null);
+		panelSignUp.setBackground(Color.WHITE);
+		panelSignUp.setBounds(927, 27, 115, 50);
+		panel.add(panelSignUp);
+		
+		lblSignUp = new JLabel("Đăng ký");
+		lblSignUp.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSignUp.setFont(new Font("Arial", Font.BOLD, 14));
+		lblSignUp.setBounds(0, 0, 115, 50);
+		panelSignUp.add(lblSignUp);
+		
+		// SingIn Panel
+		panelSignIn = new JPanel();
+		panelSignIn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				do_panelSignIn_mouseClicked(e);
+			}
+		});
+		panelSignIn.setLayout(null);
+		panelSignIn.setBorder(null);
+		panelSignIn.setBackground(Color.WHITE);
+		panelSignIn.setBounds(812, 27, 115, 50);
+		panel.add(panelSignIn);
+		
+		lblSignIn = new JLabel("Đăng nhập");
+		lblSignIn.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSignIn.setFont(new Font("Arial", Font.BOLD, 14));
+		lblSignIn.setBounds(0, 0, 115, 50);
+		panelSignIn.add(lblSignIn);
 		
 		// Category Panel
 		panelCategory = new JPanel();
@@ -127,8 +207,8 @@ public class PanelNavBar extends JPanel {
 		});
 		panelCategory.setLayout(null);
 		panelCategory.setBackground(Color.WHITE);
-		panelCategory.setBounds(230, 27, 115, 50);
-		panel_1.add(panelCategory);
+		panelCategory.setBounds(584, 27, 115, 50);
+		panel.add(panelCategory);
 		
 		lblCategory = new JLabel("Chủ đề");
 		lblCategory.setHorizontalAlignment(SwingConstants.CENTER);
@@ -136,11 +216,24 @@ public class PanelNavBar extends JPanel {
 		lblCategory.setBounds(0, 0, 115, 50);
 		panelCategory.add(lblCategory);
 		
-		JPanel fieldAuthor = new JPanel();
-		fieldAuthor.setLayout(null);
-		fieldAuthor.setBackground(Color.WHITE);
-		fieldAuthor.setBounds(936, 27, 115, 50);
-		panel_1.add(fieldAuthor);
+		// Logout Panel
+		panelLogOut = new JPanel();
+		panelLogOut.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				do_panelLogOut_mouseClicked(e);
+			}
+		});
+		panelLogOut.setLayout(null);
+		panelLogOut.setBackground(Color.WHITE);
+		panelLogOut.setBounds(926, 27, 115, 50);
+		panel.add(panelLogOut);
+		
+		lblLogOut = new JLabel("Đăng xuất");
+		lblLogOut.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLogOut.setFont(new Font("Arial", Font.BOLD, 14));
+		lblLogOut.setBounds(0, 0, 115, 50);
+		panelLogOut.add(lblLogOut);
 		
 		// Lesson Panel
 		panelLesson = new JPanel();
@@ -153,8 +246,8 @@ public class PanelNavBar extends JPanel {
 		panelLesson.setLayout(null);
 		panelLesson.setBorder(null);
 		panelLesson.setBackground(Color.WHITE);
-		panelLesson.setBounds(345, 27, 115, 50);
-		panel_1.add(panelLesson);
+		panelLesson.setBounds(697, 27, 115, 50);
+		panel.add(panelLesson);
 		
 		lblLesson = new JLabel("Bài học");
 		lblLesson.setHorizontalAlignment(SwingConstants.CENTER);
@@ -173,8 +266,8 @@ public class PanelNavBar extends JPanel {
 		panelProfile.setLayout(null);
 		panelProfile.setBorder(null);
 		panelProfile.setBackground(Color.WHITE);
-		panelProfile.setBounds(571, 27, 115, 50);
-		panel_1.add(panelProfile);
+		panelProfile.setBounds(811, 27, 115, 50);
+		panel.add(panelProfile);
 		
 		lblProfile = new JLabel("Thông tin");
 		lblProfile.setHorizontalAlignment(SwingConstants.CENTER);
@@ -192,8 +285,8 @@ public class PanelNavBar extends JPanel {
 		panelHome.setLayout(null);
 		panelHome.setBorder(null);
 		panelHome.setBackground(new Color(37, 57, 111));
-		panelHome.setBounds(0, 27, 115, 50);
-		panel_1.add(panelHome);
+		panelHome.setBounds(354, 27, 115, 50);
+		panel.add(panelHome);
 		
 		lblHome = new JLabel("Trang chủ");
 		lblHome.setForeground(new Color(255, 255, 255));
@@ -201,6 +294,7 @@ public class PanelNavBar extends JPanel {
 		lblHome.setFont(new Font("Arial", Font.BOLD, 14));
 		lblHome.setBounds(0, 0, 115, 50);
 		panelHome.add(lblHome);
+		
 	}
 
 	public void menuChanged(JPanel panel, JLabel label) {
@@ -214,6 +308,12 @@ public class PanelNavBar extends JPanel {
 		panelLesson.setBackground(new Color(255, 255, 255));
 		lblHome.setForeground(new Color(37, 57, 111));
 		panelHome.setBackground(new Color(255, 255, 255));
+		lblSignIn.setForeground(new Color(37, 57, 111));
+		panelSignIn.setBackground(new Color(255, 255, 255));
+		lblSignUp.setForeground(new Color(37, 57, 111));
+		panelSignUp.setBackground(new Color(255, 255, 255));
+		lblLogOut.setForeground(new Color(37, 57, 111));
+		panelLogOut.setBackground(new Color(255, 255, 255));
 		label.setForeground(new Color(255, 255, 255));
 		panel.setBackground(new Color(37, 57, 111));
 	}
@@ -227,5 +327,11 @@ public class PanelNavBar extends JPanel {
 	protected void do_panelLesson_mouseClicked(MouseEvent e) {
 	}
 	protected void do_panelHome_mouseClicked(MouseEvent e) {
+	}
+	protected void do_panelSignUp_mouseClicked(MouseEvent e) {
+	}
+	protected void do_panelSignIn_mouseClicked(MouseEvent e) {
+	}
+	protected void do_panelLogOut_mouseClicked(MouseEvent e) {
 	}
 }

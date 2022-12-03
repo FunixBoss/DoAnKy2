@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import admin.gui.FrameDashboard;
 import admin.insert.FrameInsertAdmin;
 import admin.item.ItemUser;
 import dao.UserDAO;
@@ -37,7 +39,9 @@ public class PanelAdmin extends JPanel {
 	private Integer totalPage;
 	private JTextField txtPage;
 	private JComboBox cbbNumberOfRows;
-
+	public FrameDashboard frameParent;
+	
+	
 	private static PanelAdmin myInstance;
 	
 	public static PanelAdmin getMyInstance() {
@@ -47,6 +51,10 @@ public class PanelAdmin extends JPanel {
 		return myInstance;
 	}
 	
+	public JPanel getPanel() {
+		return panel;
+	}
+
 	public PanelAdmin() {
 		initComponent();
 		dao = new UserDAOImpl();
@@ -240,9 +248,9 @@ public class PanelAdmin extends JPanel {
 	}
 	
 	
-	private void loadData() {
+	public void loadData() {
 		panel.removeAll();
-		totalOfRows = dao.countNumberOfUser();
+		totalOfRows = dao.countNumberOfAdmin();
 		totalPage = (int) Math.ceil((double) totalOfRows / rowsOfPage);
 		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
 		lblRowCount.setText("Số dòng: " + totalOfRows);
@@ -256,7 +264,8 @@ public class PanelAdmin extends JPanel {
 
 		int y = 40;		
 		for(User user : dao.selectAdminByPages(pageNumber, rowsOfPage)){
-			ItemUser userItem = new ItemUser(user, y);			
+			ItemUser userItem = new ItemUser(user, y);
+			userItem.panelParent = this;
 			panel.add(userItem);
 			y = y + 60;
 		}
@@ -264,6 +273,7 @@ public class PanelAdmin extends JPanel {
 	}
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
 		FrameInsertAdmin frame = FrameInsertAdmin.getMyInstance();
+		frame.panelParent = this;
 		if(!frame.isVisible()) {
 			FrameUtils.alignFrameScreenCenter(frame);
 			frame.setVisible(true);

@@ -135,8 +135,10 @@ public class FrameInsertVocab extends JFrame {
 	}
 	
 	private void deleteVc() {
-		if(isAdded) {
-			new VocabularyContributionService().delete(vc);
+		if(vc != null) {
+			if(isAdded) {
+				new VocabularyContributionService().delete(vc);
+			}
 		}
 	}
 

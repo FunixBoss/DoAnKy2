@@ -85,3 +85,15 @@ BEGIN
 	FETCH NEXT @RowsOfPage ROWS ONLY
 END
 GO 
+
+
+DROP PROC IF EXISTS deleteFeedbackByUserId
+GO
+CREATE PROC deleteFeedbackByUserId
+@user_id INT
+AS
+BEGIN
+	DELETE FROM FEEDBACK
+	WHERE [USER_ID] = @user_id
+END
+GO

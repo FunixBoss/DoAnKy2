@@ -32,33 +32,40 @@ public class FrameDashboard extends JFrame {
 	private PanelLesson panelLesson;
 	private PanelResponse panelResponse;
 	
+	private PanelMainContent mainContent;
 	class SideBarMenu extends PanelSideBar {
 		protected void do_panelDashboard_mouseClicked(MouseEvent e) {
+			panelDashboard = new PanelDashboard();
 			menuClicked(panelDashboard);
-			panelDashboard.loadData();
 			menuChanged(getPanelDashboard(),getLblDashboard());
 		}
 		protected void do_panelVocab_mouseClicked(MouseEvent e) {
+			panelVocab = new PanelVocab();
 			menuClicked(panelVocab);
 			menuChanged(getPanelVocab(),getLblVocab());
 		}
 		protected void do_panelCategory_mouseClicked(MouseEvent e) {
+			panelCategory = new PanelCategory();
 			menuClicked(panelCategory);
 			menuChanged(getPanelCategory(),getLblCategory());
 		}
 		protected void do_panelMember_mouseClicked(MouseEvent e) {
+			panelMember = new PanelMember();
 			menuClicked(panelMember);	
 			menuChanged(getPanelMember(),getLblMember());
 		}
 		protected void do_panelAdmin_mouseClicked(MouseEvent e) {
+			panelAdmin = new PanelAdmin();
 			menuClicked(panelAdmin);	
 			menuChanged(getPanelAdmin(),getLblAdmin());
 		}
 		protected void do_panelLesson_mouseClicked(MouseEvent e) {
+			panelLesson = new PanelLesson();
 			menuClicked(panelLesson);	
 			menuChanged(getPanelLesson(),getLblLesson());
 		}
 		protected void do_panelFeedback_mouseClicked(MouseEvent e) {
+			panelResponse = new PanelResponse();
 			menuClicked(panelResponse);	
 			menuChanged(getPanelFeedback(),getLblFeedback());
 		}
@@ -101,29 +108,35 @@ public class FrameDashboard extends JFrame {
 		sideBar.add(sideBarMenu);
 		
 		// Main Content
-		PanelMainContent mainContent = new PanelMainContent();
+		mainContent = new PanelMainContent();
 		mainContent.setBounds(217, 50, 1085, 729);
 		contentPane.add(mainContent);
 		mainContent.setLayout(null);
 		
-		panelMember = new PanelMember();
-		panelVocab = new PanelVocab();
-		panelAdmin = new PanelAdmin();
-		panelCategory = new PanelCategory();
 		panelDashboard = new PanelDashboard();
-		panelLesson = new PanelLesson();
-		panelResponse = new PanelResponse();
 		panelDashboard.loadData();
-		panelDashboard.setBounds(0, 0, 1085, 729);
-	
 		mainContent.add(panelDashboard);
-		mainContent.add(panelVocab);
-		mainContent.add(panelAdmin);
-		mainContent.add(panelMember);
-		mainContent.add(panelCategory);
-		mainContent.add(panelLesson);
-		mainContent.add(panelResponse);
-		menuClicked(panelDashboard);
+		
+//		panelMember = new PanelMember();
+//		panelVocab = new PanelVocab();
+//		panelAdmin = new PanelAdmin();
+//		panelAdmin.frameParent = this;
+//		
+//		panelCategory = new PanelCategory();
+//		panelDashboard = new PanelDashboard();
+//		panelLesson = new PanelLesson();
+//		panelResponse = new PanelResponse();
+//		panelDashboard.loadData();
+//		panelDashboard.setBounds(0, 0, 1085, 729);
+	
+//		mainContent.add(panelDashboard);
+//		mainContent.add(panelVocab);
+//		mainContent.add(panelAdmin);
+//		mainContent.add(panelMember);
+//		mainContent.add(panelCategory);
+//		mainContent.add(panelLesson);
+//		mainContent.add(panelResponse);
+//		menuClicked(panelDashboard);
 		
 		// Top Bar
 		JPanel panel_1 = new JPanel();
@@ -134,14 +147,27 @@ public class FrameDashboard extends JFrame {
 		FrameUtils.alignFrameScreenCenter(this);
 		
 	}
+	
+	public void callPanel(JPanel panel) {
+		//remove
+		mainContent.removeAll();
+		mainContent.repaint();
+		mainContent.revalidate();
+		//repaint
+		mainContent.add(panel);
+		mainContent.repaint();
+		mainContent.revalidate();
+	}
+	
 	public void menuClicked(JPanel panel) {
-		panelMember.setVisible(false);
-		panelVocab.setVisible(false);
-		panelAdmin.setVisible(false);
-		panelCategory.setVisible(false);
-		panelDashboard.setVisible(false);
-		panelLesson.setVisible(false);
-		panelResponse.setVisible(false);
-		panel.setVisible(true);
+//		panelMember.setVisible(false);
+//		panelVocab.setVisible(false);
+//		panelAdmin.setVisible(false);
+//		panelCategory.setVisible(false);
+//		panelDashboard.setVisible(false);
+//		panelLesson.setVisible(false);
+//		panelResponse.setVisible(false);
+//		panel.setVisible(true);
+		callPanel(panel);
 	}
 }

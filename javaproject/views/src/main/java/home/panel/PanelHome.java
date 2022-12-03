@@ -30,6 +30,8 @@ public class PanelHome extends JPanel {
 		panelLesson.add(itemLesson_1);
 		cate = new Category();
 		itemCategory = new ItemCategory(cate);
+		itemCategory.setSize(264, 102);
+		itemCategory.setLocation(32, 36);
 		panelCategory.add(itemCategory);
 		
 	}
@@ -58,7 +60,7 @@ public class PanelHome extends JPanel {
 		panelCategory.setLayout(null);
 		
 		JLabel lblCategory = new JLabel("Chủ đề mới nhất");
-		lblCategory.setBounds(22, 10, 200, 35);
+		lblCategory.setBounds(32, 0, 200, 35);
 		panelCategory.add(lblCategory);
 		lblCategory.setHorizontalAlignment(SwingConstants.LEFT);
 		lblCategory.setFont(new Font("Arial", Font.BOLD, 18));
@@ -72,7 +74,12 @@ public class PanelHome extends JPanel {
 		JLabel lblFooter = new JLabel("@ MADE BY AFK TEAM");
 		lblFooter.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFooter.setFont(new Font("Arial", Font.BOLD, 14));
-		lblFooter.setBounds(450, 662, 384, 19);
+		lblFooter.setBounds(450, 666, 384, 19);
 		panel.add(lblFooter);
+		
+		JPanel panelMarketing = new JPanel();
+		panelMarketing.setBackground(new Color(255, 255, 255));
+		panelMarketing.setBounds(651, 10, 621, 642);
+		panel.add(panelMarketing);
 	}
 }

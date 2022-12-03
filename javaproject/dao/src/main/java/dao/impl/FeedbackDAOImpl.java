@@ -157,4 +157,20 @@ public class FeedbackDAOImpl extends AbstractDAO<Feedback> implements FeedbackDA
 		return list;
 	}
 
+	
+	public Integer delByUserId(Integer userId) {
+		Integer result = 0;
+		try (
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call deleteFeedbackByUserId(?)}");
+		) {
+			cs.setInt(1, userId);
+			result = cs.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Delete History by User Id Failed");
+		}
+		return result;
+	}
+	
 }

@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
+import admin.panel.PanelAdmin;
 import admin.update.FrameUpdateAdmin;
 import admin.update.FrameUpdateMember;
 import entity.User;
@@ -32,6 +33,7 @@ public class ItemUser extends JPanel {
 	private UserService userService;
 	private JButton btnDelete;
 	private JButton btnEdit;
+	public PanelAdmin panelParent;
 
 	public ItemUser(User user, int y) {
 		this.user = user;
@@ -144,6 +146,12 @@ public class ItemUser extends JPanel {
 			userService = new UserService();
 			if (userService.delete(user)) {
 				JOptionPane.showMessageDialog(this, "Xoá " + mess + " thành công!");
+				
+				JPanel panel = this.panelParent.getPanel();
+				panel.removeAll();
+				panel.repaint();
+				panel.revalidate();
+				this.panelParent.loadData();
 			}
 		}
 	}
