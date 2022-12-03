@@ -139,7 +139,7 @@ public class PanelAdmin extends JPanel {
 		panelHeader.add(panel_1_1);
 		panel_1_1.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblXa = new JLabel("Xóa");
+		JLabel lblXa = new JLabel("Sửa");
 		lblXa.setHorizontalAlignment(SwingConstants.CENTER);
 		lblXa.setForeground(Color.WHITE);
 		lblXa.setFont(new Font("Arial", Font.BOLD, 14));
@@ -150,7 +150,7 @@ public class PanelAdmin extends JPanel {
 		panelHeader.add(panel_1_1_1);
 		panel_1_1_1.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblSa = new JLabel("Sửa");
+		JLabel lblSa = new JLabel("Xóa");
 		lblSa.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSa.setForeground(Color.WHITE);
 		lblSa.setFont(new Font("Arial", Font.BOLD, 14));

@@ -140,7 +140,7 @@ public class ItemCategory extends JPanel {
 				fr.setVisible(true);
 			}
 		});
-		btnEdit.setBounds(44, 25, 73, 30);
+		btnEdit.setBounds(54, 25, 73, 30);
 		btnEdit.setForeground(Color.WHITE);
 		btnEdit.setFont(new Font("Arial", Font.BOLD, 14));
 		btnEdit.setBorder(null);
@@ -162,7 +162,7 @@ public class ItemCategory extends JPanel {
 		btnDelete.setFont(new Font("Arial", Font.BOLD, 14));
 		btnDelete.setBorder(null);
 		btnDelete.setBackground(new Color(205, 16, 64));
-		btnDelete.setBounds(46, 25, 75, 30);
+		btnDelete.setBounds(56, 25, 75, 30);
 		panel_1_1.add(btnDelete);
 	}
 	

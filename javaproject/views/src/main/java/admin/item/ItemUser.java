@@ -26,6 +26,8 @@ public class ItemUser extends JPanel {
 
 	private User user;
 	private UserService userService;
+	private JButton btnDelete;
+	private JButton btnEdit;
 
 	public ItemUser(User user, int y) {
 		this.user = user;
@@ -89,54 +91,26 @@ public class ItemUser extends JPanel {
 		panel_1_1.setLayout(null);
 		panel_1_1.setBackground(new Color(255, 255, 255));
 		panelHeader.add(panel_1_1);
-
-		JButton btnDelete = new JButton("Xóa");
-		btnDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				do_btnDelete_actionPerformed(e);
-			}
-		});
-		btnDelete.setBorder(null);
-		btnDelete.setForeground(Color.WHITE);
-		btnDelete.setFont(new Font("Arial", Font.BOLD, 14));
-		btnDelete.setBackground(new Color(205, 16, 64));
-		btnDelete.setBounds(73, 11, 60, 30);
-		panel_1_1.add(btnDelete);
+		
+		btnEdit = new JButton("Sửa ");
+		btnEdit.setForeground(Color.WHITE);
+		btnEdit.setFont(new Font("Arial", Font.BOLD, 14));
+		btnEdit.setBorder(null);
+		btnEdit.setBackground(new Color(67, 98, 190));
+		btnEdit.setBounds(73, 11, 60, 30);
+		panel_1_1.add(btnEdit);
 
 		JPanel panel_1_1_1 = new JPanel();
 		panel_1_1_1.setLayout(null);
 		panel_1_1_1.setBackground(new Color(255, 255, 255));
 		panelHeader.add(panel_1_1_1);
-
-		JButton btnEdit = new JButton("Sửa ");
-		btnEdit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				do_btnEdit_actionPerformed(e);
-			}
-		});
-		btnEdit.setBorder(null);
-		btnEdit.setForeground(new Color(255, 255, 255));
-		btnEdit.setBackground(new Color(67, 98, 190));
-		btnEdit.setFont(new Font("Arial", Font.BOLD, 14));
-		btnEdit.setBounds(75, 11, 60, 30);
-		panel_1_1_1.add(btnEdit);
-	}
-
-	protected void do_btnEdit_actionPerformed(ActionEvent e) {
-		FrameUpdateMember fr = new FrameUpdateMember(user);
-		fr.setVisible(true);
-	}
-
-	protected void do_btnDelete_actionPerformed(ActionEvent e) {
-		int option = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn xóa user này?", "Xóa user",
-				JOptionPane.YES_NO_OPTION);
-		if (option == JOptionPane.YES_OPTION) {
-			userService = new UserService();
-			if (userService.delete(user)) {
-				JOptionPane.showMessageDialog(this, "Xoá User thành công!");
-			} else {
-				JOptionPane.showMessageDialog(this, ErrorMessage.ERROR_MESSAGES);
-			}
-		}
+		
+		btnDelete = new JButton("Xóa");
+		btnDelete.setForeground(Color.WHITE);
+		btnDelete.setFont(new Font("Arial", Font.BOLD, 14));
+		btnDelete.setBorder(null);
+		btnDelete.setBackground(new Color(205, 16, 64));
+		btnDelete.setBounds(76, 11, 60, 30);
+		panel_1_1_1.add(btnDelete);
 	}
 }
