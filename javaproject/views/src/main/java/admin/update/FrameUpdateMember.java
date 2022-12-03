@@ -27,7 +27,6 @@ import java.util.Map;
 import java.awt.event.ActionEvent;
 
 public class FrameUpdateMember extends JFrame {
-
 	private JPanel contentPane;
 	private final JPanel panel = new JPanel();
 	private JLabel lblAddMember;
@@ -47,6 +46,10 @@ public class FrameUpdateMember extends JFrame {
 	public static FrameUpdateMember getMyInstance(User user) {
 		if (myInstance == null) {
 			myInstance = new FrameUpdateMember(user);
+		} else {
+			myInstance.dispose();
+			myInstance = new FrameUpdateMember(user);
+
 		}
 		return myInstance;
 	}

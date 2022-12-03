@@ -7,15 +7,19 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
+import admin.update.FrameUpdateAdmin;
 import admin.update.FrameUpdateMember;
 import entity.User;
 import helper.ErrorMessage;
 import service.UserService;
+import service.VocabularyService;
+
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
 import javax.swing.SwingConstants;
@@ -93,6 +97,11 @@ public class ItemUser extends JPanel {
 		panelHeader.add(panel_1_1);
 		
 		btnEdit = new JButton("Sửa ");
+		btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doBtnEditActionPerformed(e);
+			}
+		});
 		btnEdit.setForeground(Color.WHITE);
 		btnEdit.setFont(new Font("Arial", Font.BOLD, 14));
 		btnEdit.setBorder(null);
@@ -106,11 +115,36 @@ public class ItemUser extends JPanel {
 		panelHeader.add(panel_1_1_1);
 		
 		btnDelete = new JButton("Xóa");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doBtnDeleteActionPerformed(e);
+			}
+		});
 		btnDelete.setForeground(Color.WHITE);
 		btnDelete.setFont(new Font("Arial", Font.BOLD, 14));
 		btnDelete.setBorder(null);
 		btnDelete.setBackground(new Color(205, 16, 64));
 		btnDelete.setBounds(76, 11, 60, 30);
 		panel_1_1_1.add(btnDelete);
+	}
+	protected void doBtnEditActionPerformed(ActionEvent e) {
+		JFrame a = null;
+		if(user.getRoleId() == 3) {
+			a = FrameUpdateMember.getMyInstance(user);
+		} else {
+			a = FrameUpdateAdmin.getMyInstance(user);
+		}
+		a.setVisible(true);
+	}
+	protected void doBtnDeleteActionPerformed(ActionEvent e) {
+		String mess = user.getRoleId() == 3 ? "thành viên" : "quản trị viên"; 
+		int option = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn " + mess +" này?", "Xóa " + mess,
+				JOptionPane.YES_NO_OPTION);
+		if (option == JOptionPane.YES_OPTION) {
+			userService = new UserService();
+			if (userService.delete(user)) {
+				JOptionPane.showMessageDialog(this, "Xoá " + mess + " thành công!");
+			}
+		}
 	}
 }

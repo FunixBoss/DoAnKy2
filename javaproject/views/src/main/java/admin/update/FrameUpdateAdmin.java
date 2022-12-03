@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.Insets;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
@@ -25,45 +26,43 @@ import java.util.Map;
 import java.awt.event.ActionEvent;
 
 public class FrameUpdateAdmin extends JFrame {
-
 	private JPanel contentPane;
 	private final JPanel panel = new JPanel();
-	
-	private JPasswordField passwordFieldPassword;
 	private JLabel lblAddMember;
 	private JLabel lblEmail;
-	private JLabel lblPassword ;
 	private JLabel lblLevel;
 	private JTextField textEmail;
 	private JTextField txtLevel;
-	private JButton btnUpdate;	
-	
-	private static User user;
+	private JButton btnUpdate;
+	private JComboBox<String> cbbRole;
 	private UserService userService;
-	private Map<String, String> data;
-	private static FrameUpdateMember myInstance;
 	
-	public static FrameUpdateMember getMyInstance(User user) {
+	private static FrameUpdateAdmin myInstance;
+	private User user;
+	private Map<String, String> data;
+	
+	
+	public static FrameUpdateAdmin getMyInstance(User user) {
 		if (myInstance == null) {
-			myInstance = new FrameUpdateMember(user);
+			myInstance = new FrameUpdateAdmin(user);
+		} else {
+			myInstance.dispose();
+			myInstance = new FrameUpdateAdmin(user);
+
 		}
 		return myInstance;
 	}
 	
 	public FrameUpdateAdmin(User user) {
-		initComponent(); 
-		FrameUtils.alignFrameScreenCenter(this);
-		
 		this.user = user;
+		initComponent();
+		FrameUtils.alignFrameScreenCenter(this);
 		userService = new UserService();
-		textEmail.setText(user.getEmail());
 	}
-	
-
 	
 	private void initComponent() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 885, 390);
+		setBounds(100, 100, 400, 400);
 		
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
@@ -72,20 +71,20 @@ public class FrameUpdateAdmin extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		lblAddMember = new JLabel("Sửa thông tin thành viên");
+		lblAddMember = new JLabel("Sửa thông tin quản trị viên");
 		lblAddMember.setForeground(new Color(37, 57, 111));
 		lblAddMember.setFont(new Font("Arial", Font.BOLD, 20));
-		lblAddMember.setBounds(20, 11, 219, 34);
+		lblAddMember.setBounds(20, 11, 253, 34);
 		contentPane.add(lblAddMember);
 		
 //		EMAIL
 		lblEmail = new JLabel("Email ");
 		lblEmail.setForeground(Color.BLACK);
 		lblEmail.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblEmail.setBounds(32, 103, 102, 21);
+		lblEmail.setBounds(30, 100, 100, 21);
 		contentPane.add(lblEmail);
 		panel.setBackground(new Color(242, 247, 255));
-		panel.setBounds(0, 0, 869, 62);
+		panel.setBounds(0, 0, 384, 62);
 		contentPane.add(panel);
 		
 		textEmail = new JTextField();
@@ -95,22 +94,16 @@ public class FrameUpdateAdmin extends JFrame {
 		textEmail.setFont(new Font("Arial", Font.PLAIN, 14));
 		textEmail.setColumns(10);
 		textEmail.setBackground(Color.WHITE);
-		textEmail.setBounds(186, 94, 239, 38);
+		textEmail.setBounds(115, 95, 240, 38);
 		textEmail.setEditable(false);;
+		textEmail.setText(user.getEmail());
 		contentPane.add(textEmail);
-		
-//		PASSWORD
-		lblPassword = new JLabel("Mật khẩu");
-		lblPassword.setForeground(Color.BLACK);
-		lblPassword.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblPassword.setBounds(32, 165, 102, 21);
-		contentPane.add(lblPassword);
 		
 //		LEVEL
 		lblLevel = new JLabel("Chức vụ");
 		lblLevel.setForeground(Color.BLACK);
 		lblLevel.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblLevel.setBounds(32, 229, 102, 21);
+		lblLevel.setBounds(29, 170, 100, 21);
 		contentPane.add(lblLevel);
 		
 		
@@ -118,35 +111,34 @@ public class FrameUpdateAdmin extends JFrame {
 		btnUpdate = new JButton("Cập nhật");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnUpdateActionPerformed(e, user.getId());
+				btnUpdateActionPerformed(e);
 			}
 		});
 		btnUpdate.setBackground(new Color(67, 98, 190));
 		btnUpdate.setForeground(new Color(255, 255, 255));
 		btnUpdate.setFont(new Font("Arial", Font.BOLD, 16));
-		btnUpdate.setBounds(362, 284, 150, 44);
+		btnUpdate.setBounds(110, 273, 150, 44);
 		contentPane.add(btnUpdate);
 		
-		txtLevel = new JTextField();
-		txtLevel.setEditable(false);
-		txtLevel.setText("Quản trị viên");
-		txtLevel.setMargin(new Insets(2, 6, 2, 2));
-		txtLevel.setHorizontalAlignment(SwingConstants.LEFT);
-		txtLevel.setFont(new Font("Arial", Font.PLAIN, 14));
-		txtLevel.setColumns(10);
-		txtLevel.setBackground(Color.WHITE);
-		txtLevel.setBounds(186, 221, 239, 38);
-		contentPane.add(txtLevel);
 		
-		passwordFieldPassword = new JPasswordField();
-		passwordFieldPassword.setBounds(186, 156, 239, 38);
-		contentPane.add(passwordFieldPassword);
+		cbbRole = new JComboBox<>();
+		cbbRole.addItem("Thành viên");
+		cbbRole.addItem("Quản trị viên");
+		int cbbRoleIndex = user.getRoleId() == 3 ? 0 : 1;
+		cbbRole.setSelectedIndex(cbbRoleIndex);
+		cbbRole.setBounds(115, 162, 240, 38);
+		cbbRole.setBackground(new Color(255, 255, 255));
+		cbbRole.setFont(new Font("Arial", Font.PLAIN, 14));
+		contentPane.add(cbbRole);
+		
+		
+		FrameUtils.alignFrameScreenCenter(this);
 	}
-	protected void btnUpdateActionPerformed(ActionEvent e, Integer userId) {
+	protected void btnUpdateActionPerformed(ActionEvent e) {
 		data = new HashMap<>();
-		data.put("id", Integer.toString(userId));
-		data.put("password", new String(passwordFieldPassword.getPassword()));
-		data.put("level", "2");
+		data.put("id", Integer.toString(user.getId()));
+		Integer roleId = cbbRole.getSelectedItem().equals("Quản trị viên") ? 2 : 3;
+		data.put("role", roleId.toString());
 		
 		if(userService.update(data)) {
 			JOptionPane.showMessageDialog(this, "Cập nhật quản trị viên thành công");

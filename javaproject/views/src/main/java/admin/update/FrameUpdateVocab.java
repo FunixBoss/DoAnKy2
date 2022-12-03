@@ -199,7 +199,7 @@ public class FrameUpdateVocab extends JFrame {
 		lblWord.setFont(new Font("Arial", Font.PLAIN, 14));
 		panelChild.add(lblWord);
 
-		btnAdd = new JButton("Thêm");
+		btnAdd = new JButton("Cập nhật");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnAddActionPerformed(e);

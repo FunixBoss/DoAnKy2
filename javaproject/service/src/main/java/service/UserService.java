@@ -64,6 +64,8 @@ public class UserService {
 		Integer userId = Integer.parseInt(data.get("id"));
 		Integer role = Integer.parseInt(data.get("role"));
 
+		System.out.println(data);
+		
 		User originalUser = dao.select(userId);
 		
 		if(originalUser.getRoleId() == role) {
