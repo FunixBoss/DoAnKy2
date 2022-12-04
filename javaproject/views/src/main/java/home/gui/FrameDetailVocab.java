@@ -245,6 +245,7 @@ public class FrameDetailVocab extends JFrame {
 		panel.setLayout(new BorderLayout(0, 0));
 		
 		 textArea = new JTextArea();
+		 textArea.setLineWrap(true);
 		 textArea.setDisabledTextColor(new Color(0, 0, 0));
 		 textArea.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textArea.setEditable(false);

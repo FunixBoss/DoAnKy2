@@ -1,6 +1,7 @@
 package home.panel;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
@@ -11,6 +12,7 @@ import dao.impl.UserDAOImpl;
 import entity.Vocabulary;
 import home.item.ItemVocab;
 import service.Authorization;
+import javax.swing.ScrollPaneConstants;
 
 public class PanelHistory extends JPanel {
 	public JPanel panelMain;
@@ -24,12 +26,14 @@ public class PanelHistory extends JPanel {
 	}
 	public  void initConstructor() {
 		int id = UserDAOImpl.getIdFromDbByAccount(Authorization.email);
-		
+		Integer y=0;
 		if( new HistoryDAOImpl().selectAllVocabByUserId(id) !=null ) {
 			for (Vocabulary vocab : new HistoryDAOImpl().selectAllVocabByUserId(id)) { 
-				ItemVocab item = new ItemVocab(vocab,21);
+				ItemVocab item = new ItemVocab(vocab,y);
 				panelMain.add(item);
+				y+=29;
 			}
+			panelMain.setPreferredSize(new Dimension(378,y));
 		}else {
 			panel.removeAll();
 			lblNewLabel = new JLabel("Bạn Chưa Lưu Mục Nào!");
@@ -58,14 +62,15 @@ public class PanelHistory extends JPanel {
 		panel.add(lblHeader);
 		
 		scrollPane = new JScrollPane();
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(null);
-		scrollPane.setBounds(10, 107, 1262, 585);
+		scrollPane.setBounds(312, 104, 300, 588);
 		panel.add(scrollPane);
 		
 		panelMain = new JPanel();
 		panelMain.setBackground(new Color(255, 255, 255));
 		scrollPane.setViewportView(panelMain);
-		panelMain.setLayout(new GridLayout(5, 2, 2, 2));
+		panelMain.setLayout(null);
 	}
 
 }

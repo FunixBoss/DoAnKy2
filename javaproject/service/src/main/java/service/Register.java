@@ -16,7 +16,6 @@ public class Register {
 		boolean ok = true;
 		if (field.getText().equals("")) {
 			sb.append(msg).append("\n");
-			field.setBorder(new LineBorder(Color.red, 2));
 			ok = false;
 		} else {
 			ok = true;
@@ -25,10 +24,8 @@ public class Register {
 	}
 	public static boolean checkPasswordConfirm(JTextField password,JTextField PasswordConfirm,StringBuilder sb) {
 		if(password.getText().equals(PasswordConfirm.getText()) && !PasswordConfirm.getText().equals("") ) {
-			PasswordConfirm.setBorder(new LineBorder(Color.GREEN, 2));
 			return true;
 		}else {
-			PasswordConfirm.setBorder(new LineBorder(Color.RED, 2));
 			sb.append("Mật Khẩu Không Trùng Khớp").append("\n");
 			return false;
 		}
@@ -48,9 +45,7 @@ public class Register {
 	}
 	public static void checkColorText(String regex, JTextField message, StringBuilder sb,String fieldComponent) {
 		if(checkRegexRegister(regex, message, sb, fieldComponent)){
-			message.setBorder(new LineBorder(Color.GREEN, 2));
 		}else {
-			message.setBorder(new LineBorder(Color.RED, 2));
 		}
 	}
 	

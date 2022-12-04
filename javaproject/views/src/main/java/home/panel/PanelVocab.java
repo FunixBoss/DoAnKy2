@@ -29,20 +29,26 @@ import javax.swing.AbstractListModel;
 import javax.swing.DefaultListModel;
 
 import java.awt.Font;
+import java.awt.GridLayout;
 
 public class PanelVocab extends JPanel {
-	private JScrollPane scrollPane;
 	private JPanel panel;
 	private JLabel lblNewLabel;
 	private JTextField textSearch;
 	private JPanel panelDetailVocab;
 	private ItemVocab item;
 	private PanelDetailVocab detail;
-	private JPanel panelSearch;
-	private JList<Vocabulary> listVocab;
+	private JPanel panelLeft;
 	private List<String> getItemss;
 	private List<Vocabulary> itemss;
 	private DefaultListModel<String> model;
+	private JPanel panelParent;
+	private JScrollPane scrollPane;
+	private JPanel panelList;
+	private JLabel lblNewLabel_1;
+	private JLabel lblNewLabel_2;
+	private JPanel panel_1;
+	private PanelDetailVocab panelDetail;
 
 	/**
 	 * Create the panel.
@@ -53,29 +59,29 @@ public class PanelVocab extends JPanel {
 
 		VocabularyDAOImpl dao = new VocabularyDAOImpl();
 		itemss = dao.selectAll();
-		getItemss = new ArrayList<>();
-		for (int i = 0; i < itemss.size(); i++) {
-			getItemss.add(i, itemss.get(i).getWord());
-		}
-
 		int y = 0;
 
-		for (int i = 0; i < getItemss.size(); i++) {
-			item = new ItemVocab(itemss.get(i), y);
-			model.add(i, getItemss.get(i));
+		for (int i = 0; i < itemss.size(); i++) {
+			item = new ItemVocab(itemss.get(i), y,panelDetailVocab);
+			panelList.add(item);
 			y = y + 29;
 		}
-
+		panelList.setPreferredSize(new Dimension(100,y));
 	}
 
 	public void searchVocab() {
-		model.removeAllElements();
+		panelList.removeAll();
 		VocabularyDAOImpl dao = new VocabularyDAOImpl();
 		itemss = dao.searchAll(textSearch.getText());
+		Integer y =0;
 		for (int i = 0; i < itemss.size(); i++) {
-			model.add(i, itemss.get(i).getWord());
+			item = new ItemVocab(itemss.get(i), y,panelDetailVocab);
+			panelList.add(item);
+			y = y + 29;
 		}
-
+		panelList.setPreferredSize(new Dimension(100,y));
+		panelList.revalidate();
+		panelList.repaint();
 	}
 
 	private void initComponent() {
@@ -90,14 +96,26 @@ public class PanelVocab extends JPanel {
 		add(panel);
 		panel.setLayout(null);
 
-		panelSearch = new JPanel();
-		panelSearch.setBounds(0, 0, 265, 691);
-		panel.add(panelSearch);
-		panelSearch.setLayout(null);
+		panelLeft = new JPanel();
+		panelLeft.setBounds(0, 0, 265, 691);
+		panel.add(panelLeft);
+		panelLeft.setLayout(null);
 
 		textSearch = new JTextField();
 		textSearch.setBounds(59, 11, 134, 28);
-		panelSearch.add(textSearch);
+		panelLeft.add(textSearch);
+		
+		 panelParent = new JPanel();
+		panelParent.setBounds(10, 66, 245, 614);
+		panelLeft.add(panelParent);
+		panelParent.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		 scrollPane = new JScrollPane();
+		panelParent.add(scrollPane);
+		
+		 panelList = new JPanel();
+		scrollPane.setViewportView(panelList);
+		panelList.setLayout(null);
 		textSearch.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -105,23 +123,16 @@ public class PanelVocab extends JPanel {
 			}
 		});
 
-		scrollPane = new JScrollPane();
-		scrollPane.setAutoscrolls(true);
-		scrollPane.setBounds(10, 54, 245, 626);
-		panelSearch.add(scrollPane);
-		scrollPane.setBorder(null);
-		scrollPane.setPreferredSize(new Dimension(245, 1000));
-
-		model = new DefaultListModel<>();
-		listVocab = new JList(model);
-		scrollPane.setViewportView(listVocab);
-
-		listVocab.setFont(new Font("Tahoma", Font.BOLD, 18));
 
 		panelDetailVocab = new JPanel();
 		panelDetailVocab.setBounds(265, 0, 1017, 691);
 		panel.add(panelDetailVocab);
 		panelDetailVocab.setLayout(null);
+		
+		
+		panelDetail = new PanelDetailVocab(new VocabularyDAOImpl().select(1));
+		panelDetail.setBounds(25, 65, 966, 615);
+		panelDetailVocab.add(panelDetail);
 
 	}
 }

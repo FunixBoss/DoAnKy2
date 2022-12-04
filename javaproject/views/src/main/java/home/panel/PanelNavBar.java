@@ -319,6 +319,7 @@ public class PanelNavBar extends JPanel {
 	}
 	
 	protected void do_panelVocab_mouseClicked(MouseEvent e) {
+		
 	}
 	protected void do_panelCategory_mouseClicked(MouseEvent e) {
 	}
