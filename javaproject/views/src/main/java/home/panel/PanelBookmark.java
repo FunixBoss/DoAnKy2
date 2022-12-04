@@ -1,6 +1,7 @@
 package home.panel;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
@@ -18,14 +19,18 @@ public class PanelBookmark extends JPanel {
 	public JScrollPane scrollPane;
 	public JPanel panel;
 	public JLabel lblNewLabel;
+	private JPanel panelParent;
 
 	public void initConstructor() {
 		int id = UserDAOImpl.getIdFromDbByAccount(Authorization.email);
+		Integer y = 0;
 		if (new BookmarkDAOImpl().selectAllVocabByUserId(id) != null) {
 			for(Vocabulary vocab : new BookmarkDAOImpl().selectAllVocabByUserId(id)) {
-				ItemVocab item = new ItemVocab(vocab, 21);
+				ItemVocab item = new ItemVocab(vocab, y);
 				panelMain.add(item);
+				y+=29;
 			}
+			
 		} else {
 			panel.removeAll();
 			lblNewLabel = new JLabel("Bạn Chưa Lưu Mục Nào!");
@@ -33,7 +38,7 @@ public class PanelBookmark extends JPanel {
 			lblNewLabel.setBounds(354, 202, 544, 154);
 			panel.add(lblNewLabel);
 		}
-
+		panelMain.setPreferredSize(new Dimension(300,y));
 	}
 
 	public PanelBookmark() {
@@ -60,14 +65,18 @@ public class PanelBookmark extends JPanel {
 
 		scrollPane = new JScrollPane();
 		scrollPane.setBorder(null);
-		scrollPane.setBounds(10, 107, 1262, 574);
-		panel.add(scrollPane);
-
+		
 		panelMain = new JPanel();
 		panelMain.setBackground(new Color(255, 255, 255));
-
+		
 		scrollPane.setViewportView(panelMain);
-		panelMain.setLayout(new GridLayout(5, 2, 2, 2));
+		panelMain.setLayout(null);
+		
+		panelParent = new JPanel();
+		panelParent.setBounds(308, 132, 385, 549);
+		panelParent.add(scrollPane);
+		panel.add(panelParent);
+		panelParent.setLayout(new GridLayout(1, 0, 0, 0));
 	}
 
 }

@@ -76,4 +76,7 @@ public class IconImage {
 	public Image getLogoutImg() {
 		return logoutImg;
 	}
+	public static void main(String[] args) {
+		
+	}
 }

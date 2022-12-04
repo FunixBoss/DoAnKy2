@@ -1,5 +1,6 @@
 package home.gui;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -38,6 +39,7 @@ public class FrameHome extends JFrame {
 	private JPanel navBar;
 	private PanelProfile panelProfile;
 	private PanelLesson panelLesson;
+	private PanelMainContent panelMain;
 	/**
 	 * Launch the application.
 	 */
@@ -54,34 +56,45 @@ public class FrameHome extends JFrame {
 
 	class NavBar extends PanelNavBar {
 		protected void do_panelVocab_mouseClicked(MouseEvent e) {
+			panelVocab = null;
+			panelVocab = new PanelVocab();
 			menuClicked(panelVocab);
 			menuChanged(getPanelVocab(),getLblVocab());
 		}
 		protected void do_panelCategory_mouseClicked(MouseEvent e) {
+			panelCategory = null;
+			panelCategory = new PanelCategory();
 			menuClicked(panelCategory);
 			menuChanged(getPanelCategory(),getLblCategory());
 		}
 		protected void do_panelProfile_mouseClicked(MouseEvent e) {
+			panelProfile = null;
+			panelProfile = new PanelProfile();
 			menuClicked(panelProfile);
 			menuChanged(getPanelProfile(),getLblProfile());
 		}
 		protected void do_panelLesson_mouseClicked(MouseEvent e) {
+			panelLesson = null;
+			panelLesson = new PanelLesson();
 			menuClicked(panelLesson);
 			menuChanged(getPanelLesson(),getLblLesson());
 		}
 		protected void do_panelHome_mouseClicked(MouseEvent e) {
+			panelHome = null;
+			panelHome = new PanelHome();
 			menuClicked(panelHome);
 			menuChanged(getPanelHome(),getLblHome());
 		}
-		protected void do_panelSignUp_mouseClicked(MouseEvent e) {
-			FrameSignUp fr = new FrameSignUp();
-			fr.setVisible(true);
-			menuChanged(getPanelSignUp(),getLblSignUp());
-		}
 		protected void do_panelSignIn_mouseClicked(MouseEvent e) {
-			menuChanged(getPanelSignIn(),getLblSignIn());
-			FrameSignIn fr = new FrameSignIn();
-			fr.setVisible(true);
+			dispose();
+			frIn = new FrameSignIn();
+			frIn.setVisible(true);
+		}
+		protected void do_panelLogOut_mouseClicked(MouseEvent e) {
+			dispose();
+			Authorization.setNull();
+			frOut = new FrameSignIn();
+			frOut.setVisible(true);
 		}
 	}
 	/**
@@ -89,6 +102,30 @@ public class FrameHome extends JFrame {
 	 */
 	public FrameHome() {
 		initComponent();
+//		if (Authorization.email == null) {
+//			lblSignIn = new JLabel("Đăng nhập");
+//		} else {
+//			lblSignIn = new JLabel("Thông Tin");
+//		}
+//		lblSignIn.setHorizontalAlignment(SwingConstants.CENTER);
+//		lblSignIn.setFont(new Font("Arial", Font.BOLD, 14));
+//		lblSignIn.setBounds(6, 11, 83, 23);
+		
+		btnLogout = new JPanel();
+		btnLogout.setBounds(982, 32, 93, 45);
+		if(Authorization.email!=null) {
+			navBar.add(btnLogout);
+		}
+		btnLogout.setLayout(null);
+		btnLogout.setBackground(Color.WHITE);
+		
+		lblLogout = new JLabel("Đăng Xuất");
+		lblLogout.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLogout.setFont(new Font("Arial", Font.BOLD, 14));
+		lblLogout.setBounds(10, 11, 73, 23);
+		btnLogout.add(lblLogout);
+
+		
 	}
 
 	private void initComponent() {
@@ -141,37 +178,39 @@ public class FrameHome extends JFrame {
 		
 		// NavBar
 		navBar = new JPanel();
-		navBar.setBounds(250, 0, 1052, 77);
+		navBar.setBounds(250, 0, 1051, 77);
 		contentPane.add(navBar);
 		NavBar navBarMenu = new NavBar();
 		navBar.add(navBarMenu);
 		navBar.setLayout(null);
 		
 		// Main Panel
-		PanelMainContent panelMain = new PanelMainContent();
+		panelMain = new PanelMainContent();
 		contentPane.add(panelMain);
 		panelHome = new PanelHome();
-		panelHome.setBackground(new Color(37, 57, 111));
+		panelHome.setBackground(new Color(255, 255, 255));
 		panelCategory = new PanelCategory();
 		panelVocab = new PanelVocab();
 		panelProfile = new PanelProfile();
 		panelLesson = new PanelLesson();
 		panelMain.add(panelHome);
-		panelMain.add(panelCategory);
-		panelMain.add(panelVocab);
-		panelMain.add(panelProfile);
-		panelMain.add(panelLesson);
 		menuClicked(panelHome);
 		FrameUtils.alignFrameScreenCenter(this);
 	}
-
 	public void menuClicked(JPanel panel) {
+		panelMain.removeAll();
+//		panel = null;
 		panelVocab.setVisible(false);
 		panelCategory.setVisible(false);
 		panelHome.setVisible(false);
 		panelProfile.setVisible(false);
 		panelLesson.setVisible(false);
 		panel.setVisible(true);
+		panelMain.add(panel);
+		
+		panelMain.revalidate();
+		panelMain.repaint();
+		
 	}
 
 	protected void do_panelLogo_mouseClicked(MouseEvent e) {
@@ -206,7 +245,6 @@ public class FrameHome extends JFrame {
 	}
 
 	protected void btnLogoutMouseClicked(MouseEvent e) {
-		dispose();
 		dispose();
 		Authorization.setNull();
 		frOut = new FrameSignIn();

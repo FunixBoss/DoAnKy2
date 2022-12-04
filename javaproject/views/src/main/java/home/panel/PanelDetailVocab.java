@@ -1,5 +1,6 @@
 package home.panel;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import dao.BookmarkDAO;
@@ -36,6 +37,9 @@ import javax.swing.JToggleButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import java.awt.BorderLayout;
+import javax.swing.JButton;
+import java.awt.GridLayout;
+import javax.swing.ScrollPaneConstants;
 
 public class PanelDetailVocab extends JPanel {
 
@@ -52,12 +56,23 @@ public class PanelDetailVocab extends JPanel {
 	private BookmarkDAO bmDAO;
 	private UserDAO userDAO;
 
+	private JPanel panel;
+
+	private JScrollPane scroll;
+	private JLabel lblNewLabel_1;
+	private JLabel lblNewLabel_3;
+
 	public PanelDetailVocab(Vocabulary vocab) {
+		
 		bmDAO = new BookmarkDAOImpl();
 		userDAO = new UserDAOImpl();
 		initComponent(vocab);
 		lblWord.setText(StringUtils.toCapitalize(vocab.getWord()));
 		lblWordType.setText(new WordTypeDAOImpl().get(vocab.getWordTypeId()));
+		
+	
+		
+		
 		Category cate = new CategoryDAOImpl().select(vocab.getCategoryId());
 		if (cate != null) {
 			lblCategory.setText("Thể loại: " + cate.getName());
@@ -141,31 +156,33 @@ public class PanelDetailVocab extends JPanel {
 		setBackground(new Color(255, 255, 255));
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLayout(null);
+		
+		
 
-		lblWord = new JLabel();
+		lblWord = new JLabel("x");
 		lblWord.setFont(new Font("Arial", Font.BOLD, 25));
 		lblWord.setBackground(new Color(255, 255, 255));
-		lblWord.setBounds(35, 25, 236, 66);
-		contentPane.add(lblWord);
-
+		lblWord.setBounds(93, 5, 129, 30);
+		add(lblWord);
+		
 		lblWordType = new JLabel();
 		lblWordType.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblWordType.setBounds(35, 97, 87, 27);
-		contentPane.add(lblWordType);
-
+		lblWordType.setBounds(227, 10, 76, 19);
+		add(lblWordType);
+		
 		lblRelatives = new JLabel("");
 		lblRelatives.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblRelatives.setBounds(35, 135, 344, 27);
-		contentPane.add(lblRelatives);
-
+		lblRelatives.setBounds(308, 20, 0, 0);
+		add(lblRelatives);
+		
 		lblImage = new JLabel();
 		lblImage.setIcon(new ImageIcon());
 		lblImage.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblImage.setBounds(526, 25, 273, 180);
-		contentPane.add(lblImage);
+		lblImage.setBounds(313, 20, 0, 0);
+		 add(lblImage);
 		final int ROW_HEIGHT = 180;
 		lblImage.setIcon(ImageUtils.getImageByURL("vocabulary", vocab.getImage(), ROW_HEIGHT));
-
+		
 		lblPronunciation = new JLabel("");
 		lblPronunciation.addMouseListener(new MouseAdapter() {
 			@Override
@@ -184,35 +201,41 @@ public class PanelDetailVocab extends JPanel {
 		});
 		lblPronunciation.setIcon(new ImageIcon(
 				PanelDetailVocab.class.getResource("/jaco/mp3/player/plaf/resources/mp3PlayerSoundOn.png")));
-		lblPronunciation.setBounds(202, 97, 31, 27);
-		contentPane.add(lblPronunciation);
-
+		lblPronunciation.setBounds(318, 12, 16, 16);
+		 add(lblPronunciation);
+			
 		tglbtnNewToggleButton = new JToggleButton("");
 		tglbtnNewToggleButton.setBorderPainted(false);
 		tglbtnNewToggleButton.setContentAreaFilled(false);
 		tglbtnNewToggleButton.setBorder(null);
-		tglbtnNewToggleButton.setBounds(797, 11, 65, 61);
-		contentPane.add(tglbtnNewToggleButton);
+		tglbtnNewToggleButton.setBounds(355, 10, 48, 25);
+		add(tglbtnNewToggleButton);
 
+		 
+		 
 		lblCategory = new JLabel();
 		lblCategory.setText((String) null);
 		lblCategory.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblCategory.setBounds(35, 146, 333, 27);
-		contentPane.add(lblCategory);
+		lblCategory.setBounds(345, 20, 0, 0);
+		 add(lblCategory);
 
-		JPanel panel = new JPanel();
-		panel.setBounds(35, 203, 805, 356);
-		contentPane.add(panel);
-		panel.setLayout(new BorderLayout(0, 0));
+		 panel = new JPanel();
+		panel.setBounds(100, 100, 767, 391);
+		 add(panel);
+		 panel.setLayout(new GridLayout(1, 0, 0, 0));
 
 		textArea = new JTextArea();
+		textArea.setLineWrap(true);
 		textArea.setDisabledTextColor(new Color(0, 0, 0));
 		textArea.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textArea.setEditable(false);
-		panel.add(textArea);
 
-		JScrollPane scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		 scroll = new JScrollPane(textArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		 scroll.setViewportView(textArea);
 		panel.add(scroll);
+	}
+	public static void main(String[] args) {
+		
 	}
 }

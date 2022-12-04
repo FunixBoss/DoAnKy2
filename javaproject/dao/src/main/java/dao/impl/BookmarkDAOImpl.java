@@ -156,7 +156,7 @@ public class BookmarkDAOImpl extends AbstractDAO<Bookmark> implements BookmarkDA
 			// e.printStackTrace();
 			System.err.println("Select all vocabulary In Bookmark by User Id failed!");
 		}
-		return list;
+		return list.isEmpty() ? null : list;
 	}
 
 	@Override
@@ -180,7 +180,7 @@ public class BookmarkDAOImpl extends AbstractDAO<Bookmark> implements BookmarkDA
 			e.printStackTrace();
 			System.err.println("checkExistBookmark Failed!");
 		}
-		return list;
+		return list.isEmpty() ? null : list;
 	}
 
 	@Override

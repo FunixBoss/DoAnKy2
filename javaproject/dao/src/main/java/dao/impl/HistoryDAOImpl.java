@@ -159,7 +159,7 @@ public class HistoryDAOImpl extends AbstractDAO<History> implements HistoryDAO {
 			e.printStackTrace();
 			System.err.println("checkExistHistory Failed!");
 		}
-		return hs;
+		return hs  ;
 	}
 
 	@Override
