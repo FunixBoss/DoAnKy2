@@ -42,6 +42,7 @@ public class PanelVocabContribution extends JPanel{
 	private Integer totalPage;
 	private JTextField txtPage;
 	private JComboBox cbbNumberOfRows;
+	public PanelResponse panelParent;
 
 	private static PanelVocabContribution myInstance;
 	
@@ -245,7 +246,7 @@ public class PanelVocabContribution extends JPanel{
 	}
 	
 	
-	private void loadData() {
+	public void loadData() {
 		totalOfRows = dao.countVocabContri();
 		totalPage = (int) Math.ceil((double) totalOfRows / rowsOfPage);
 		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
@@ -262,10 +263,15 @@ public class PanelVocabContribution extends JPanel{
 
 		int y = 40;		
 		for(VocabularyContribution vc : dao.selectByPages(pageNumber, rowsOfPage)){
-			ItemVocabContribution vcItem = new ItemVocabContribution(vc, y);			
+			ItemVocabContribution vcItem = new ItemVocabContribution(vc, y);
+			vcItem.panelParent = this;
 			panel.add(vcItem);
 			y = y + 60;
 		}	
+	}
+	
+	public JPanel getPanel() {
+		return panel;
 	}
 	
 	protected void txtPageActionPerformed(ActionEvent e) {

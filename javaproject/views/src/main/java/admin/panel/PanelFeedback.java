@@ -49,6 +49,7 @@ public class PanelFeedback extends JPanel{
 	private Integer totalPage;
 	private JTextField txtPage;
 	private JComboBox cbbNumberOfRows;
+	public PanelResponse panelParent;
 	
 	private static PanelFeedback myInstance;
 	
@@ -68,6 +69,9 @@ public class PanelFeedback extends JPanel{
 		loadData();
 	}
 
+	public JPanel getPanel() {
+		return panel;
+	}
 
 	private void initComponent() {
 		setLayout(null);
@@ -253,7 +257,7 @@ public class PanelFeedback extends JPanel{
 		panel_1_1.add(lblXa);
 	}
 
-	private void loadData() {
+	public void loadData() {
 		totalOfRows = dao.countFeedback();
 		totalPage = (int) Math.ceil((double)totalOfRows / rowsOfPage);
 		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
@@ -270,8 +274,9 @@ public class PanelFeedback extends JPanel{
 		printTitleComponent(panel);
 		int y = 40;		
 		for(Feedback vc : dao.selectByPages(pageNumber, rowsOfPage)){
-			ItemFeedback vcItem = new ItemFeedback(vc, y);			
-			panel.add(vcItem);
+			ItemFeedback fbItem = new ItemFeedback(vc, y);			
+			fbItem.panelParent = this;
+			panel.add(fbItem);
 			y = y + 60;
 		}	
 	}

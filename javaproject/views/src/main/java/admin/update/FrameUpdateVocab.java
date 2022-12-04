@@ -82,21 +82,23 @@ public class FrameUpdateVocab extends JFrame {
 	private int CURRENT_PANELS_MN_EX_HEIGHT = 345;
 	private int HEIGHT_ADDED = 0;
 
+	
+	private Vocabulary vocab;
+	public ItemVocab itemVocab;
 	private static FrameUpdateVocab myInstance;
-
+	
 	public static FrameUpdateVocab getMyInstance(Vocabulary vocab) {
 		if (myInstance == null) {
+			myInstance = new FrameUpdateVocab(vocab);
+		} else {
+			myInstance.dispose();
 			myInstance = new FrameUpdateVocab(vocab);
 		}
 		return myInstance;
 	}
 	
-	public static void main(String[] args) {
-		FrameUpdateVocab a = new FrameUpdateVocab(new VocabularyDAOImpl().select(116));
-		a.setVisible(true);
-	}
-
 	public FrameUpdateVocab(Vocabulary vocab) {
+		this.vocab = vocab;
 		initComponent();
 		meaningAndExamples = new ArrayList<>();
 		data = new HashMap<>();
@@ -435,6 +437,11 @@ public class FrameUpdateVocab extends JFrame {
 		if (vocabService.update(data)) {
 			JOptionPane.showMessageDialog(this, "Cập nhật từ vựng thành công");
 			dispose();
+			
+			JPanel panel = this.itemVocab.panelParent.getPanel();
+			panel.repaint();
+			panel.revalidate();
+			this.itemVocab.panelParent.loadData();
 		} else {
 			JOptionPane.showMessageDialog(this, ErrorMessage.ERROR_MESSAGES);
 		}

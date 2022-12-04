@@ -32,6 +32,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import admin.item.ItemCategory;
 import admin.item.ItemVocab;
+import admin.panel.PanelAdmin;
 import dao.impl.CategoryDAOImpl;
 import entity.Category;
 import helper.ErrorMessage;
@@ -58,16 +59,23 @@ public class FrameUpdateCategory extends JFrame {
 	
 	private Map<String, String> data;
 	private CategoryService cateService;
+	
+	public ItemCategory itemCate;
+	private Category category;
 	private static FrameUpdateCategory myInstance;
 	
 	public static FrameUpdateCategory getMyInstance(Category category) {
 		if (myInstance == null) {
+			myInstance = new FrameUpdateCategory(category);
+		} else {
+			myInstance.dispose();
 			myInstance = new FrameUpdateCategory(category);
 		}
 		return myInstance;
 	}
 	
 	public FrameUpdateCategory(Category category) {
+		this.category = category;
 		initComponent();
 		FrameUtils.alignFrameScreenCenter(this);
 		
@@ -75,8 +83,8 @@ public class FrameUpdateCategory extends JFrame {
 		cateService = new CategoryService();
 		data.put("id", Integer.toString(category.getId()));
 		
-		final int ROW_HEIGHT = 171;
 		textCategory.setText(category.getName());
+		final int ROW_HEIGHT = 171;
 		lblImageShow.setIcon(ImageUtils.getImageByURL("category", category.getImageIcon(), ROW_HEIGHT));
 	}
 
@@ -182,6 +190,11 @@ public class FrameUpdateCategory extends JFrame {
 		if(cateService.update(data)) {
 			JOptionPane.showMessageDialog(this, "Cập nhật chủ đề thành công");
 			dispose();
+			
+			JPanel panel = this.itemCate.panelParent.getPanel();
+			panel.repaint();
+			panel.revalidate();
+			this.itemCate.panelParent.loadData();
 		} else {
 			JOptionPane.showMessageDialog(this, ErrorMessage.ERROR_MESSAGES);
 		}

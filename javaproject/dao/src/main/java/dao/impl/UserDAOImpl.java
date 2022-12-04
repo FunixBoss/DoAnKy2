@@ -470,6 +470,37 @@ public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 		return result;
 	}
 
+	@Override
+	public List<User> searchAll(String str, Integer roleId) {
+		List<User> list = new ArrayList<>();
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call searchAllUser(?, ?)}");
+		){
+			cs.setString(1,str );
+			cs.setInt(2, roleId);
+			var rs = cs.executeQuery();
+			User user;
+			while(rs.next()) {
+				Integer userId = rs.getInt(1);
+				String email = rs.getString(2);
+				Integer roleIdRs = rs.getInt(3);
+				LocalDate createdAt = LocalDate.parse(rs.getDate(4).toString(),
+						DateTimeFormatter.ofPattern("[yyyy-MM-dd]"));
+				LocalDate updatedAt = LocalDate.parse(rs.getDate(5).toString(),
+						DateTimeFormatter.ofPattern("[yyyy-MM-dd]"));
+				user = new User(userId, email, null, roleIdRs);
+				user.setCreatedAt(createdAt);
+				user.setUpdatedAt(updatedAt);
+				list.add(user);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.err.println("search all user failed!");
+		}
+		return list;
+	}
+
 
 	
 }

@@ -11,5 +11,5 @@ public interface CategoryDAO extends DAO<Category> {
 	Integer countNumberOfCate();
 	
 	Integer getIdFromCateName(String name);
-	
+	List<Category> searchAll(String str);
 }

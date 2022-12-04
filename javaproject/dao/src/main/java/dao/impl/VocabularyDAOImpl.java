@@ -347,7 +347,7 @@ public class VocabularyDAOImpl extends AbstractDAO<Vocabulary> implements Vocabu
 		List<Vocabulary> list = new ArrayList<>();
 		try(
 			var con = ConnectDBFromProperties.getConnectionFromClassPath();
-			var cs = con.prepareCall("{call searchAll(?)}");
+			var cs = con.prepareCall("{call searchAllVocab(?)}");
 		){
 			cs.setString(1,str );
 			var rs = cs.executeQuery();

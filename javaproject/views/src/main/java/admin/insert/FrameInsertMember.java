@@ -2,6 +2,9 @@ package admin.insert;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import admin.panel.PanelAdmin;
+import admin.panel.PanelMember;
 import helper.ErrorMessage;
 import helper.FrameUtils;
 import service.UserService;
@@ -39,10 +42,16 @@ public class FrameInsertMember extends JFrame {
 	
 	private UserService userService;
 	private Map<String, String> data;
+	
+	public PanelMember panelParent;
+	
 	private static FrameInsertMember myInstance;
 	
 	public static FrameInsertMember getMyInstance() {
 		if (myInstance == null) {
+			myInstance = new FrameInsertMember();
+		} else {
+			myInstance.dispose();
 			myInstance = new FrameInsertMember();
 		}
 		return myInstance;
@@ -51,7 +60,7 @@ public class FrameInsertMember extends JFrame {
 	public FrameInsertMember() {
 		initComponent();
 		FrameUtils.alignFrameScreenCenter(this);
-		data = new HashMap<>();		
+		data = new HashMap<>();	
 	}
 	
 	private void initComponent() {
@@ -177,6 +186,8 @@ public class FrameInsertMember extends JFrame {
 		if(insert) {
 			JOptionPane.showMessageDialog(this, "Thêm thành viên thành công");
 			dispose();
+			
+			this.panelParent.frameParent.callPanel(new PanelMember());
 		} else {
 			JOptionPane.showMessageDialog(this, ErrorMessage.ERROR_MESSAGES);
 		}

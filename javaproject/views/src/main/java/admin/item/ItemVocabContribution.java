@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
 import admin.insert.FrameInsertVocab;
+import admin.panel.PanelVocabContribution;
 import admin.update.FrameUpdateMember;
 import dao.impl.UserDAOImpl;
 import entity.User;
@@ -39,6 +40,8 @@ public class ItemVocabContribution extends JPanel {
 	private VocabularyContributionService vocabService;
 	private JButton btnDelete_1;
 
+	public PanelVocabContribution panelParent;
+	
 	public ItemVocabContribution(VocabularyContribution vocabContri, int y) {
 		this.vocabContribution = vocabContri;
 		initComponent(y);
@@ -92,7 +95,7 @@ public class ItemVocabContribution extends JPanel {
 
 		JLabel lblWord = new JLabel();
 		lblWord.setHorizontalAlignment(SwingConstants.CENTER);
-		lblWord.setText(vocabContribution.getWord());
+		lblWord.setText(StringUtils.toCapitalize(vocabContribution.getWord()));
 		lblWord.setForeground(new Color(37, 57, 111));
 		lblWord.setFont(new Font("Arial", Font.PLAIN, 14));
 		panel_1_2_1.add(lblWord);
@@ -150,7 +153,8 @@ public class ItemVocabContribution extends JPanel {
 	}
 
 	protected void do_btnEdit_actionPerformed(ActionEvent e) {
-		FrameInsertVocab fr = new FrameInsertVocab();
+		FrameInsertVocab fr = FrameInsertVocab.getMyInstance();
+		fr.itemVocabContri = this;
 		fr.setTextWordAndMeanings(vocabContribution);
 		fr.setVisible(true);
 	}
@@ -161,6 +165,11 @@ public class ItemVocabContribution extends JPanel {
 			vocabService = new VocabularyContributionService();
 			if (vocabService.delete(vocabContribution)) {
 				JOptionPane.showMessageDialog(this, "Xoá từ vựng thành công!");
+				JPanel panel = this.panelParent.getPanel();
+				panel.removeAll();
+				panel.repaint();
+				panel.revalidate();
+				this.panelParent.loadData();
 			}
 		}
 	}

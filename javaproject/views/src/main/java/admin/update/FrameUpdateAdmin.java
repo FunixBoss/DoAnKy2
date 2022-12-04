@@ -3,6 +3,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import admin.item.ItemUser;
+import admin.panel.PanelAdmin;
 import entity.User;
 import helper.ErrorMessage;
 import helper.FrameUtils;
@@ -27,7 +29,7 @@ import java.awt.event.ActionEvent;
 
 public class FrameUpdateAdmin extends JFrame {
 	private JPanel contentPane;
-	private final JPanel panel = new JPanel();
+	private JPanel panel;
 	private JLabel lblAddMember;
 	private JLabel lblEmail;
 	private JLabel lblLevel;
@@ -37,9 +39,11 @@ public class FrameUpdateAdmin extends JFrame {
 	private JComboBox<String> cbbRole;
 	private UserService userService;
 	
-	private static FrameUpdateAdmin myInstance;
 	private User user;
 	private Map<String, String> data;
+	
+	public ItemUser itemAdmin;
+	private static FrameUpdateAdmin myInstance;
 	
 	
 	public static FrameUpdateAdmin getMyInstance(User user) {
@@ -48,7 +52,6 @@ public class FrameUpdateAdmin extends JFrame {
 		} else {
 			myInstance.dispose();
 			myInstance = new FrameUpdateAdmin(user);
-
 		}
 		return myInstance;
 	}
@@ -83,6 +86,8 @@ public class FrameUpdateAdmin extends JFrame {
 		lblEmail.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblEmail.setBounds(30, 100, 100, 21);
 		contentPane.add(lblEmail);
+		
+		panel = new JPanel();
 		panel.setBackground(new Color(242, 247, 255));
 		panel.setBounds(0, 0, 384, 62);
 		contentPane.add(panel);
@@ -143,6 +148,12 @@ public class FrameUpdateAdmin extends JFrame {
 		if(userService.update(data)) {
 			JOptionPane.showMessageDialog(this, "Cập nhật quản trị viên thành công");
 			dispose();
+			
+			JPanel panel = ((PanelAdmin) this.itemAdmin.panelParent).getPanel();
+			panel.repaint();
+			panel.revalidate();
+			((PanelAdmin) this.itemAdmin.panelParent).loadData();
+			
 		} else {
 			JOptionPane.showMessageDialog(this, ErrorMessage.ERROR_MESSAGES);
 		}

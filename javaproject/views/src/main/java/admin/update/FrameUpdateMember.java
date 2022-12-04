@@ -4,6 +4,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import admin.item.ItemUser;
+import admin.panel.PanelAdmin;
+import admin.panel.PanelMember;
 import dao.impl.UserDAOImpl;
 import entity.User;
 import helper.ErrorMessage;
@@ -42,6 +44,7 @@ public class FrameUpdateMember extends JFrame {
 	private static FrameUpdateMember myInstance;
 	private User user;
 	private Map<String, String> data;
+	
 	public ItemUser itemUser;
 	
 	public static FrameUpdateMember getMyInstance(User user) {
@@ -147,10 +150,10 @@ public class FrameUpdateMember extends JFrame {
 			JOptionPane.showMessageDialog(this, "Cập nhật thành viên thành công");
 			dispose();
 			
-			JPanel panel = this.itemUser.panelParent.getPanel();
-			panel.removeAll();
+			JPanel panel = ((PanelMember) this.itemUser.panelParent).getPanel();
 			panel.repaint();
 			panel.revalidate();
+			((PanelMember) this.itemUser.panelParent).loadData();
 		} else {
 			JOptionPane.showMessageDialog(this, ErrorMessage.ERROR_MESSAGES);
 		}

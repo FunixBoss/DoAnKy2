@@ -22,6 +22,7 @@ import dao.impl.HistoryDAOImpl;
 import dao.impl.MeaningDAOImpl;
 import dao.impl.PhoneticDAOImpl;
 import dao.impl.RelativeWordDAOImpl;
+import dao.impl.TheoryDAOImpl;
 import dao.impl.VocabularyDAOImpl;
 import entity.Bookmark;
 import entity.Example;
@@ -382,6 +383,10 @@ public class VocabularyService {
 			List<History> histories = hstrDao.selHistoryByVocabId(vocab.getId());
 			histories.stream().forEach(h -> hstrDao.delete(h));
 			
+			
+//			delete theory
+			TheoryDAOImpl thDAO = new TheoryDAOImpl();
+			thDAO.deleteByVocabId(vocab.getId());
 //			delete vocabulary
 			vocabDao.delete(vocab);
 			return true;

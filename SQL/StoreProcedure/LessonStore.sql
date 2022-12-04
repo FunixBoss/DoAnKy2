@@ -80,8 +80,19 @@ CREATE PROC selLessonByPages
 AS
 BEGIN
 	SELECT * FROM LESSON
-	ORDER BY ID
+	ORDER BY ID DESC
 	OFFSET (@pageNumber - 1) * @RowsOfPage ROWS
 	FETCH NEXT @RowsOfPage ROWS ONLY
 END
 GO 
+
+DROP PROC IF EXISTS searchAllLesson
+GO
+CREATE PROC searchAllLesson
+@data NVARCHAR(200)
+AS 
+BEGIN
+	SELECT * FROM LESSON
+	WHERE TITLE like @data+'%'  OR [ID] like @data+'%'
+END
+GO

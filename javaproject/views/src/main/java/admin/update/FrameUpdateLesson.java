@@ -30,6 +30,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import admin.insert.FrameInsertLesson;
+import admin.item.ItemLesson;
 import admin.item.ItemQuestion;
 import dao.AnswerDAO;
 import dao.LessonDAO;
@@ -79,21 +80,18 @@ public class FrameUpdateLesson extends JFrame{
 	private TheoryDAO thDAO;
 	private AnswerDAO anDAO;
 	
+	public ItemLesson itemLesson;
 	private static FrameUpdateLesson myInstance;
 
 	public static FrameUpdateLesson getMyInstance(Lesson ls) {
 		if (myInstance == null) {
 			myInstance = new FrameUpdateLesson(ls);
+		} else {
+			myInstance.dispose();
+			myInstance = new FrameUpdateLesson(ls);
 		}
 		return myInstance;
 	}
-	
-	public static void main(String[] args) {
-		Lesson ls = new LessonDAOImpl().select(51);
-		FrameUpdateLesson a = new FrameUpdateLesson(ls);
-		a.setVisible(true);
-	}
-	
 	
 	public FrameUpdateLesson(Lesson ls) {
 		this.ls = ls;
@@ -314,6 +312,11 @@ public class FrameUpdateLesson extends JFrame{
 			if (lsSerivce.update(data)) {
 				JOptionPane.showMessageDialog(this, "Cập nhật bài học thành công");
 				dispose();
+				
+				JPanel panel = this.itemLesson.panelParent.getPanel();
+				panel.repaint();
+				panel.revalidate();
+				this.itemLesson.panelParent.loadData();
 			} else {
 				JOptionPane.showMessageDialog(this, ErrorMessage.ERROR_MESSAGES);
 			}

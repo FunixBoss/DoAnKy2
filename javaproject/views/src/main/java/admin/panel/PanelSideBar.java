@@ -148,7 +148,7 @@ public class PanelSideBar extends JPanel {
 		JPanel panelHome = new JPanel();
 		panelHome.setLayout(null);
 		panelHome.setBackground(Color.WHITE);
-		panelHome.setBounds(0, 78, 217, 70);
+		panelHome.setBounds(0, 637, 217, 70);
 		add(panelHome);
 		JLabel lblHome = new JLabel("Trang chủ");
 		lblHome.setForeground(new Color(37, 57, 143));
@@ -171,7 +171,7 @@ public class PanelSideBar extends JPanel {
 		panelDashboard.setBorder(null);
 		panelDashboard.setLayout(null);
 		panelDashboard.setBackground(new Color(37, 57, 111));
-		panelDashboard.setBounds(0, 148, 217, 70);
+		panelDashboard.setBounds(0, 78, 217, 70);
 		add(panelDashboard);
 		lblDashboard = new JLabel("Dashboard");
 		lblDashboard.setForeground(new Color(255, 255, 255));
@@ -192,7 +192,7 @@ public class PanelSideBar extends JPanel {
 			}
 		});
 		panelVocab.setBackground(new Color(255, 255, 255));
-		panelVocab.setBounds(0, 218, 217, 70);
+		panelVocab.setBounds(0, 148, 217, 70);
 		add(panelVocab);
 		panelVocab.setLayout(null);
 		JLabel lblIconVocab = new JLabel("");
@@ -217,7 +217,7 @@ public class PanelSideBar extends JPanel {
 		});
 		panelCategory.setLayout(null);
 		panelCategory.setBackground(Color.WHITE);
-		panelCategory.setBounds(0, 288, 217, 70);
+		panelCategory.setBounds(0, 218, 217, 70);
 		add(panelCategory);
 		JLabel lblIconCategory = new JLabel("");
 		lblIconCategory.setForeground(Color.WHITE);
@@ -241,7 +241,7 @@ public class PanelSideBar extends JPanel {
 			}
 		});
 		panelMember.setBackground(new Color(255, 255, 255));
-		panelMember.setBounds(0, 358, 217, 70);
+		panelMember.setBounds(0, 288, 217, 70);
 		panelMember.setLayout(null);
 		add(panelMember);
 		lblMember = new JLabel("Thành viên");
@@ -264,7 +264,7 @@ public class PanelSideBar extends JPanel {
 			}
 		});
 		panelAdmin.setBackground(new Color(255, 255, 255));
-		panelAdmin.setBounds(0, 427, 217, 70);
+		panelAdmin.setBounds(0, 357, 217, 70);
 		panelAdmin.setLayout(null);
 		add(panelAdmin);
 		lblAdmin = new JLabel("Quản trị viên");
@@ -287,7 +287,7 @@ public class PanelSideBar extends JPanel {
 		});
 		panelLesson.setLayout(null);
 		panelLesson.setBackground(Color.WHITE);
-		panelLesson.setBounds(0, 497, 217, 70);
+		panelLesson.setBounds(0, 427, 217, 70);
 		add(panelLesson);
 		
 		lblLesson = new JLabel("Bài học");
@@ -311,7 +311,7 @@ public class PanelSideBar extends JPanel {
 		});
 		panelFeedback.setLayout(null);
 		panelFeedback.setBackground(Color.WHITE);
-		panelFeedback.setBounds(0, 567, 217, 70);
+		panelFeedback.setBounds(0, 497, 217, 70);
 		add(panelFeedback);
 		
 		lblFeedback = new JLabel("Phản hồi");

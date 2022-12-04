@@ -23,4 +23,6 @@ public interface UserDAO extends DAO<User> {
 	List<User> selectAdminByPages(int pageNumber, int rowOfPages);
 	Integer countNumberOfAdmin();
 	Integer selectIdByUserEmail(String email);
+	List<User> searchAll(String str, Integer roleId);
+
 }

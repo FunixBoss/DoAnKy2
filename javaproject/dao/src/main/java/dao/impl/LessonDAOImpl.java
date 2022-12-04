@@ -14,6 +14,7 @@ import database.ConnectDBFromProperties;
 import entity.Bookmark;
 import entity.Category;
 import entity.Lesson;
+import entity.Vocabulary;
 
 public class LessonDAOImpl extends AbstractDAO<Lesson> implements LessonDAO {
 
@@ -194,6 +195,28 @@ public class LessonDAOImpl extends AbstractDAO<Lesson> implements LessonDAO {
 			System.err.println("Insert Get Last Id Lesson failed!");
 		}
 		return result;
+	}
+
+	@Override
+	public List<Lesson> searchAll(String str) {
+		List<Lesson> list = new ArrayList<>();
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call searchAllLesson(?)}");
+		){
+			cs.setString(1,str );
+			var rs = cs.executeQuery();
+			while(rs.next()) {
+				Integer id = rs.getInt(1);
+				String title = rs.getString(2);
+				String image = rs.getString(3);
+				list.add(new Lesson(id, title, image));
+			}
+		} catch(Exception e) {
+//			e.printStackTrace();
+			System.err.println("search all vocabulary failed!");
+		}
+		return list;
 	}
 
 }

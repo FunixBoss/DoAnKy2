@@ -14,6 +14,7 @@ import javax.swing.border.MatteBorder;
 
 import admin.gui.FrameDetailFeedback;
 import admin.insert.FrameInsertVocab;
+import admin.panel.PanelFeedback;
 import dao.impl.UserDAOImpl;
 import entity.Feedback;
 import service.FeedbackService;
@@ -28,6 +29,7 @@ public class ItemFeedback extends JPanel {
 	private FeedbackService fbService;
 	private JButton btnDelete_1;
 
+	public PanelFeedback panelParent;
 	public ItemFeedback(Feedback feedback, int y) {
 		this.feedback = feedback;
 		initComponent(y);
@@ -128,7 +130,7 @@ public class ItemFeedback extends JPanel {
 	}
 
 	protected void do_btnEdit_actionPerformed(ActionEvent e) {
-		FrameDetailFeedback fr = new FrameDetailFeedback(feedback);
+		FrameDetailFeedback fr = FrameDetailFeedback.getMyInstance(feedback);
 		fr.setVisible(true);
 	}
 	protected void doBtnDelete_1ActionPerformed(ActionEvent e) {
@@ -138,6 +140,12 @@ public class ItemFeedback extends JPanel {
 			fbService = new FeedbackService();
 			if (fbService.delete(feedback)) {
 				JOptionPane.showMessageDialog(this, "Xoá phản hồi thành công!");
+				
+				JPanel panel = this.panelParent.getPanel();
+				panel.removeAll();
+				panel.repaint();
+				panel.revalidate();
+				this.panelParent.loadData();
 			}
 		}
 	}

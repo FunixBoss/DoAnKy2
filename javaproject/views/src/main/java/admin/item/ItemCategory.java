@@ -9,7 +9,6 @@ import entity.Category;
 import helper.FrameUtils;
 import helper.ImageUtils;
 import helper.StringUtils;
-import home.gui.FrameCategory;
 import service.CategoryService;
 import service.UserService;
 
@@ -26,6 +25,9 @@ import javax.swing.JButton;
 import java.awt.BorderLayout;
 import javax.swing.SwingConstants;
 
+import admin.gui.FrameCategory;
+import admin.panel.PanelAdmin;
+import admin.panel.PanelCategory;
 import admin.update.FrameUpdateCategory;
 
 import java.awt.GridLayout;
@@ -48,17 +50,21 @@ public class ItemCategory extends JPanel {
 	private JPanel panel_1_1;
 	private JButton btnDelete;
 	
+	public PanelCategory panelParent;
+	
+	private Category cate;
 	private CategoryService cateService;
 	
 	public ItemCategory(Category cate, int y) {
-		initComponent(cate, y);
+		this.cate = cate;
+		initComponent(y);
 		lblId.setText(cate.getId().toString());
 		lblWord.setText(StringUtils.toCapitalize(cate.getName()));
 		lblImage.setIcon(ImageUtils.getImageByURL("category", cate.getImageIcon(), 60));
 
 	}
 
-	private void initComponent(Category cate, int y) {
+	private void initComponent(int y) {
 		setLayout(null);
 		setBounds(0, y, 980, 80);
 		
@@ -115,9 +121,7 @@ public class ItemCategory extends JPanel {
 		btnDetail = new JButton("Chi tiết");
 		btnDetail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FrameCategory detail = new FrameCategory(cate.getId());
-				FrameUtils.alignFrameScreenCenter(detail);
-				detail.setVisible(true);
+				btnDetailActionPerformed(e);
 			}
 		});
 		btnDetail.setForeground(Color.WHITE);
@@ -135,10 +139,10 @@ public class ItemCategory extends JPanel {
 		btnEdit = new JButton("Sửa");
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FrameUpdateCategory fr = new FrameUpdateCategory(cate);
-				FrameUtils.alignFrameScreenCenter(fr);
-				fr.setVisible(true);
+				btnEditActionPerformed(e);
 			}
+
+			
 		});
 		btnEdit.setBounds(54, 25, 73, 30);
 		btnEdit.setForeground(Color.WHITE);
@@ -166,7 +170,16 @@ public class ItemCategory extends JPanel {
 		panel_1_1.add(btnDelete);
 	}
 	
-	
+	protected void btnDetailActionPerformed(ActionEvent e) {
+		FrameCategory detail = FrameCategory.getMyInstance(cate);
+		detail.itemCate = this;
+		detail.setVisible(true);
+	}
+	protected void btnEditActionPerformed(ActionEvent e) {
+		FrameUpdateCategory fr = FrameUpdateCategory.getMyInstance(cate);
+		fr.itemCate = this;
+		fr.setVisible(true);
+	}
 	
 	protected void btnDeleteActionPerformed(ActionEvent e, Category category) {
 		int option = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn xóa chủ đề này này?", "Xóa chủ đề", JOptionPane.YES_NO_OPTION);
@@ -174,6 +187,12 @@ public class ItemCategory extends JPanel {
 			cateService = new CategoryService();
 			if(cateService.delete(category)) {
 				JOptionPane.showMessageDialog(this, "Xoá chủ đề thành công!");
+				
+				JPanel panel = this.panelParent.getPanel();
+				panel.removeAll();
+				panel.repaint();
+				panel.revalidate();
+				this.panelParent.loadData();
 			}
 		}
 	}

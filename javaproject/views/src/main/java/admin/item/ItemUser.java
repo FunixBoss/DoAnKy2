@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
 import admin.panel.PanelAdmin;
+import admin.panel.PanelMember;
 import admin.update.FrameUpdateAdmin;
 import admin.update.FrameUpdateMember;
 import entity.User;
@@ -33,7 +34,8 @@ public class ItemUser extends JPanel {
 	private UserService userService;
 	private JButton btnDelete;
 	private JButton btnEdit;
-	public PanelAdmin panelParent;
+	
+	public JPanel panelParent;
 
 	public ItemUser(User user, int y) {
 		this.user = user;
@@ -130,13 +132,15 @@ public class ItemUser extends JPanel {
 		panel_1_1_1.add(btnDelete);
 	}
 	protected void doBtnEditActionPerformed(ActionEvent e) {
-		JFrame a = null;
 		if(user.getRoleId() == 3) {
-			a = FrameUpdateMember.getMyInstance(user);
+			FrameUpdateMember a = FrameUpdateMember.getMyInstance(user);
+			a.itemUser = this;
+			a.setVisible(true);
 		} else {
-			a = FrameUpdateAdmin.getMyInstance(user);
+			FrameUpdateAdmin a = FrameUpdateAdmin.getMyInstance(user);
+			a.itemAdmin = this;
+			a.setVisible(true);
 		}
-		a.setVisible(true);
 	}
 	protected void doBtnDeleteActionPerformed(ActionEvent e) {
 		String mess = user.getRoleId() == 3 ? "thành viên" : "quản trị viên"; 
@@ -146,12 +150,22 @@ public class ItemUser extends JPanel {
 			userService = new UserService();
 			if (userService.delete(user)) {
 				JOptionPane.showMessageDialog(this, "Xoá " + mess + " thành công!");
+			
 				
-				JPanel panel = this.panelParent.getPanel();
-				panel.removeAll();
-				panel.repaint();
-				panel.revalidate();
-				this.panelParent.loadData();
+				if(panelParent instanceof PanelAdmin) {
+					JPanel panel = ((PanelAdmin)this.panelParent).getPanel();
+					panel.removeAll();
+					panel.repaint();
+					panel.revalidate();
+					((PanelAdmin) this.panelParent).loadData();
+				} else if (panelParent instanceof PanelMember){
+					JPanel panel = ((PanelMember) this.panelParent).getPanel();
+					panel.removeAll();
+					panel.repaint();
+					panel.revalidate();
+					((PanelMember) this.panelParent).loadData();
+				}
+				
 			}
 		}
 	}

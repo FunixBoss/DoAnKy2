@@ -127,4 +127,20 @@ public class TheoryDAOImpl extends AbstractDAO<Theory> implements TheoryDAO {
 		return list;
 	}
 
+	@Override
+	public Integer deleteByVocabId(Integer vocabId) {
+		Integer result = 0;
+		try (
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call deleteTheoryByVocabId(?)}");
+		) {
+			cs.setInt(1, vocabId);
+			result = cs.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Delete a theory failed");
+		}
+		return result;
+	}
+
 }

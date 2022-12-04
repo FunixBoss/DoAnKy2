@@ -23,6 +23,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import admin.item.ItemMeaning;
+import admin.item.ItemVocabContribution;
+import admin.panel.PanelCategory;
+import admin.panel.PanelVocab;
+import admin.panel.PanelVocabContribution;
 import dao.impl.CategoryDAOImpl;
 import dao.impl.WordTypeDAOImpl;
 import entity.VocabularyContribution;
@@ -74,7 +78,7 @@ public class FrameInsertVocab extends JFrame {
 	private JPanel panel_1;
 	private JButton btnStopSound;
 	private JButton btnPlus;
-	private JPanel panelParent;
+	private JPanel panelParent2;
 	private JPanel panelChild;
 	private JTextField textPhonetic;
 	private boolean isAdded;
@@ -88,10 +92,15 @@ public class FrameInsertVocab extends JFrame {
 	private int CURRENT_PANELS_MN_EX_HEIGHT = 345;
 	private int HEIGHT_ADDED = 0;
 
+	public PanelVocab panelParent;
+	public ItemVocabContribution itemVocabContri;
 	private static FrameInsertVocab myInstance;
 
 	public static FrameInsertVocab getMyInstance() {
 		if (myInstance == null) {
+			myInstance = new FrameInsertVocab();
+		} else {
+			myInstance.dispose();
 			myInstance = new FrameInsertVocab();
 		}
 		return myInstance;
@@ -153,19 +162,19 @@ public class FrameInsertVocab extends JFrame {
 		setContentPane(contentPane);
 
 		
-		panelParent = new JPanel();
-		panelParent.setBounds(0, 56, 1113, 637);
-		panelParent.setLayout(new BorderLayout(0, 0));
-		getContentPane().add(panelParent);
+		panelParent2 = new JPanel();
+		panelParent2.setBounds(0, 56, 1113, 637);
+		panelParent2.setLayout(new BorderLayout(0, 0));
+		getContentPane().add(panelParent2);
 		
 		panelChild = new JPanel();
 		panelChild.setBackground(new Color(255, 255, 255));
 		panelChild.setBounds(0, 56, 1113, 746);
 		panelChild.setLayout(null);
-		panelParent.add(panelChild);
+		panelParent2.add(panelChild);
 		
 		JScrollPane jspEx1 = new JScrollPane(panelChild, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		panelParent.add(jspEx1, BorderLayout.CENTER);
+		panelParent2.add(jspEx1, BorderLayout.CENTER);
 		
 		lblNewLabel = new JLabel("Thêm từ vựng");
 		lblNewLabel.setBounds(20, 11, 219, 34);
@@ -402,9 +411,22 @@ public class FrameInsertVocab extends JFrame {
 		vocabService = new VocabularyService();
 		if (vocabService.add(data)) {
 			JOptionPane.showMessageDialog(this, "Thêm từ vựng thành công");
+			dispose();
+			
+			if(itemVocabContri != null) {
+				System.out.println("not null");
+				PanelVocabContribution newPanelParent = new PanelVocabContribution();
+				newPanelParent.panelParent = this.itemVocabContri.panelParent.panelParent;
+				this.itemVocabContri.panelParent.panelParent.callPanel(newPanelParent);	
+			}
 			isAdded = true;
 			deleteVc();
-			dispose();
+			
+			if(panelParent != null) {
+				PanelVocab newPanelParent = new PanelVocab();
+				newPanelParent.frameParent = this.panelParent.frameParent;
+				this.panelParent.frameParent.callPanel(newPanelParent);
+			}
 		} else {
 			System.out.println(ErrorMessage.ERROR_MESSAGES);
 		}

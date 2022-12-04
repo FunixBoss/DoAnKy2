@@ -25,7 +25,7 @@ import java.awt.event.ActionEvent;
 
 public class FrameInsertAdmin extends JFrame {
 	private JPanel contentPane;
-	private final JPanel panel = new JPanel();
+	private JPanel panel;
 	
 	private JPasswordField passwordFieldPassword;
 	private JPasswordField passwordResetPassword;
@@ -86,8 +86,10 @@ public class FrameInsertAdmin extends JFrame {
 		lblEmail.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblEmail.setBounds(32, 103, 102, 21);
 		contentPane.add(lblEmail);
+		
+		panel = new JPanel();
 		panel.setBackground(new Color(242, 247, 255));
-		panel.setBounds(0, 0, 869, 62);
+		panel.setBounds(0, 0, 454, 62);
 		contentPane.add(panel);
 		
 		textEmail = new JTextField();
@@ -190,11 +192,8 @@ public class FrameInsertAdmin extends JFrame {
 		if(insert) {
 			JOptionPane.showMessageDialog(this, "Thêm quản trị viên thành công");
 			dispose();
-			panel.removeAll();
-			JPanel panel = this.panelParent.getPanel();
-			panel.repaint();
-			panel.revalidate();
-			this.panelParent.loadData();
+
+			this.panelParent.frameParent.callPanel(new PanelAdmin());
 		} else {
 			JOptionPane.showMessageDialog(this, ErrorMessage.ERROR_MESSAGES);
 		}

@@ -5,6 +5,10 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.List;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -15,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import admin.gui.FrameDashboard;
 import admin.insert.FrameInsertMember;
 import admin.insert.FrameInsertVocab;
 import admin.item.ItemVocab;
@@ -42,13 +47,20 @@ public class PanelVocab extends JPanel {
 	private JTextField txtPage;
 	private JComboBox cbbNumberOfRows;
 	
+	public FrameDashboard frameParent;
 	private static PanelVocab myInstance;
+	private JTextField txtSearch;
 	
 	public static PanelVocab getMyInstance() {
 		if (myInstance == null) {
 			myInstance = new PanelVocab();
 		}
 		return myInstance;
+	}
+	
+	
+	public JPanel getPanel() {
+		return panel;
 	}
 	
 	public PanelVocab() {
@@ -186,6 +198,18 @@ public class PanelVocab extends JPanel {
 		});
 		add(txtPage);
 		
+		txtSearch = new JTextField();
+		txtSearch.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				searchVocab();
+			}
+		});
+		txtSearch.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		txtSearch.setBounds(41, 61, 255, 36);
+		add(txtSearch);
+		txtSearch.setColumns(10);
+		
 	}
 
 	private void printTitleComponent(JPanel panel) {
@@ -285,7 +309,7 @@ public class PanelVocab extends JPanel {
 		panel_1_1.add(lblXa);
 	}
 
-	private void loadData() {
+	public void loadData() {
 		totalOfRows = dao.countNumberOfVocab();
 		totalPage = (int) Math.ceil((double)totalOfRows / rowsOfPage);
 		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
@@ -303,17 +327,56 @@ public class PanelVocab extends JPanel {
 		int y = 40;
 		scrollPane.setViewportView(panel);
 		for(Vocabulary vocab : dao.selectByPages(pageNumber, rowsOfPage)){
-			ItemVocab vocabItem = new ItemVocab(vocab, y);			
+			ItemVocab vocabItem = new ItemVocab(vocab, y);	
+			vocabItem.panelParent = this;
 			panel.add(vocabItem);
 			y = y + 84;
 		}	
 	}
 	
+	public void loadData(List<Vocabulary> vocabs) {
+		totalOfRows = dao.countNumberOfVocab();
+		totalPage = (int) Math.ceil((double)totalOfRows / rowsOfPage);
+		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
+		lblRowCount.setText("Số dòng: " + totalOfRows);
+		
+		
+		final int ITEM_HEIGHT = 88;
+		Integer tableHeigth = Math.min(ITEM_HEIGHT * rowsOfPage, ITEM_HEIGHT * totalOfRows);
+		Dimension dim = new Dimension(975, tableHeigth);
+		panel.setPreferredSize(dim);
+		scrollPane.setViewportView(panel);
+		
+		panel.removeAll();
+		printTitleComponent(panel);
+		int y = 40;
+		scrollPane.setViewportView(panel);
+		for(Vocabulary vocab : vocabs){
+			ItemVocab vocabItem = new ItemVocab(vocab, y);	
+			vocabItem.panelParent = this;
+			panel.add(vocabItem);
+			y = y + 84;
+		}
+	}
+	
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
 		FrameInsertVocab frame = FrameInsertVocab.getMyInstance();
+		frame.panelParent = this;
 		if(!frame.isVisible()) {
 			FrameUtils.alignFrameScreenCenter(frame);
 			frame.setVisible(true);
+		}
+	}
+	
+	public void searchVocab() {
+		if(!txtSearch.getText().equals("")) {
+			VocabularyDAOImpl dao = new VocabularyDAOImpl();
+			List<Vocabulary> vocabs = dao.searchAll(txtSearch.getText());
+			panel.repaint();
+			panel.revalidate();
+			loadData(vocabs);
+		} else {
+			loadData();
 		}
 	}
 	
@@ -369,5 +432,8 @@ public class PanelVocab extends JPanel {
 			rowsOfPage = Integer.parseInt(cbbNumberOfRows.getSelectedItem().toString());
 			loadData();
 		}
+	}
+	protected void doTxtSearchActionPerformed(ActionEvent e) {
+		System.out.println(txtSearch.getText());
 	}
 }

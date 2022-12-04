@@ -6,6 +6,10 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.List;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -15,10 +19,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import admin.gui.FrameDashboard;
 import admin.insert.FrameInsertMember;
 import admin.item.ItemUser;
 import dao.impl.UserDAOImpl;
+import dao.impl.VocabularyDAOImpl;
 import entity.User;
+import entity.Vocabulary;
 import helper.FrameUtils;
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
@@ -38,13 +46,19 @@ public class PanelMember extends JPanel {
 	private JTextField txtPage;
 	private JComboBox cbbNumberOfRows;
 
+	public FrameDashboard frameParent;
 	private static PanelMember myInstance;
+	private JTextField txtSearch;
 	
 	public static PanelMember getMyInstance() {
 		if (myInstance == null) {
 			myInstance = new PanelMember();
 		}
 		return myInstance;
+	}
+	
+	public JPanel getPanel() {
+		return panel;
 	}
 	
 	public PanelMember() {
@@ -239,10 +253,22 @@ public class PanelMember extends JPanel {
 		});
 		add(txtPage);
 		
+		txtSearch = new JTextField();
+		txtSearch.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		txtSearch.setColumns(10);
+		txtSearch.setBounds(41, 61, 255, 36);
+		txtSearch.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				searchUser();
+			}
+		});
+		add(txtSearch);
+		
 	}
 	
 	
-	private void loadData() {
+	public void loadData() {
 		totalOfRows = dao.countNumberOfUser();
 		totalPage = (int) Math.ceil((double) totalOfRows / rowsOfPage);
 		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
@@ -259,19 +285,55 @@ public class PanelMember extends JPanel {
 
 		int y = 40;		
 		for(User user : dao.selectUserByPages(pageNumber, rowsOfPage)){
-			ItemUser userItem = new ItemUser(user, y);			
+			ItemUser userItem = new ItemUser(user, y);	
+			userItem.panelParent = this;
 			panel.add(userItem);
 			y = y + 60;
 		}	
 	}
+	
+	public void loadData(List<User> users) {
+		totalOfRows = dao.countNumberOfUser();
+		totalPage = (int) Math.ceil((double) totalOfRows / rowsOfPage);
+		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
+		lblRowCount.setText("Số dòng: " + totalOfRows);
+		
+		final int ITEM_HEIGHT = 63;
+		Integer tableHeigth = Math.min(ITEM_HEIGHT * rowsOfPage, ITEM_HEIGHT * totalOfRows);
+		Dimension dim = new Dimension(975, tableHeigth);
+		panel.setPreferredSize(dim);
+		scrollPane.setViewportView(panel);
+		
+		panel.removeAll();
+		printTitleComponent(panel);
+
+		int y = 40;		
+		for(User user : users){
+			ItemUser userItem = new ItemUser(user, y);	
+			userItem.panelParent = this;
+			panel.add(userItem);
+			y = y + 60;
+		}	
+	}
+	
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
 		FrameInsertMember frame = FrameInsertMember.getMyInstance();
+		frame.panelParent = this;
 		if(!frame.isVisible()) {
 			FrameUtils.alignFrameScreenCenter(frame);
 			frame.setVisible(true);
 		}
 	}
-	
+	public void searchUser() {
+		if(!txtSearch.getText().equals("")) {
+			List<User> users = dao.searchAll(txtSearch.getText(), 3);
+			panel.repaint();
+			panel.revalidate();
+			loadData(users);
+		} else {
+			loadData();
+		}
+	}
 	protected void txtPageActionPerformed(ActionEvent e) {
 		if(txtPage.getText() != null) {
 			try {

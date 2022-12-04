@@ -5,17 +5,35 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
+import admin.gui.FrameDashboard;
+
 public class PanelResponse extends JPanel {
+	private JPanel topBar;
+	private PanelMainContent mainContent;
+	
+	public FrameDashboard frameParent;
 	private PanelFeedback panelFeedback;
 	private PanelVocabContribution panelVocabContribution;
-	private JPanel topBar;
+	
+	private static PanelResponse myInstance;
+	
+	public static PanelResponse getMyInstance() {
+		if (myInstance == null) {
+			myInstance = new PanelResponse();
+		}
+		return myInstance;
+	}	
 	
 	private class SideBarMenu extends PanelSideBarFeedback{
 		public void doPanelVocabContributionMousePressed(MouseEvent e) {
+			panelVocabContribution = new PanelVocabContribution();
+			panelVocabContribution.panelParent = getOuter();
 			menuClicked(panelVocabContribution);
 			menuChanged(getPanelVocabContribution(), getLblVocabContribution());
 		}
 		public void doPanelFeedbackMousePressed(MouseEvent e) {
+			panelFeedback = new PanelFeedback();
+			panelFeedback.panelParent = getOuter();
 			menuClicked(panelFeedback);
 			menuChanged(getPanelFeedback(),getLblFeedback());
 		}
@@ -35,7 +53,7 @@ public class PanelResponse extends JPanel {
 		SideBarMenu sideBarMenu = new SideBarMenu();
 		topBar.add(sideBarMenu);
 		
-		PanelMainContent mainContent = new PanelMainContent();
+		mainContent = new PanelMainContent();
 		mainContent.setBounds(0, 61, 1085, 668);
 		mainContent.setLayout(null);		
 		add(mainContent);
@@ -51,9 +69,21 @@ public class PanelResponse extends JPanel {
 		sideBarMenu.doPanelVocabContributionMousePressed(null);
 	}
 	
+	private PanelResponse getOuter() {
+		return PanelResponse.this;
+	}
+	
+	public void callPanel(JPanel panel) {
+		//remove
+		mainContent.removeAll();
+		mainContent.repaint();
+		mainContent.revalidate();
+		//repaint
+		mainContent.add(panel);
+		mainContent.repaint();
+		mainContent.revalidate();
+	}
 	private void menuClicked(JPanel panel) {
-		panelVocabContribution.setVisible(false);;
-		panelFeedback.setVisible(false);
-		panel.setVisible(true);
+		callPanel(panel);
 	}
 }

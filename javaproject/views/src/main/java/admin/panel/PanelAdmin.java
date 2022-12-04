@@ -7,6 +7,10 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.List;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,6 +30,7 @@ import entity.User;
 import helper.FrameUtils;
 
 public class PanelAdmin extends JPanel {
+	public static Boolean isChanged = false;
 	private JLabel lblStatusPage;
 	private JLabel lblRowCount;	
 	private JPanel panel;
@@ -39,15 +44,16 @@ public class PanelAdmin extends JPanel {
 	private Integer totalPage;
 	private JTextField txtPage;
 	private JComboBox cbbNumberOfRows;
+	
 	public FrameDashboard frameParent;
 	
-	
 	private static PanelAdmin myInstance;
+	private JTextField txtSearch;
 	
 	public static PanelAdmin getMyInstance() {
 		if (myInstance == null) {
 			myInstance = new PanelAdmin();
-		}
+		} 
 		return myInstance;
 	}
 	
@@ -245,6 +251,18 @@ public class PanelAdmin extends JPanel {
 			}
 		});
 		add(txtPage);
+		
+		txtSearch = new JTextField();
+		txtSearch.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		txtSearch.setColumns(10);
+		txtSearch.setBounds(41, 61, 255, 36);
+		txtSearch.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				searchUser();
+			}
+		});
+		add(txtSearch);
 	}
 	
 	
@@ -271,6 +289,42 @@ public class PanelAdmin extends JPanel {
 		}
 			
 	}
+	
+	public void loadData(List<User> users) {
+		totalOfRows = dao.countNumberOfUser();
+		totalPage = (int) Math.ceil((double) totalOfRows / rowsOfPage);
+		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
+		lblRowCount.setText("Số dòng: " + totalOfRows);
+		
+		final int ITEM_HEIGHT = 63;
+		Integer tableHeigth = Math.min(ITEM_HEIGHT * rowsOfPage, ITEM_HEIGHT * totalOfRows);
+		Dimension dim = new Dimension(975, tableHeigth);
+		panel.setPreferredSize(dim);
+		scrollPane.setViewportView(panel);
+		
+		panel.removeAll();
+		printTitleComponent(panel);
+
+		int y = 40;		
+		for(User user : users){
+			ItemUser userItem = new ItemUser(user, y);	
+			userItem.panelParent = this;
+			panel.add(userItem);
+			y = y + 60;
+		}	
+	}
+	
+	public void searchUser() {
+		if(!txtSearch.getText().equals("")) {
+			List<User> users = dao.searchAll(txtSearch.getText(), 2);
+			panel.repaint();
+			panel.revalidate();
+			loadData(users);
+		} else {
+			loadData();
+		}
+	}
+	
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
 		FrameInsertAdmin frame = FrameInsertAdmin.getMyInstance();
 		frame.panelParent = this;

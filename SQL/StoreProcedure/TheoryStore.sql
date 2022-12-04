@@ -73,3 +73,14 @@ BEGIN
 	WHERE LESSON_ID = @lesson_id
 END
 GO
+
+DROP PROC IF EXISTS deleteTheoryByVocabId
+GO
+CREATE PROC deleteTheoryByVocabId
+@vocab_id INT
+AS
+BEGIN
+	DELETE FROM THEORY
+	WHERE VOCABULARY_ID = @vocab_id
+END
+GO

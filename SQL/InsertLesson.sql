@@ -32,11 +32,24 @@ INSERT INTO LESSON VALUES (N'', N'')
 		INSERT INTO ANSWER VALUES(N'', 0, (SELECT IDENT_CURRENT('QUESTION')))
 */ 
 
+-- INSERT INTO VOCABULARY_CONTRIBUTION VALUES(N'', N'', )
+INSERT INTO VOCABULARY_CONTRIBUTION VALUES(N'manikin', N'người lùn', 3)
 INSERT INTO VOCABULARY_CONTRIBUTION VALUES(N'Student', N'Học Sinh; Sinh Viên; Super Man; ét ô ét', 2);
+INSERT INTO VOCABULARY_CONTRIBUTION VALUES(N'grenadine', N'món thịt bò con', 5)
+INSERT INTO VOCABULARY_CONTRIBUTION VALUES(N'pomegranate', N'trái thạch lựu', 6)
+INSERT INTO VOCABULARY_CONTRIBUTION VALUES(N'hefty', N'khổng lồ', 7)
+INSERT INTO VOCABULARY_CONTRIBUTION VALUES(N'pelter', N'người chăn vịt', 8)
+INSERT INTO VOCABULARY_CONTRIBUTION VALUES(N'concretize', N'cụ thể hóa', 9)
 GO
 
-INSERT INTO FEEDBACK VALUES (N'At the end of the first session, a short feedback of each participant can provide useful information about the group climate reached so far.', 9)
-INSERT INTO FEEDBACK VALUES (N'Feedback', 8)
+-- INSERT INTO FEEDBACK VALUES(N'', )
+INSERT INTO FEEDBACK VALUES (N'At the end of the first session, a short feedback of each participant can provide useful information about the group climate reached so far.', 3)
+INSERT INTO FEEDBACK VALUES (N'My favourite sport is football. I played it when I was ten. It is a team sport. When you play football, you need sports clothes, a ball and nets. There are 90 office minutes and 22 players in the field. You need to take the ball into the net. Football is good for your healthy.', 4)
+INSERT INTO FEEDBACK VALUES(N' played a lot of sports and games, but there is a sport I like best. Its name is badminton. Its an individual. There are two players in this sport. To play badminton, ', 5)
+INSERT INTO FEEDBACK VALUES(N'Tôi đã chơi rất nhiều môn thể thao và trò chơi, nhưng có một môn thể thao tôi thích nhất. Tên của nó là cầu lông. Đó là một môn thể thao cá nhân. Có hai người ',6 )
+INSERT INTO FEEDBACK VALUES(N'chơi trong môn thể thao này. Để chơi cầu lông, tôi cần hai vợt cho hai người chơi và một cái cầu. Trong môn thể thao này, người chơi phải đánh cái cầu tới đối thủ, ', 7)
+INSERT INTO FEEDBACK VALUES(N'để nó không rơi và lấy điểm. Người chơi nào có nhiều điểm hơn sẽ giành chiến t', 8)
+INSERT INTO FEEDBACK VALUES(N'thắng. Tôi tập luyện môn thể thao này mỗi ngày, vì vậy tôi chơi nó rất tốt. Tôi rất thích cầu lông vì nó giúp tôi khỏe mạnh và thư thái.', 9)
 GO
 
 INSERT INTO LESSON VALUES (N'Lesson06', N'lesson01.png')

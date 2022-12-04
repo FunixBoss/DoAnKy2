@@ -9,6 +9,10 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.List;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,11 +22,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import admin.gui.FrameDashboard;
 import admin.insert.FrameInsertCategory;
 import admin.insert.FrameInsertMember;
 import admin.item.ItemCategory;
+import admin.item.ItemVocab;
 import dao.impl.CategoryDAOImpl;
+import dao.impl.VocabularyDAOImpl;
 import entity.Category;
+import entity.Vocabulary;
 import helper.FrameUtils;
 
 
@@ -41,7 +50,10 @@ public class PanelCategory extends JPanel {
 	private JTextField txtPage;
 	private JComboBox cbbNumberOfRows;
 	
+	
+	public FrameDashboard frameParent;
 	private static PanelCategory myInstance;
+	private JTextField txtSearch;
 	
 	public static PanelCategory getMyInstance() {
 		if (myInstance == null) {
@@ -186,6 +198,18 @@ public class PanelCategory extends JPanel {
 		});
 		add(txtPage);
 		
+		txtSearch = new JTextField();
+		txtSearch.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		txtSearch.setColumns(10);
+		txtSearch.setBounds(43, 61, 255, 36);
+		txtSearch.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				searchCate();
+			}
+		});
+		add(txtSearch);
+		
 	}
 
 	private void printTitleComponent(JPanel panel) {
@@ -263,7 +287,7 @@ public class PanelCategory extends JPanel {
 		panel_1_1.add(lblXa);
 	}
 
-	private void loadData() {
+	public void loadData() {
 		totalOfRows = dao.countNumberOfCate();
 		totalPage = (int) Math.ceil((double)totalOfRows / rowsOfPage);
 		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
@@ -280,14 +304,55 @@ public class PanelCategory extends JPanel {
 		printTitleComponent(panel);
 		int y = 40;
 		for(Category cate : dao.selectByPages(pageNumber, rowsOfPage)){
-			ItemCategory cateItem = new ItemCategory(cate, y);			
+			ItemCategory cateItem = new ItemCategory(cate, y);	
+			cateItem.panelParent = this;
 			panel.add(cateItem);
 			y = y + 84;
 		}	
 	}
 	
+	public void loadData(List<Category> cates) {
+		totalOfRows = dao.countNumberOfCate();
+		totalPage = (int) Math.ceil((double)totalOfRows / rowsOfPage);
+		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
+		lblRowCount.setText("Số dòng: " + totalOfRows);
+		
+		final int ITEM_HEIGHT = 88;
+		Integer tableHeigth = Math.min(ITEM_HEIGHT * rowsOfPage, ITEM_HEIGHT * totalOfRows);
+		Dimension dim = new Dimension(975, tableHeigth);
+		
+		
+		panel.removeAll();
+		panel.setPreferredSize(dim);
+		scrollPane.setViewportView(panel);
+		printTitleComponent(panel);
+		int y = 40;
+		for(Category cate : cates){
+			ItemCategory cateItem = new ItemCategory(cate, y);	
+			cateItem.panelParent = this;
+			panel.add(cateItem);
+			y = y + 84;
+		}	
+	}
+	
+	public JPanel getPanel() {
+		return panel;
+	}
+	
+	private void searchCate() {
+		if(!txtSearch.getText().equals("")) {
+			List<Category> cates = dao.searchAll(txtSearch.getText());
+			panel.repaint();
+			panel.revalidate();
+			loadData(cates);
+		} else {
+			loadData();
+		}
+	}
+	
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
 		FrameInsertCategory frame = FrameInsertCategory.getMyInstance();
+		frame.panelParent = this;
 		if(!frame.isVisible()) {
 			FrameUtils.alignFrameScreenCenter(frame);
 			frame.setVisible(true);

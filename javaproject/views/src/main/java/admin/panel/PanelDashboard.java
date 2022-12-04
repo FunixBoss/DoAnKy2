@@ -10,6 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+
+import admin.gui.FrameDashboard;
 import admin.item.ItemCard;
 import admin.item.ItemVocabDashboard;
 import dao.impl.CategoryDAOImpl;
@@ -36,6 +38,8 @@ public class PanelDashboard extends JPanel {
 	private JPanel panelData;
 	private VocabularyDAOImpl dao; // data
 	private JLabel lblTop5;
+	
+	public FrameDashboard frameParent;
 
 	private static PanelDashboard myInstance;
 	

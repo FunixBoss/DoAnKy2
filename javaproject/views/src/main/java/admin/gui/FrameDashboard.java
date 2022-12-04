@@ -36,39 +36,50 @@ public class FrameDashboard extends JFrame {
 	class SideBarMenu extends PanelSideBar {
 		protected void do_panelDashboard_mouseClicked(MouseEvent e) {
 			panelDashboard = new PanelDashboard();
+			panelDashboard.frameParent = getOuter();
 			menuClicked(panelDashboard);
 			menuChanged(getPanelDashboard(),getLblDashboard());
 		}
 		protected void do_panelVocab_mouseClicked(MouseEvent e) {
-			panelVocab = new PanelVocab();
+			panelVocab = PanelVocab.getMyInstance();
+			panelVocab.frameParent = getOuter();
 			menuClicked(panelVocab);
 			menuChanged(getPanelVocab(),getLblVocab());
 		}
 		protected void do_panelCategory_mouseClicked(MouseEvent e) {
-			panelCategory = new PanelCategory();
+			panelCategory = PanelCategory.getMyInstance();
+			panelCategory.frameParent = getOuter();
 			menuClicked(panelCategory);
 			menuChanged(getPanelCategory(),getLblCategory());
 		}
 		protected void do_panelMember_mouseClicked(MouseEvent e) {
-			panelMember = new PanelMember();
+			panelMember = PanelMember.getMyInstance();
+			panelMember.frameParent = getOuter();
 			menuClicked(panelMember);	
 			menuChanged(getPanelMember(),getLblMember());
 		}
 		protected void do_panelAdmin_mouseClicked(MouseEvent e) {
-			panelAdmin = new PanelAdmin();
+			panelAdmin = PanelAdmin.getMyInstance();
+			panelAdmin.frameParent = getOuter();
 			menuClicked(panelAdmin);	
 			menuChanged(getPanelAdmin(),getLblAdmin());
 		}
 		protected void do_panelLesson_mouseClicked(MouseEvent e) {
-			panelLesson = new PanelLesson();
+			panelLesson = PanelLesson.getMyInstance();
+			panelLesson.frameParent = getOuter();
 			menuClicked(panelLesson);	
 			menuChanged(getPanelLesson(),getLblLesson());
 		}
 		protected void do_panelFeedback_mouseClicked(MouseEvent e) {
-			panelResponse = new PanelResponse();
+			panelResponse = PanelResponse.getMyInstance();
+			panelResponse.frameParent = getOuter();
 			menuClicked(panelResponse);	
 			menuChanged(getPanelFeedback(),getLblFeedback());
 		}
+	}
+	
+	private FrameDashboard getOuter() {
+		return FrameDashboard.this;
 	}
 
 	public static void main(String[] args) {
@@ -117,27 +128,6 @@ public class FrameDashboard extends JFrame {
 		panelDashboard.loadData();
 		mainContent.add(panelDashboard);
 		
-//		panelMember = new PanelMember();
-//		panelVocab = new PanelVocab();
-//		panelAdmin = new PanelAdmin();
-//		panelAdmin.frameParent = this;
-//		
-//		panelCategory = new PanelCategory();
-//		panelDashboard = new PanelDashboard();
-//		panelLesson = new PanelLesson();
-//		panelResponse = new PanelResponse();
-//		panelDashboard.loadData();
-//		panelDashboard.setBounds(0, 0, 1085, 729);
-	
-//		mainContent.add(panelDashboard);
-//		mainContent.add(panelVocab);
-//		mainContent.add(panelAdmin);
-//		mainContent.add(panelMember);
-//		mainContent.add(panelCategory);
-//		mainContent.add(panelLesson);
-//		mainContent.add(panelResponse);
-//		menuClicked(panelDashboard);
-		
 		// Top Bar
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(217, 0, 1085, 50);
@@ -159,15 +149,7 @@ public class FrameDashboard extends JFrame {
 		mainContent.revalidate();
 	}
 	
-	public void menuClicked(JPanel panel) {
-//		panelMember.setVisible(false);
-//		panelVocab.setVisible(false);
-//		panelAdmin.setVisible(false);
-//		panelCategory.setVisible(false);
-//		panelDashboard.setVisible(false);
-//		panelLesson.setVisible(false);
-//		panelResponse.setVisible(false);
-//		panel.setVisible(true);
+	private void menuClicked(JPanel panel) {
 		callPanel(panel);
 	}
 }

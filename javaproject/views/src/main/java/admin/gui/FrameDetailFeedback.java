@@ -36,18 +36,20 @@ public class FrameDetailFeedback extends JFrame {
 	private JLabel lblNewLabel_1;
 	private JScrollBar scrollBar;
 	private JTextArea textContent;
-	private static FrameDetailFeedback myInstance;
 	private JLabel lblContent;
 
+	private static FrameDetailFeedback myInstance;
 	public static FrameDetailFeedback getMyInstance(Feedback fb) {
 		if (myInstance == null) {
+			myInstance = new FrameDetailFeedback(fb);
+		} else {
+			myInstance.dispose();
 			myInstance = new FrameDetailFeedback(fb);
 		}
 		return myInstance;
 	}
 
 	public FrameDetailFeedback(Feedback fb) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 768, 481);
 		setResizable(false);
 		contentPane = new JPanel();

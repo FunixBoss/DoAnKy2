@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import admin.panel.PanelLesson;
 import admin.update.FrameUpdateLesson;
 import admin.update.FrameUpdateVocab;
 import dao.impl.CategoryDAOImpl;
@@ -35,6 +36,7 @@ import service.VocabularyService;
 public class ItemLesson extends JPanel {
 	private LessonService lsService;
 	private Lesson ls;
+	public PanelLesson panelParent;
 	
 	public ItemLesson(Lesson ls, int y) {
 		this.ls = ls;
@@ -127,8 +129,7 @@ public class ItemLesson extends JPanel {
 		btnEdit = new JButton("Sửa");
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FrameUpdateLesson fr = new FrameUpdateLesson(ls);
-				fr.setVisible(true);
+				btnEditActionPerfromed(e);
 			}
 		});
 		btnEdit.setBounds(60, 25, 58, 30);
@@ -156,6 +157,12 @@ public class ItemLesson extends JPanel {
 		btnDelete.setBounds(60, 25, 60, 30);
 		panel_1_1.add(btnDelete);
 	}
+	
+	protected void btnEditActionPerfromed(ActionEvent e) {
+		FrameUpdateLesson fr = FrameUpdateLesson.getMyInstance(ls);
+		fr.itemLesson = this;
+		fr.setVisible(true);
+	}
 
 	protected void btnDeleteActionPerformed(ActionEvent e) {
 		int option = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn xóa bài học này?", "Xóa từ vựng",
@@ -165,6 +172,12 @@ public class ItemLesson extends JPanel {
 			lsService = new LessonService();
 			if (lsService.delete(ls)) {
 				JOptionPane.showMessageDialog(this, "Xoá bài học thành công!");
+				
+				JPanel panel = this.panelParent.getPanel();
+				panel.removeAll();
+				panel.repaint();
+				panel.revalidate();
+				this.panelParent.loadData();
 			}
 		}
 	}

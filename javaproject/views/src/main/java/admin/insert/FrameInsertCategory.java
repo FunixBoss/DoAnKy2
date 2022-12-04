@@ -23,14 +23,15 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import admin.panel.PanelAdmin;
+import admin.panel.PanelCategory;
 import helper.ErrorMessage;
 import helper.FrameUtils;
 import helper.ImageUtils;
 import service.CategoryService;
 import java.awt.BorderLayout;
 import javax.swing.SwingConstants;
-
-
 
 public class FrameInsertCategory extends JFrame {
 
@@ -40,24 +41,22 @@ public class FrameInsertCategory extends JFrame {
 	private JLabel lblImageShow;
 	private JPanel panelImageShow;
 	private Map<String, String> data;
-	
+
+	public PanelCategory panelParent;
 	private static FrameInsertCategory myInstance;
-	
+
 	public static FrameInsertCategory getMyInstance() {
 		if (myInstance == null) {
+			myInstance = new FrameInsertCategory();
+		} else {
+			myInstance.dispose();
 			myInstance = new FrameInsertCategory();
 		}
 		return myInstance;
 	}
-	
-	public static void main(String[] args) {
-		FrameInsertCategory a = new FrameInsertCategory();
-		a.setVisible(true);
-	}
-	
+
 	public FrameInsertCategory() {
 		initComponent();
-		FrameUtils.alignFrameScreenCenter(this);
 		data = new HashMap<>();
 
 	}
@@ -72,19 +71,19 @@ public class FrameInsertCategory extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JLabel lblTopic = new JLabel("Thêm chủ đề");
 		lblTopic.setBounds(20, 11, 219, 34);
 		lblTopic.setForeground(new Color(37, 57, 111));
 		lblTopic.setFont(new Font("Arial", Font.BOLD, 20));
 		contentPane.add(lblTopic);
-		
+
 		JLabel lblCategory = new JLabel("Chủ đề");
 		lblCategory.setBounds(44, 97, 84, 21);
 		lblCategory.setForeground(Color.BLACK);
 		lblCategory.setFont(new Font("Arial", Font.PLAIN, 14));
 		contentPane.add(lblCategory);
-		
+
 		JButton btnAdd = new JButton("Thêm");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -96,18 +95,18 @@ public class FrameInsertCategory extends JFrame {
 		btnAdd.setForeground(new Color(255, 255, 255));
 		btnAdd.setFont(new Font("Arial", Font.BOLD, 16));
 		contentPane.add(btnAdd);
-		
+
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 0, 412, 62);
 		panel.setBackground(new Color(242, 247, 255));
 		contentPane.add(panel);
-		
+
 		JLabel lblImage = new JLabel("Hình ảnh");
 		lblImage.setBounds(44, 164, 96, 21);
 		lblImage.setForeground(Color.BLACK);
 		lblImage.setFont(new Font("Arial", Font.PLAIN, 14));
 		contentPane.add(lblImage);
-		
+
 		JButton btnImage = new JButton("Tải ảnh lên");
 		btnImage.setBounds(192, 156, 175, 37);
 		btnImage.addActionListener(new ActionListener() {
@@ -115,7 +114,6 @@ public class FrameInsertCategory extends JFrame {
 				try {
 					do_btnImage_actionPerformed(e);
 				} catch (URISyntaxException | IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -124,54 +122,57 @@ public class FrameInsertCategory extends JFrame {
 		btnImage.setFont(new Font("Arial", Font.BOLD, 14));
 		btnImage.setBackground(new Color(242, 247, 255));
 		contentPane.add(btnImage);
-		
+
 		textCategory = new JTextField();
 		textCategory.setFont(new Font("Arial", Font.PLAIN, 14));
 		textCategory.setBounds(192, 90, 175, 37);
 		contentPane.add(textCategory);
 		textCategory.setColumns(10);
-		
+
 		panelImageShow = new JPanel();
 		panelImageShow.setBounds(10, 204, 392, 171);
 		contentPane.add(panelImageShow);
 		panelImageShow.setLayout(new BorderLayout(0, 0));
-		
+
 		lblImageShow = new JLabel("");
 		lblImageShow.setHorizontalAlignment(SwingConstants.CENTER);
 		panelImageShow.add(lblImageShow);
 		lblImageShow.setForeground(new Color(0, 0, 0));
 		lblImageShow.setBackground(new Color(192, 192, 192));
+		FrameUtils.alignFrameScreenCenter(this);
 	}
-	
+
 	protected void do_btnImage_actionPerformed(ActionEvent e) throws URISyntaxException, IOException {
 		JFileChooser chooser = new JFileChooser("desktop://");
 		chooser.setDialogTitle("Hình ảnh");
-		chooser.setFileFilter(
-					new FileNameExtensionFilter("image(jpg, png, gif)","jpg","png","gif" )
-				);
+		chooser.setFileFilter(new FileNameExtensionFilter("image(jpg, png, gif)", "jpg", "png", "gif"));
 		chooser.setAcceptAllFileFilterUsed(false);
-		int result = chooser.showOpenDialog( null);
+		int result = chooser.showOpenDialog(null);
 		File rawFile = null;
-		
-		if(result == chooser.APPROVE_OPTION) {
+
+		if (result == chooser.APPROVE_OPTION) {
 			rawFile = chooser.getSelectedFile();
 			final int ROW_HEIGHT = 171;
-			
+
 			lblImageShow.setIcon(ImageUtils.getImageByFile(rawFile.getAbsoluteFile(), ROW_HEIGHT));
 			data.put("image", rawFile.toPath().toString());
 		}
 	}
-	
+
 	protected void btnAddActionPerformed(ActionEvent e) {
 		cateService = new CategoryService();
 		data.put("category", textCategory.getText());
-		
-		if(cateService.add(data)) {
+
+		if (cateService.add(data)) {
 			JOptionPane.showMessageDialog(this, "Thêm chủ đề thành công");
 			dispose();
+
+			PanelCategory newPanelParent = new PanelCategory();
+			newPanelParent.frameParent = this.panelParent.frameParent;
+			this.panelParent.frameParent.callPanel(newPanelParent);
 		} else {
 			JOptionPane.showMessageDialog(this, ErrorMessage.ERROR_MESSAGES);
 		}
-		
+
 	}
 }

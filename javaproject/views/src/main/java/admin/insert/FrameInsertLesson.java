@@ -34,6 +34,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import admin.item.ItemLesson;
 import admin.item.ItemMeaning;
 import admin.item.ItemQuestion;
+import admin.panel.PanelCategory;
+import admin.panel.PanelLesson;
 import dao.impl.CategoryDAOImpl;
 import dao.impl.WordTypeDAOImpl;
 import helper.ErrorMessage;
@@ -57,7 +59,7 @@ public class FrameInsertLesson extends JFrame {
 	private JLabel lblShowImage;
 	private LessonService lsSerivce;
 	private JButton btnPlus;
-	private JPanel panelParent;
+	private JPanel panelParent2;
 	private JPanel panelChild;
 
 	private List<ItemQuestion> qsItems;
@@ -68,19 +70,19 @@ public class FrameInsertLesson extends JFrame {
 	private int CURRENT_PANELS_MN_EX_HEIGHT = 210;
 	private int HEIGHT_ADDED = 0;
 
+	public PanelLesson panelParent;
 	private static FrameInsertLesson myInstance;
 
 	public static FrameInsertLesson getMyInstance() {
 		if (myInstance == null) {
 			myInstance = new FrameInsertLesson();
+		} else {
+			myInstance.dispose();
+			myInstance = new FrameInsertLesson();
 		}
 		return myInstance;
 	}
 
-	public static void main(String[] args) {
-		FrameInsertLesson a = new FrameInsertLesson();
-		a.setVisible(true);
-	}
 	public FrameInsertLesson() {
 		initComponent();
 		questionAndAnswers = new ArrayList<>();
@@ -98,19 +100,19 @@ public class FrameInsertLesson extends JFrame {
 		setContentPane(contentPane);
 
 		
-		panelParent = new JPanel();
-		panelParent.setBounds(0, 56, 989, 637);
-		panelParent.setLayout(new BorderLayout(0, 0));
-		getContentPane().add(panelParent);
+		panelParent2 = new JPanel();
+		panelParent2.setBounds(0, 56, 989, 637);
+		panelParent2.setLayout(new BorderLayout(0, 0));
+		getContentPane().add(panelParent2);
 		
 		panelChild = new JPanel();
 		panelChild.setBackground(new Color(255, 255, 255));
 		panelChild.setBounds(0, 56, 989, 637);
 		panelChild.setLayout(null);
-		panelParent.add(panelChild);
+		panelParent2.add(panelChild);
 		
 		JScrollPane jspEx1 = new JScrollPane(panelChild, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		panelParent.add(jspEx1, BorderLayout.CENTER);
+		panelParent2.add(jspEx1, BorderLayout.CENTER);
 		
 		lblNewLabel = new JLabel("Thêm bài học");
 		lblNewLabel.setBounds(20, 11, 219, 34);
@@ -240,6 +242,10 @@ public class FrameInsertLesson extends JFrame {
 			if (lsSerivce.add(data)) {
 				JOptionPane.showMessageDialog(this, "Thêm bài học thành công");
 				dispose();
+				
+				PanelLesson newPanelParent = new PanelLesson();
+				newPanelParent.frameParent = this.panelParent.frameParent;
+				this.panelParent.frameParent.callPanel(newPanelParent);
 			} else {
 				JOptionPane.showMessageDialog(this, ErrorMessage.ERROR_MESSAGES);
 			}

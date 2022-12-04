@@ -24,6 +24,12 @@ public class CategoryService {
 	public CategoryService() {
 		dao = new CategoryDAOImpl();
 	}
+	
+	public boolean deleteCateFromVocab(Vocabulary vocabulary) {
+		vocabulary.setCategoryId(null);
+		new VocabularyDAOImpl().update(vocabulary);
+		return true;
+	}
 
 	public boolean add(Map<String, String> data) {
 		ErrorMessage.ERROR_MESSAGES = null;
@@ -48,7 +54,7 @@ public class CategoryService {
 				return false;
 			}
 		}
-		dao.insert(new Category(name, name + ".png"));
+		dao.insert(new Category(name, StringUtils.fileNameFormat(name) + ".png"));
 		return true;
 	}
 
@@ -84,7 +90,7 @@ public class CategoryService {
 //					them file moi
 					Path newDir = Paths.get(ImageUtils.pathToResource + "\\category\\" + StringUtils.fileNameFormat(name) + ".png");
 					Files.copy(Paths.get(imageDir), newDir, StandardCopyOption.REPLACE_EXISTING);
-					imageName = name + ".png";
+					imageName = StringUtils.fileNameFormat(name) + ".png";
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -94,7 +100,7 @@ public class CategoryService {
 				File oldImageFile = new File(ImageUtils.pathToResource + "\\category\\" + originalCate.getName() + ".png");
 				File newImageFile = new File(ImageUtils.pathToResource + "\\category\\" + StringUtils.fileNameFormat(name) + ".png");
 				oldImageFile.renameTo(newImageFile);
-				imageName = name + ".png";
+				imageName = StringUtils.fileNameFormat(name) + ".png";
 			}
 		} else {
 //			k thay đổi tên
@@ -102,7 +108,7 @@ public class CategoryService {
 				try {
 					Path newDir = Paths.get(ImageUtils.pathToResource + "\\category\\" + StringUtils.fileNameFormat(name) + ".png");
 					Files.copy(Paths.get(imageDir), newDir, StandardCopyOption.REPLACE_EXISTING);
-					imageName = name + ".png";
+					imageName = StringUtils.fileNameFormat(name) + ".png";
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -110,7 +116,7 @@ public class CategoryService {
 			}
 		}
 		
-		dao.update(new Category(cateId, formatName(name), imageName));
+		dao.update(new Category(cateId, name, imageName));
 		return true;
 	}
 

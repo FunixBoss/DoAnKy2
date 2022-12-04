@@ -102,11 +102,22 @@ CREATE PROC selCateByPages
 AS
 BEGIN
 	SELECT * FROM CATEGORY
-	ORDER BY ID
+	ORDER BY ID DESC
 	OFFSET (@pageNumber - 1) * @RowsOfPage ROWS
 	FETCH NEXT @RowsOfPage ROWS ONLY
 END
 GO 
+
+DROP PROC IF EXISTS searchAllCate
+GO
+CREATE PROC searchAllCate
+@data NVARCHAR(200)
+AS 
+BEGIN
+	SELECT * FROM CATEGORY
+	WHERE [NAME] like @data+'%' OR [ID] like @data+'%'
+END
+GO
 
 --- EXEC selCateByPages 2, 10
 

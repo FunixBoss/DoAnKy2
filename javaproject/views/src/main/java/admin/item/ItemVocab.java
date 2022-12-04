@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
 import javax.swing.SwingConstants;
+
+import admin.panel.PanelVocab;
 import admin.update.FrameUpdateVocab;
 import dao.impl.CategoryDAOImpl;
 import dao.impl.VocabularyDAOImpl;
@@ -26,12 +28,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class ItemVocab extends JPanel {
-	private VocabularyService vocabService;
 
+	private Vocabulary vocab;
+	private VocabularyService vocabService;
+	public	PanelVocab panelParent;
 	
 
 	public ItemVocab(Vocabulary vocab, int y) {
-		initComponent(vocab, y);
+		this.vocab = vocab;
+		
+		initComponent(y);
 		lblId.setText(vocab.getId().toString());
 		lblWord.setText(StringUtils.toCapitalize(vocab.getWord()));
 		lblImage.setIcon(ImageUtils.getImageByURL("vocabulary", vocab.getImage(), 78));
@@ -50,7 +56,7 @@ public class ItemVocab extends JPanel {
 		lblWordType.setText(new WordTypeDAOImpl().get(vocab.getWordTypeId()));
 	}
 
-	private void initComponent(Vocabulary vocab, int y) {
+	private void initComponent(int y) {
 		setLayout(null);
 		setBounds(0, y, 980, 80);
 
@@ -140,8 +146,7 @@ public class ItemVocab extends JPanel {
 		btnEdit = new JButton("Sửa");
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FrameUpdateVocab fr = new FrameUpdateVocab(vocab);
-				fr.setVisible(true);
+				btnEditActionPerformed(e);
 			}
 		});
 		btnEdit.setBounds(32, 25, 58, 30);
@@ -159,7 +164,7 @@ public class ItemVocab extends JPanel {
 		btnDelete = new JButton("Xóa");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnDeleteActionPerformed(e, vocab);
+				btnDeleteActionPerformed(e);
 			}
 		});
 		btnDelete.setForeground(Color.WHITE);
@@ -169,14 +174,26 @@ public class ItemVocab extends JPanel {
 		btnDelete.setBounds(32, 25, 60, 30);
 		panel_1_1.add(btnDelete);
 	}
+	
+	protected void btnEditActionPerformed(ActionEvent e) {
+		FrameUpdateVocab fr = new FrameUpdateVocab(vocab);
+		fr.itemVocab = this;
+		fr.setVisible(true);
+	}
 
-	protected void btnDeleteActionPerformed(ActionEvent e, Vocabulary vocab) {
+	protected void btnDeleteActionPerformed(ActionEvent e) {
 		int option = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn xóa từ vựng này?", "Xóa từ vựng",
 				JOptionPane.YES_NO_OPTION);
 		if (option == JOptionPane.YES_OPTION) {
 			vocabService = new VocabularyService();
 			if (vocabService.delete(vocab)) {
 				JOptionPane.showMessageDialog(this, "Xoá từ vựng thành công!");
+				
+				JPanel panel = this.panelParent.getPanel();
+				panel.removeAll();
+				panel.repaint();
+				panel.revalidate();
+				this.panelParent.loadData();;
 			}
 		}
 	}

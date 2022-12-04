@@ -9,6 +9,10 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.List;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -19,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import admin.gui.FrameDashboard;
 import admin.insert.FrameInsertCategory;
 import admin.insert.FrameInsertLesson;
 import admin.insert.FrameInsertVocab;
@@ -47,8 +52,10 @@ public class PanelLesson extends JPanel {
 	private Integer totalPage;
 	private JTextField txtPage;
 	private JComboBox cbbNumberOfRows;
+	public FrameDashboard frameParent;
 	
 	private static PanelLesson myInstance;
+	private JTextField txtSearch;
 	
 	public static PanelLesson getMyInstance() {
 		if (myInstance == null) {
@@ -64,6 +71,10 @@ public class PanelLesson extends JPanel {
 		rowsOfPage = dao.countNumberOfLesson() > 10 ? 10 : dao.countNumberOfLesson();
 		
 		loadData();
+	}
+	
+	public JPanel getPanel() {
+		return panel;
 	}
 
 
@@ -192,6 +203,17 @@ public class PanelLesson extends JPanel {
 		});
 		add(txtPage);
 		
+		txtSearch = new JTextField();
+		txtSearch.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		txtSearch.setColumns(10);
+		txtSearch.setBounds(41, 61, 255, 36);
+		txtSearch.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				searchLesson();
+			}
+		});
+		add(txtSearch);
 	}
 
 	private void printTitleComponent(JPanel panel) {
@@ -269,7 +291,7 @@ public class PanelLesson extends JPanel {
 		panel_1_1.add(lblXa);
 	}
 
-	private void loadData() {
+	public void loadData() {
 		totalOfRows = dao.countNumberOfLesson();
 		totalPage = (int) Math.ceil((double)totalOfRows / rowsOfPage);
 		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
@@ -289,13 +311,50 @@ public class PanelLesson extends JPanel {
 		scrollPane.setViewportView(panel);
 		for(Lesson ls : dao.selectByPages(pageNumber, rowsOfPage)){
 			ItemLesson lsItem = new ItemLesson(ls, y);
+			lsItem.panelParent = this;
 			panel.add(lsItem);
 			y = y + 84;
 		}	
 	}
 	
+	public void loadData(List<Lesson> lessons) {
+		totalOfRows = dao.countNumberOfLesson();
+		totalPage = (int) Math.ceil((double)totalOfRows / rowsOfPage);
+		lblStatusPage.setText("Trang " + pageNumber + " / " + totalPage);
+		lblRowCount.setText("Số dòng: " + totalOfRows);
+		
+		
+		final int ITEM_HEIGHT = 88;
+		Integer tableHeigth = Math.min(ITEM_HEIGHT * rowsOfPage, ITEM_HEIGHT * totalOfRows);
+		Dimension dim = new Dimension(975, tableHeigth + 20);
+		panel.setPreferredSize(dim);
+		scrollPane.setViewportView(panel);
+		
+		panel.removeAll();
+		printTitleComponent(panel);
+		
+		int y = 40;
+		scrollPane.setViewportView(panel);
+		for(Lesson ls : lessons){
+			ItemLesson lsItem = new ItemLesson(ls, y);
+			lsItem.panelParent = this;
+			panel.add(lsItem);
+			y = y + 84;
+		}	
+	}
+	public void searchLesson() {
+		if(!txtSearch.getText().equals("")) {
+			List<Lesson> lessons = dao.searchAll(txtSearch.getText());
+			panel.repaint();
+			panel.revalidate();
+			loadData(lessons);
+		} else {
+			loadData();
+		}
+	}
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
 		FrameInsertLesson frame = FrameInsertLesson.getMyInstance();
+		frame.panelParent = this;
 		if(!frame.isVisible()) {
 			frame.setVisible(true);
 		}

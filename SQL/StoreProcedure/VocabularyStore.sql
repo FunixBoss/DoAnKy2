@@ -112,7 +112,7 @@ CREATE PROC selVocabByPages
 AS
 BEGIN
 	SELECT * FROM VOCABULARY
-	ORDER BY ID
+	ORDER BY ID DESC
 	OFFSET (@pageNumber - 1) * @RowsOfPage ROWS
 	FETCH NEXT @RowsOfPage ROWS ONLY
 END
@@ -120,14 +120,14 @@ GO
 
 --- EXEC selVocabByPages 2, 10
 
-DROP PROC IF EXISTS searchAll
+DROP PROC IF EXISTS searchAllVocab
 GO
-CREATE PROC searchAll
+CREATE PROC searchAllVocab
 @data NVARCHAR(200)
 AS 
 BEGIN
 	SELECT * FROM VOCABULARY
-	WHERE WORD like @data+'%'
+	WHERE WORD like @data+'%'  OR [ID] like @data+'%'
 END
 GO
 

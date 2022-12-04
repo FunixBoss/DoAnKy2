@@ -215,4 +215,26 @@ public class CategoryDAOImpl extends AbstractDAO<Category> implements CategoryDA
 		return id;		
 	}
 
+	@Override
+	public List<Category> searchAll(String str) {
+		List<Category> list = new ArrayList<>();
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call searchAllCate(?)}");
+		){
+			cs.setString(1,str );
+			var rs = cs.executeQuery();
+			while(rs.next()) {
+				Integer id = rs.getInt(1);
+				String name = rs.getString(2);
+				String imageIcon = rs.getString(3);
+				list.add(new Category(id, name, imageIcon));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.err.println("search all cate failed!");
+		}
+		return list;
+	}
+
 }
