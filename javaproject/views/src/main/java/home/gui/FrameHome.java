@@ -38,9 +38,7 @@ public class FrameHome extends JFrame {
 	private JPanel navBar;
 	private PanelProfile panelProfile;
 	private PanelLesson panelLesson;
-	/**
-	 * Launch the application.
-	 */
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
 			try {
@@ -84,9 +82,7 @@ public class FrameHome extends JFrame {
 			fr.setVisible(true);
 		}
 	}
-	/**
-	 * Create the frame.
-	 */
+	
 	public FrameHome() {
 		initComponent();
 	}
