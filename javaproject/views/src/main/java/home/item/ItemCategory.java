@@ -5,13 +5,13 @@ import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
-import admin.item.ItemVocab;
 import entity.Category;
 import helper.ImageUtils;
 import helper.StringUtils;
 import home.gui.FrameCategory;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -30,14 +30,14 @@ public class ItemCategory extends JPanel {
 		initComponent(cate);
 		
 		lblCategory.setText(StringUtils.toCapitalize(cate.getName() == null ? "" : cate.getName()) );
-		final int ROW_HEIGHT = 50;
+		final int ROW_HEIGHT = 100;
 		lblImage.setIcon(ImageUtils.getImageByURL("category", cate.getImageIcon(), ROW_HEIGHT));
 		
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
-					FrameCategory fr = new FrameCategory(cate.getId());
+					FrameCategory fr = FrameCategory.getMyInstance(cate);
 					fr.setVisible(true);
 				} catch (Exception e2) {
 				}
@@ -49,16 +49,21 @@ public class ItemCategory extends JPanel {
 	private void initComponent(Category cate) {
 		setBackground(new Color(242, 247, 255));
 		setLayout(null);
-		setBounds(1, 1, 277, 102);
+		setBounds(0, 0, 200, 200);
+		setBorder(BorderFactory.createLineBorder(new Color(37, 57, 111), 2));
 		
 		lblCategory = new JLabel();
+		lblCategory.setOpaque(true);
 		lblCategory.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCategory.setFont(new Font("Arial", Font.BOLD, 14));
-		lblCategory.setBounds(76, 0, 201, 102);
+		lblCategory.setFont(new Font("Arial", Font.BOLD, 16));
+		lblCategory.setBounds(2, 148, 196, 50);
+		lblCategory.setBackground(new Color(37, 57, 111));
+		lblCategory.setForeground(new Color(255, 255, 255));
 		add(lblCategory);
 		
 		lblImage = new JLabel();
-		lblImage.setBounds(40, 24, 72, 62);
+		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
+		lblImage.setBounds(2, 24, 196, 100);
 		add(lblImage);
 	}
 }

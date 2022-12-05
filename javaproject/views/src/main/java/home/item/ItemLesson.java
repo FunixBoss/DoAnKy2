@@ -2,23 +2,49 @@ package home.item;
 
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.LayoutManager;
+import java.awt.RenderingHints;
+
 import javax.swing.SwingConstants;
+
+import dao.impl.TheoryDAOImpl;
+import dao.impl.UserDAOImpl;
+import dao.impl.UserLessonResultDAOImpl;
+import dao.impl.VocabularyDAOImpl;
+import entity.Lesson;
+import entity.Theory;
+import entity.UserLessonResult;
+import entity.Vocabulary;import helper.ImageUtils;
+import helper.StringUtils;
+import home.panel.PanelLesson;
+import service.Authorization;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.awt.BorderLayout;
 
 public class ItemLesson extends JPanel {
+	private JPanel panelTitle;
 	private JPanel panel;
-	private JPanel panelPoint;
-	private JLabel lbPoint;
-	private JLabel lblLessonTitle;
-	private JLabel lblVocalb;
-	private JPanel panel_2;
 	private JLabel lblImage;
-	
-	public ItemLesson() {
+	private ItemCard cardContent;
+
+	private Lesson ls;
+	public PanelLesson panelLs;
+
+	public ItemLesson(Lesson ls) {
+		this.ls = ls;
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -26,53 +52,63 @@ public class ItemLesson extends JPanel {
 			}
 		});
 		initComponent();
-		
 	}
 
 	private void initComponent() {
 		setLayout(null);
-		setBackground(new Color(255, 255, 255));
+		setBackground(new Color(242, 247, 255));
 		setBounds(20, 20, 264, 292);
+		setBorder(BorderFactory.createLineBorder(new Color(37, 57, 111), 2));
+
+		setOpaque(false);
+		panelTitle = new JPanel();
+		panelTitle.setBounds(2, 156, 260, 134);
+		panelTitle.setBackground(new Color(242, 247, 255));
+		add(panelTitle);
+		panelTitle.setLayout(new BorderLayout(0, 0));
+		cardContent = new ItemCard();
+		cardContent.setColor1(new Color(37, 57, 111));
+		cardContent.setColor2(new Color(116, 215, 252));
+		
+		TheoryDAOImpl thDAO = new TheoryDAOImpl();
+		VocabularyDAOImpl vocabDAO = new VocabularyDAOImpl();
+		List<Theory> ths = thDAO.selAllTheoriesByLessonId(ls.getId());
+		List<Vocabulary> vocabs = new ArrayList<>();
+		ths.forEach(th -> vocabs.add(vocabDAO.select(th.getVocabId())));
+		
+		String strs = vocabs.stream().map(v -> StringUtils.toCapitalize(v.getWord()))
+						.collect(Collectors.joining(" ,"));
+		
+		UserDAOImpl userDAO = new UserDAOImpl();
+		UserLessonResult ulr = new UserLessonResultDAOImpl().find(
+							userDAO.selectIdByUserEmail(Authorization.email),
+							ls.getId());
+		
+		int point = 0;
+		if(ulr != null) {
+			point  = ulr.getPoint();
+		}
+		cardContent.setData(ls.getTitle(), strs, String.valueOf(point));
+		panelTitle.add(cardContent);
+
 		panel = new JPanel();
-		panel.setBounds(0, 131, 264, 161);
-		panel.setBackground(new Color(242, 247, 255));
+		panel.setBackground(new Color(255, 255, 255));
+		panel.setBounds(2, 2, 260, 288);
+
 		add(panel);
 		panel.setLayout(null);
-		
-		panelPoint = new JPanel();
-		panelPoint.setBounds(125, 117, 129, 34);
-		panel.add(panelPoint);
-		panelPoint.setBackground(new Color(255, 255, 255));
-		panelPoint.setLayout(null);
-		
-		lbPoint = new JLabel("Points");
-		lbPoint.setHorizontalAlignment(SwingConstants.CENTER);
-		lbPoint.setFont(new Font("Arial", Font.PLAIN, 12));
-		lbPoint.setBounds(0, 0, 129, 34);
-		panelPoint.add(lbPoint);
-		
-		lblLessonTitle = new JLabel("Title Lesson");
-		lblLessonTitle.setFont(new Font("Arial", Font.BOLD, 16));
-		lblLessonTitle.setBounds(20, 10, 115, 26);
-		panel.add(lblLessonTitle);
-		
-		lblVocalb = new JLabel("Num of Vocab");
-		lblVocalb.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblVocalb.setBounds(20, 40, 92, 13);
-		panel.add(lblVocalb);
-		
-		panel_2 = new JPanel();
-		panel_2.setBounds(0, 0, 264, 292);
-		add(panel_2);
-		panel_2.setLayout(null);
-		
-		lblImage = new JLabel("Image");
+
+		lblImage = new JLabel();
+		lblImage.setBounds(2, 29, 260, 100);
 		lblImage.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblImage.setBackground(new Color(124, 141, 181));
 		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
-		lblImage.setBounds(73, 23, 119, 88);
-		panel_2.add(lblImage);
+		lblImage.setIcon(ImageUtils.getImageByURL("lesson", ls.getImage(), 100));
+		panel.add(lblImage);
+
 	}
+
 	protected void do_this_mouseClicked(MouseEvent e) {
 	}
+
 }

@@ -6,20 +6,50 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import dao.impl.CategoryDAOImpl;
 import entity.Category;
+import home.gui.FrameHome;
 import home.item.ItemCategory;
 import java.awt.GridLayout;
+import java.util.List;
 
 public class PanelCategory extends JPanel {
 	public JPanel panelMain;
 	public JScrollPane scrollPane;
 	public JPanel panel;
 	public JLabel lblNewLabel;
+	public FrameHome frameParent;
 	
+	private static PanelCategory myInstance;
+
+	public static PanelCategory getMyInstance() {
+		if (myInstance == null) {
+			myInstance = new PanelCategory();
+		}
+		return myInstance;
+	}
 	public PanelCategory() {
 		initComponent();
-		for (Category cate : new CategoryDAOImpl().selectAll()) { 
-			ItemCategory item = new ItemCategory(cate);
-			panelMain.add(item);
+		int currentX = 10;
+		int currentY = 0;
+		int xGap = 10;
+		int yGap = 10;
+		
+		Category cate;
+		ItemCategory item = null;
+		List<Category> cates = new CategoryDAOImpl().selectAll();
+		int k = 0;
+		for (int i = 0; i < 5 ; i++) {
+			for(int j = 0; j < 6; j++) {
+				if(k == cates.size() - 1) break;
+				cate = cates.get(k++);
+				
+				item = new ItemCategory(cate);
+				item.setLocation(currentX, currentY);
+				panelMain.add(item);
+				
+				currentX += item.getWidth() + xGap;
+			}
+			currentY += item.getHeight() + yGap; 
+			currentX = 10;
 		}
 	}
 	private void initComponent() {
@@ -42,7 +72,7 @@ public class PanelCategory extends JPanel {
 		panelMain = new JPanel();
 		panelMain.setBackground(new Color(255, 255, 255));
 		scrollPane.setViewportView(panelMain);
-		panelMain.setLayout(new GridLayout(4, 2, 2, 2));
+		panelMain.setLayout(null);
 	}
 
 }

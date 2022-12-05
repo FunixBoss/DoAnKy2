@@ -218,5 +218,25 @@ public class LessonDAOImpl extends AbstractDAO<Lesson> implements LessonDAO {
 		}
 		return list;
 	}
+	
+	public List<Lesson> selectTop3() {
+		List<Lesson> list = new ArrayList<>();
+		try (
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call selTop3Lesson}");
+			var rs = cs.executeQuery();
+		) {
+			while (rs.next()) {
+				Integer lsId = rs.getInt(1);
+				String title = rs.getString(2);
+				String image = rs.getString(3);
+				list.add(new Lesson(lsId, title, image));
+			}
+		} catch (Exception e) {
+			// e.printStackTrace();
+			System.err.println("Select top 3 Lessons failed!");
+		}
+		return list;
+	}
 
 }

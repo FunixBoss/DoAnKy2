@@ -23,55 +23,48 @@ public class ItemVocab extends JPanel {
 
 	private JLabel lblWord;
 	private WordTypeDAOImpl typeDao;
-
-	public ItemVocab(Vocabulary vocab, int y) {
-		initComponent(vocab,y);
+	
+	private Vocabulary vocab;
+	public PanelDetailVocab panelDetailVocab;
+	
+	public ItemVocab(Vocabulary vocab) {
+		this.vocab = vocab;
+		
+		initComponent();
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				do_this_mouseClicked(e,vocab);
+				do_this_mouseClicked(e);
 			}
 		});
 	}
 	
-	public ItemVocab(Vocabulary vocab, int y,JPanel panelDetailVocab) {
-		initComponent(vocab,y);
-		addMouseListener(new MouseAdapter() {
-			private PanelDetailVocab q;
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				panelDetailVocab.removeAll();
-				Integer userId = new UserDAOImpl().selectIdByUserEmail(Authorization.email); 
-				History his = new History(vocab.getId(), userId);
-				HistoryDAOImpl hdao= new HistoryDAOImpl();
-				if(hdao.checkExistHistory(userId, vocab.getId()) == null){
-					hdao.insert(his);
-				}
-				q = new PanelDetailVocab(vocab);
-				q.setBounds(25, 65, 966, 615);
-				panelDetailVocab.add(q);
-				panelDetailVocab.revalidate();
-				panelDetailVocab.repaint();
-			}
-		});
-	}
-
-	private void initComponent(Vocabulary vocab,int y) {		
-		setBackground(new Color(128, 128, 128));
+	private void initComponent() {		
+		setBackground(Color.WHITE);
 		setLayout(null);
-		setBounds(0,y, 300, 29);
+		setBounds(0, 0, 332, 30);
 		typeDao = new WordTypeDAOImpl();
 		lblWord = new JLabel("");
+		lblWord.setForeground(new Color(37, 57, 111));
 		lblWord.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblWord.setBounds(7, 5, 228, 18);
+		lblWord.setBounds(10, 0, 322, 28);
+		StringBuilder str = new StringBuilder();
+		str.append(StringUtils.toCapitalize(vocab.getWord()) + " (");
+		str.append(StringUtils.toCapitalize(typeDao.get(vocab.getWordTypeId()).toLowerCase()) + ") ");
+		lblWord.setText(str.toString());
 		add(lblWord);
-		lblWord.setText(StringUtils.toCapitalize(vocab.getWord()) + " (" + typeDao.get(vocab.getWordTypeId()).toLowerCase() + ") ");
 	}
 	
-	
-
-	protected void do_this_mouseClicked(MouseEvent e,Vocabulary vocab) {
-		System.out.println(vocab);
+	protected void do_this_mouseClicked(MouseEvent e) {
+		Integer userId = new UserDAOImpl().selectIdByUserEmail(Authorization.email); 
+		History his = new History(vocab.getId(), userId);
+		HistoryDAOImpl hdao= new HistoryDAOImpl();
+		
+		if(hdao.checkExistHistory(userId, vocab.getId()) == null){
+			hdao.insert(his);
+			System.out.println("inserted");
+		}
+		
+		panelDetailVocab = PanelDetailVocab.getMyInstance(vocab);
 	}
 }

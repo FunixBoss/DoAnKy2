@@ -5,55 +5,66 @@ import dao.impl.WordTypeDAOImpl;
 import entity.Vocabulary;
 import helper.ImageUtils;
 import helper.StringUtils;
+import home.gui.FrameCategory;
 import home.gui.FrameDetailVocab;
+import service.CategoryService;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.SwingConstants;
+
 
 public class ItemCategoryVocab extends JPanel {
 
 	private JLabel lblWord;
 	private WordTypeDAOImpl typeDao;
+	private CategoryService cateService;
+	private Vocabulary vocab;
+	public FrameCategory frameCate;
 
-	public ItemCategoryVocab(Vocabulary vocab, int y, int x) {
-		initComponent(vocab, y, x);
-		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				FrameDetailVocab fr = new FrameDetailVocab(vocab);
-				fr.setVisible(true);
-			}
-		});
+	public ItemCategoryVocab(Vocabulary vocab) {
+		initComponent(vocab);
 	}
 
-	private void initComponent(Vocabulary vocab, int y, int x) {		
+	private void initComponent(Vocabulary vocab) {	
+		this.vocab = vocab;
+		setBorder(BorderFactory.createLineBorder(new Color(37, 57, 111), 2));
 		setBackground(new Color(242, 247, 255));
 		setLayout(null);
-		setBounds(x,y, 300, 120);
+		setBounds(0, 0, 200, 200);
 		typeDao = new WordTypeDAOImpl();
-		
+
 		JLabel lblImage = new JLabel("");
 		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
 		lblImage.setBackground(new Color(0, 0, 0));
-		lblImage.setBounds(0, 0, 119, 119);
+		lblImage.setBounds(2, 20, 196, 100);
 		add(lblImage);
-		lblImage.setIcon(ImageUtils.getImageByURL("vocabulary", vocab.getImage(),80));
+		lblImage.setIcon(ImageUtils.getImageByURL("vocabulary", vocab.getImage(), 100));
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(37, 57, 111));
-		panel.setBounds(120, 0, 180, 119);
+		panel.setBounds(2, 140, 196, 58);
 		add(panel);
 		panel.setLayout(null);
 		lblWord = new JLabel("");
 		lblWord.setHorizontalAlignment(SwingConstants.CENTER);
-		lblWord.setBounds(0, 0, 180, 119);
+		lblWord.setBounds(0, 0, 200, 58);
 		panel.add(lblWord);
 		lblWord.setForeground(new Color(255, 255, 255));
 		lblWord.setFont(new Font("Arial", Font.PLAIN, 18));
 		lblWord.setText(StringUtils.toCapitalize(vocab.getWord()) + " (" + typeDao.get(vocab.getWordTypeId()).toLowerCase() + ") ");
+		
 	}
+	
+
 
 }

@@ -237,4 +237,25 @@ public class CategoryDAOImpl extends AbstractDAO<Category> implements CategoryDA
 		return list;
 	}
 
+	@Override
+	public List<Category> selTop5() {
+		List<Category> list = new ArrayList<>();
+		try(
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call selTop5Cate}");
+			var rs = cs.executeQuery();
+		){
+			while(rs.next()) {
+				Integer id = rs.getInt(1);
+				String name = rs.getString(2);
+				String imageIcon = rs.getString(3);
+				list.add(new Category(id, name, imageIcon));
+			}
+		} catch(Exception e) {
+//			e.printStackTrace();
+			System.out.println("Select 5 Categories failed");
+		}
+		return list;
+	}
+
 }

@@ -20,6 +20,7 @@ import entity.Vocabulary;
 import helper.IconImage;
 import helper.ImageUtils;
 import helper.StringUtils;
+import home.gui.FrameCategory;
 import jaco.mp3.player.MP3Player;
 import service.Authorization;
 import java.awt.Color;
@@ -53,36 +54,46 @@ public class PanelDetailVocab extends JPanel {
 	private JLabel lblWordType;
 	private JTextArea textArea;
 	private JLabel lblCategory;
-	private BookmarkDAO bmDAO;
-	private UserDAO userDAO;
-
+	private JScrollPane scroll;
 	private JPanel panel;
 
-	private JScrollPane scroll;
+	private Vocabulary vocab;
+
+	private BookmarkDAO bmDAO;
+	private UserDAO userDAO;
+	private PanelVocab panelVocab;
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_3;
-
+	
+	private static PanelDetailVocab myInstance;
+	
+	public static PanelDetailVocab getMyInstance(Vocabulary vocab) {
+		if (myInstance == null) {
+			myInstance = new PanelDetailVocab(vocab);
+		} else {
+			myInstance.setData(vocab);
+		}
+		return myInstance;
+	}
 	public PanelDetailVocab(Vocabulary vocab) {
-		
+		this.vocab = vocab;
 		bmDAO = new BookmarkDAOImpl();
 		userDAO = new UserDAOImpl();
-		initComponent(vocab);
+		initComponent();
+		
+		bookmarkFeature();
+		
+		setData(vocab);
+	}
+	
+	public void setData(Vocabulary vocab) {
 		lblWord.setText(StringUtils.toCapitalize(vocab.getWord()));
 		lblWordType.setText(new WordTypeDAOImpl().get(vocab.getWordTypeId()));
-		
-	
-		
 		
 		Category cate = new CategoryDAOImpl().select(vocab.getCategoryId());
 		if (cate != null) {
 			lblCategory.setText("Thể loại: " + cate.getName());
 		}
-
-		bookmarkFeature(vocab);
-		loadData(vocab);
-	}
-
-	private void loadData(Vocabulary vocab) {
 		List<Meaning> meanings = new VocabularyDAOImpl().selectAllMeaningByVocabId(vocab.getId());
 		StringBuffer txt = new StringBuffer();
 		for (Meaning mn : meanings) {
@@ -110,7 +121,7 @@ public class PanelDetailVocab extends JPanel {
 		textArea.setText(txt.toString());
 	}
 
-	private void bookmarkFeature(Vocabulary vocab) {
+	private void bookmarkFeature() {
 		IconImage icon = new IconImage();
 		// set Icon
 		try {
@@ -151,13 +162,11 @@ public class PanelDetailVocab extends JPanel {
 		});
 	}
 
-	private void initComponent(Vocabulary vocab) {
+	private void initComponent() {
 		setBounds(0, 0, 892, 609);
 		setBackground(new Color(255, 255, 255));
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLayout(null);
-		
-		
 
 		lblWord = new JLabel("x");
 		lblWord.setFont(new Font("Arial", Font.BOLD, 25));
@@ -187,18 +196,10 @@ public class PanelDetailVocab extends JPanel {
 		lblPronunciation.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (vocab.getPronunciation() != null) {
-					try {
-						String url = System.getProperty("user.dir") + "/src/main/resources/pronunciation/"
-								+ vocab.getPronunciation();
-						MP3Player mp3 = new MP3Player(new File(url));
-						mp3.play();
-					} catch (Exception e2) {
-						JOptionPane.showMessageDialog(null, "Không tìm thấy file phát âm");
-					}
-				}
+				soundMouseClick(e);
 			}
 		});
+		
 		lblPronunciation.setIcon(new ImageIcon(
 				PanelDetailVocab.class.getResource("/jaco/mp3/player/plaf/resources/mp3PlayerSoundOn.png")));
 		lblPronunciation.setBounds(318, 12, 16, 16);
@@ -235,7 +236,16 @@ public class PanelDetailVocab extends JPanel {
 		 scroll.setViewportView(textArea);
 		panel.add(scroll);
 	}
-	public static void main(String[] args) {
-		
+	
+	protected void soundMouseClick(MouseEvent e) {
+		if (vocab.getPronunciation() != null) {
+			try {
+				String url = ImageUtils.pathToResource + "/" + vocab.getPronunciation();
+				MP3Player mp3 = new MP3Player(new File(url));
+				mp3.play();
+			} catch (Exception e2) {
+				JOptionPane.showMessageDialog(null, "Không tìm thấy file phát âm");
+			}
+		}
 	}
 }

@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import dao.impl.VocabularyDAOImpl;
 import entity.Vocabulary;
+import home.gui.FrameHome;
 import home.item.ItemVocab;
 import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
@@ -21,6 +22,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.ScrollPaneConstants;
+
+import admin.panel.PanelDashboard;
+
 import java.awt.FlowLayout;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
@@ -33,55 +37,56 @@ import java.awt.GridLayout;
 
 public class PanelVocab extends JPanel {
 	private JPanel panel;
-	private JLabel lblNewLabel;
 	private JTextField textSearch;
-	private JPanel panelDetailVocab;
-	private ItemVocab item;
-	private PanelDetailVocab detail;
 	private JPanel panelLeft;
-	private List<String> getItemss;
-	private List<Vocabulary> itemss;
-	private DefaultListModel<String> model;
 	private JPanel panelParent;
 	private JScrollPane scrollPane;
 	private JPanel panelList;
-	private JLabel lblNewLabel_1;
-	private JLabel lblNewLabel_2;
-	private JPanel panel_1;
-	private PanelDetailVocab panelDetail;
 
-	/**
-	 * Create the panel.
-	 */
+
+	private ItemVocab item;
+	private PanelDetailVocab panelDetailVocab;
+	private List<Vocabulary> vocabs;
+	public FrameHome frameParent;
+	private static PanelVocab myInstance;
+
+	public static PanelVocab getMyInstance() {
+		if (myInstance == null) {
+			myInstance = new PanelVocab();
+		}
+		return myInstance;
+	}
 
 	public PanelVocab() {
 		initComponent();
 
 		VocabularyDAOImpl dao = new VocabularyDAOImpl();
-		itemss = dao.selectAll();
-		int y = 0;
+		vocabs = dao.selectAll();
 
-		for (int i = 0; i < itemss.size(); i++) {
-			item = new ItemVocab(itemss.get(i), y,panelDetailVocab);
+		loadData(vocabs);
+	}
+	
+	public void loadData(List<Vocabulary> vocabs) {
+		Integer y = 0;
+		for (int i = 0; i < vocabs.size(); i++) {
+			item = new ItemVocab(vocabs.get(i));
+			item.setLocation(0, y);
+			item.panelDetailVocab = panelDetailVocab;
 			panelList.add(item);
 			y = y + 29;
 		}
-		panelList.setPreferredSize(new Dimension(100,y));
+		
+		panelList.setPreferredSize(new Dimension(100, y));
+		panelList.revalidate();
+		panelList.repaint();
 	}
 
+	
 	public void searchVocab() {
 		panelList.removeAll();
 		VocabularyDAOImpl dao = new VocabularyDAOImpl();
-		itemss = dao.searchAll(textSearch.getText());
-		Integer y =0;
-		for (int i = 0; i < itemss.size(); i++) {
-			item = new ItemVocab(itemss.get(i), y,panelDetailVocab);
-			panelList.add(item);
-			y = y + 29;
-		}
-		panelList.setPreferredSize(new Dimension(100,y));
-		panelList.revalidate();
-		panelList.repaint();
+		List<Vocabulary> vocabs = dao.searchAll(textSearch.getText());
+		loadData(vocabs);
 	}
 
 	private void initComponent() {
@@ -92,28 +97,30 @@ public class PanelVocab extends JPanel {
 
 		panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));
-		panel.setBounds(10, 0, 1282, 691);
+		panel.setBounds(0, 0, 1292, 691);
 		add(panel);
 		panel.setLayout(null);
 
 		panelLeft = new JPanel();
+		panelLeft.setBackground(new Color(37, 57, 111));
 		panelLeft.setBounds(0, 0, 265, 691);
 		panel.add(panelLeft);
 		panelLeft.setLayout(null);
 
 		textSearch = new JTextField();
-		textSearch.setBounds(59, 11, 134, 28);
+		textSearch.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		textSearch.setBounds(10, 10, 245, 40);
 		panelLeft.add(textSearch);
-		
-		 panelParent = new JPanel();
+
+		panelParent = new JPanel();
 		panelParent.setBounds(10, 66, 245, 614);
 		panelLeft.add(panelParent);
 		panelParent.setLayout(new GridLayout(1, 0, 0, 0));
-		
-		 scrollPane = new JScrollPane();
+
+		scrollPane = new JScrollPane();
 		panelParent.add(scrollPane);
-		
-		 panelList = new JPanel();
+
+		panelList = new JPanel();
 		scrollPane.setViewportView(panelList);
 		panelList.setLayout(null);
 		textSearch.addKeyListener(new KeyAdapter() {
@@ -124,15 +131,9 @@ public class PanelVocab extends JPanel {
 		});
 
 
-		panelDetailVocab = new JPanel();
-		panelDetailVocab.setBounds(265, 0, 1017, 691);
+		Vocabulary vocab = new VocabularyDAOImpl().select(1);
+		panelDetailVocab = PanelDetailVocab.getMyInstance(vocab);
+		panelDetailVocab.setBounds(265, 0, 1027, 691);
 		panel.add(panelDetailVocab);
-		panelDetailVocab.setLayout(null);
-		
-		
-		panelDetail = new PanelDetailVocab(new VocabularyDAOImpl().select(1));
-		panelDetail.setBounds(25, 65, 966, 615);
-		panelDetailVocab.add(panelDetail);
-
 	}
 }

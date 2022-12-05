@@ -90,7 +90,6 @@ public class FrameCategory extends JFrame {
 			for(int j = 0; j < NUMBER_OF_COL; j ++) {
 				vocab = vocabs.get(k++);
 				
-				System.err.println(x + " - " + y + " - " + vocab.getId());
 				ItemCategoryVocab item = new ItemCategoryVocab(vocab, x, y);
 				item.frameCate = this;
 				panel.add(item);

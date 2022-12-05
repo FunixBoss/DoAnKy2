@@ -1,4 +1,5 @@
 package home.gui;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -25,6 +26,7 @@ import home.panel.PanelVocab;
 import service.Authorization;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 public class FrameHome extends JFrame {
 	public FrameSignIn frOut;
 	public FrameSignIn frIn;
@@ -40,6 +42,7 @@ public class FrameHome extends JFrame {
 	private PanelProfile panelProfile;
 	private PanelLesson panelLesson;
 	private PanelMainContent panelMain;
+
 	/**
 	 * Launch the application.
 	 */
@@ -56,40 +59,46 @@ public class FrameHome extends JFrame {
 
 	class NavBar extends PanelNavBar {
 		protected void do_panelVocab_mouseClicked(MouseEvent e) {
-			panelVocab = null;
-			panelVocab = new PanelVocab();
+			panelVocab = PanelVocab.getMyInstance();
+			panelVocab.frameParent = getOuter();
 			menuClicked(panelVocab);
-			menuChanged(getPanelVocab(),getLblVocab());
+			menuChanged(getPanelVocab(), getLblVocab());
 		}
+
 		protected void do_panelCategory_mouseClicked(MouseEvent e) {
-			panelCategory = null;
-			panelCategory = new PanelCategory();
+			panelCategory = PanelCategory.getMyInstance();
+			panelCategory.frameParent = getOuter();
 			menuClicked(panelCategory);
-			menuChanged(getPanelCategory(),getLblCategory());
+			menuChanged(getPanelCategory(), getLblCategory());
 		}
+
 		protected void do_panelProfile_mouseClicked(MouseEvent e) {
-			panelProfile = null;
 			panelProfile = new PanelProfile();
+			panelProfile.frameParent = getOuter();
 			menuClicked(panelProfile);
-			menuChanged(getPanelProfile(),getLblProfile());
+			menuChanged(getPanelProfile(), getLblProfile());
 		}
+
 		protected void do_panelLesson_mouseClicked(MouseEvent e) {
-			panelLesson = null;
-			panelLesson = new PanelLesson();
+			panelLesson = PanelLesson.getMyInstance();
+			panelLesson.frameParent = getOuter();
 			menuClicked(panelLesson);
-			menuChanged(getPanelLesson(),getLblLesson());
+			menuChanged(getPanelLesson(), getLblLesson());
 		}
+
 		protected void do_panelHome_mouseClicked(MouseEvent e) {
-			panelHome = null;
 			panelHome = new PanelHome();
+			panelHome.frameParent = getOuter();
 			menuClicked(panelHome);
-			menuChanged(getPanelHome(),getLblHome());
+			menuChanged(getPanelHome(), getLblHome());
 		}
+
 		protected void do_panelSignIn_mouseClicked(MouseEvent e) {
 			dispose();
 			frIn = new FrameSignIn();
 			frIn.setVisible(true);
 		}
+
 		protected void do_panelLogOut_mouseClicked(MouseEvent e) {
 			dispose();
 			Authorization.setNull();
@@ -97,33 +106,28 @@ public class FrameHome extends JFrame {
 			frOut.setVisible(true);
 		}
 	}
-	
+
 	public FrameHome() {
 		initComponent();
-//		if (Authorization.email == null) {
-//			lblSignIn = new JLabel("Đăng nhập");
-//		} else {
-//			lblSignIn = new JLabel("Thông Tin");
-//		}
-//		lblSignIn.setHorizontalAlignment(SwingConstants.CENTER);
-//		lblSignIn.setFont(new Font("Arial", Font.BOLD, 14));
-//		lblSignIn.setBounds(6, 11, 83, 23);
-		
+
 		btnLogout = new JPanel();
 		btnLogout.setBounds(982, 32, 93, 45);
-		if(Authorization.email!=null) {
+		if (Authorization.email != null) {
 			navBar.add(btnLogout);
 		}
 		btnLogout.setLayout(null);
 		btnLogout.setBackground(Color.WHITE);
-		
+
 		lblLogout = new JLabel("Đăng Xuất");
 		lblLogout.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLogout.setFont(new Font("Arial", Font.BOLD, 14));
 		lblLogout.setBounds(10, 11, 73, 23);
 		btnLogout.add(lblLogout);
 
-		
+	}
+
+	private FrameHome getOuter() {
+		return FrameHome.this;
 	}
 
 	private void initComponent() {
@@ -144,9 +148,9 @@ public class FrameHome extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(37, 57, 111));
 		panel.setBounds(0, 0, 250, 77);
-		contentPane.add(panel);
 		panel.setLayout(null);
-		
+		contentPane.add(panel);
+
 		JPanel panelLogo = new JPanel();
 		panelLogo.addMouseListener(new MouseAdapter() {
 			@Override
@@ -173,50 +177,47 @@ public class FrameHome extends JFrame {
 		panelLogo.add(lblIconLogo);
 		lblIconLogo.setBackground(new Color(0, 0, 0));
 		lblIconLogo.setIcon(new ImageIcon(icon.getLogoImg()));
-		
+
 		// NavBar
 		navBar = new JPanel();
 		navBar.setBounds(250, 0, 1051, 77);
-		contentPane.add(navBar);
 		NavBar navBarMenu = new NavBar();
 		navBar.add(navBarMenu);
 		navBar.setLayout(null);
-		
+		contentPane.add(navBar);
+
 		// Main Panel
 		panelMain = new PanelMainContent();
-		contentPane.add(panelMain);
-		panelHome = new PanelHome();
-		panelHome.setBackground(new Color(255, 255, 255));
-		panelCategory = new PanelCategory();
-		panelVocab = new PanelVocab();
-		panelProfile = new PanelProfile();
-		panelLesson = new PanelLesson();
+		
+		panelHome = PanelHome.getMyInstance();
 		panelMain.add(panelHome);
+
+		contentPane.add(panelMain);
 		menuClicked(panelHome);
 		FrameUtils.alignFrameScreenCenter(this);
 	}
-	public void menuClicked(JPanel panel) {
+
+	public void callPanel(JPanel panel) {
+		// remove
 		panelMain.removeAll();
-//		panel = null;
-		panelVocab.setVisible(false);
-		panelCategory.setVisible(false);
-		panelHome.setVisible(false);
-		panelProfile.setVisible(false);
-		panelLesson.setVisible(false);
-		panel.setVisible(true);
-		panelMain.add(panel);
-		
-		panelMain.revalidate();
 		panelMain.repaint();
-		
+		panelMain.revalidate();
+		// repaint
+		panelMain.add(panel);
+		panelMain.repaint();
+		panelMain.revalidate();
+	}
+
+	public void menuClicked(JPanel panel) {
+		callPanel(panel);
 	}
 
 	protected void do_panelLogo_mouseClicked(MouseEvent e) {
-		if(Authorization.loggedrole == 2) {
+		if (Authorization.loggedrole == 2) {
 			dispose();
 			FrameHome dh = new FrameHome();
 			dh.setVisible(true);
-		}else {
+		} else {
 			dispose();
 			FrameDashboard dh = new FrameDashboard();
 			dh.setVisible(true);
@@ -231,12 +232,12 @@ public class FrameHome extends JFrame {
 	}
 
 	protected void do_panelLogOut_mouseClicked(MouseEvent e) {
-		if(Authorization.email != null) {
+		if (Authorization.email != null) {
 			UserDAOImpl userDao = new UserDAOImpl();
 			int id = UserDAOImpl.getIdFromDbByAccount(Authorization.email);
 			FrameUpdateMember updateMem = new FrameUpdateMember(userDao.select(id));
 			updateMem.setVisible(true);
-		}else {
+		} else {
 			FrameSignIn login = new FrameSignIn();
 			login.setVisible(true);
 		}

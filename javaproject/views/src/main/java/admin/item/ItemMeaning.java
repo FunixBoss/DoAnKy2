@@ -41,7 +41,7 @@ public class ItemMeaning extends JPanel {
 		panelMeaning2.add(textMeaning);
 		
 		panelExample2 = new Panel();
-		panelExample2.setBackground(Color.BLACK);
+		panelExample2.setBackground(new Color(255, 255, 255));
 		panelExample2.setBounds(592, 0, 462, 102);
 		add(panelExample2);
 		panelExample2.setLayout(new BorderLayout(0, 0));

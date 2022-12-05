@@ -110,4 +110,29 @@ public class UserLessonResultDAOImpl extends AbstractDAO<UserLessonResult> imple
 		return result;
 	}
 
+	@Override
+	public UserLessonResult find(Integer userId, Integer lessonId) {
+		UserLessonResult ulr = null;
+		try (
+			var con = ConnectDBFromProperties.getConnectionFromClassPath();
+			var cs = con.prepareCall("{call findUserLessonResult(?, ?)}");
+		) {
+			cs.setInt(1, userId);
+			cs.setInt(2, lessonId);
+			var rs = cs.executeQuery();
+
+			if (rs.next()) {
+				Integer ulrId = rs.getInt(1);
+				Integer userIdRs = rs.getInt(2);
+				Integer lessonIdRs = rs.getInt(3);
+				Integer point = rs.getInt(4);
+				ulr = new UserLessonResult(ulrId, userIdRs, lessonIdRs, point);
+			}
+		} catch (Exception e) {
+			 e.printStackTrace();
+			System.err.println("Find A UserLessonResult Failed!");
+		}
+		return ulr;
+	}
+
 }

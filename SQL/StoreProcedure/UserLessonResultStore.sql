@@ -9,6 +9,17 @@ BEGIN
 END
 GO
 
+DROP PROC IF EXISTS findUserLessonResult
+GO
+CREATE PROC findUserLessonResult
+@user_id INT,
+@lesson_id INT
+AS
+BEGIN
+	SELECT * FROM USER_LESSON_RESULT 
+	WHERE [USER_ID] = @user_id AND LESSON_ID = @lesson_id
+END
+GO
 
 DROP PROC IF EXISTS selAllUserLessonResult
 GO

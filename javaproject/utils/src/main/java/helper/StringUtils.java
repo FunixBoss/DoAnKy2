@@ -14,5 +14,10 @@ public class StringUtils {
 	public static String formatWord(String str) {
 		return str.trim().replaceAll("\\s+", "_").toLowerCase();
 	}
+	
+	public static String formatVocab(String str) {
+		return str.trim().toLowerCase();
+	}
 }
+
 
