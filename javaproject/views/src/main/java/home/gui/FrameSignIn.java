@@ -216,14 +216,22 @@ public class FrameSignIn extends JFrame {
 		textFieldEmail.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				if(textFieldEmail.getText().equals("Enter your email")) {
+				if(textFieldEmail.getText().equals("Email")) {
+					textFieldEmail.setForeground(new Color(37, 57, 111));
 					textFieldEmail.setText("");
-					textFieldEmail.setForeground(new Color(0,0,0));
+				}
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(textFieldEmail.getText().equals("")) {
+					textFieldEmail.setForeground(new Color(153, 153, 153));
+					textFieldEmail.setText("Email");
+
 				}
 			}
 		});
 		textFieldEmail.setForeground(new Color(128, 128, 128));
-		textFieldEmail.setText("Enter your email");
+		textFieldEmail.setText("Email");
 		textFieldEmail.setBorder(null);
 		textFieldEmail.setBounds(1, 1, 267, 43);
 		panelEmail.add(textFieldEmail);
@@ -251,6 +259,23 @@ public class FrameSignIn extends JFrame {
 		lblIconPassword.setIcon(new ImageIcon(icon.getPasswordImg()));
 		
 		textFieldPassword = new JPasswordField();
+		textFieldPassword.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(textFieldPassword.getText().equals("Password")) {
+					textFieldPassword.setForeground(new Color(37, 57, 111));
+					textFieldPassword.setText("");
+				}
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(textFieldPassword.getText().equals("")) {
+					textFieldPassword.setForeground(new Color(153, 153, 153));
+					textFieldPassword.setText("Password");
+				}
+			}
+		});
+		textFieldPassword.setText("Password");
 		textFieldPassword.setFont(new Font("Arial", Font.PLAIN, 14));
 		textFieldPassword.setBorder(null);
 		textFieldPassword.setBounds(1, 1, 267, 43);
@@ -315,5 +340,7 @@ public class FrameSignIn extends JFrame {
 
 	public void setJfSignIn(FrameSignIn jfSignIn) {
 		this.jfSignIn = jfSignIn;
+	}
+	protected void doTextFieldEmailFocusLost(FocusEvent e) {
 	}
 }
