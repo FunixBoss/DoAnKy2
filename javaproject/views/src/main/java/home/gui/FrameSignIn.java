@@ -36,6 +36,7 @@ import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.border.LineBorder;
+import java.awt.event.FocusAdapter;
 
 public class FrameSignIn extends JFrame {
 	private FrameSignIn jfSignIn;
@@ -51,6 +52,7 @@ public class FrameSignIn extends JFrame {
 	private IconImage icon;
 	private JButton btnSignIn;
 	private JButton btnSignUp;
+	private JLabel lblBg;
 
 	/**
 	 * Launch the application.
@@ -148,12 +150,19 @@ public class FrameSignIn extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		icon = new IconImage();
+		
 		// Panel 
 		panel = new JPanel();
 		panel.setBackground(new Color(37, 57, 111));
-		panel.setBounds(0, 0, 415, 532);
+		panel.setBounds(0, 0, 428, 532);
 		contentPane.add(panel);
 		panel.setLayout(null);
+		
+		lblBg = new JLabel("");
+		lblBg.setBounds(0, 0, 428, 532);
+		panel.add(lblBg);
+		lblBg.setIcon(new ImageIcon(icon.getBgImg()));
 		
 		
 		// Panel Main
@@ -169,15 +178,14 @@ public class FrameSignIn extends JFrame {
 		lblSignIn.setBounds(134, 79, 131, 32);
 		panelMain.add(lblSignIn);		
 		
-		icon = new IconImage();
+		
 		
 		// Email
 		panelEmail = new JPanel();
 		panelEmail.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelEmail.setBackground(new Color(242, 247, 255));
 		panelEmail.setBounds(50, 182, 314, 45);
-		panelEmail.addFocusListener(new FocusListener() {
-			
+		panelEmail.addFocusListener(new FocusListener() {	
 			@Override
 			public void focusLost(FocusEvent e) {
 				// TODO Auto-generated method stub	
@@ -205,6 +213,17 @@ public class FrameSignIn extends JFrame {
 		lblIconEmail.setIcon(new ImageIcon(icon.getEmailImg()));
 		
 		textFieldEmail = new JTextField();
+		textFieldEmail.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(textFieldEmail.getText().equals("Enter your email")) {
+					textFieldEmail.setText("");
+					textFieldEmail.setForeground(new Color(0,0,0));
+				}
+			}
+		});
+		textFieldEmail.setForeground(new Color(128, 128, 128));
+		textFieldEmail.setText("Enter your email");
 		textFieldEmail.setBorder(null);
 		textFieldEmail.setBounds(1, 1, 267, 43);
 		panelEmail.add(textFieldEmail);

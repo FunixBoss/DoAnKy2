@@ -22,6 +22,10 @@ public class IconImage {
 	private Image bookmarkImg = new ImageIcon(getClass().getResource("/image/bookmark.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 	private Image generalImg = new ImageIcon(getClass().getResource("/image/general.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 	private Image logoutImg = new ImageIcon(getClass().getResource("/image/logout.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+	private Image bgImg = new ImageIcon(getClass().getResource("/image/bg.png")).getImage().getScaledInstance(428, 532, Image.SCALE_SMOOTH);
+	public Image getBgImg() {
+		return bgImg;
+	}
 	public Image getFeedbackImg() {
 		return feedbackImg;
 	}
@@ -75,8 +79,5 @@ public class IconImage {
 	}
 	public Image getLogoutImg() {
 		return logoutImg;
-	}
-	public static void main(String[] args) {
-		
 	}
 }
