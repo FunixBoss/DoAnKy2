@@ -42,6 +42,7 @@ public class FrameSignUp extends JFrame {
 	private JButton btnSignUp;
 	private JButton btnSignIn;
 	private IconImage icon;
+	private JLabel lblBg;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
@@ -96,8 +97,13 @@ public class FrameSignUp extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		panel.setBackground(new Color(37, 57, 111));
-		panel.setBounds(0, 0, 415, 532);
+		panel.setBounds(0, 0, 428, 532);
 		contentPane.add(panel);
+		
+		lblBg = new JLabel("");
+		lblBg.setBounds(0, 0, 428, 532);
+		panel.add(lblBg);
+		lblBg.setIcon(new ImageIcon(icon.getBgImg()));
 		
 		// Panel Main
 		panelMain = new JPanel();

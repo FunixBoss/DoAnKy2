@@ -97,23 +97,25 @@ public class PanelVocab extends JPanel {
 		panel.setLayout(null);
 
 		panelLeft = new JPanel();
+		panelLeft.setBackground(new Color(255, 255, 255));
 		panelLeft.setBounds(0, 0, 265, 691);
 		panel.add(panelLeft);
 		panelLeft.setLayout(null);
 
 		textSearch = new JTextField();
-		textSearch.setBounds(59, 11, 134, 28);
+		textSearch.setBounds(10, 11, 245, 35);
 		panelLeft.add(textSearch);
 		
 		 panelParent = new JPanel();
-		panelParent.setBounds(10, 66, 245, 614);
+		panelParent.setBounds(10, 56, 245, 624);
 		panelLeft.add(panelParent);
 		panelParent.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		 scrollPane = new JScrollPane();
 		panelParent.add(scrollPane);
 		
-		 panelList = new JPanel();
+		panelList = new JPanel();
+		panelList.setBackground(new Color(255, 255, 255));
 		scrollPane.setViewportView(panelList);
 		panelList.setLayout(null);
 		textSearch.addKeyListener(new KeyAdapter() {
@@ -125,6 +127,7 @@ public class PanelVocab extends JPanel {
 
 
 		panelDetailVocab = new JPanel();
+		panelDetailVocab.setBackground(new Color(255, 255, 255));
 		panelDetailVocab.setBounds(265, 0, 1017, 691);
 		panel.add(panelDetailVocab);
 		panelDetailVocab.setLayout(null);

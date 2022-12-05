@@ -24,6 +24,9 @@ public class ItemVocab extends JPanel {
 	private JLabel lblWord;
 	private WordTypeDAOImpl typeDao;
 
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public ItemVocab(Vocabulary vocab, int y) {
 		initComponent(vocab,y);
 		addMouseListener(new MouseAdapter() {
@@ -58,7 +61,7 @@ public class ItemVocab extends JPanel {
 	}
 
 	private void initComponent(Vocabulary vocab,int y) {		
-		setBackground(new Color(128, 128, 128));
+		setBackground(new Color(255, 255, 255));
 		setLayout(null);
 		setBounds(0,y, 300, 29);
 		typeDao = new WordTypeDAOImpl();

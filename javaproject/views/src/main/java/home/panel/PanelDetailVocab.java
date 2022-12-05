@@ -167,7 +167,7 @@ public class PanelDetailVocab extends JPanel {
 		
 		lblWordType = new JLabel();
 		lblWordType.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblWordType.setBounds(227, 10, 76, 19);
+		lblWordType.setBounds(103, 45, 76, 19);
 		add(lblWordType);
 		
 		lblRelatives = new JLabel("");
@@ -220,6 +220,7 @@ public class PanelDetailVocab extends JPanel {
 		 add(lblCategory);
 
 		 panel = new JPanel();
+		 panel.setBorder(null);
 		panel.setBounds(100, 100, 767, 391);
 		 add(panel);
 		 panel.setLayout(new GridLayout(1, 0, 0, 0));
