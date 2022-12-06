@@ -135,5 +135,9 @@ public class PanelVocab extends JPanel {
 		panelDetailVocab = PanelDetailVocab.getMyInstance(vocab);
 		panelDetailVocab.setBounds(265, 0, 1027, 691);
 		panel.add(panelDetailVocab);
+		
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setBounds(262, 0, 1030, 691);
+		panel.add(lblNewLabel);
 	}
 }
