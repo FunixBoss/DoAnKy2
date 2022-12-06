@@ -50,6 +50,10 @@ public class PanelVocab extends JPanel {
 	public FrameHome frameParent;
 	private static PanelVocab myInstance;
 
+	public PanelDetailVocab getPanelDetailVocab() {
+		return panelDetailVocab;
+	}
+	
 	public static PanelVocab getMyInstance() {
 		if (myInstance == null) {
 			myInstance = new PanelVocab();

@@ -44,6 +44,7 @@ public class PanelCategory extends JPanel {
 				
 				item = new ItemCategory(cate);
 				item.setLocation(currentX, currentY);
+				item.panelParent = this;
 				panelMain.add(item);
 				
 				currentX += item.getWidth() + xGap;

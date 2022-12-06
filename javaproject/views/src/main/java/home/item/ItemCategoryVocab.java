@@ -7,6 +7,8 @@ import helper.ImageUtils;
 import helper.StringUtils;
 import home.gui.FrameCategory;
 import home.gui.FrameDetailVocab;
+import home.gui.FrameHome;
+import home.panel.PanelVocab;
 import service.CategoryService;
 
 import javax.swing.BorderFactory;
@@ -23,6 +25,9 @@ import java.awt.event.MouseEvent;
 import javax.swing.SwingConstants;
 
 
+import java.awt.Cursor;
+
+
 public class ItemCategoryVocab extends JPanel {
 
 	private JLabel lblWord;
@@ -30,8 +35,16 @@ public class ItemCategoryVocab extends JPanel {
 	private CategoryService cateService;
 	private Vocabulary vocab;
 	public FrameCategory frameCate;
-
+	public PanelVocab panelVocab;
+	
 	public ItemCategoryVocab(Vocabulary vocab) {
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				doThisMouseClicked(e);
+			}
+		});
+		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		initComponent(vocab);
 	}
 
@@ -62,9 +75,13 @@ public class ItemCategoryVocab extends JPanel {
 		lblWord.setForeground(new Color(255, 255, 255));
 		lblWord.setFont(new Font("Arial", Font.PLAIN, 18));
 		lblWord.setText(StringUtils.toCapitalize(vocab.getWord()) + " (" + typeDao.get(vocab.getWordTypeId()).toLowerCase() + ") ");
-		
 	}
-	
 
-
+	protected void doThisMouseClicked(MouseEvent e) {
+		if(frameCate != null) {
+			frameCate.dispose();
+		}
+		FrameHome.getMyInstance().navbarMenuChanged();
+		panelVocab.getMyInstance().getPanelDetailVocab().setData(vocab);
+	}
 }

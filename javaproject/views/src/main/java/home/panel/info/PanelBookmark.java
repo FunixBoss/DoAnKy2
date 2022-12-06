@@ -38,27 +38,29 @@ public class PanelBookmark extends JPanel {
 		int id = UserDAOImpl.getIdFromDbByAccount(Authorization.email);
 		
 		List<Vocabulary> vocabs = new BookmarkDAOImpl().selectAllVocabByUserId(id);
-		final int NUMBER_OF_COL = 4;
-		final int NUMBER_OF_ROW = (int) Math.ceil((double) vocabs.size() / NUMBER_OF_COL);
-		System.out.println(NUMBER_OF_ROW);
-		panelContent.setPreferredSize(new Dimension(660, NUMBER_OF_ROW * 220));
-		Vocabulary vocab;
-		int currentX = 10; 
-		int currentY = 10;
-		int k = 0;
-		for(int i = 0; i < NUMBER_OF_ROW; i++ ) {
-			for(int j = 0; j < NUMBER_OF_COL; j++) {
-				if(k == vocabs.size()) break;
-				vocab = vocabs.get(k++);
-				
-				ItemCategoryVocab item = new ItemCategoryVocab(vocab);
-				item.setLocation(currentX, currentY);
-				panelContent.add(item);
-				
-				currentX += 220;
+		if(vocabs.size() != 0) {
+			final int NUMBER_OF_COL = 4;
+			final int NUMBER_OF_ROW = (int) Math.ceil((double) vocabs.size() / NUMBER_OF_COL);
+			System.out.println(NUMBER_OF_ROW);
+			panelContent.setPreferredSize(new Dimension(660, NUMBER_OF_ROW * 220));
+			Vocabulary vocab;
+			int currentX = 10; 
+			int currentY = 10;
+			int k = 0;
+			for(int i = 0; i < NUMBER_OF_ROW; i++ ) {
+				for(int j = 0; j < NUMBER_OF_COL; j++) {
+					if(k == vocabs.size()) break;
+					vocab = vocabs.get(k++);
+					
+					ItemCategoryVocab item = new ItemCategoryVocab(vocab);
+					item.setLocation(currentX, currentY);
+					panelContent.add(item);
+					
+					currentX += 220;
+				}
+				currentX = 10;
+				currentY += 220;
 			}
-			currentX = 10;
-			currentY += 220;
 		}
 	}
 	

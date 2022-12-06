@@ -2,15 +2,20 @@ package home.panel.info;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 
 import dao.FeedbackDAO;
 import dao.VocabularyContributionDAO;
@@ -42,13 +47,11 @@ public class PanelRespose extends JPanel{
 	private JPanel panelContentVocabContri;
 
 	private static PanelRespose myInstance;
-	private JLabel lblResponse;
 	private JButton btnSendFeedback;
 	private JPanel panelVocabContri;
 	private JLabel lblEmail_1;
 	private JTextField txtEmail1;
 	private JLabel lblTVng;
-	private JLabel lblVocabContri;
 	private JButton btnSendVocabContri;
 	private JTextField txtWord;
 	private JTextField txtMeaning1;
@@ -56,7 +59,11 @@ public class PanelRespose extends JPanel{
 	private JTextField txtMeaning2;
 	private JTextField txtMeaning3;
 	private JPanel panel;
+	private JLabel lblImage;
+	private JLabel lblImage2;
 
+	private JPanel panelParent;
+	private JPanel panelChild;
 	public static PanelRespose getMyInstance() {
 		if (myInstance == null) {
 			myInstance = new PanelRespose();
@@ -68,50 +75,62 @@ public class PanelRespose extends JPanel{
 		setBackground(new Color(255, 255, 255));
 		setLayout(null);
 		setBounds(0, 0, 1042, 691);
-		panel = new JPanel();
-		panel.setLayout(null);
-		add(panel);
+		panelParent = new JPanel();
+		panelParent.setBounds(0, 0, 1042, 691);
+		panelParent.setBackground(new Color(255, 255, 255));
+		panelParent.setLayout(new BorderLayout(0, 0));
+		add(panelParent);
+		
+		panelChild = new JPanel();
+		panelParent.add(panelChild);
 		
 		initComponentFeedback();
 		initComponentVocabContri();
-		txtEmail.setText(Authorization.email);
-		txtEmail.setEditable(false);
 		
-		txtEmail1.setText(Authorization.email);
-		txtEmail1.setEditable(false);
+		panelChild.setPreferredSize(new Dimension(691, 1400));
+		JScrollPane jsp = new JScrollPane(panelChild, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		jsp.setBorder(null);
+		panelParent.add(jsp);
+		
+		txtEmail.setText(Authorization.email);
 	}
 
 	private void initComponentVocabContri() {
+		panelChild.setLayout(null);
 		panelVocabContri = new JPanel();
-		panelVocabContri.setLayout(null);
+		panelVocabContri.setLayout(new BorderLayout());
 		panelVocabContri.setBorder(BorderFactory.createLineBorder(new Color(37, 57, 111), 2));
 		panelVocabContri.setBackground(Color.WHITE);
-		panelVocabContri.setBounds(550, 40, 450, 450);
-		add(panelVocabContri);
+		panelVocabContri.setBounds(50, 30, 946, 595);
+		panelChild.add(panelVocabContri);
+		
+		
+		lblImage2 = new JLabel();
+		lblImage2.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/image/backgroundVocabContri.png")).getImage()
+				.getScaledInstance(942, 591, Image.SCALE_SMOOTH)));
+		panelVocabContri.add(lblImage2, BorderLayout.CENTER);
+		
 		
 		lblEmail_1 = new JLabel("Email");
 		lblEmail_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblEmail_1.setBounds(10, 72, 84, 35);
-		panelVocabContri.add(lblEmail_1);
+		lblEmail_1.setBounds(191, 166, 84, 41);
+		lblImage2.add(lblEmail_1);
 		
 		txtEmail1 = new JTextField();
 		txtEmail1.setText((String) null);
 		txtEmail1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txtEmail1.setBorder(null);
 		txtEmail1.setColumns(10);
-		txtEmail1.setBounds(93, 72, 347, 35);
-		panelVocabContri.add(txtEmail1);
+		txtEmail1.setBackground(new Color(217, 217, 217));
+		txtEmail1.setBounds(279, 168, 383, 35);
+		
+		lblImage2.add(txtEmail1);
 		
 		lblTVng = new JLabel("Từ vựng");
 		lblTVng.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTVng.setBounds(10, 139, 84, 35);
-		panelVocabContri.add(lblTVng);
-		
-		lblVocabContri = new JLabel("Đóng góp từ vựng");
-		lblVocabContri.setHorizontalAlignment(SwingConstants.CENTER);
-		lblVocabContri.setForeground(new Color(37, 57, 111));
-		lblVocabContri.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblVocabContri.setBounds(0, 13, 450, 35);
-		panelVocabContri.add(lblVocabContri);
+		lblTVng.setBounds(191, 236, 84, 41);
+		lblImage2.add(lblTVng);
 		
 		btnSendVocabContri = new JButton("Gửi");
 		btnSendVocabContri.addActionListener(new ActionListener() {
@@ -122,87 +141,97 @@ public class PanelRespose extends JPanel{
 		btnSendVocabContri.setForeground(Color.WHITE);
 		btnSendVocabContri.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnSendVocabContri.setBackground(new Color(37, 57, 111));
-		btnSendVocabContri.setBounds(175, 400, 100, 35);
-		panelVocabContri.add(btnSendVocabContri);
+		btnSendVocabContri.setBounds(421, 530, 135, 35);
+		lblImage2.add(btnSendVocabContri);
 		
 		txtWord = new JTextField();
 		txtWord.setText((String) null);
 		txtWord.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtWord.setColumns(10);
-		txtWord.setBounds(93, 137, 347, 35);
-		panelVocabContri.add(txtWord);
+		txtWord.setBounds(279, 239, 383, 35);
+		txtWord.setBorder(null);
+		lblImage2.add(txtWord);
 		
 		txtMeaning1 = new JTextField();
 		txtMeaning1.setText((String) null);
 		txtMeaning1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtMeaning1.setColumns(10);
-		txtMeaning1.setBounds(93, 205, 347, 35);
-		panelVocabContri.add(txtMeaning1);
+		txtMeaning1.setBounds(279, 309, 383, 35);
+		txtMeaning1.setBorder(null);
+		lblImage2.add(txtMeaning1);
 		
 		lblMeaning = new JLabel("Ý Nghĩa");
 		lblMeaning.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblMeaning.setBounds(10, 205, 84, 35);
-		panelVocabContri.add(lblMeaning);
+		lblMeaning.setBounds(191, 306, 84, 41);
+		lblImage2.add(lblMeaning);
 		
 		txtMeaning2 = new JTextField();
 		txtMeaning2.setText((String) null);
 		txtMeaning2.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtMeaning2.setColumns(10);
-		txtMeaning2.setBounds(93, 270, 347, 35);
-		panelVocabContri.add(txtMeaning2);
+		txtMeaning2.setBounds(279, 379, 383, 35);
+		txtMeaning2.setBorder(null);
+		lblImage2.add(txtMeaning2);
 		
 		txtMeaning3 = new JTextField();
 		txtMeaning3.setText((String) null);
 		txtMeaning3.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtMeaning3.setColumns(10);
-		txtMeaning3.setBounds(93, 337, 347, 35);
-		panelVocabContri.add(txtMeaning3);
+		txtMeaning3.setBounds(279, 449, 383, 35);
+		txtMeaning3.setBorder(null);
+		lblImage2.add(txtMeaning3);
+		
+		txtEmail1.setText(Authorization.email);
+		txtEmail1.setEditable(false);
+		
+		txtEmail1.setText(Authorization.email);
+		txtEmail1.setEditable(false);
 	}
 
 	private void initComponentFeedback() {
+		panelChild.setLayout(null);
 		panelContentFeedback = new JPanel();
 		panelContentFeedback.setBackground(new Color(255, 255, 255));
-		panelContentFeedback.setBounds(41, 41, 450, 450);
-		panelContentFeedback.setLayout(null);
+		panelContentFeedback.setBounds(50, 700, 946, 595);
 		panelContentFeedback.setBorder(BorderFactory.createLineBorder(new Color(37, 57, 111), 2));
-		add(panelContentFeedback);
+		panelContentFeedback.setLayout(new BorderLayout(0, 0));
+		panelChild.add(panelContentFeedback);
+		
+		lblImage = new JLabel();
+		lblImage.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/image/backgroundFeedback.png")).getImage()
+				.getScaledInstance(942, 591, Image.SCALE_SMOOTH)));
+		panelContentFeedback.add(lblImage, BorderLayout.CENTER);
 		
 		lblEmail = new JLabel("Email");
 		lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblEmail.setBounds(10, 72, 84, 35);
-		panelContentFeedback.add(lblEmail);
+		lblEmail.setBounds(190, 164, 84, 42);
+		lblImage.add(lblEmail);
 
 		txtEmail = new JTextField();
 		txtEmail.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		txtEmail.setBounds(93, 72, 347, 35);
+		txtEmail.setBounds(278, 168, 285, 34);
+		txtEmail.setBorder(null);
 		txtEmail.setEditable(false);
+		txtEmail.setBackground(new Color(217, 217, 217));
 		txtEmail.setColumns(10);
-		panelContentFeedback.add(txtEmail);
+		lblImage.add(txtEmail);
 
 		panelContent = new JPanel();
 		panelContent.setBackground(Color.BLACK);
-		panelContent.setBounds(93, 138, 347, 244);
+		panelContent.setBounds(277, 247, 387, 170);
 		panelContent.setLayout(new BorderLayout(0, 0));
-		panelContentFeedback.add(panelContent);
+		lblImage.add(panelContent);
 
 		txtContent = new JTextArea();
 		txtContent.setLineWrap(true);
 		txtContent.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtContent.setBackground(Color.WHITE);
-		txtContent.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		panelContent.add(txtContent);
 		
 		lblContent = new JLabel("Nội dung");
 		lblContent.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblContent.setBounds(10, 138, 90, 35);
-		panelContentFeedback.add(lblContent);
-		
-		lblResponse = new JLabel("Đóng góp ý kiến");
-		lblResponse.setForeground(new Color(37, 57, 111));
-		lblResponse.setHorizontalAlignment(SwingConstants.CENTER);
-		lblResponse.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblResponse.setBounds(0, 13, 450, 35);
-		panelContentFeedback.add(lblResponse);
+		lblContent.setBounds(190, 242, 84, 42);
+		lblImage.add(lblContent);
 		
 		btnSendFeedback = new JButton("Gửi");
 		btnSendFeedback.setForeground(new Color(255, 255, 255));
@@ -213,9 +242,8 @@ public class PanelRespose extends JPanel{
 			}
 		});
 		btnSendFeedback.setBackground(new Color(37, 57, 111));
-		btnSendFeedback.setBounds(175, 400, 100 , 35);
-		panelContentFeedback.add(btnSendFeedback);
-		
+		btnSendFeedback.setBounds(421, 500, 100 , 35);
+		lblImage.add(btnSendFeedback);
 	}
 	
 	
@@ -291,5 +319,4 @@ public class PanelRespose extends JPanel{
 		txtMeaning2.setText("");
 		txtMeaning3.setText("");
 	}
-	
 }

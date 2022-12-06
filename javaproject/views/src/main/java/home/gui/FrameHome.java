@@ -1,6 +1,7 @@
 package home.gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -43,9 +44,15 @@ public class FrameHome extends JFrame {
 	private PanelLesson panelLesson;
 	private PanelMainContent panelMain;
 
-	/**
-	 * Launch the application.
-	 */
+	private static FrameHome myInstance;
+
+	public static FrameHome getMyInstance() {
+		if (myInstance == null) {
+			myInstance = new FrameHome();
+		}
+		return myInstance;
+	}
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
 			try {
@@ -57,7 +64,7 @@ public class FrameHome extends JFrame {
 		});
 	}
 
-	class NavBar extends PanelNavBar {
+	public class NavBar extends PanelNavBar {
 		protected void do_panelVocab_mouseClicked(MouseEvent e) {
 			panelVocab = PanelVocab.getMyInstance();
 			panelVocab.frameParent = getOuter();
@@ -123,7 +130,6 @@ public class FrameHome extends JFrame {
 		lblLogout.setFont(new Font("Arial", Font.BOLD, 14));
 		lblLogout.setBounds(10, 11, 73, 23);
 		btnLogout.add(lblLogout);
-
 	}
 
 	private FrameHome getOuter() {
@@ -179,9 +185,9 @@ public class FrameHome extends JFrame {
 		lblIconLogo.setIcon(new ImageIcon(icon.getLogoImg()));
 
 		// NavBar
+		NavBar navBarMenu = new NavBar();
 		navBar = new JPanel();
 		navBar.setBounds(250, 0, 1051, 77);
-		NavBar navBarMenu = new NavBar();
 		navBar.add(navBarMenu);
 		navBar.setLayout(null);
 		contentPane.add(navBar);
@@ -196,6 +202,14 @@ public class FrameHome extends JFrame {
 		menuClicked(panelHome);
 		FrameUtils.alignFrameScreenCenter(this);
 	}
+	
+	public void navbarMenuChanged() {
+		Component[] navComp = navBar.getComponents();
+		if(navComp[0] instanceof NavBar) {
+			((NavBar) navComp[0]).do_panelVocab_mouseClicked(null);
+		}
+	}
+	
 
 	public void callPanel(JPanel panel) {
 		// remove

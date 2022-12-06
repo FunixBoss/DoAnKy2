@@ -62,7 +62,6 @@ public class ItemVocab extends JPanel {
 		
 		if(hdao.checkExistHistory(userId, vocab.getId()) == null){
 			hdao.insert(his);
-			System.out.println("inserted");
 		}
 		
 		panelDetailVocab = PanelDetailVocab.getMyInstance(vocab);

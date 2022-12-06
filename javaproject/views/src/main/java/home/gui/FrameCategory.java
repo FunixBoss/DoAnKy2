@@ -12,6 +12,8 @@ import entity.Vocabulary;
 import helper.FrameUtils;
 import home.item.ItemCategory;
 import home.item.ItemCategoryVocab;
+import home.panel.PanelVocab;
+
 import java.awt.GridLayout;
 import java.util.List;
 import java.awt.BorderLayout;
@@ -92,6 +94,7 @@ public class FrameCategory extends JFrame {
 				
 				ItemCategoryVocab item = new ItemCategoryVocab(vocab);
 				item.setLocation(currentX, currentY);
+				item.frameCate = this;
 				panel.add(item);
 				
 				currentX += 220;

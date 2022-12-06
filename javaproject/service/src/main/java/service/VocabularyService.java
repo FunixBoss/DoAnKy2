@@ -222,7 +222,7 @@ public class VocabularyService {
 			} else {
 //				ko update img
 				File oldImageFile = new File(
-						ImageUtils.pathToResource + "\\vocabulary\\" + originalVocab.getWord() + ".png");
+						ImageUtils.pathToResource + "\\vocabulary\\" + originalVocab.getImage());
 				File newImageFile = new File(ImageUtils.pathToResource + "\\vocabulary\\" + formatName(word) + ".png");
 				oldImageFile.renameTo(newImageFile);
 			}

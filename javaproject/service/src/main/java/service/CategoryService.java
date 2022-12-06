@@ -64,6 +64,8 @@ public class CategoryService {
 		String name = data.get("category");
 		String imageDir = data.get("image"); // C:\Users\ADMIN\OneDrive\Documents\admin.png
 
+		System.out.println(name + " - " + imageDir);
+		
 		Category originalCate = dao.select(cateId);
 //		validate
 		if (formatName(name).equals("")) {
@@ -97,9 +99,10 @@ public class CategoryService {
 
 			} else {
 //				kh thay đổi hình
-				File oldImageFile = new File(ImageUtils.pathToResource + "\\category\\" + originalCate.getName() + ".png");
+				File oldImageFile = new File(ImageUtils.pathToResource + "\\category\\" + originalCate.getImageIcon());
 				File newImageFile = new File(ImageUtils.pathToResource + "\\category\\" + StringUtils.fileNameFormat(name) + ".png");
 				oldImageFile.renameTo(newImageFile);
+				
 				imageName = StringUtils.fileNameFormat(name) + ".png";
 			}
 		} else {

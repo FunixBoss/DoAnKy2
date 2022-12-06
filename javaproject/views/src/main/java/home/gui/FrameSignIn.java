@@ -92,7 +92,7 @@ public class FrameSignIn extends JFrame {
 						frame.setVisible(true);
 
 					} else if (Authorization.loggedrole == 3) {
-						FrameHome frame = new FrameHome();
+						FrameHome frame = FrameHome.getMyInstance();
 						Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 						frame.setLocation(dim.width / 2 - frame.getSize().width / 2,
 								dim.height / 2 - frame.getSize().height / 2);
