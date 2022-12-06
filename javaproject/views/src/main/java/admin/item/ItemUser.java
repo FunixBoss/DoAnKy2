@@ -19,6 +19,7 @@ import admin.update.FrameUpdateAdmin;
 import admin.update.FrameUpdateMember;
 import entity.User;
 import helper.ErrorMessage;
+import service.Authorization;
 import service.UserService;
 import service.VocabularyService;
 
@@ -132,41 +133,49 @@ public class ItemUser extends JPanel {
 		panel_1_1_1.add(btnDelete);
 	}
 	protected void doBtnEditActionPerformed(ActionEvent e) {
-		if(user.getRoleId() == 3) {
-			FrameUpdateMember a = FrameUpdateMember.getMyInstance(user);
-			a.itemUser = this;
-			a.setVisible(true);
-		} else {
-			FrameUpdateAdmin a = FrameUpdateAdmin.getMyInstance(user);
-			a.itemAdmin = this;
-			a.setVisible(true);
+		if(Authorization.loggedrole == 1 ) {
+			if(user.getRoleId() == 3) {
+				FrameUpdateMember a = FrameUpdateMember.getMyInstance(user);
+				a.itemUser = this;
+				a.setVisible(true);
+			} else {
+				FrameUpdateAdmin a = FrameUpdateAdmin.getMyInstance(user);
+				a.itemAdmin = this;
+				a.setVisible(true);
+			}
+		}else {
+			JOptionPane.showMessageDialog(null, "Vui Lòng Liên Hệ SuperAdmin");
 		}
 	}
 	protected void doBtnDeleteActionPerformed(ActionEvent e) {
-		String mess = user.getRoleId() == 3 ? "thành viên" : "quản trị viên"; 
-		int option = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn " + mess +" này?", "Xóa " + mess,
-				JOptionPane.YES_NO_OPTION);
-		if (option == JOptionPane.YES_OPTION) {
-			userService = new UserService();
-			if (userService.delete(user)) {
-				JOptionPane.showMessageDialog(this, "Xoá " + mess + " thành công!");
-			
-				
-				if(panelParent instanceof PanelAdmin) {
-					JPanel panel = ((PanelAdmin)this.panelParent).getPanel();
-					panel.removeAll();
-					panel.repaint();
-					panel.revalidate();
-					((PanelAdmin) this.panelParent).loadData();
-				} else if (panelParent instanceof PanelMember){
-					JPanel panel = ((PanelMember) this.panelParent).getPanel();
-					panel.removeAll();
-					panel.repaint();
-					panel.revalidate();
-					((PanelMember) this.panelParent).loadData();
+		if(Authorization.loggedrole == 1) {
+			String mess = user.getRoleId() == 3 ? "thành viên" : "quản trị viên"; 
+			int option = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn " + mess +" này?", "Xóa " + mess,
+					JOptionPane.YES_NO_OPTION);
+			if (option == JOptionPane.YES_OPTION) {
+				userService = new UserService();
+				if (userService.delete(user)) {
+					JOptionPane.showMessageDialog(this, "Xoá " + mess + " thành công!");
+					
+					
+					if(panelParent instanceof PanelAdmin) {
+						JPanel panel = ((PanelAdmin)this.panelParent).getPanel();
+						panel.removeAll();
+						panel.repaint();
+						panel.revalidate();
+						((PanelAdmin) this.panelParent).loadData();
+					} else if (panelParent instanceof PanelMember){
+						JPanel panel = ((PanelMember) this.panelParent).getPanel();
+						panel.removeAll();
+						panel.repaint();
+						panel.revalidate();
+						((PanelMember) this.panelParent).loadData();
+					}
+					
 				}
-				
 			}
+		}else {
+			JOptionPane.showMessageDialog(null, "Vui Lòng Liên Hệ SuperAdmin");
 		}
 	}
 }

@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 
 import admin.gui.FrameDashboard;
+import service.Authorization;
 
 public class PanelResponse extends JPanel {
 	private JPanel topBar;
@@ -32,10 +33,12 @@ public class PanelResponse extends JPanel {
 			menuChanged(getPanelVocabContribution(), getLblVocabContribution());
 		}
 		public void doPanelFeedbackMousePressed(MouseEvent e) {
-			panelFeedback = new PanelFeedback();
-			panelFeedback.panelParent = getOuter();
-			menuClicked(panelFeedback);
-			menuChanged(getPanelFeedback(),getLblFeedback());
+			if(Authorization.loggedrole ==1 ) {
+				panelFeedback = new PanelFeedback();
+				panelFeedback.panelParent = getOuter();
+				menuClicked(panelFeedback);
+				menuChanged(getPanelFeedback(),getLblFeedback());
+			}
 		}
 		
 	}

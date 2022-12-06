@@ -70,6 +70,7 @@ public class FrameSignIn extends JFrame {
 			}
 		});
 	}
+
 	/**
 	 * Create the frame.
 	 */
@@ -83,16 +84,24 @@ public class FrameSignIn extends JFrame {
 				if (UserDAOImpl.loginDb(user)) {
 					Authorization authInfoUser = new Authorization(account, password, user.getRoleId());
 					dispose();
-					if(Authorization.loggedrole==1) {
+					if (Authorization.loggedrole == 2) {
 						FrameDashboard frame = new FrameDashboard();
 						Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-						frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+						frame.setLocation(dim.width / 2 - frame.getSize().width / 2,
+								dim.height / 2 - frame.getSize().height / 2);
 						frame.setVisible(true);
-						
-					}else {
+
+					} else if (Authorization.loggedrole == 3) {
 						FrameHome frame = new FrameHome();
 						Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-						frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+						frame.setLocation(dim.width / 2 - frame.getSize().width / 2,
+								dim.height / 2 - frame.getSize().height / 2);
+						frame.setVisible(true);
+					} else {
+						FrameDashboard frame = new FrameDashboard();
+						Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+						frame.setLocation(dim.width / 2 - frame.getSize().width / 2,
+								dim.height / 2 - frame.getSize().height / 2);
 						frame.setVisible(true);
 					}
 				}
@@ -105,6 +114,7 @@ public class FrameSignIn extends JFrame {
 
 		}
 	}
+
 	public FrameSignIn() {
 		initComponent();
 		textFieldEmail.addKeyListener(new KeyAdapter() {
@@ -112,32 +122,32 @@ public class FrameSignIn extends JFrame {
 				textFieldEmailKeyReleased(e);
 			}
 		});
-		
+
 		textFieldPassword.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				
+
 				StringBuilder s = new StringBuilder();
 				Login.checkColorText(RegexPattern.PASSWORD, textFieldPassword, s, "password");
-				  if (e.getKeyCode()==KeyEvent.VK_ENTER){
-					  login();
-				    }
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					login();
+				}
 			}
 		});
-		
-		
+
 		btnSignIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 login();
+				login();
 			}
 		});
-		
+
 		btnSignUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				do_btnSignUp_actionPerformed(e);
 			}
 		});
 	}
+
 	private void initComponent() {
 		setResizable(false);
 		setForeground(new Color(62, 115, 255));
@@ -149,81 +159,79 @@ public class FrameSignIn extends JFrame {
 		contentPane.setBorder(null);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		icon = new IconImage();
-		
-		// Panel 
+
+		// Panel
 		panel = new JPanel();
 		panel.setBackground(new Color(37, 57, 111));
 		panel.setBounds(0, 0, 428, 532);
 		contentPane.add(panel);
 		panel.setLayout(null);
-		
+
 		lblBg = new JLabel("");
 		lblBg.setBounds(0, 0, 428, 532);
 		panel.add(lblBg);
 		lblBg.setIcon(new ImageIcon(icon.getBgImg()));
-		
-		
+
 		// Panel Main
 		panelMain = new JPanel();
 		panelMain.setBackground(new Color(255, 255, 255));
 		panelMain.setBounds(427, 0, 415, 532);
 		contentPane.add(panelMain);
 		panelMain.setLayout(null);
-		
+
 		JLabel lblSignIn = new JLabel("Đăng nhập");
 		lblSignIn.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSignIn.setFont(new Font("Arial", Font.BOLD, 22));
 		lblSignIn.setBounds(134, 79, 131, 32);
-		panelMain.add(lblSignIn);		
-		
-		
-		
+		panelMain.add(lblSignIn);
+
 		// Email
 		panelEmail = new JPanel();
 		panelEmail.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelEmail.setBackground(new Color(242, 247, 255));
 		panelEmail.setBounds(50, 182, 314, 45);
-		panelEmail.addFocusListener(new FocusListener() {	
+		panelEmail.addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				// TODO Auto-generated method stub	
+				// TODO Auto-generated method stub
 				if (textFieldEmail.getText().equals("Email")) {
 					textFieldEmail.setText("");
-		        }
+				}
 			}
-			
+
 			@Override
 			public void focusGained(FocusEvent e) {
 				// TODO Auto-generated method stub
 				if (textFieldEmail.getText().isEmpty()) {
 					textFieldEmail.setText("");
-		        }
-				
+				}
+
 			}
 		});
 		panelMain.add(panelEmail);
 		panelEmail.setLayout(null);
-		
+
 		lblIconEmail = new JLabel("");
 		lblIconEmail.setHorizontalAlignment(SwingConstants.CENTER);
 		lblIconEmail.setBounds(269, 0, 45, 45);
 		panelEmail.add(lblIconEmail);
 		lblIconEmail.setIcon(new ImageIcon(icon.getEmailImg()));
-		
+
 		textFieldEmail = new JTextField();
 		textFieldEmail.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				if(textFieldEmail.getText().equals("Email")) {
+				if (textFieldEmail.getText().equals("Email")) {
 					textFieldEmail.setForeground(new Color(37, 57, 111));
 					textFieldEmail.setText("");
 				}
 			}
+
 			@Override
 			public void focusLost(FocusEvent e) {
-				if(textFieldEmail.getText().equals("")) {
+				if (textFieldEmail.getText().equals("")) {
 					textFieldEmail.setForeground(new Color(153, 153, 153));
 					textFieldEmail.setText("Email");
 
@@ -235,7 +243,7 @@ public class FrameSignIn extends JFrame {
 		textFieldEmail.setBorder(null);
 		textFieldEmail.setBounds(1, 1, 267, 43);
 		panelEmail.add(textFieldEmail);
-		
+
 		// textFieldEmail.setBorder(new LineBorder(Color.red, 2));
 		textFieldEmail.setCaretColor(new Color(0, 0, 0));
 		textFieldEmail.setMargin(new Insets(2, 12, 2, 2));
@@ -243,33 +251,34 @@ public class FrameSignIn extends JFrame {
 		textFieldEmail.setBackground(UIManager.getColor("Button.highlight"));
 		textFieldEmail.setFont(new Font("Arial", Font.PLAIN, 14));
 		textFieldEmail.setColumns(10);
-				
-		// Password 
+
+		// Password
 		panelPassword = new JPanel();
 		panelPassword.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelPassword.setBackground(new Color(242, 247, 255));
 		panelPassword.setBounds(50, 271, 314, 45);
 		panelMain.add(panelPassword);
 		panelPassword.setLayout(null);
-		
+
 		lblIconPassword = new JLabel("");
 		lblIconPassword.setHorizontalAlignment(SwingConstants.CENTER);
 		lblIconPassword.setBounds(270, 0, 44, 45);
 		panelPassword.add(lblIconPassword);
 		lblIconPassword.setIcon(new ImageIcon(icon.getPasswordImg()));
-		
+
 		textFieldPassword = new JPasswordField();
 		textFieldPassword.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				if(textFieldPassword.getText().equals("Password")) {
+				if (textFieldPassword.getText().equals("Password")) {
 					textFieldPassword.setForeground(new Color(37, 57, 111));
 					textFieldPassword.setText("");
 				}
 			}
+
 			@Override
 			public void focusLost(FocusEvent e) {
-				if(textFieldPassword.getText().equals("")) {
+				if (textFieldPassword.getText().equals("")) {
 					textFieldPassword.setForeground(new Color(153, 153, 153));
 					textFieldPassword.setText("Password");
 				}
@@ -281,7 +290,7 @@ public class FrameSignIn extends JFrame {
 		textFieldPassword.setBounds(1, 1, 267, 43);
 		panelPassword.add(textFieldPassword);
 		textFieldPassword.setMargin(new Insets(2, 6, 2, 2));
-		
+
 		// btn Sign In
 		btnSignIn = new JButton("Đăng nhập");
 		btnSignIn.setBounds(50, 361, 314, 45);
@@ -289,7 +298,7 @@ public class FrameSignIn extends JFrame {
 		btnSignIn.setForeground(new Color(255, 255, 255));
 		btnSignIn.setBackground(new Color(37, 57, 111));
 		btnSignIn.setFont(new Font("Arial", Font.BOLD, 14));
-		
+
 		// btn Sign Up
 		btnSignUp = new JButton("Đăng ký");
 		btnSignUp.setBounds(242, 499, 70, 23);
@@ -298,41 +307,40 @@ public class FrameSignIn extends JFrame {
 		btnSignUp.setForeground(new Color(37, 57, 111));
 		btnSignUp.setFont(new Font("Arial", Font.BOLD, 14));
 		btnSignUp.setBackground(new Color(255, 255, 255));
-		
+
 		JLabel lblNewLabel = new JLabel("Chưa có tài khoản?");
 		lblNewLabel.setBounds(107, 500, 131, 21);
 		panelMain.add(lblNewLabel);
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-		
+
 		// Mess
 		JLabel textMess1 = new JLabel("");
 		textMess1.setBounds(50, 235, 57, 32);
 		panelMain.add(textMess1);
 		textMess1.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
+
 		JLabel textmess2 = new JLabel("");
 		textmess2.setBounds(50, 320, 57, 38);
 		panelMain.add(textmess2);
 		textmess2.setAlignmentX(0.5f);
-		
+
 		FrameUtils.alignFrameScreenCenter(this);
 	}
 
 	protected void do_btnSignUp_actionPerformed(ActionEvent e) {
-//		desktop = new JDesktopPane();
+		// desktop = new JDesktopPane();
 		dispose();
 		FrameSignUp signUp = new FrameSignUp();
 		signUp.setVisible(true);
 	}
+
 	protected void textFieldEmailKeyReleased(KeyEvent e) {
 		StringBuilder s = new StringBuilder();
 		Login.checkColorText(RegexPattern.EMAIL, textFieldEmail, s, "email");
-		 if (e.getKeyCode()==KeyEvent.VK_ENTER){
-			  login();
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			login();
 		}
 	}
-
-	
 
 	public FrameSignIn getJfSignIn() {
 		return jfSignIn;
@@ -341,6 +349,5 @@ public class FrameSignIn extends JFrame {
 	public void setJfSignIn(FrameSignIn jfSignIn) {
 		this.jfSignIn = jfSignIn;
 	}
-	protected void doTextFieldEmailFocusLost(FocusEvent e) {
-	}
+
 }
