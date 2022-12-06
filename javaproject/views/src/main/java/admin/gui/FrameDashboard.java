@@ -20,6 +20,9 @@ import admin.panel.PanelSideBar;
 import admin.panel.PanelVocab;
 import helper.FrameUtils;
 import helper.ImageUtils;
+import home.gui.FrameHome;
+import home.gui.FrameSignIn;
+import service.Authorization;
 
 public class FrameDashboard extends JFrame {
 
@@ -34,6 +37,7 @@ public class FrameDashboard extends JFrame {
 	
 	private PanelMainContent mainContent;
 	class SideBarMenu extends PanelSideBar {
+		private FrameSignIn frOut;
 		protected void do_panelDashboard_mouseClicked(MouseEvent e) {
 			panelDashboard = new PanelDashboard();
 			panelDashboard.frameParent = getOuter();
@@ -75,6 +79,19 @@ public class FrameDashboard extends JFrame {
 			panelResponse.frameParent = getOuter();
 			menuClicked(panelResponse);	
 			menuChanged(getPanelFeedback(),getLblFeedback());
+		}
+		protected void do_panelLogOut_mouseClicked(MouseEvent e) {
+			dispose();
+			Authorization.setNull();
+			frOut = new FrameSignIn();
+			frOut.setVisible(true);
+		}
+		protected void do_panelHome_mouseClicked(MouseEvent e) {
+			dispose();
+			FrameHome frame = new FrameHome();
+			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+			frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+			frame.setVisible(true);
 		}
 	}
 	

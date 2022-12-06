@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import helper.IconImage;
+import service.Authorization;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -57,7 +59,8 @@ public class PanelSideBarFeedback extends JPanel {
 		panelFeedback.setLayout(null);
 		panelFeedback.setBackground(new Color(37, 57, 111));
 		panelFeedback.setBounds(250, 0, 200, 50);
-		add(panelFeedback);
+		
+		
 		lblFeedback = new JLabel("Phản hồi");
 		lblFeedback.setForeground(new Color(255, 255, 255));
 		lblFeedback.setFont(new Font("Arial", Font.BOLD, 16));
@@ -67,6 +70,12 @@ public class PanelSideBarFeedback extends JPanel {
 		lblIconFeedback.setBounds(30, 10, 46, 29);
 		panelFeedback.add(lblIconFeedback);
 		lblIconFeedback.setIcon(new ImageIcon(icon.getBookmarkImg()));
+		
+		
+		
+		if(Authorization.loggedrole==1) {
+			add(panelFeedback);
+		}
 	}
 
 	public void menuChanged(JPanel panel, JLabel label) {

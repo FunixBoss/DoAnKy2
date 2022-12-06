@@ -1,7 +1,10 @@
 package admin.panel;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -10,7 +13,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.SwingConstants;
 
+import dao.impl.UserDAOImpl;
+import entity.User;
 import helper.IconImage;
+import home.gui.FrameHome;
 
 public class PanelSideBar extends JPanel {
 	private JPanel panelVocab;
@@ -146,6 +152,12 @@ public class PanelSideBar extends JPanel {
 		
 		// Home Panel
 		JPanel panelHome = new JPanel();
+		panelHome.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				do_panelHome_mouseClicked(e);
+			}
+		});
 		panelHome.setLayout(null);
 		panelHome.setBackground(Color.WHITE);
 		panelHome.setBounds(0, 637, 217, 70);
@@ -330,6 +342,12 @@ public class PanelSideBar extends JPanel {
 		panelLogOut.setLayout(null);
 		panelLogOut.setBackground(new Color(124, 141, 181));
 		panelLogOut.setBounds(0, 707, 217, 70);
+		panelLogOut.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				do_panelLogOut_mouseClicked(e);
+			}
+		});
 		add(panelLogOut);
 		
 		JLabel lblLogOut = new JLabel("Đăng xuất");
@@ -338,6 +356,12 @@ public class PanelSideBar extends JPanel {
 		lblLogOut.setFont(new Font("Arial", Font.BOLD, 18));
 		lblLogOut.setBounds(0, 0, 217, 70);
 		panelLogOut.add(lblLogOut);
+		
+	}
+	protected void do_panelHome_mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+	
+		
 		
 	}
 	public void menuChanged(JPanel panel, JLabel label) {
@@ -371,5 +395,12 @@ public class PanelSideBar extends JPanel {
 	protected void do_panelLesson_mouseClicked(MouseEvent e) {
 	}
 	protected void do_panelFeedback_mouseClicked(MouseEvent e) {
+	}
+	protected void do_panelLogOut_mouseClicked(MouseEvent e) {
+		
+	}
+	public static void main(String[] args) {
+		User x = new User(17,"hungn12333@gmail.com", "Aa@12345", 1);
+		new UserDAOImpl().updateRole(x);
 	}
 }

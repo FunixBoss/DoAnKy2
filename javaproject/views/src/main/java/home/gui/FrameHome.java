@@ -212,14 +212,16 @@ public class FrameHome extends JFrame {
 	}
 
 	protected void do_panelLogo_mouseClicked(MouseEvent e) {
-		if(Authorization.loggedrole == 2) {
-			dispose();
-			FrameHome dh = new FrameHome();
-			dh.setVisible(true);
-		}else {
+		if(Authorization.loggedrole !=3) {
 			dispose();
 			FrameDashboard dh = new FrameDashboard();
 			dh.setVisible(true);
+		}else {
+			dispose();
+			FrameHome dh = new FrameHome();
+			dh.setVisible(true);
+			System.out.println("xx");
+			
 		}
 	}
 

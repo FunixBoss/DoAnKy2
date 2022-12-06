@@ -81,14 +81,19 @@ public class FrameSignIn extends JFrame {
 				if (UserDAOImpl.loginDb(user)) {
 					Authorization authInfoUser = new Authorization(account, password, user.getRoleId());
 					dispose();
-					if(Authorization.loggedrole==1) {
+					if(Authorization.loggedrole==2) {
 						FrameDashboard frame = new FrameDashboard();
 						Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 						frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
 						frame.setVisible(true);
 						
-					}else {
+					}else if(Authorization.loggedrole==3) {
 						FrameHome frame = new FrameHome();
+						Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+						frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+						frame.setVisible(true);
+					}else {
+						FrameDashboard frame = new FrameDashboard();
 						Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 						frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
 						frame.setVisible(true);
@@ -297,4 +302,5 @@ public class FrameSignIn extends JFrame {
 	public void setJfSignIn(FrameSignIn jfSignIn) {
 		this.jfSignIn = jfSignIn;
 	}
+	
 }

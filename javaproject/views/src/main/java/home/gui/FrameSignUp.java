@@ -233,7 +233,10 @@ public class FrameSignUp extends JFrame {
 				User user = new User(email, password, User.USER_ROLE);
 				if (new UserDAOImpl().insert(user) == 1) {
 					sendHtmlMail.sendMail(email, "Bạn Đã Đăng kí Thành Công", "<h1>Welcome to English</h1>");
+					dispose();
 					JOptionPane.showMessageDialog(null, "Bạn Đã Đăng Kí Thành Công");
+					FrameSignIn x = new FrameSignIn();
+					x.setVisible(true);
 				}
 			} else {
 				JOptionPane.showMessageDialog(null,
