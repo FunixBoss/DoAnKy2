@@ -22,8 +22,10 @@ import dao.impl.VocabularyDAOImpl;
 import entity.Lesson;
 import entity.Theory;
 import entity.UserLessonResult;
-import entity.Vocabulary;import helper.ImageUtils;
+import entity.Vocabulary;
+import helper.ImageUtils;
 import helper.StringUtils;
+import home.gui.FrameLesson;
 import home.panel.PanelLesson;
 import service.Authorization;
 
@@ -33,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 
 public class ItemLesson extends JPanel {
 	private JPanel panelTitle;
@@ -41,26 +44,42 @@ public class ItemLesson extends JPanel {
 	private ItemCard cardContent;
 
 	private Lesson ls;
-	public PanelLesson panelLs;
+	public PanelLesson panelLesson;
 
 	public ItemLesson(Lesson ls) {
 		this.ls = ls;
-		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				do_this_mouseClicked(e);
-			}
-		});
+
 		initComponent();
+
+		TheoryDAOImpl thDAO = new TheoryDAOImpl();
+		VocabularyDAOImpl vocabDAO = new VocabularyDAOImpl();
+		List<Theory> ths = thDAO.selAllTheoriesByLessonId(ls.getId());
+		List<Vocabulary> vocabs = new ArrayList<>();
+		ths.forEach(th -> vocabs.add(vocabDAO.select(th.getVocabId())));
+
+		String strs = vocabs.stream().map(v -> StringUtils.toCapitalize(v.getWord())).collect(Collectors.joining(" ,"));
+
+		UserDAOImpl userDAO = new UserDAOImpl();
+		UserLessonResult ulr = new UserLessonResultDAOImpl().find(userDAO.selectIdByUserEmail(Authorization.email),
+				ls.getId());
+
+		int point = 0;
+		if (ulr != null) {
+			point = ulr.getPoint();
+		}
+		cardContent.setData(ls.getTitle(), strs, String.valueOf(point));
+		lblImage.setIcon(ImageUtils.getImageByURL("lesson", ls.getImage(), 100));
+
 	}
 
 	private void initComponent() {
+		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		setLayout(null);
 		setBackground(new Color(242, 247, 255));
 		setBounds(20, 20, 264, 292);
 		setBorder(BorderFactory.createLineBorder(new Color(37, 57, 111), 2));
 
-		setOpaque(false);
+		setOpaque(true);
 		panelTitle = new JPanel();
 		panelTitle.setBounds(2, 156, 260, 134);
 		panelTitle.setBackground(new Color(242, 247, 255));
@@ -69,26 +88,7 @@ public class ItemLesson extends JPanel {
 		cardContent = new ItemCard();
 		cardContent.setColor1(new Color(37, 57, 111));
 		cardContent.setColor2(new Color(116, 215, 252));
-		
-		TheoryDAOImpl thDAO = new TheoryDAOImpl();
-		VocabularyDAOImpl vocabDAO = new VocabularyDAOImpl();
-		List<Theory> ths = thDAO.selAllTheoriesByLessonId(ls.getId());
-		List<Vocabulary> vocabs = new ArrayList<>();
-		ths.forEach(th -> vocabs.add(vocabDAO.select(th.getVocabId())));
-		
-		String strs = vocabs.stream().map(v -> StringUtils.toCapitalize(v.getWord()))
-						.collect(Collectors.joining(" ,"));
-		
-		UserDAOImpl userDAO = new UserDAOImpl();
-		UserLessonResult ulr = new UserLessonResultDAOImpl().find(
-							userDAO.selectIdByUserEmail(Authorization.email),
-							ls.getId());
-		
-		int point = 0;
-		if(ulr != null) {
-			point  = ulr.getPoint();
-		}
-		cardContent.setData(ls.getTitle(), strs, String.valueOf(point));
+
 		panelTitle.add(cardContent);
 
 		panel = new JPanel();
@@ -103,12 +103,21 @@ public class ItemLesson extends JPanel {
 		lblImage.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblImage.setBackground(new Color(124, 141, 181));
 		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
-		lblImage.setIcon(ImageUtils.getImageByURL("lesson", ls.getImage(), 100));
 		panel.add(lblImage);
+
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				do_this_mouseClicked(e);
+			}
+		});
 
 	}
 
 	protected void do_this_mouseClicked(MouseEvent e) {
+		FrameLesson frameLs = FrameLesson.getMyInstance(ls);
+		frameLs.itemLesson = this;
+		frameLs.setVisible(true);
 	}
 
 }

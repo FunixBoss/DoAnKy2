@@ -46,43 +46,35 @@ public class ItemCard extends JPanel {
     public void setData(String title, String value, String point) {
         lbTitle.setText(title);
         lbValues.setText(value);
-        lblPoint.setText(point);
+        lblPoint.setText("Your point: " + point);
     }
 
     @SuppressWarnings("unchecked")
     private void initComponents() {
         lbTitle = new JLabel();
         lbValues = new JLabel();
+        lblPoint = new JLabel();
 
         lbTitle.setFont(new Font("SansSerif", Font.BOLD, 18));
         lbTitle.setForeground(new Color(255, 255, 255));
-        lbTitle.setText("Title");
 
         lbValues.setFont(new Font("SansSerif", Font.BOLD, 14)); 
         lbValues.setForeground(new Color(255, 255, 255));
-        lbValues.setText("Values");
         
-        lblPoint = new JLabel();
-        lblPoint.setText("Point");
+        lblPoint.setFont(new Font("SansSerif", Font.BOLD, 16));
         lblPoint.setForeground(Color.WHITE);
-        lblPoint.setFont(new Font("SansSerif", Font.BOLD, 18));
 
 
         GroupLayout layout = new GroupLayout(this);
         layout.setHorizontalGroup(
         	layout.createParallelGroup(Alignment.LEADING)
         		.addGroup(layout.createSequentialGroup()
+        			.addContainerGap()
         			.addGroup(layout.createParallelGroup(Alignment.LEADING)
-        				.addGroup(layout.createSequentialGroup()
-        					.addContainerGap()
-        					.addComponent(lbTitle))
-        				.addGroup(layout.createSequentialGroup()
-        					.addContainerGap()
-        					.addComponent(lbValues))
-        				.addGroup(layout.createSequentialGroup()
-        					.addContainerGap()
-        					.addComponent(lblPoint, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)))
-        			.addContainerGap(380, Short.MAX_VALUE))
+        				.addComponent(lbTitle)
+        				.addComponent(lbValues)
+        				.addComponent(lblPoint, GroupLayout.PREFERRED_SIZE, 219, GroupLayout.PREFERRED_SIZE))
+        			.addContainerGap(221, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
         	layout.createParallelGroup(Alignment.LEADING)
@@ -91,9 +83,9 @@ public class ItemCard extends JPanel {
         			.addComponent(lbTitle)
         			.addGap(18)
         			.addComponent(lbValues)
-        			.addPreferredGap(ComponentPlacement.RELATED, 169, Short.MAX_VALUE)
-        			.addComponent(lblPoint, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-        			.addGap(22))
+        			.addGap(18)
+        			.addComponent(lblPoint, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+        			.addContainerGap(221, Short.MAX_VALUE))
         );
         this.setLayout(layout);
     }

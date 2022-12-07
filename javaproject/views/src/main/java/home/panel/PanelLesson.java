@@ -31,6 +31,8 @@ public class PanelLesson extends JPanel {
 	public static PanelLesson getMyInstance() {
 		if (myInstance == null) {
 			myInstance = new PanelLesson();
+		} else {
+			myInstance.loadData();
 		}
 		return myInstance;
 	}
@@ -41,11 +43,16 @@ public class PanelLesson extends JPanel {
 		panelMain.setLayout(null);
 		lsDAO = new LessonDAOImpl();
 		
+		loadData();
+	}
+
+	public void loadData() {
 		int currentX = 0;
 		int currentY = 0;
 		for(Lesson ls : lsDAO.selectAll()) {
 			ItemLesson item = new  ItemLesson(ls);
 			item.setLocation(currentX, currentY);
+			item.panelLesson = this;
 			panelMain.add(item);
 			currentX += item.getWidth() + 20;
 		}

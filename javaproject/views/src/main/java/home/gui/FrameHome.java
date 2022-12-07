@@ -87,7 +87,7 @@ public class FrameHome extends JFrame {
 		}
 
 		protected void do_panelLesson_mouseClicked(MouseEvent e) {
-			panelLesson = PanelLesson.getMyInstance();
+			panelLesson = new PanelLesson();
 			panelLesson.frameParent = getOuter();
 			menuClicked(panelLesson);
 			menuChanged(getPanelLesson(), getLblLesson());
@@ -207,6 +207,13 @@ public class FrameHome extends JFrame {
 		Component[] navComp = navBar.getComponents();
 		if(navComp[0] instanceof NavBar) {
 			((NavBar) navComp[0]).do_panelVocab_mouseClicked(null);
+		}
+	}
+	
+	public void navbarMenuChangedLesson() {
+		Component[] navComp = navBar.getComponents();
+		if(navComp[0] instanceof NavBar) {
+			((NavBar) navComp[0]).do_panelLesson_mouseClicked(null);
 		}
 	}
 	

@@ -40,7 +40,6 @@ public class PanelHistory extends JPanel {
 		List<Vocabulary> vocabs = new HistoryDAOImpl().selectAllVocabByUserId(id);
 		final int NUMBER_OF_COL = 4;
 		final int NUMBER_OF_ROW = (int) Math.ceil((double) vocabs.size() / NUMBER_OF_COL);
-		System.out.println(NUMBER_OF_ROW);
 		panelContent.setPreferredSize(new Dimension(660, NUMBER_OF_ROW * 220));
 		Vocabulary vocab;
 		int currentX = 10; 
