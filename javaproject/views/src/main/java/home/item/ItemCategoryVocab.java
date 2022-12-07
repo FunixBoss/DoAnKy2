@@ -6,7 +6,6 @@ import entity.Vocabulary;
 import helper.ImageUtils;
 import helper.StringUtils;
 import home.gui.FrameCategory;
-import home.gui.FrameDetailVocab;
 import home.gui.FrameHome;
 import home.panel.PanelVocab;
 import service.CategoryService;

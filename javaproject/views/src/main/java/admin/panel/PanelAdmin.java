@@ -24,10 +24,13 @@ import javax.swing.SwingConstants;
 import admin.gui.FrameDashboard;
 import admin.insert.FrameInsertAdmin;
 import admin.item.ItemUser;
+import admin.update.FrameUpdateAdmin;
+import admin.update.FrameUpdateMember;
 import dao.UserDAO;
 import dao.impl.UserDAOImpl;
 import entity.User;
 import helper.FrameUtils;
+import service.Authorization;
 
 public class PanelAdmin extends JPanel {
 	public static Boolean isChanged = false;
@@ -326,12 +329,17 @@ public class PanelAdmin extends JPanel {
 	}
 	
 	protected void do_btnAdd_actionPerformed(ActionEvent e) {
-		FrameInsertAdmin frame = FrameInsertAdmin.getMyInstance();
-		frame.panelParent = this;
-		if(!frame.isVisible()) {
-			FrameUtils.alignFrameScreenCenter(frame);
-			frame.setVisible(true);
-		} 
+		if(Authorization.loggedrole == 1 ) {
+			FrameInsertAdmin frame = FrameInsertAdmin.getMyInstance();
+			frame.panelParent = this;
+			if(!frame.isVisible()) {
+				FrameUtils.alignFrameScreenCenter(frame);
+				frame.setVisible(true);
+			} 
+		}else {
+			JOptionPane.showMessageDialog(null, "Bạn Không Đủ Quyền Hạn Để Thực Hiện!");
+		}
+		
 	}
 	
 	protected void txtPageActionPerformed(ActionEvent e) {

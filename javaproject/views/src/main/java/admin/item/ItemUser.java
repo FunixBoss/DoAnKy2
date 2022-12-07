@@ -144,7 +144,7 @@ public class ItemUser extends JPanel {
 				a.setVisible(true);
 			}
 		}else {
-			JOptionPane.showMessageDialog(null, "Vui Lòng Liên Hệ SuperAdmin");
+			JOptionPane.showMessageDialog(null, "Bạn Không Đủ Quyền Hạn Để Thực Hiện!");
 		}
 	}
 	protected void doBtnDeleteActionPerformed(ActionEvent e) {
@@ -175,7 +175,7 @@ public class ItemUser extends JPanel {
 				}
 			}
 		}else {
-			JOptionPane.showMessageDialog(null, "Vui Lòng Liên Hệ SuperAdmin");
+			JOptionPane.showMessageDialog(null, "Bạn Không Đủ Quyền Hạn Để Thực Hiện!");
 		}
 	}
 }

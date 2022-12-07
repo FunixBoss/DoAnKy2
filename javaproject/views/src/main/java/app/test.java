@@ -9,7 +9,9 @@ import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
 
 import dao.impl.BookmarkDAOImpl;
+import dao.impl.UserDAOImpl;
 import dao.impl.VocabularyDAOImpl;
+import entity.User;
 import helper.IconImage;
 import home.panel.PanelDetailVocab;
 import service.Authorization;
@@ -29,6 +31,7 @@ public class test extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+//		new UserDAOImpl().updateRole(new User(17, null, null, 2));
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
