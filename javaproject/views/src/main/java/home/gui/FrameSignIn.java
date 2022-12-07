@@ -323,6 +323,24 @@ public class FrameSignIn extends JFrame {
 		textmess2.setBounds(50, 320, 57, 38);
 		panelMain.add(textmess2);
 		textmess2.setAlignmentX(0.5f);
+		
+		JButton btnNewButton = new JButton("Quên Mật Khẩu");
+		btnNewButton.setBorder(null);
+		btnNewButton.setForeground(new Color(37, 57, 111));
+		btnNewButton.setFont(new Font("Arial", Font.BOLD, 14));
+		btnNewButton.setBackground(new Color(255, 255, 255));
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				FrameResetPass x = new FrameResetPass();
+				Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+				x.setLocation(dim.width / 2 - x.getSize().width / 2,
+						dim.height / 2 - x.getSize().height / 2);
+				x.setVisible(true);
+			}
+		});
+		btnNewButton.setBounds(242, 28, 154, 38);
+		panelMain.add(btnNewButton);
 
 		FrameUtils.alignFrameScreenCenter(this);
 	}
@@ -349,5 +367,4 @@ public class FrameSignIn extends JFrame {
 	public void setJfSignIn(FrameSignIn jfSignIn) {
 		this.jfSignIn = jfSignIn;
 	}
-
 }
