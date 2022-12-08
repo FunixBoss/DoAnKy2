@@ -5,7 +5,6 @@ import dao.impl.WordTypeDAOImpl;
 import entity.Vocabulary;
 import helper.ImageUtils;
 import helper.StringUtils;
-import home.gui.FrameDetailVocab;
 import service.CategoryService;
 
 import javax.swing.JLabel;

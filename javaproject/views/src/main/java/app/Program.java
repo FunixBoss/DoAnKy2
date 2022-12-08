@@ -1,6 +1,9 @@
 package app;
 
 import java.awt.EventQueue;
+
+import dao.impl.UserDAOImpl;
+import entity.User;
 import home.gui.FrameSignIn;
 
 public class Program {
@@ -13,5 +16,6 @@ public class Program {
 				e.printStackTrace();
 			}
 		});
+		
 	}
 }

@@ -3,6 +3,7 @@ package admin.panel;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import admin.gui.FrameDashboard;
@@ -33,11 +34,13 @@ public class PanelResponse extends JPanel {
 			menuChanged(getPanelVocabContribution(), getLblVocabContribution());
 		}
 		public void doPanelFeedbackMousePressed(MouseEvent e) {
-			if(Authorization.loggedrole ==1 ) {
+			if(Authorization.loggedrole == 1 ) {
 				panelFeedback = new PanelFeedback();
 				panelFeedback.panelParent = getOuter();
 				menuClicked(panelFeedback);
 				menuChanged(getPanelFeedback(),getLblFeedback());
+			} else {
+				JOptionPane.showMessageDialog(this, "Bạn không đủ quyền hạn để thực hiện!");
 			}
 		}
 		

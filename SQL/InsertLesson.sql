@@ -108,7 +108,7 @@ INSERT INTO FEEDBACK VALUES(N'thắng. Tôi tập luyện môn thể thao này m
 GO
 
 
-INSERT INTO LESSON VALUES (N'Sport', N'sport.png')
+INSERT INTO LESSON VALUES (N'Fruit', N'Fruit.png')
 	INSERT INTO THEORY VALUES (1 ,(SELECT IDENT_CURRENT('LESSON')))
 		INSERT INTO QUESTION VALUES(N'The coach looked at the ______ players with the fans who were very happy.', (SELECT IDENT_CURRENT('LESSON'))) -- football
 			INSERT INTO ANSWER VALUES(N'Football', 1, (SELECT IDENT_CURRENT('QUESTION')))
